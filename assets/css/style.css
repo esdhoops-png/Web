@@ -272,46 +272,6 @@ img { max-width: 100%; display: block; }
 .btn-on-dark.btn-outline { border-color: var(--tan); color: var(--tan); }
 .btn-on-dark.btn-outline:hover { background: var(--tan); color: var(--navy-deep); }
 
-/* Scroll-scrubbed shot sequence */
-.shot-scrub {
-  position: relative;
-  height: 280vh;
-}
-.shot-scrub-sticky {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
-  background: linear-gradient(180deg, var(--tan-light) 0%, var(--tan) 32%, var(--navy-2) 68%, var(--navy-deep) 100%);
-}
-#shotCanvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.shot-caption {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--navy);
-  font-family: var(--font-head);
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.55;
-  white-space: nowrap;
-}
-
-@media (max-width: 760px) {
-  .shot-scrub { height: 220vh; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .shot-scrub { height: 100svh; }
-  .shot-scrub-sticky { position: relative; }
-  .shot-caption { display: none; }
-}
-
 /* Ticker */
 .ticker {
   background: var(--tan);
