@@ -32,17 +32,11 @@ const observer = new IntersectionObserver((entries) => {
 
 revealItems.forEach((item) => observer.observe(item));
 
-/* Scoreboard scroll rail: a small ball that travels down a rail as the page scrolls */
-const railBall = document.getElementById('railBall');
-const rail = document.getElementById('scoreboardRail');
-if (railBall && rail) {
-  const updateRail = () => {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
-    const railHeight = rail.clientHeight;
-    railBall.style.top = `${progress * railHeight}px`;
-  };
-  window.addEventListener('scroll', updateRail, { passive: true });
-  window.addEventListener('resize', updateRail);
-  updateRail();
-}
+/* Spotlight hover effect on program cards: a soft glow that follows the cursor */
+document.querySelectorAll('.program-card').forEach((card) => {
+  card.addEventListener('pointermove', (event) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--spot-x', `${event.clientX - rect.left}px`);
+    card.style.setProperty('--spot-y', `${event.clientY - rect.top}px`);
+  });
+});
