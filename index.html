@@ -6,15 +6,19 @@
 <title>ESD Hoops | Torneos, Ligas y Camps de Baloncesto</title>
 <meta name="description" content="ESD Hoops organiza torneos 3x3, la liga 5x5 estilo AAU, campamentos de baloncesto con jugadores profesionales, combines y showcase camps.">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <a class="skip-link" href="#main">Saltar al contenido</a>
+
+<div class="scoreboard-rail" id="scoreboardRail" aria-hidden="true">
+  <div class="rail-line"></div>
+  <div class="rail-ball" id="railBall">
+    <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#e2672b"/><path d="M20 3v34M4 13c8 5 24 5 32 0M4 27c8-5 24-5 32 0" stroke="#142a3d" stroke-width="2" fill="none"/></svg>
+  </div>
+</div>
 
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
@@ -40,26 +44,52 @@
 <main id="main">
 
   <section class="hero" id="inicio">
-    <div class="hero-court" aria-hidden="true"></div>
+    <div class="hero-stripes" aria-hidden="true"></div>
     <div class="container hero-inner">
-      <p class="eyebrow reveal">Eventos deportivos de baloncesto</p>
-      <h1 class="reveal">ELEVAMOS EL JUEGO,<br>EVENTO POR EVENTO</h1>
-      <p class="hero-sub reveal">
-        Torneos 3x3, liga 5x5 estilo AAU, camps con jugadores profesionales, combines y showcases.
-        ESD Hoops crea los escenarios donde los jugadores compiten, se desarrollan y se dan a conocer.
-      </p>
-      <div class="hero-actions reveal">
-        <a href="#programas" class="btn btn-primary">Ver programas</a>
-        <a href="#contacto" class="btn btn-outline btn-on-dark">Contáctanos</a>
+      <div class="hero-text">
+        <p class="eyebrow reveal">Eventos deportivos de baloncesto</p>
+        <h1 class="reveal"><span class="line">ELEVAMOS</span><span class="line line-accent">EL JUEGO</span></h1>
+        <p class="hero-sub reveal">
+          Torneos 3x3, liga 5x5 estilo AAU, camps con jugadores profesionales, combines y showcases.
+          ESD Hoops crea los escenarios donde los jugadores compiten, se desarrollan y se dan a conocer.
+        </p>
+        <div class="hero-actions reveal">
+          <a href="#programas" class="btn btn-primary">Ver programas</a>
+          <a href="#contacto" class="btn btn-outline btn-on-dark">Contáctanos</a>
+        </div>
+      </div>
+      <div class="hero-ball reveal" aria-hidden="true">
+        <svg class="hoop-backdrop" viewBox="0 0 300 260" aria-hidden="true">
+          <rect x="60" y="10" width="180" height="120" rx="4" fill="none" stroke="#d9c4b0" stroke-width="6"/>
+          <rect x="118" y="52" width="64" height="46" fill="none" stroke="#d9c4b0" stroke-width="5"/>
+          <ellipse cx="150" cy="140" rx="46" ry="10" fill="none" stroke="#e2672b" stroke-width="5"/>
+        </svg>
+        <canvas id="ballCanvas"></canvas>
+        <p class="ball-hint">Toca la cancha para dar un pase</p>
       </div>
     </div>
   </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>TORNEOS 3X3</span><span class="dot">•</span>
+      <span>LIGA 5X5 ESTILO AAU</span><span class="dot">•</span>
+      <span>BASKETBALL CAMPS</span><span class="dot">•</span>
+      <span>COMBINES</span><span class="dot">•</span>
+      <span>SHOWCASE CAMPS</span><span class="dot">•</span>
+      <span>TORNEOS 3X3</span><span class="dot">•</span>
+      <span>LIGA 5X5 ESTILO AAU</span><span class="dot">•</span>
+      <span>BASKETBALL CAMPS</span><span class="dot">•</span>
+      <span>COMBINES</span><span class="dot">•</span>
+      <span>SHOWCASE CAMPS</span><span class="dot">•</span>
+    </div>
+  </div>
 
   <section class="section" id="nosotros">
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Quiénes somos</p>
-        <h2>Baloncesto competitivo, con propósito</h2>
+        <h2>Baloncesto competitivo,<br>con propósito</h2>
       </div>
       <div class="about-grid">
         <p class="about-text reveal">
@@ -71,25 +101,16 @@
           a conocer ante nuevas oportunidades: cada evento de ESD Hoops está pensado para hacer crecer
           el juego de cada participante.
         </p>
-        <div class="about-pillars reveal">
-          <div class="pillar">
-            <span class="pillar-num">01</span>
-            <p>Competencia real, formatos serios</p>
-          </div>
-          <div class="pillar">
-            <span class="pillar-num">02</span>
-            <p>Desarrollo con jugadores profesionales</p>
-          </div>
-          <div class="pillar">
-            <span class="pillar-num">03</span>
-            <p>Visibilidad para el futuro de cada jugador</p>
-          </div>
+        <div class="about-score reveal">
+          <div class="score-row"><span class="score-num">01</span><p>Competencia real, formatos serios</p></div>
+          <div class="score-row"><span class="score-num">02</span><p>Desarrollo con jugadores profesionales</p></div>
+          <div class="score-row"><span class="score-num">03</span><p>Visibilidad para el futuro de cada jugador</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt" id="programas">
+  <section class="section section-alt angled" id="programas">
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Lo que hacemos</p>
@@ -156,7 +177,7 @@
         <a href="#contacto" class="btn btn-outline btn-on-dark">Quiero más información</a>
       </div>
       <div class="camp-feature-badge reveal" aria-hidden="true">
-        <div class="badge-ball">
+        <div class="badge-ball spin-ball">
           <svg viewBox="0 0 100 100" fill="none">
             <circle cx="50" cy="50" r="38" stroke="#d9c4b0" stroke-width="3"/>
             <path d="M50 12v76M14 32c10 7 62 7 72 0M14 68c10-7 62-7 72 0" stroke="#d9c4b0" stroke-width="3"/>
