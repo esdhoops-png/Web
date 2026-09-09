@@ -1,35 +1,39 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESD Hoops | Torneos, Ligas y Camps de Baloncesto</title>
-<meta name="description" content="ESD Hoops organiza torneos 3x3, la liga 5x5 estilo AAU, campamentos de baloncesto con jugadores profesionales, combines y showcase camps.">
+<title>ESD Hoops — More Than Basketball</title>
+<meta name="description" content="ESD Hoops is a basketball development platform: FIBA 3x3 competition, in-season individual development, camps and international programs. Player development. Competition. Culture.">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<a class="skip-link" href="#main">Saltar al contenido</a>
-
+<a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
-    <a href="#inicio" class="brand">
+    <a href="#home" class="brand">
       <img src="assets/img/logo.svg" alt="ESD Hoops" class="brand-mark">
       <span class="brand-name">ESD <strong>HOOPS</strong></span>
     </a>
 
     <nav class="main-nav" id="mainNav">
-      <a href="#inicio">Inicio</a>
-      <a href="#nosotros">Nosotros</a>
-      <a href="#programas">Programas</a>
-      <a href="#camp-cazorla">Camp Cazorla</a>
-      <a href="#contacto" class="nav-cta">Contáctanos</a>
+      <a href="#home">Home</a>
+      <a href="#3x3">3x3</a>
+      <a href="#in-season">In-Season</a>
+      <a href="#player-development">Player Development</a>
+      <a href="#camps">Camps</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="nav-cta">Contact</a>
     </nav>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mainNav">
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -37,168 +41,373 @@
 
 <main id="main">
 
-  <section class="hero" id="inicio">
-    <div class="hero-court" aria-hidden="true"></div>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-texture" aria-hidden="true"></div>
+    <div class="hero-arc" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+    <div class="hero-ghost" aria-hidden="true">HOOPS</div>
     <div class="container hero-inner">
-      <div class="hero-text">
-        <p class="eyebrow eyebrow-light reveal">Eventos deportivos de baloncesto</p>
-        <h1 class="reveal">Elevamos el juego,<br>evento por evento</h1>
-        <p class="hero-sub reveal">
-          Torneos 3x3, liga 5x5 estilo AAU, camps con jugadores profesionales, combines y showcases.
-          ESD Hoops crea los escenarios donde los jugadores compiten, se desarrollan y se dan a conocer.
-        </p>
-        <div class="hero-actions reveal">
-          <a href="#programas" class="btn btn-primary">Ver programas</a>
-          <a href="#contacto" class="btn btn-outline btn-on-dark">Contáctanos</a>
+      <p class="eyebrow eyebrow-light reveal">Est. Basketball Development</p>
+      <h1 class="hero-h1 reveal">More Than<br>Basketball.</h1>
+      <h2 class="hero-h2 reveal">A Process.</h2>
+      <p class="hero-sub reveal">Player development. Competition. Culture.</p>
+      <div class="hero-actions reveal">
+        <a href="#about" class="btn btn-primary">Explore ESD Hoops</a>
+        <a href="#in-season" class="btn btn-outline btn-on-dark">Train With Us</a>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- INTRO / ABOUT -->
+  <section class="intro" id="about">
+    <div class="container intro-inner">
+      <p class="intro-mark reveal">ESD HOOPS</p>
+      <p class="intro-quote reveal">&ldquo;A basketball development platform focused on helping players become better athletes, better basketball players and better competitors.&rdquo;</p>
+      <div class="intro-pillars reveal">
+        <span>Athletes</span>
+        <span class="dot">/</span>
+        <span>Players</span>
+        <span class="dot">/</span>
+        <span>Competitors</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 1 — 3X3 -->
+  <section class="section section-3x3" id="3x3">
+    <div class="section-texture" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-head split reveal">
+        <div>
+          <p class="eyebrow eyebrow-light">FIBA 3x3</p>
+          <h2 class="h-light">3x3 Basketball</h2>
+        </div>
+        <p class="section-lede light">ESD Hoops is proud to be involved in FIBA-endorsed 3x3 events and programs — bringing sanctioned, world-standard streetball competition to players who want to test themselves against the clock, the rim and each other.</p>
+      </div>
+
+      <div class="x3-grid">
+        <article class="x3-card reveal">
+          <span class="x3-num">01</span>
+          <h3>Tournaments</h3>
+          <p>Sanctioned FIBA 3x3 events across divisions and age groups, run to international competition standards.</p>
+        </article>
+        <article class="x3-card reveal">
+          <span class="x3-num">02</span>
+          <h3>Teams &amp; Players</h3>
+          <p>Rosters, brackets and individual player profiles tracked across every ESD Hoops 3x3 competition.</p>
+        </article>
+        <article class="x3-card reveal">
+          <span class="x3-num">03</span>
+          <h3>Results</h3>
+          <p>Live standings, final scores and tournament recaps published after every stop on the calendar.</p>
+        </article>
+        <article class="x3-card reveal">
+          <span class="x3-num">04</span>
+          <h3>Registration</h3>
+          <p>Open registration for upcoming events, with team and individual entries accepted online.</p>
+        </article>
+        <article class="x3-card reveal">
+          <span class="x3-num">05</span>
+          <h3>Event Galleries</h3>
+          <p>Photo and video coverage from every tournament — the culture and competition, captured courtside.</p>
+        </article>
+        <article class="x3-card reveal">
+          <span class="x3-num">06</span>
+          <h3>FIBA Endorsed</h3>
+          <p>Built on the official FIBA 3x3 framework, connecting local competition to the global 3x3 pathway.</p>
+        </article>
+      </div>
+
+      <div class="events-block reveal">
+        <div class="events-block-head">
+          <h3>Upcoming Events</h3>
+          <a href="https://play.fiba3x3.com" target="_blank" rel="noopener" class="text-link light">Full FIBA 3x3 calendar &rarr;</a>
+        </div>
+        <div class="events-grid">
+          <article class="event-card">
+            <div class="event-date"><span class="event-day">TBD</span><span class="event-month">2026</span></div>
+            <div class="event-info">
+              <p class="event-tag">3x3 Tournament</p>
+              <h4>ESD Street Series I</h4>
+              <p class="event-loc">Open Division · Location TBA</p>
+            </div>
+            <a href="https://play.fiba3x3.com/events/65506e7c-f001-4730-b86d-65c6c6a6ead4" target="_blank" rel="noopener" class="btn btn-outline btn-sm btn-on-dark">Register</a>
+          </article>
+          <article class="event-card">
+            <div class="event-date"><span class="event-day">TBD</span><span class="event-month">2026</span></div>
+            <div class="event-info">
+              <p class="event-tag">3x3 Tournament</p>
+              <h4>ESD Street Series I — Senior</h4>
+              <p class="event-loc">Senior Division · Location TBA</p>
+            </div>
+            <a href="https://play.fiba3x3.com/events/45a0f26a-16e8-4c41-ad18-a30b5e0b0f8b" target="_blank" rel="noopener" class="btn btn-outline btn-sm btn-on-dark">Register</a>
+          </article>
+          <article class="event-card event-card-ghost">
+            <div class="event-date"><span class="event-day">&mdash;</span><span class="event-month">2027</span></div>
+            <div class="event-info">
+              <p class="event-tag">Coming Soon</p>
+              <h4>ESD Street Series II</h4>
+              <p class="event-loc">Dates and location announced soon</p>
+            </div>
+            <a href="#contact" class="btn btn-outline btn-sm btn-on-dark">Get Notified</a>
+          </article>
         </div>
       </div>
-    </div>
-  </section>
 
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <span>TORNEOS 3X3</span><span class="dot">•</span>
-      <span>LIGA 5X5 ESTILO AAU</span><span class="dot">•</span>
-      <span>BASKETBALL CAMPS</span><span class="dot">•</span>
-      <span>COMBINES</span><span class="dot">•</span>
-      <span>SHOWCASE CAMPS</span><span class="dot">•</span>
-      <span>TORNEOS 3X3</span><span class="dot">•</span>
-      <span>LIGA 5X5 ESTILO AAU</span><span class="dot">•</span>
-      <span>BASKETBALL CAMPS</span><span class="dot">•</span>
-      <span>COMBINES</span><span class="dot">•</span>
-      <span>SHOWCASE CAMPS</span><span class="dot">•</span>
-    </div>
-  </div>
-
-  <section class="registration-banner">
-    <div class="container registration-inner">
-      <div class="registration-text">
-        <p class="eyebrow">Inscripciones abiertas · Septiembre</p>
-        <h2>ESD Street Series — Torneos 3x3</h2>
-      </div>
-      <div class="registration-links">
-        <a href="https://play.fiba3x3.com/events/65506e7c-f001-4730-b86d-65c6c6a6ead4" target="_blank" rel="noopener" class="btn btn-primary">Regístrate: ESD Street Series I</a>
-        <a href="https://play.fiba3x3.com/events/45a0f26a-16e8-4c41-ad18-a30b5e0b0f8b" target="_blank" rel="noopener" class="btn btn-outline">Regístrate: ESD Street Series I Senior</a>
+      <div class="section-cta reveal">
+        <a href="https://play.fiba3x3.com" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Discover 3x3</a>
       </div>
     </div>
   </section>
 
-  <section class="section" id="nosotros">
+  <!-- SECTION 2 — IN-SEASON PLAYER DEVELOPMENT -->
+  <section class="section season-section" id="in-season">
     <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Quiénes somos</p>
-        <h2>Baloncesto competitivo,<br>con propósito</h2>
-      </div>
-      <div class="about-grid">
-        <p class="about-text reveal">
-          <strong>ESD Hoops</strong> es una empresa de eventos deportivos dedicada al baloncesto.
-          Diseñamos torneos, ligas y campamentos que retan a los jugadores dentro de la cancha y los
-          preparan para el siguiente nivel fuera de ella. Desde competencias 3x3 de alta intensidad
-          hasta una liga 5x5 con formato estilo AAU americana, pasando por camps de desarrollo junto
-          a jugadores profesionales, evaluaciones físicas en nuestros combines y showcases para darse
-          a conocer ante nuevas oportunidades: cada evento de ESD Hoops está pensado para hacer crecer
-          el juego de cada participante.
-        </p>
-        <div class="about-score reveal">
-          <div class="score-row"><span class="score-num">01</span><p>Competencia real, formatos serios</p></div>
-          <div class="score-row"><span class="score-num">02</span><p>Desarrollo con jugadores profesionales</p></div>
-          <div class="score-row"><span class="score-num">03</span><p>Visibilidad para el futuro de cada jugador</p></div>
+      <div class="season-grid">
+        <div class="season-copy reveal">
+          <p class="eyebrow">In-Season Development</p>
+          <h2>Don&rsquo;t Wait For<br>The Offseason.</h2>
+          <p class="season-subhead">Get Better While You Compete.</p>
+          <p class="season-text">ESD Hoops provides individual and small-group basketball development throughout the competitive season — so progress never stops for a schedule. Players train around games and practices, sharpening the skills that show up when it matters.</p>
+
+          <ul class="checklist">
+            <li>Individual Skills Training</li>
+            <li>Shooting</li>
+            <li>Ball Handling</li>
+            <li>Finishing</li>
+            <li>Decision Making</li>
+            <li>Game Reading</li>
+            <li>Tactical Development</li>
+            <li>Position-Specific Development</li>
+            <li>Confidence &amp; Competitive Tools</li>
+          </ul>
+
+          <a href="#contact-form" class="btn btn-primary">Train With ESD Hoops</a>
         </div>
+
+        <aside class="coach-card reveal">
+          <div class="coach-media" aria-hidden="true">
+            <span class="coach-media-mark">VE</span>
+          </div>
+          <p class="coach-eyebrow">In Partnership With</p>
+          <h3>Vincenzo Esposito</h3>
+          <p class="coach-role">Former NBA Player &amp; High-Level Italian Basketball Coach</p>
+          <p class="coach-text">Our in-season development work is built alongside Vincenzo Esposito, bringing professional-level standards and international coaching experience directly to ESD Hoops players.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap" id="contact-form">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Get Started</p>
+          <h2>Tell Us About Your Player</h2>
+          <p class="section-lede">For players, parents and teams — reach out and we&rsquo;ll follow up with a plan.</p>
+        </div>
+
+        <form class="dev-form reveal" id="devForm" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="fName">Full Name</label>
+              <input type="text" id="fName" name="name" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="fEmail">Email</label>
+              <input type="email" id="fEmail" name="email" required autocomplete="email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="fPhone">Phone</label>
+              <input type="tel" id="fPhone" name="phone" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="fRole">I Am A</label>
+              <select id="fRole" name="role">
+                <option value="Player">Player</option>
+                <option value="Parent">Parent</option>
+                <option value="Team / Club">Team / Club</option>
+                <option value="Coach">Coach</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="fProgram">Interested In</label>
+            <select id="fProgram" name="program">
+              <option value="In-Season Development">In-Season Development</option>
+              <option value="3x3 Tournaments">3x3 Tournaments</option>
+              <option value="Camps &amp; Clinics">Camps &amp; Clinics</option>
+              <option value="Team Training">Team Training</option>
+              <option value="International Programs">International Programs</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fMessage">Message</label>
+            <textarea id="fMessage" name="message" rows="4" placeholder="Tell us about the player and what you're looking for."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+          <p class="form-note" id="formNote">This opens your email client with your message pre-filled to info@esdhoops.com.</p>
+        </form>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt angled" id="programas">
+  <!-- SECTION 3 — PLAYER DEVELOPMENT PHILOSOPHY -->
+  <section class="section philosophy-section" id="player-development">
     <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Lo que hacemos</p>
-        <h2>Nuestros programas</h2>
+      <div class="section-head center reveal">
+        <p class="eyebrow">Our Philosophy</p>
+        <h2>Develop. Compete. Evolve.</h2>
+      </div>
+    </div>
+
+    <div class="philosophy-grid">
+      <article class="philosophy-block reveal">
+        <div class="philosophy-media" aria-hidden="true"><span>01</span></div>
+        <div class="philosophy-copy">
+          <h3>Develop</h3>
+          <p>Technical and individual skills — the foundation every complete player is built on.</p>
+        </div>
+      </article>
+      <article class="philosophy-block reveal">
+        <div class="philosophy-media" aria-hidden="true"><span>02</span></div>
+        <div class="philosophy-copy">
+          <h3>Compete</h3>
+          <p>Game situations, decision making and competitive mentality, under real pressure.</p>
+        </div>
+      </article>
+      <article class="philosophy-block reveal">
+        <div class="philosophy-media" aria-hidden="true"><span>03</span></div>
+        <div class="philosophy-copy">
+          <h3>Evolve</h3>
+          <p>Long-term player development and basketball IQ, built to last beyond one season.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — CAMPS & PROGRAMS -->
+  <section class="section camps-section" id="camps">
+    <div class="container">
+      <div class="section-head split reveal">
+        <div>
+          <p class="eyebrow">Camps &amp; Programs</p>
+          <h2>Train Your Way</h2>
+        </div>
+        <p class="section-lede">From single sessions to international programs — every format is built on the same ESD Hoops standard.</p>
       </div>
 
       <div class="programs-grid">
-
         <article class="program-card reveal">
-          <div class="program-icon">
-            <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="19" stroke="currentColor" stroke-width="3"/><path d="M24 5v38M6.5 15.5c6 4 29.5 4 35 0M6.5 32.5c6-4 29.5-4 35 0" stroke="currentColor" stroke-width="3"/></svg>
-          </div>
-          <h3>Torneos 3x3</h3>
-          <p>Competencias rápidas e intensas de tres contra tres, con la energía y el formato que definen el baloncesto de calle a nivel competitivo.</p>
-        </article>
-
-        <article class="program-card reveal">
-          <div class="program-icon">
-            <svg viewBox="0 0 48 48" fill="none"><path d="M24 4l6 12 13 2-9.5 9 2.3 13L24 33l-11.8 7 2.3-13-9.5-9 13-2z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>Liga 5x5 (Estilo AAU)</h3>
-          <p>Liga de cinco contra cinco inspirada en el modelo AAU americano: temporada regular, calendario de partidos y desarrollo continuo por equipos.</p>
-        </article>
-
-        <article class="program-card reveal">
-          <div class="program-icon">
-            <svg viewBox="0 0 48 48" fill="none"><path d="M24 6c-6 0-9 5-9 10s3 8 9 8 9-3 9-8-3-10-9-10z" stroke="currentColor" stroke-width="3"/><path d="M9 42c1-9 7-14 15-14s14 5 15 14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-          </div>
+          <div class="program-media" aria-hidden="true"></div>
           <h3>Basketball Camps</h3>
-          <p>Campamentos de baloncesto con jugadores profesionales invitados, enfocados en técnica, fundamentos y mentalidad competitiva.</p>
+          <p>Multi-day camps combining technical training, competition and professional-level coaching.</p>
         </article>
-
         <article class="program-card reveal">
-          <div class="program-icon">
-            <svg viewBox="0 0 48 48" fill="none"><path d="M6 40l10-22 8 12 6-10 12 20" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="16" cy="18" r="3" fill="currentColor"/></svg>
-          </div>
-          <h3>Combines</h3>
-          <p>Evaluaciones a lo largo del año que miden rendimiento físico y habilidades de baloncesto, con métricas claras del progreso de cada jugador.</p>
+          <div class="program-media" aria-hidden="true"></div>
+          <h3>Clinics</h3>
+          <p>Focused, single-topic sessions built around one skill or concept at a time.</p>
         </article>
-
         <article class="program-card reveal">
-          <div class="program-icon">
-            <svg viewBox="0 0 48 48" fill="none"><path d="M4 24s7-13 20-13 20 13 20 13-7 13-20 13S4 24 4 24z" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="24" r="5" stroke="currentColor" stroke-width="3"/></svg>
-          </div>
-          <h3>Showcase Camps</h3>
-          <p>Espacios donde los jugadores se muestran ante posibles futuros equipos, programas y entrenadores en busca de nuevas oportunidades.</p>
+          <div class="program-media" aria-hidden="true"></div>
+          <h3>Individual Training</h3>
+          <p>One-on-one sessions built entirely around a single player&rsquo;s game and goals.</p>
         </article>
+        <article class="program-card reveal">
+          <div class="program-media" aria-hidden="true"></div>
+          <h3>Small-Group Training</h3>
+          <p>Focused development in small groups, balancing individual attention with competition.</p>
+        </article>
+        <article class="program-card reveal">
+          <div class="program-media" aria-hidden="true"></div>
+          <h3>Team Training</h3>
+          <p>Tactical and system-based sessions built for teams and clubs preparing to compete.</p>
+        </article>
+        <article class="program-card reveal">
+          <div class="program-media" aria-hidden="true"></div>
+          <h3>International Programs</h3>
+          <p>Cross-border training experiences connecting ESD Hoops players to the global game.</p>
+        </article>
+      </div>
 
+      <div class="section-cta reveal">
+        <a href="#contact-form" class="btn btn-outline btn-lg">View All Programs</a>
       </div>
     </div>
   </section>
 
-  <section class="section camp-feature" id="camp-cazorla">
-    <div class="container camp-feature-inner">
-      <div class="camp-feature-text reveal">
-        <p class="eyebrow eyebrow-light">Camp especial</p>
-        <h2>Camp con Maite Cazorla</h2>
-        <p>
-          Estamos preparando un campamento de baloncesto junto a la jugadora profesional
-          <strong>Maite Cazorla</strong>, una oportunidad única para entrenar, aprender y compartir
-          cancha con talento de nivel profesional. Muy pronto compartiremos fechas, sede e
-          inscripciones.
-        </p>
-        <a href="#contacto" class="btn btn-outline btn-on-dark">Quiero más información</a>
+  <!-- SECTION 5 — COMMUNITY -->
+  <section class="community-section" id="community">
+    <div class="community-texture" aria-hidden="true"></div>
+    <div class="container community-inner">
+      <p class="eyebrow eyebrow-light reveal">Culture</p>
+      <h2 class="h-light reveal">The ESD Hoops Community</h2>
+      <p class="community-text reveal">A basketball community where players train, compete, learn and connect — coaches, teammates and competitors building the same process, together. On the court and off it, this is where the culture lives.</p>
+      <div class="community-stats reveal">
+        <div class="stat"><span class="stat-num">3x3</span><span class="stat-label">FIBA-Endorsed Events</span></div>
+        <div class="stat"><span class="stat-num">1</span><span class="stat-label">Season-Long Process</span></div>
+        <div class="stat"><span class="stat-num">&infin;</span><span class="stat-label">Room To Grow</span></div>
       </div>
-      <div class="camp-feature-badge reveal" aria-hidden="true">
-        <div class="badge-ball spin-ball">
-          <svg viewBox="0 0 100 100" fill="none">
-            <circle cx="50" cy="50" r="38" stroke="#d9c4b0" stroke-width="3"/>
-            <path d="M50 12v76M14 32c10 7 62 7 72 0M14 68c10-7 62-7 72 0" stroke="#d9c4b0" stroke-width="3"/>
-          </svg>
+    </div>
+  </section>
+
+  <!-- SECTION 6 — NEWS / EVENTS -->
+  <section class="section news-section" id="news">
+    <div class="container">
+      <div class="section-head split reveal">
+        <div>
+          <p class="eyebrow">News &amp; Events</p>
+          <h2>From The Court</h2>
         </div>
-        <p class="badge-label">Jugadora profesional<br><strong>Maite Cazorla</strong></p>
+        <p class="section-lede">3x3 tournaments, training programs, camps and announcements from across ESD Hoops.</p>
+      </div>
+
+      <div class="news-grid">
+        <article class="news-card news-card-lg reveal">
+          <div class="news-media" aria-hidden="true"><span class="news-media-tag">3x3</span></div>
+          <p class="news-date">Sept 2026</p>
+          <h3>ESD Street Series Opens Registration</h3>
+          <p>FIBA 3x3 competition returns with open and senior divisions — registration is live now.</p>
+        </article>
+        <article class="news-card reveal">
+          <div class="news-media" aria-hidden="true"><span class="news-media-tag">Development</span></div>
+          <p class="news-date">Oct 2026</p>
+          <h3>In-Season Training Slots Open For Fall</h3>
+          <p>Individual and small-group sessions with Vincenzo Esposito&rsquo;s coaching program.</p>
+        </article>
+        <article class="news-card reveal">
+          <div class="news-media" aria-hidden="true"><span class="news-media-tag">Camps</span></div>
+          <p class="news-date">Winter 2026</p>
+          <h3>Winter Camp Dates Announced Soon</h3>
+          <p>A multi-day development camp for competitive players — details coming shortly.</p>
+        </article>
+        <article class="news-card reveal">
+          <div class="news-media" aria-hidden="true"><span class="news-media-tag">Community</span></div>
+          <p class="news-date">Ongoing</p>
+          <h3>ESD Hoops Community Sessions</h3>
+          <p>Open runs and community events connecting players across every ESD Hoops program.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="section" id="contacto">
-    <div class="container contact-grid">
-      <div class="contact-text reveal">
-        <p class="eyebrow">Hablemos</p>
-        <h2>¿Listo para tu próximo torneo, liga o camp?</h2>
-        <p>
-          Escríbenos para conocer fechas, sedes e inscripciones de nuestros torneos 3x3,
-          la liga 5x5, los camps, combines y showcases.
-        </p>
+  <!-- CONTACT -->
+  <section class="contact-dark" id="contact">
+    <div class="contact-texture" aria-hidden="true"></div>
+    <div class="container contact-dark-inner">
+      <p class="eyebrow eyebrow-light reveal">Get In Touch</p>
+      <h2 class="reveal">Ready To Get Better?</h2>
+      <p class="contact-tagline reveal">Train. Compete. Develop.</p>
+      <div class="contact-dark-actions reveal">
+        <a href="mailto:info@esdhoops.com" class="contact-email-lg">info@esdhoops.com</a>
+        <a href="mailto:info@esdhoops.com?subject=ESD%20Hoops%20Inquiry" class="btn btn-primary btn-lg">Contact ESD Hoops</a>
       </div>
-      <div class="contact-card reveal">
-        <a class="contact-email" href="mailto:info@esdhoops.com">info@esdhoops.com</a>
-        <a href="mailto:info@esdhoops.com?subject=Consulta%20ESD%20Hoops" class="btn btn-primary">Enviar correo</a>
+      <div class="social-links reveal">
+        <a href="https://instagram.com/esdhoops" target="_blank" rel="noopener" aria-label="ESD Hoops on Instagram">Instagram</a>
+        <a href="https://twitter.com/esdhoops" target="_blank" rel="noopener" aria-label="ESD Hoops on X">X / Twitter</a>
+        <a href="https://youtube.com/@esdhoops" target="_blank" rel="noopener" aria-label="ESD Hoops on YouTube">YouTube</a>
       </div>
     </div>
   </section>
@@ -207,19 +416,21 @@
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <a href="#inicio" class="brand brand-footer">
+    <a href="#home" class="brand brand-footer">
       <img src="assets/img/logo-light.svg" alt="ESD Hoops" class="brand-mark">
       <span class="brand-name">ESD <strong>HOOPS</strong></span>
     </a>
     <nav class="footer-nav">
-      <a href="#nosotros">Nosotros</a>
-      <a href="#programas">Programas</a>
-      <a href="#camp-cazorla">Camp Cazorla</a>
-      <a href="#contacto">Contacto</a>
+      <a href="#3x3">3x3</a>
+      <a href="#in-season">In-Season</a>
+      <a href="#player-development">Player Development</a>
+      <a href="#camps">Camps</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
     </nav>
     <div class="footer-meta">
       <a href="mailto:info@esdhoops.com">info@esdhoops.com</a>
-      <p>&copy; <span id="year"></span> ESD Hoops. Todos los derechos reservados.</p>
+      <p>&copy; <span id="year"></span> ESD Hoops. All rights reserved.</p>
     </div>
   </div>
 </footer>

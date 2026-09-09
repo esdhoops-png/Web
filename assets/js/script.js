@@ -32,11 +32,30 @@ const observer = new IntersectionObserver((entries) => {
 
 revealItems.forEach((item) => observer.observe(item));
 
-/* Spotlight hover effect on program cards: a soft glow that follows the cursor */
-document.querySelectorAll('.program-card').forEach((card) => {
-  card.addEventListener('pointermove', (event) => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--spot-x', `${event.clientX - rect.left}px`);
-    card.style.setProperty('--spot-y', `${event.clientY - rect.top}px`);
+/* In-season contact form: builds a mailto with the entered details.
+   Static site, no backend — mailto keeps it a working, honest zero-dependency form. */
+const devForm = document.getElementById('devForm');
+if (devForm) {
+  devForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(devForm);
+    const name = data.get('name') || '';
+    const email = data.get('email') || '';
+    const phone = data.get('phone') || '';
+    const role = data.get('role') || '';
+    const program = data.get('program') || '';
+    const message = data.get('message') || '';
+
+    const subject = `ESD Hoops Inquiry — ${name}`;
+    const body =
+      `Name: ${name}\n` +
+      `Email: ${email}\n` +
+      `Phone: ${phone}\n` +
+      `Role: ${role}\n` +
+      `Program: ${program}\n\n` +
+      `Message:\n${message}`;
+
+    window.location.href =
+      `mailto:info@esdhoops.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
-});
+}
