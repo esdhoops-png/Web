@@ -95,13 +95,13 @@
     media.appendChild(v);
   }
   const todayItems = (SITE.today && SITE.today.items) || [];
-  $('#heroToday').innerHTML = todayItems.map((it) =>
+  if ($('#heroToday')) $('#heroToday').innerHTML = todayItems.map((it) =>
     `<li>${icon((TYPE[it.type] || TYPE.fiesta).icon, 18)}<span>${esc(it.title)}</span><time>${esc(it.time)}</time></li>`).join('');
 
   // sonido: solo al pulsar y solo si hay archivo configurado
   const soundBtn = $('#soundBtn');
   let audio = null;
-  soundBtn.addEventListener('click', () => {
+  if (soundBtn) soundBtn.addEventListener('click', () => {
     if (!CFG.sound) { toast('Audio pendiente: añade un archivo en js/data.js (sound).'); return; }
     if (!audio) { audio = new Audio(CFG.sound); audio.loop = true; audio.volume = .6; }
     const on = soundBtn.getAttribute('aria-pressed') !== 'true';
@@ -142,7 +142,7 @@
   /* ---------------- scroll (un solo rAF) ---------------- */
   const hero = $('.hero');
   const expFlow = $('#expFlow');
-  const expItems = $$('li', expFlow);
+  const expItems = expFlow ? $$('li', expFlow) : [];
   const badge = $('.exp-badge');
   const night = $('#noche');
   const nightClock = $('#nightClock');
@@ -166,7 +166,7 @@
     // experiencia: los conceptos se encienden al pasar por el centro
     let lit = 0;
     expItems.forEach((li) => { const on = li.getBoundingClientRect().top < vh * .62; li.classList.toggle('on', on); if (on) lit++; });
-    expFlow.style.setProperty('--flow', expItems.length > 1 ? clamp((lit - 1) / (expItems.length - 1)) : 0);
+    if (expFlow) expFlow.style.setProperty('--flow', expItems.length > 1 ? clamp((lit - 1) / (expItems.length - 1)) : 0);
     if (badge && !reduced) badge.style.setProperty('--rot', (y * .04).toFixed(1));
 
     // tarde → noche
@@ -289,10 +289,9 @@
       const t = TYPE[e.type] || TYPE.fiesta;
       return `<article class="poster" style="--i:${i}" data-id="${esc(e.id)}">
         <div class="poster-img"><img src="${esc(e.image)}" alt="Imagen de ejemplo para ${esc(e.name)}" loading="lazy"></div>
-        <div class="poster-top"><span class="tag${e.type === 'futbol' ? ' is-green' : ''}">${icon(t.icon, 14)}${esc(t.label)}</span><span class="poster-time">${esc(e.time)}</span></div>
-        <div class="poster-date"><strong>${e.when.getDate()}</strong><span>${MONTHS[e.when.getMonth()]}</span></div>
+        <div class="poster-top"><span class="tag">${esc(t.label)}</span></div>
         <div class="poster-body">
-          <p class="poster-day">${DAYS[e.when.getDay()]}</p>
+          <p class="poster-day">${DAYS[e.when.getDay()].slice(0, 3)} ${e.when.getDate()} ${MONTHS[e.when.getMonth()]} · ${esc(e.time)}</p>
           <h3>${esc(e.name)}</h3>
           <p class="poster-artist">${esc(e.artist)}</p>
           <div class="poster-actions">
@@ -317,19 +316,6 @@
     b.tabIndex = i === 0 ? 0 : -1;
   });
   renderEvents('all');
-
-  // inclinación sutil de los carteles con el ratón
-  if (finePointer && !reduced) {
-    grid.addEventListener('pointermove', (e) => {
-      const card = e.target.closest('.poster'); if (!card) return;
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--tilt-y', ((e.clientX - r.left) / r.width - .5) * 6 + 'deg');
-      card.style.setProperty('--tilt-x', -((e.clientY - r.top) / r.height - .5) * 6 + 'deg');
-    });
-    grid.addEventListener('pointerout', (e) => {
-      const card = e.target.closest('.poster'); if (card && !card.contains(e.relatedTarget)) { card.style.setProperty('--tilt-x', '0deg'); card.style.setProperty('--tilt-y', '0deg'); }
-    });
-  }
 
   /* ---------------- tardeo ---------------- */
   const TD = SITE.tardeo || {};
@@ -614,17 +600,6 @@
     }
     if (menu.classList.contains('open') && e.key === 'Escape') { setMenu(false); burger.focus(); }
   });
-
-  /* ---------------- cursor ---------------- */
-  if (finePointer && !reduced) {
-    document.documentElement.classList.add('has-cursor');
-    const cur = $('.cursor');
-    let x = -100, y = -100, cx = -100, cy = -100;
-    window.addEventListener('pointermove', (e) => { x = e.clientX; y = e.clientY; }, { passive: true });
-    document.addEventListener('pointerover', (e) => cur.classList.toggle('hover', !!e.target.closest('a, button, .tile, .poster, input, select')));
-    const loop = () => { cx += (x - cx) * .2; cy += (y - cy) * .2; cur.style.transform = `translate3d(${cx}px, ${cy}px, 0)`; requestAnimationFrame(loop); };
-    loop();
-  }
 
   /* ---------------- arranque ---------------- */
   loadMatches().then((list) => { MATCHES = list; renderMatches(); watch($('#futbol')); });

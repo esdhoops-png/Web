@@ -57,7 +57,6 @@
   <button class="loader-skip" type="button" id="loaderSkip">Entrar</button>
 </div>
 
-<div class="cursor" aria-hidden="true"><span></span></div>
 
 <!-- NAVBAR -->
 <header class="nav" id="nav">
@@ -108,7 +107,6 @@
     </div>
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="hero-content">
-      <p class="hero-kicker reveal-up" style="--d:.05s"><span class="live-dot" aria-hidden="true"></span>Heineken 5mentarios</p>
       <h1 id="heroTitle" class="hero-title">
         <span class="line"><span class="word">La</span> <span class="word">tarde</span></span>
         <span class="line"><span class="word">no</span> <span class="word">termina</span></span>
@@ -121,58 +119,25 @@
       </div>
     </div>
 
-    <aside class="today-chip reveal-up" style="--d:.9s" aria-label="Hoy en 5mentarios">
-      <p class="today-chip-title"><span class="live-dot" aria-hidden="true"></span>Hoy en 5mentarios</p>
-      <ul id="heroToday"></ul>
-    </aside>
 
     <div class="hero-bottom">
-      <a class="scroll-cue" href="#experiencia">Scroll <svg width="16" height="16" aria-hidden="true"><use href="#i-down"/></svg></a>
-      <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false">
-        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="sound-label">Play sound</span>
-      </button>
+      <a class="scroll-cue" href="#hoy">Scroll <svg width="16" height="16" aria-hidden="true"><use href="#i-down"/></svg></a>
     </div>
   </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      <span>Tardeo</span><b>—</b><span>Fútbol</span><b>—</b><span>Live music</span><b>—</b><span>DJ</span><b>—</b><span>Night</span><b>—</b>
-      <span>Tardeo</span><b>—</b><span>Fútbol</span><b>—</b><span>Live music</span><b>—</b><span>DJ</span><b>—</b><span>Night</span><b>—</b>
-    </div>
-  </div>
 
-  <!-- 2. EXPERIENCIA -->
-  <section class="section experience" id="experiencia" aria-labelledby="expTitle">
-    <div class="wrap exp-grid">
-      <div class="exp-intro">
-        <p class="eyebrow reveal">La experiencia</p>
-        <h2 id="expTitle" class="h-xl reveal">No es solo<br>un bar.</h2>
-        <p class="lead reveal">Empieza la tarde, quédate por la música y termina la noche con nosotros.</p>
-        <p class="exp-claim reveal">No importa a qué hora llegues.<br><strong>La experiencia continúa.</strong></p>
-        <img class="exp-badge" src="img/logo-5mentarios.png" alt="" width="320" height="320" loading="lazy">
-      </div>
-      <ol class="exp-flow" id="expFlow">
-        <li><span class="exp-time">Tarde</span><span class="exp-word">Tardeo</span></li>
-        <li><span class="exp-time">Primera hora</span><span class="exp-word">Música en directo</span></li>
-        <li><span class="exp-time">Matchday</span><span class="exp-word">Fútbol</span></li>
-        <li><span class="exp-time">Más tarde</span><span class="exp-word">DJ</span></li>
-        <li><span class="exp-time">Hasta última hora</span><span class="exp-word green">Noche</span></li>
-      </ol>
-    </div>
-  </section>
 
   <!-- ¿QUÉ PASA HOY? -->
   <section class="section today" id="hoy" aria-labelledby="todayTitle">
     <div class="wrap">
       <div class="head-row">
         <div>
-          <p class="eyebrow reveal">Agenda</p>
-          <h2 id="todayTitle" class="h-lg reveal">¿Qué pasa hoy?</h2>
+          <p class="eyebrow reveal">La experiencia</p>
+          <h2 id="todayTitle" class="h-xl reveal">No es solo un bar.</h2>
+          <p class="lead reveal">Empieza la tarde, quédate por la música y termina la noche con nosotros. No importa a qué hora llegues: la experiencia continúa.</p>
         </div>
-        <p class="note reveal" id="todayLabel"></p>
       </div>
+      <div class="today-head reveal"><h3>¿Qué pasa hoy?</h3><p class="note" id="todayLabel"></p></div>
       <ol class="timeline" id="todayTimeline"></ol>
     </div>
   </section>
@@ -214,7 +179,6 @@
 
   <!-- FÚTBOL -->
   <section class="section football" id="futbol" aria-labelledby="footTitle">
-    <div class="led-bg" aria-hidden="true"></div>
     <div class="wrap">
       <div class="head-row">
         <div>
@@ -227,16 +191,6 @@
       <div class="matchday" id="matchFeatured"></div>
       <ul class="match-list" id="matchList"></ul>
 
-      <div class="chain-block">
-        <h3 class="h-lg reveal">Del primer tiempo<br>al último tema.</h3>
-        <ol class="chain" id="chain">
-          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-ball"/></svg><span>Partido</span></li>
-          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-beer"/></svg><span>Cerveza</span></li>
-          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-music"/></svg><span>Música</span></li>
-          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-headphones"/></svg><span>DJ</span></li>
-          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-moon"/></svg><span>Noche</span></li>
-        </ol>
-      </div>
     </div>
   </section>
 
@@ -278,9 +232,6 @@
           <span class="g-day">Tarde</span>
           <span class="g-night">Noche</span>
         </div>
-        <ol class="night-steps" id="nightSteps">
-          <li>Tardeo</li><li>Partido</li><li>Directo</li><li>DJ</li><li>Hasta última hora</li>
-        </ol>
       </div>
     </div>
   </section>
@@ -425,7 +376,6 @@
         <a href="#eventos">Eventos</a><a href="#tardeo">Tardeo</a><a href="#futbol">Fútbol</a><a href="#musica">Música</a><a href="#galeria">Galería</a><a href="#reservas">Reservas</a>
       </nav>
     </div>
-    <p class="footer-giant" aria-hidden="true">5mentarios</p>
     <div class="footer-bottom">
       <p>© <span id="year">2026</span> Heineken 5mentarios · <span data-cfg="address"></span></p>
       <p>Consumo responsable · Prohibida la venta de alcohol a menores de 18 años · <a href="#">Aviso legal</a> · <a href="#">Privacidad</a></p>
