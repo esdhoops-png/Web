@@ -222,7 +222,7 @@
     const hue = [140, 0, 210, 45, 280, 170][h % 6];
     const initials = (team.short || team.name).slice(0, 3).toUpperCase();
     return `<svg class="crest" viewBox="0 0 100 116" width="${size}" height="${Math.round(size * 1.16)}" role="img" aria-label="Escudo genérico de ${esc(team.name)}">
-      <path d="M50 4 94 18v38c0 28-19 46-44 56C25 102 6 84 6 56V18Z" fill="hsl(${hue} 30% 14%)" stroke="hsl(${hue} 55% 55%)" stroke-width="4"/>
+      <path d="M50 4 94 18v38c0 28-19 46-44 56C25 102 6 84 6 56V18Z" fill="hsl(${hue} 12% 13%)" stroke="hsl(${hue} 18% 58%)" stroke-width="4"/>
       <path d="M50 16 82 26v28c0 20-13 33-32 41-19-8-32-21-32-41V26Z" fill="none" stroke="rgba(245,247,245,.18)" stroke-width="2"/>
       <text x="50" y="66" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="30" fill="#f5f7f5">${esc(initials)}</text></svg>`;
   }
