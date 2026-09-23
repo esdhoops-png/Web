@@ -6,7 +6,9 @@
 <title>Volcán Smash Burger · El fuego está servido</title>
 <meta name="description" content="Smash burgers hechas a fuego alto, con costra crujiente, queso fundido y actitud. Carta, locales y pedidos de Volcán Smash Burger.">
 <meta name="theme-color" content="#0b0908">
-<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta property="og:image" content="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -221,7 +223,7 @@
 <!-- ============ PRELOADER ============ -->
 <div class="preloader" id="preloader" aria-hidden="true">
   <div class="preloader-inner">
-    <img src="img/logo.svg" alt="" width="72" height="72">
+    <img src="img/logo.png" alt="" width="150" height="150">
     <div class="preloader-bar"><span></span></div>
     <p>Calentando la plancha a 250°C…</p>
   </div>
@@ -231,7 +233,7 @@
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
     <a href="#inicio" class="brand" aria-label="Volcán Smash Burger, inicio">
-      <img src="img/logo.svg" alt="" width="40" height="40">
+      <img src="img/logo-sm.png" alt="" width="48" height="48">
       <span class="brand-name">VOLCÁN<small>SMASH BURGER</small></span>
     </a>
     <nav class="main-nav" id="mainNav" aria-label="Principal">
@@ -471,6 +473,7 @@
   <section class="section club" id="club" aria-labelledby="clubTitle">
     <canvas class="embers" id="clubEmbers" aria-hidden="true"></canvas>
     <div class="container club-inner reveal">
+      <img class="club-stamp" src="img/logo.png" alt="" width="150" height="150" loading="lazy">
       <p class="kicker">Club Magma</p>
       <h2 id="clubTitle" class="club-title">Entra al <span class="lava-text">cráter</span></h2>
       <p class="section-lead">Burgers secretas, drops de edición limitada y una smash gratis el día de tu cumpleaños.</p>
@@ -488,9 +491,8 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-top">
-      <a href="#inicio" class="brand">
-        <img src="img/logo.svg" alt="" width="40" height="40">
-        <span class="brand-name">VOLCÁN<small>SMASH BURGER</small></span>
+      <a href="#inicio" class="footer-logo" aria-label="Volcán Smash Burger, volver arriba">
+        <img src="img/logo.png" alt="Volcán Smash Burger" width="120" height="120" loading="lazy">
       </a>
       <nav class="footer-nav" aria-label="Pie de página">
         <a href="#carta">Carta</a>

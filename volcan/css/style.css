@@ -149,7 +149,7 @@ p { margin: 0; }
 }
 .preloader.is-done { opacity: 0; visibility: hidden; }
 .preloader-inner { display: grid; justify-items: center; gap: 18px; }
-.preloader-inner img { animation: pulse 1.2s ease-in-out infinite; }
+.preloader-inner img { width: 150px; height: 150px; animation: pulse 1.2s ease-in-out infinite; }
 .preloader-inner p { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .preloader-bar { width: 180px; height: 3px; background: var(--ash); border-radius: 3px; overflow: hidden; }
 .preloader-bar span { display: block; height: 100%; width: 100%; background: var(--grad-lava); transform-origin: left; animation: load 1s var(--ease-out) forwards; }
@@ -173,7 +173,8 @@ html:not(.js) .preloader { display: none; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 24px; }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; }
-.brand img { width: 40px; height: 40px; }
+.brand img { width: 48px; height: 48px; transition: transform .6s var(--ease-spring); }
+.brand:hover img { transform: rotate(-12deg) scale(1.06); }
 .brand-name { font-family: var(--font-display); font-size: 24px; letter-spacing: .04em; line-height: .9; }
 .brand-name small { display: block; font-family: var(--font-body); font-size: 9.5px; font-weight: 800; letter-spacing: .32em; color: var(--fire); margin-top: 4px; }
 
@@ -643,6 +644,8 @@ html:not(.js) .preloader { display: none; }
    ========================================================= */
 .club { overflow: hidden; text-align: center; background: radial-gradient(900px 500px at 50% 120%, rgba(224, 38, 27, .45), transparent 70%), var(--coal); }
 .club-inner { position: relative; z-index: 2; display: grid; justify-items: center; }
+.club-stamp { width: 130px; height: 130px; margin-bottom: 26px; transform: rotate(-8deg); filter: drop-shadow(0 0 30px rgba(255, 122, 26, .35)); transition: transform .8s var(--ease-spring); }
+.club-inner:hover .club-stamp { transform: rotate(6deg) scale(1.05); }
 .club-title { margin-top: 14px; font-family: var(--font-display); font-size: clamp(56px, 10vw, 150px); line-height: .9; }
 .club-form { display: flex; gap: 10px; width: 100%; max-width: 520px; margin-top: 34px; padding: 6px; border-radius: 999px; background: rgba(255, 255, 255, .05); border: 1px solid var(--line); }
 .club-form input {
@@ -659,6 +662,8 @@ html:not(.js) .preloader { display: none; }
    ========================================================= */
 .site-footer { padding: 70px 0 30px; background: var(--coal); border-top: 1px solid var(--line); overflow: hidden; }
 .footer-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
+.footer-logo img { width: 120px; height: 120px; transition: transform .8s var(--ease-spring); }
+.footer-logo:hover img { transform: rotate(-10deg) scale(1.05); }
 .footer-nav { display: flex; flex-wrap: wrap; gap: 26px; font-weight: 700; font-size: 14px; letter-spacing: .06em; }
 .footer-nav a:hover { color: var(--fire); }
 .footer-social { display: flex; gap: 10px; }
