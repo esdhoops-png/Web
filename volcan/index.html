@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volcán Smash Burger · El fuego está servido</title>
+<meta name="description" content="Smash burgers hechas a fuego alto, con costra crujiente, queso fundido y actitud. Carta, locales y pedidos de Volcán Smash Burger.">
+<meta name="theme-color" content="#0b0908">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- ============ SPRITE: capas de la hamburguesa + ilustraciones ============ -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="g-bun" cx="42%" cy="18%" r="85%">
+      <stop offset="0" stop-color="#ffc877"/>
+      <stop offset=".35" stop-color="#e8892f"/>
+      <stop offset=".75" stop-color="#b3521a"/>
+      <stop offset="1" stop-color="#6e2a0c"/>
+    </radialGradient>
+    <linearGradient id="g-bun-base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7cf8f"/>
+      <stop offset=".22" stop-color="#e79a45"/>
+      <stop offset=".7" stop-color="#b85a1d"/>
+      <stop offset="1" stop-color="#6b290b"/>
+    </linearGradient>
+    <linearGradient id="g-patty" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a4a22"/>
+      <stop offset=".35" stop-color="#5a2a12"/>
+      <stop offset="1" stop-color="#231008"/>
+    </linearGradient>
+    <linearGradient id="g-cheese" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe27a"/>
+      <stop offset=".5" stop-color="#ffc21f"/>
+      <stop offset="1" stop-color="#f08a0c"/>
+    </linearGradient>
+    <linearGradient id="g-sauce" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff7a2a"/>
+      <stop offset=".5" stop-color="#f0401c"/>
+      <stop offset="1" stop-color="#b3160f"/>
+    </linearGradient>
+    <radialGradient id="g-pickle" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#c9e27a"/>
+      <stop offset=".55" stop-color="#86b33f"/>
+      <stop offset="1" stop-color="#3f6a1c"/>
+    </radialGradient>
+    <linearGradient id="g-volcano" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1d18"/>
+      <stop offset="1" stop-color="#0b0908"/>
+    </linearGradient>
+    <linearGradient id="g-lava-flow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd166"/>
+      <stop offset=".3" stop-color="#ff7a1a"/>
+      <stop offset="1" stop-color="#e0261b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <symbol id="l-bun-top" viewBox="0 0 400 170">
+    <path d="M18 150C18 62 108 8 200 8s182 54 182 142c0 12-8 18-22 18H40c-14 0-22-6-22-18Z" fill="url(#g-bun)"/>
+    <path d="M22 146c40 10 316 10 356 0v6c0 10-8 16-20 16H42c-12 0-20-6-20-16Z" fill="#7a300d" opacity=".55"/>
+    <ellipse cx="150" cy="48" rx="92" ry="26" fill="#fff" opacity=".16" transform="rotate(-10 150 48)"/>
+    <g fill="#f8ebc9">
+      <ellipse cx="120" cy="60" rx="9" ry="4.5" transform="rotate(-25 120 60)"/>
+      <ellipse cx="165" cy="38" rx="9" ry="4.5" transform="rotate(15 165 38)"/>
+      <ellipse cx="215" cy="30" rx="9" ry="4.5" transform="rotate(-8 215 30)"/>
+      <ellipse cx="262" cy="46" rx="9" ry="4.5" transform="rotate(30 262 46)"/>
+      <ellipse cx="300" cy="78" rx="9" ry="4.5" transform="rotate(-20 300 78)"/>
+      <ellipse cx="88" cy="96" rx="9" ry="4.5" transform="rotate(35 88 96)"/>
+      <ellipse cx="190" cy="72" rx="9" ry="4.5" transform="rotate(-40 190 72)"/>
+      <ellipse cx="240" cy="88" rx="9" ry="4.5" transform="rotate(12 240 88)"/>
+      <ellipse cx="145" cy="104" rx="9" ry="4.5" transform="rotate(-12 145 104)"/>
+      <ellipse cx="330" cy="116" rx="9" ry="4.5" transform="rotate(40 330 116)"/>
+      <ellipse cx="60" cy="130" rx="8" ry="4" transform="rotate(-30 60 130)"/>
+      <ellipse cx="282" cy="118" rx="9" ry="4.5" transform="rotate(-35 282 118)"/>
+    </g>
+    <g fill="#a86a2a" opacity=".45">
+      <ellipse cx="121" cy="62" rx="8" ry="2"  transform="rotate(-25 121 62)"/>
+      <ellipse cx="263" cy="48" rx="8" ry="2"  transform="rotate(30 263 48)"/>
+      <ellipse cx="191" cy="74" rx="8" ry="2"  transform="rotate(-40 191 74)"/>
+    </g>
+  </symbol>
+
+  <symbol id="l-patty" viewBox="0 0 400 86">
+    <path d="M12 34c14-20 46-16 76-22 40-8 72 2 112-4 40-6 78 4 118-2 32-4 60 4 70 24 8 18-2 34-24 40-40 10-80 4-120 8s-80 10-120 8c-40-2-78 0-98-14C6 64 2 48 12 34Z" fill="url(#g-patty)"/>
+    <path d="M18 30c16-14 44-10 70-16M150 12c30-4 60 2 90-2M280 12c30-2 70 0 94 18" stroke="#c46a2c" stroke-width="5" stroke-linecap="round" fill="none" opacity=".75"/>
+    <path d="M10 44c-6 6-4 12 2 16M388 42c8 6 6 14-2 18M40 70c-10 4-14 8-10 12M360 72c10 2 14 6 8 10" stroke="#9a4a1c" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <g fill="#b85e24" opacity=".7">
+      <circle cx="60" cy="40" r="3"/><circle cx="102" cy="30" r="2.5"/><circle cx="140" cy="46" r="3.5"/>
+      <circle cx="186" cy="28" r="2.5"/><circle cx="224" cy="44" r="3"/><circle cx="268" cy="30" r="2.5"/>
+      <circle cx="310" cy="42" r="3.5"/><circle cx="350" cy="34" r="2.5"/><circle cx="84" cy="56" r="2"/>
+      <circle cx="252" cy="58" r="2"/>
+    </g>
+    <g fill="#140804" opacity=".8">
+      <circle cx="78" cy="48" r="3"/><circle cx="120" cy="60" r="2.5"/><circle cx="170" cy="50" r="3"/>
+      <circle cx="206" cy="62" r="2.5"/><circle cx="246" cy="36" r="2"/><circle cx="290" cy="56" r="3"/>
+      <circle cx="334" cy="54" r="2.5"/><circle cx="40" cy="52" r="2"/><circle cx="372" cy="46" r="2"/>
+    </g>
+  </symbol>
+
+  <symbol id="l-cheese" viewBox="0 0 400 96">
+    <path d="M8 10h384v22c-10 0-12 24-20 30s-12-22-22-28h-44c-8 0-10 40-22 48s-16-32-20-46h-66c-8 0-6 26-18 30s-14-24-24-30H92c-8 0-8 48-22 50S56 42 48 34H8Z" fill="url(#g-cheese)"/>
+    <path d="M14 16h372" stroke="#fff3b8" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+    <path d="M70 60c2 12-2 20-4 24M280 60c2 10 0 16-2 20" stroke="#fff3b8" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+  </symbol>
+
+  <symbol id="l-sauce" viewBox="0 0 400 56">
+    <path d="M14 22c44-16 84 10 126-4 40-14 80 12 120-2 40-14 80 8 126-2v12c-22 16-54 6-74 22-14 10-20-10-40-12-30-2-50 14-80 10s-50 12-70 2c-20-8-40 8-70 0-20-4-30-2-38-10Z" fill="url(#g-sauce)"/>
+    <path d="M40 22c30-6 60 6 90-2M220 18c30-6 60 4 90-2" stroke="#ffb07a" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7"/>
+    <circle cx="316" cy="46" r="5" fill="#c81d12"/>
+    <circle cx="96" cy="44" r="4" fill="#c81d12"/>
+  </symbol>
+
+  <symbol id="l-pickles" viewBox="0 0 400 60">
+    <g>
+      <ellipse cx="78" cy="32" rx="52" ry="20" fill="url(#g-pickle)" stroke="#355a17" stroke-width="4"/>
+      <ellipse cx="78" cy="32" rx="32" ry="10" fill="none" stroke="#e6f2b0" stroke-width="2.5" stroke-dasharray="3 6" opacity=".8"/>
+      <ellipse cx="170" cy="28" rx="54" ry="20" fill="url(#g-pickle)" stroke="#355a17" stroke-width="4"/>
+      <ellipse cx="170" cy="28" rx="34" ry="10" fill="none" stroke="#e6f2b0" stroke-width="2.5" stroke-dasharray="3 6" opacity=".8"/>
+      <ellipse cx="258" cy="34" rx="50" ry="19" fill="url(#g-pickle)" stroke="#355a17" stroke-width="4"/>
+      <ellipse cx="258" cy="34" rx="30" ry="9" fill="none" stroke="#e6f2b0" stroke-width="2.5" stroke-dasharray="3 6" opacity=".8"/>
+      <ellipse cx="336" cy="28" rx="46" ry="18" fill="url(#g-pickle)" stroke="#355a17" stroke-width="4"/>
+      <ellipse cx="336" cy="28" rx="28" ry="9" fill="none" stroke="#e6f2b0" stroke-width="2.5" stroke-dasharray="3 6" opacity=".8"/>
+    </g>
+  </symbol>
+
+  <symbol id="l-onion" viewBox="0 0 400 52">
+    <g fill="none" stroke-linecap="round">
+      <ellipse cx="110" cy="26" rx="82" ry="16" stroke="#b76fc9" stroke-width="8"/>
+      <ellipse cx="110" cy="26" rx="82" ry="16" stroke="#f3e4f7" stroke-width="3"/>
+      <ellipse cx="110" cy="26" rx="56" ry="10" stroke="#9b4fb3" stroke-width="6"/>
+      <ellipse cx="290" cy="26" rx="86" ry="17" stroke="#b76fc9" stroke-width="8"/>
+      <ellipse cx="290" cy="26" rx="86" ry="17" stroke="#f3e4f7" stroke-width="3"/>
+      <ellipse cx="290" cy="26" rx="60" ry="11" stroke="#9b4fb3" stroke-width="6"/>
+      <ellipse cx="200" cy="30" rx="44" ry="9" stroke="#d9a8e6" stroke-width="6"/>
+    </g>
+  </symbol>
+
+  <symbol id="l-bun-bottom" viewBox="0 0 400 92">
+    <path d="M22 10h356c12 0 16 8 14 18-6 36-40 56-94 58H102c-54-2-88-22-94-58-2-10 2-18 14-18Z" fill="url(#g-bun-base)"/>
+    <path d="M22 10h356c10 0 14 6 14 12H8c0-6 4-12 14-12Z" fill="#fbe0b0"/>
+    <ellipse cx="200" cy="58" rx="150" ry="10" fill="#fff" opacity=".08"/>
+  </symbol>
+
+  <!-- Ilustraciones de la carta -->
+  <symbol id="i-fries" viewBox="0 0 200 200">
+    <g stroke="#b36b00" stroke-width="2">
+      <rect x="58" y="30" width="14" height="90" rx="4" fill="#ffc94a" transform="rotate(-10 65 75)"/>
+      <rect x="80" y="18" width="14" height="100" rx="4" fill="#ffd66b"/>
+      <rect x="100" y="24" width="14" height="96" rx="4" fill="#ffc23a" transform="rotate(6 107 72)"/>
+      <rect x="120" y="32" width="14" height="88" rx="4" fill="#ffd66b" transform="rotate(14 127 76)"/>
+      <rect x="70" y="40" width="14" height="80" rx="4" fill="#ffb627" transform="rotate(4 77 80)"/>
+      <rect x="110" y="44" width="14" height="80" rx="4" fill="#ffc94a" transform="rotate(-6 117 84)"/>
+    </g>
+    <path d="M44 92h112l-14 90H58Z" fill="#e0261b"/>
+    <path d="M44 92h112l-3 18H47Z" fill="#b31a12"/>
+    <path d="M86 128c8-16 20-16 28 0 6 12-4 26-14 32-10-6-20-20-14-32Z" fill="#ffb627"/>
+    <path d="M94 136c4-8 8-8 12 0 3 6-2 13-6 16-4-3-9-10-6-16Z" fill="#fff1c7"/>
+  </symbol>
+  <symbol id="i-rings" viewBox="0 0 200 200">
+    <g fill="none" stroke-width="20" stroke-linecap="round">
+      <ellipse cx="80" cy="120" rx="46" ry="30" stroke="#b86a1f"/>
+      <ellipse cx="80" cy="120" rx="46" ry="30" stroke="#e3973a" stroke-width="12" stroke-dasharray="8 5"/>
+      <ellipse cx="124" cy="96" rx="46" ry="30" stroke="#b86a1f"/>
+      <ellipse cx="124" cy="96" rx="46" ry="30" stroke="#f0ac4c" stroke-width="12" stroke-dasharray="8 5"/>
+      <ellipse cx="104" cy="148" rx="40" ry="24" stroke="#a45a18"/>
+      <ellipse cx="104" cy="148" rx="40" ry="24" stroke="#d98a30" stroke-width="12" stroke-dasharray="8 5"/>
+    </g>
+  </symbol>
+  <symbol id="i-bites" viewBox="0 0 200 200">
+    <g>
+      <circle cx="70" cy="120" r="30" fill="#c26a22"/><circle cx="64" cy="112" r="10" fill="#e8a24a"/>
+      <circle cx="130" cy="120" r="30" fill="#b85f1e"/><circle cx="124" cy="112" r="10" fill="#e8a24a"/>
+      <circle cx="100" cy="76" r="30" fill="#c96f25"/><circle cx="94" cy="68" r="10" fill="#f0b25a"/>
+      <path d="M92 150c8-6 16-6 24 0v20H92Z" fill="#ffc21f"/>
+      <path d="M40 150c30 10 90 10 120 0l-8 30H48Z" fill="#e0261b"/>
+    </g>
+  </symbol>
+  <symbol id="i-cup" viewBox="0 0 200 200">
+    <rect x="96" y="10" width="8" height="46" rx="3" fill="#f4ede4" transform="rotate(12 100 33)"/>
+    <path d="M56 50h88l-10 136H66Z" fill="#1d1816" stroke="#ff7a1a" stroke-width="4"/>
+    <path d="M52 44h96v14H52Z" fill="#ff7a1a"/>
+    <path d="M62 96h76l-4 54H66Z" fill="#e0261b"/>
+    <path d="M86 112l14 10-10 6 14 12" stroke="#ffd166" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-beer" viewBox="0 0 200 200">
+    <path d="M58 52h80v130H58Z" fill="#f0a81c"/>
+    <path d="M58 52h80v130H58Z" fill="none" stroke="#f4ede4" stroke-width="5" opacity=".6"/>
+    <path d="M138 80h18c10 0 14 6 14 14v36c0 8-4 14-14 14h-18" fill="none" stroke="#f4ede4" stroke-width="8" opacity=".6"/>
+    <path d="M52 56c0-24 16-26 24-22 6-14 30-14 36-2 10-8 32-4 30 24Z" fill="#fff8e7"/>
+    <circle cx="82" cy="120" r="4" fill="#ffe08a"/><circle cx="110" cy="146" r="3" fill="#ffe08a"/><circle cx="96" cy="96" r="3" fill="#ffe08a"/>
+  </symbol>
+  <symbol id="i-shake" viewBox="0 0 200 200">
+    <rect x="108" y="4" width="8" height="54" rx="3" fill="#e0261b" transform="rotate(14 112 31)"/>
+    <path d="M58 70h84l-12 116H70Z" fill="#f4ede4" opacity=".9"/>
+    <path d="M62 100h76l-8 86H70Z" fill="#7a3b1c"/>
+    <path d="M50 70c0-30 20-36 32-28 8-18 40-18 44 0 14-8 28 4 24 28Z" fill="#fff8ef"/>
+    <path d="M58 64c10 10 20-2 30 6s22-4 30 4 20-2 26 2" stroke="#7a3b1c" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="100" cy="30" r="12" fill="#e0261b"/>
+  </symbol>
+  <symbol id="i-brownie" viewBox="0 0 200 200">
+    <path d="M40 100l60-30 60 30v50l-60 30-60-30Z" fill="#3a1a0d"/>
+    <path d="M40 100l60-30 60 30-60 30Z" fill="#5a2a14"/>
+    <path d="M100 130v50l60-30v-50Z" fill="#26100a"/>
+    <path d="M62 96c10 6 20-4 30 2s20-6 30 0 18-2 18 2" stroke="#ff7a1a" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <circle cx="96" cy="62" r="10" fill="#e0261b"/><path d="M96 52c2-8 8-12 14-12" stroke="#4d7a22" stroke-width="3" fill="none"/>
+  </symbol>
+
+  <symbol id="i-flame" viewBox="0 0 24 24">
+    <path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-4-1-6 1-9.5Z"/>
+  </symbol>
+</svg>
+
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader-inner">
+    <img src="img/logo.svg" alt="" width="72" height="72">
+    <div class="preloader-bar"><span></span></div>
+    <p>Calentando la plancha a 250°C…</p>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="#inicio" class="brand" aria-label="Volcán Smash Burger, inicio">
+      <img src="img/logo.svg" alt="" width="40" height="40">
+      <span class="brand-name">VOLCÁN<small>SMASH BURGER</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Principal">
+      <a href="#anatomia">Anatomía</a>
+      <a href="#carta">Carta</a>
+      <a href="#nivel">Nivel de fuego</a>
+      <a href="#metodo">Método</a>
+      <a href="#locales">Locales</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn btn-sm btn-fire" data-open-cart type="button">
+        <span>Pedir ahora</span>
+        <span class="cart-count" data-cart-count hidden>0</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mainNav" type="button">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="inicio">
+    <canvas class="embers" id="heroEmbers" aria-hidden="true"></canvas>
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow reveal-hero" style="--d:.1s"><span class="dot"></span> Smash burgers · Plancha a 250°C</p>
+        <h1 class="hero-title">
+          <span class="line"><span class="reveal-hero" style="--d:.2s">VOLCÁN</span></span>
+          <span class="line line-sub"><span class="reveal-hero" style="--d:.35s">SMASH BURGER</span></span>
+        </h1>
+        <p class="hero-claim reveal-hero" style="--d:.55s">EL FUEGO ESTÁ <em>SERVIDO.</em></p>
+        <p class="hero-text reveal-hero" style="--d:.7s">Smash burgers hechas a fuego alto, con costra crujiente, queso fundido y actitud.</p>
+        <div class="hero-cta reveal-hero" style="--d:.85s">
+          <a href="#carta" class="btn btn-outline">Ver la carta</a>
+          <button class="btn btn-fire" data-open-cart type="button">
+            Pedir ahora
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <ul class="hero-badges reveal-hero" style="--d:1s">
+          <li><strong>90 g</strong> bola de vaca madurada</li>
+          <li><strong>0</strong> congelados</li>
+          <li><strong>4,8★</strong> +6.000 reseñas</li>
+        </ul>
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <svg class="volcano" viewBox="0 0 600 320" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+          <ellipse class="crater-glow" cx="300" cy="96" rx="130" ry="40" fill="#ff5a1a"/>
+          <path d="M0 320 L170 110 Q190 88 214 92 L386 92 Q410 88 430 110 L600 320Z" fill="url(#g-volcano)"/>
+          <path d="M214 92 Q300 118 386 92 Q300 104 214 92Z" fill="#ff7a1a"/>
+          <path class="lava-flow" d="M250 96c-6 40-30 70-40 120-6 30-2 70-8 104h20c2-40 6-70 14-100 10-40 28-80 26-124Z" fill="url(#g-lava-flow)"/>
+          <path class="lava-flow lf2" d="M350 96c10 30 34 60 44 104 6 30 8 80 16 120h-16c-8-36-12-80-22-110-12-40-30-70-30-114Z" fill="url(#g-lava-flow)"/>
+          <path d="M120 240l40-30 20 20 30-26M430 220l30 24 26-18" stroke="#3a2a24" stroke-width="3" fill="none" opacity=".7"/>
+        </svg>
+        <div class="smoke" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="burger burger-hero" id="heroBurger" role="img" aria-label="Hamburguesa smash doble con queso fundido, salsa, pepinillos y cebolla"></div>
+        <div class="hero-sticker" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs>
+            <text><textPath href="#circ">HECHA A FUEGO ALTO · HECHA A FUEGO ALTO · </textPath></text></svg>
+          <span>250°</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="#anatomia" class="scroll-cue" aria-label="Bajar a la anatomía de la burger">
+      <span>Scroll</span><i></i>
+    </a>
+  </section>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>SMASH</span><b>✺</b><span>COSTRA CRUJIENTE</span><b>✺</b><span>QUESO FUNDIDO</span><b>✺</b><span>FUEGO ALTO</span><b>✺</b><span>ACTITUD</span><b>✺</b>
+      <span>SMASH</span><b>✺</b><span>COSTRA CRUJIENTE</span><b>✺</b><span>QUESO FUNDIDO</span><b>✺</b><span>FUEGO ALTO</span><b>✺</b><span>ACTITUD</span><b>✺</b>
+    </div>
+  </div>
+
+  <!-- ============ ANATOMÍA (scroll interactivo) ============ -->
+  <section class="build" id="anatomia" aria-labelledby="buildTitle">
+    <div class="build-sticky">
+      <div class="container build-grid">
+        <div class="build-copy">
+          <p class="kicker">Anatomía de una erupción</p>
+          <h2 id="buildTitle" class="build-title">7 capas.<br><span class="lava-text">Cero relleno.</span></h2>
+
+          <div class="build-panel" aria-live="polite">
+            <span class="build-index" id="buildIndex">00 / 07</span>
+            <h3 class="build-name" id="buildName">Haz scroll</h3>
+            <p class="build-desc" id="buildDesc">Desmonta la burger capa a capa y descubre qué hay dentro de cada erupción.</p>
+            <p class="build-meta" id="buildMeta"></p>
+          </div>
+
+          <ol class="build-steps" id="buildSteps"></ol>
+        </div>
+
+        <div class="build-stage" id="buildStage">
+          <div class="build-halo" aria-hidden="true"></div>
+          <div class="burger burger-build" id="buildBurger" role="img" aria-label="Hamburguesa que se desmonta en capas al hacer scroll"></div>
+          <div class="build-done" id="buildDone">LISTA PARA<br><span class="lava-text">ERUPCIONAR</span></div>
+        </div>
+      </div>
+      <div class="build-progress" aria-hidden="true"><span id="buildBar"></span></div>
+    </div>
+  </section>
+
+  <!-- ============ CARTA ============ -->
+  <section class="section menu" id="carta" aria-labelledby="menuTitle">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">La carta</p>
+        <h2 id="menuTitle" class="section-title">Elige tu <span class="lava-text">erupción</span></h2>
+        <p class="section-lead">Todas nuestras smash se hacen al momento: bola de vaca madurada aplastada contra la plancha hasta que la costra cruje.</p>
+      </div>
+
+      <div class="menu-tabs reveal" role="tablist" aria-label="Categorías de la carta">
+        <button role="tab" aria-selected="true" data-filter="burgers" type="button">Burgers</button>
+        <button role="tab" aria-selected="false" data-filter="sides" type="button">Para picar</button>
+        <button role="tab" aria-selected="false" data-filter="drinks" type="button">Bebidas</button>
+        <button role="tab" aria-selected="false" data-filter="desserts" type="button">Postres</button>
+        <span class="tab-indicator" aria-hidden="true"></span>
+      </div>
+
+      <div class="menu-grid" id="menuGrid" role="tabpanel"></div>
+      <p class="menu-note reveal">Pan brioche de obrador local · Opción sin gluten en todas las burgers (+1 €) · Consulta alérgenos en el local.</p>
+    </div>
+  </section>
+
+  <!-- ============ NIVEL DE FUEGO ============ -->
+  <section class="section heat" id="nivel" aria-labelledby="heatTitle">
+    <div class="container heat-grid">
+      <div class="heat-copy reveal">
+        <p class="kicker">Termómetro volcánico</p>
+        <h2 id="heatTitle" class="section-title">¿Cuánto fuego <span class="lava-text">aguantas?</span></h2>
+        <p class="section-lead">Mueve el termómetro y te decimos qué burger es la tuya.</p>
+
+        <div class="heat-control">
+          <label for="heatRange" class="sr-only">Nivel de picante del 1 al 5</label>
+          <input type="range" id="heatRange" min="1" max="5" step="1" value="3">
+          <div class="heat-scale" aria-hidden="true">
+            <span>Humo</span><span>Brasa</span><span>Fumarola</span><span>Magma</span><span>Erupción</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="heat-card reveal" id="heatCard">
+        <div class="heat-gauge" aria-hidden="true">
+          <div class="heat-fill" id="heatFill"></div>
+          <span class="heat-temp" id="heatTemp">180°</span>
+        </div>
+        <div class="heat-result">
+          <p class="heat-level" id="heatLevel">Nivel 3 · Fumarola</p>
+          <h3 class="heat-burger" id="heatBurger">Lava Clásica</h3>
+          <p class="heat-desc" id="heatDesc"></p>
+          <button class="btn btn-fire btn-sm" id="heatAdd" type="button">Añadir al pedido</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MÉTODO ============ -->
+  <section class="section method" id="metodo" aria-labelledby="methodTitle">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">El método</p>
+        <h2 id="methodTitle" class="section-title">Aplastar. Sellar. <span class="lava-text">Fundir.</span></h2>
+      </div>
+      <ol class="method-steps">
+        <li class="method-step reveal">
+          <span class="method-num">01</span>
+          <h3>La bola</h3>
+          <p>90 g de vaca gallega madurada 30 días, picada cada mañana en el local. Sin moldes, sin congelador.</p>
+        </li>
+        <li class="method-step reveal" style="--rd:.1s">
+          <span class="method-num">02</span>
+          <h3>El smash</h3>
+          <p>Contra la plancha a 250°C y aplastada con fuerza. Diez segundos que lo cambian todo: reacción de Maillard pura.</p>
+        </li>
+        <li class="method-step reveal" style="--rd:.2s">
+          <span class="method-num">03</span>
+          <h3>La erupción</h3>
+          <p>Vuelta, cheddar encima y tapa hasta que el queso se derrama como lava. Al pan y a tus manos en menos de 4 minutos.</p>
+        </li>
+      </ol>
+
+      <div class="stats">
+        <div class="stat reveal"><strong data-count="250">0</strong><span>°C en la plancha</span></div>
+        <div class="stat reveal" style="--rd:.08s"><strong data-count="10">0</strong><span>segundos de smash</span></div>
+        <div class="stat reveal" style="--rd:.16s"><strong data-count="30">0</strong><span>días de maduración</span></div>
+        <div class="stat reveal" style="--rd:.24s"><strong data-count="0">0</strong><span>productos congelados</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOCIAL ============ -->
+  <section class="section social" aria-labelledby="socialTitle">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">@volcansmash</p>
+        <h2 id="socialTitle" class="section-title">Lo que dice <span class="lava-text">la calle</span></h2>
+      </div>
+      <div class="quotes">
+        <figure class="quote reveal">
+          <blockquote>“La costra suena al morderla. No exagero, suena.”</blockquote>
+          <figcaption>@martafoodie · Malasaña</figcaption>
+        </figure>
+        <figure class="quote reveal" style="--rd:.1s">
+          <blockquote>“Pedí la Erupción Total por valiente. Volveré, pero con leche.”</blockquote>
+          <figcaption>@dani.eats · Ruzafa</figcaption>
+        </figure>
+        <figure class="quote reveal" style="--rd:.2s">
+          <blockquote>“El queso cayendo por los lados es literalmente lava. 10/10.”</blockquote>
+          <figcaption>@burgerhunter.bcn · Gràcia</figcaption>
+        </figure>
+      </div>
+      <div class="gram" id="gram"></div>
+    </div>
+  </section>
+
+  <!-- ============ LOCALES ============ -->
+  <section class="section places" id="locales" aria-labelledby="placesTitle">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">Cráteres activos</p>
+        <h2 id="placesTitle" class="section-title">Encuentra tu <span class="lava-text">volcán</span></h2>
+      </div>
+      <div class="places-grid" id="placesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ CTA / CLUB ============ -->
+  <section class="section club" id="club" aria-labelledby="clubTitle">
+    <canvas class="embers" id="clubEmbers" aria-hidden="true"></canvas>
+    <div class="container club-inner reveal">
+      <p class="kicker">Club Magma</p>
+      <h2 id="clubTitle" class="club-title">Entra al <span class="lava-text">cráter</span></h2>
+      <p class="section-lead">Burgers secretas, drops de edición limitada y una smash gratis el día de tu cumpleaños.</p>
+      <form class="club-form" id="clubForm" novalidate>
+        <label for="clubEmail" class="sr-only">Tu email</label>
+        <input type="email" id="clubEmail" placeholder="tu@email.com" autocomplete="email" required>
+        <button class="btn btn-fire" type="submit">Unirme</button>
+      </form>
+      <p class="club-msg" id="clubMsg" role="status"></p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <a href="#inicio" class="brand">
+        <img src="img/logo.svg" alt="" width="40" height="40">
+        <span class="brand-name">VOLCÁN<small>SMASH BURGER</small></span>
+      </a>
+      <nav class="footer-nav" aria-label="Pie de página">
+        <a href="#carta">Carta</a>
+        <a href="#locales">Locales</a>
+        <a href="#club">Club Magma</a>
+        <a href="#" data-open-cart>Pedir ahora</a>
+      </nav>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M14 3v11.5a3.5 3.5 0 1 1-3-3.46M14 3c.5 3 2.5 4.5 5 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      </div>
+    </div>
+    <p class="footer-giant" aria-hidden="true">VOLCÁN</p>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Volcán Smash Burger. Hecho a fuego alto.</span>
+      <span><a href="#">Aviso legal</a> · <a href="#">Privacidad</a> · <a href="#">Alérgenos</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ CARRITO ============ -->
+<button class="cart-fab" data-open-cart type="button" aria-label="Abrir pedido" hidden>
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 5h2l2 11h10l2-8H7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="17" cy="20" r="1.5" fill="currentColor"/></svg>
+  <span class="cart-count" data-cart-count>0</span>
+</button>
+
+<div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+<aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
+  <div class="drawer-head">
+    <h2 id="cartTitle">Tu pedido</h2>
+    <button class="icon-btn" id="cartClose" aria-label="Cerrar pedido" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot">
+    <div class="mode-toggle" role="radiogroup" aria-label="Tipo de pedido">
+      <button role="radio" aria-checked="true" data-mode="pickup" type="button">Recoger</button>
+      <button role="radio" aria-checked="false" data-mode="delivery" type="button">A domicilio</button>
+    </div>
+    <dl class="totals">
+      <div><dt>Subtotal</dt><dd id="cartSubtotal">0,00 €</dd></div>
+      <div class="delivery-row" hidden><dt>Envío</dt><dd>2,50 €</dd></div>
+      <div class="total"><dt>Total</dt><dd id="cartTotal">0,00 €</dd></div>
+    </dl>
+    <button class="btn btn-fire btn-block" id="checkoutBtn" type="button">Confirmar pedido</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>
