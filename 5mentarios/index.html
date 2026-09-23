@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Heineken 5mentarios | Tardeo, música en directo y noche</title>
+<meta name="description" content="Descubre Heineken 5mentarios: tardeos, música en directo, DJs y noches que no terminan. Consulta próximos eventos y reserva tu mesa.">
+<meta name="theme-color" content="#07090a">
+<meta property="og:title" content="Heineken 5mentarios | Tardeo, música en directo y noche">
+<meta property="og:description" content="Tardeos, fútbol, música en directo, DJs y noches que no terminan. Reserva tu mesa.">
+<meta property="og:image" content="img/hero.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/hero.jpg">
+<link rel="stylesheet" href="css/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- Iconos (sprite SVG) -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5l3.8 2.8-1.5 4.4H9.7l-1.5-4.4Z" fill="currentColor"/><path d="M12 3v4.5M20.5 9.5l-4.7.8M17.5 19.5l-3.2-4.8M6.5 19.5l3.2-4.8M3.5 9.5l4.7.8" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="16" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-beer" viewBox="0 0 24 24"><path d="M6 8h10v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 10h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 8a2.5 2.5 0 0 1 2-4 3 3 0 0 1 5 0 2.5 2.5 0 0 1 3 4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12v5M12.5 12v5" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="5" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="16" y="14" width="5" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14a6.5 6.5 0 0 1 3.5 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-food" viewBox="0 0 24 24"><path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 21V3c-2.5 1.5-3.5 4-3.5 7v3H17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 7.1 7.1l1.4-2.3L21 15.5V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M4 20l1.2-3.8A8.5 8.5 0 1 1 8 19Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.5c0 3.5 2.5 6.5 6.5 6.5l1-1.6-2-1-1 .8c-1-.4-2.2-1.6-2.6-2.6l.8-1-1-2Z" fill="currentColor"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5Z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z" fill="currentColor"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-screen" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+</svg>
+
+<!-- LOADING -->
+<div class="loader" id="loader" role="presentation">
+  <div class="loader-word" aria-hidden="true"><span>5</span><span>M</span><span>E</span><span>N</span><span>T</span><span>A</span><span>R</span><span>I</span><span>O</span><span>S</span></div>
+  <div class="loader-line" aria-hidden="true"></div>
+  <button class="loader-skip" type="button" id="loaderSkip">Entrar</button>
+</div>
+
+<div class="cursor" aria-hidden="true"><span></span></div>
+
+<!-- NAVBAR -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#inicio" aria-label="Heineken 5mentarios, inicio">
+      <img src="img/logo-5mentarios.png" alt="" width="44" height="44">
+      <span class="brand-text"><small>Heineken</small>5mentarios</span>
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#eventos">Eventos</a>
+      <a href="#tardeo">Tardeo</a>
+      <a href="#futbol">Fútbol</a>
+      <a href="#musica">Música</a>
+      <a href="#galeria">Galería</a>
+      <a href="#reservas">Reservas</a>
+    </nav>
+    <a class="btn btn-green btn-sm nav-cta" href="#reservas" data-reserve>Reservar</a>
+    <button class="burger" id="burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MENÚ MÓVIL -->
+<div class="menu" id="menu" aria-hidden="true">
+  <nav aria-label="Menú móvil">
+    <a href="#inicio"><span>01</span>Inicio</a>
+    <a href="#eventos"><span>02</span>Eventos</a>
+    <a href="#tardeo"><span>03</span>Tardeo</a>
+    <a href="#futbol"><span>04</span>Fútbol</a>
+    <a href="#musica"><span>05</span>Música</a>
+    <a href="#galeria"><span>06</span>Galería</a>
+    <a href="#reservas"><span>07</span>Reservas</a>
+  </nav>
+  <div class="menu-foot">
+    <a class="btn btn-green" href="#reservas" data-reserve>Reservar mesa</a>
+    <a class="menu-social" href="#" data-instagram><svg width="22" height="22"><use href="#i-instagram"/></svg><span data-cfg="instagramHandle"></span></a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- 1. HERO -->
+  <section class="hero" id="inicio" aria-labelledby="heroTitle">
+    <div class="hero-media" id="heroMedia">
+      <img src="img/hero.jpg" alt="Imagen de ejemplo del ambiente nocturno. Sustituir por una foto o vídeo real del local." id="heroImg">
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-kicker reveal-up" style="--d:.05s"><span class="live-dot" aria-hidden="true"></span>Heineken 5mentarios</p>
+      <h1 id="heroTitle" class="hero-title">
+        <span class="line"><span class="word">La</span> <span class="word">tarde</span></span>
+        <span class="line"><span class="word">no</span> <span class="word">termina</span></span>
+        <span class="line"><span class="word green">aquí.</span></span>
+      </h1>
+      <p class="hero-sub reveal-up" style="--d:.55s">Tardeo · Música en directo · Fútbol · DJs · Toda la noche</p>
+      <div class="hero-cta reveal-up" style="--d:.7s">
+        <a class="btn btn-green" href="#eventos">Ver próximos eventos <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#reservas" data-reserve>Reservar</a>
+      </div>
+    </div>
+
+    <aside class="today-chip reveal-up" style="--d:.9s" aria-label="Hoy en 5mentarios">
+      <p class="today-chip-title"><span class="live-dot" aria-hidden="true"></span>Hoy en 5mentarios</p>
+      <ul id="heroToday"></ul>
+    </aside>
+
+    <div class="hero-bottom">
+      <a class="scroll-cue" href="#experiencia">Scroll <svg width="16" height="16" aria-hidden="true"><use href="#i-down"/></svg></a>
+      <button class="sound-btn" id="soundBtn" type="button" aria-pressed="false">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="sound-label">Play sound</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Tardeo</span><b>—</b><span>Fútbol</span><b>—</b><span>Live music</span><b>—</b><span>DJ</span><b>—</b><span>Night</span><b>—</b>
+      <span>Tardeo</span><b>—</b><span>Fútbol</span><b>—</b><span>Live music</span><b>—</b><span>DJ</span><b>—</b><span>Night</span><b>—</b>
+    </div>
+  </div>
+
+  <!-- 2. EXPERIENCIA -->
+  <section class="section experience" id="experiencia" aria-labelledby="expTitle">
+    <div class="wrap exp-grid">
+      <div class="exp-intro">
+        <p class="eyebrow reveal">La experiencia</p>
+        <h2 id="expTitle" class="h-xl reveal">No es solo<br>un bar.</h2>
+        <p class="lead reveal">Empieza la tarde, quédate por la música y termina la noche con nosotros.</p>
+        <p class="exp-claim reveal">No importa a qué hora llegues.<br><strong>La experiencia continúa.</strong></p>
+        <img class="exp-badge" src="img/logo-5mentarios.png" alt="" width="320" height="320" loading="lazy">
+      </div>
+      <ol class="exp-flow" id="expFlow">
+        <li><span class="exp-time">Tarde</span><span class="exp-word">Tardeo</span></li>
+        <li><span class="exp-time">Primera hora</span><span class="exp-word">Música en directo</span></li>
+        <li><span class="exp-time">Matchday</span><span class="exp-word">Fútbol</span></li>
+        <li><span class="exp-time">Más tarde</span><span class="exp-word">DJ</span></li>
+        <li><span class="exp-time">Hasta última hora</span><span class="exp-word green">Noche</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ¿QUÉ PASA HOY? -->
+  <section class="section today" id="hoy" aria-labelledby="todayTitle">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow reveal">Agenda</p>
+          <h2 id="todayTitle" class="h-lg reveal">¿Qué pasa hoy?</h2>
+        </div>
+        <p class="note reveal" id="todayLabel"></p>
+      </div>
+      <ol class="timeline" id="todayTimeline"></ol>
+    </div>
+  </section>
+
+  <!-- 3. EVENTOS -->
+  <section class="section events" id="eventos" aria-labelledby="eventsTitle">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow reveal">Próximos eventos</p>
+          <h2 id="eventsTitle" class="h-xl reveal">Hoy se sale.</h2>
+        </div>
+        <div class="filters reveal" role="tablist" aria-label="Filtrar eventos" id="eventFilters">
+          <button type="button" role="tab" aria-selected="true" data-filter="all">Todos</button>
+          <button type="button" role="tab" aria-selected="false" data-filter="tardeo">Tardeo</button>
+          <button type="button" role="tab" aria-selected="false" data-filter="futbol">Fútbol</button>
+          <button type="button" role="tab" aria-selected="false" data-filter="live">Live</button>
+          <button type="button" role="tab" aria-selected="false" data-filter="dj">DJ</button>
+          <button type="button" role="tab" aria-selected="false" data-filter="fiesta">Fiesta</button>
+        </div>
+      </div>
+      <div class="posters" id="eventGrid" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- 4. TARDEO -->
+  <section class="section tardeo" id="tardeo" aria-labelledby="tardeoTitle">
+    <div class="wrap tardeo-grid">
+      <div class="tardeo-copy">
+        <p class="eyebrow reveal">Tardeo</p>
+        <h2 id="tardeoTitle" class="h-xl reveal">El tardeo tiene otro ritmo.</h2>
+        <p class="lead reveal">Sol que cae, primeras cañas, la música subiendo poco a poco. La mejor forma de empezar.</p>
+        <ul class="facts" id="tardeoFacts"></ul>
+        <a class="btn btn-green reveal" href="#reservas" data-reserve data-reserve-type="Tardeo">Reservar para el tardeo</a>
+      </div>
+      <div class="tardeo-gallery" id="tardeoGallery"></div>
+    </div>
+  </section>
+
+  <!-- FÚTBOL -->
+  <section class="section football" id="futbol" aria-labelledby="footTitle">
+    <div class="led-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow reveal">Fútbol en pantalla</p>
+          <h2 id="footTitle" class="h-xl reveal">El partido se vive aquí.</h2>
+          <p class="lead reveal">Fútbol, amigos, cerveza y ambiente. Vive los grandes partidos con nosotros.</p>
+        </div>
+        <p class="note reveal">Datos de ejemplo · preparado para conectar una API</p>
+      </div>
+      <div class="matchday" id="matchFeatured"></div>
+      <ul class="match-list" id="matchList"></ul>
+
+      <div class="chain-block">
+        <h3 class="h-lg reveal">Del primer tiempo<br>al último tema.</h3>
+        <ol class="chain" id="chain">
+          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-ball"/></svg><span>Partido</span></li>
+          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-beer"/></svg><span>Cerveza</span></li>
+          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-music"/></svg><span>Música</span></li>
+          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-headphones"/></svg><span>DJ</span></li>
+          <li><svg width="28" height="28" aria-hidden="true"><use href="#i-moon"/></svg><span>Noche</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. MÚSICA EN DIRECTO -->
+  <section class="section music" id="musica" aria-labelledby="musicTitle">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow reveal">Música en directo</p>
+          <h2 id="musicTitle" class="h-xl reveal">Música. Copas.<br>Amigos.</h2>
+        </div>
+        <div class="player reveal" id="player">
+          <button class="player-btn" type="button" id="playerBtn" aria-pressed="false" aria-label="Reproducir vista previa">
+            <svg width="22" height="22" aria-hidden="true"><use href="#i-play"/></svg>
+          </button>
+          <div class="player-body">
+            <p class="player-title"><strong>Live Session</strong> · Vista previa</p>
+            <div class="player-wave" aria-hidden="true"></div>
+            <p class="player-note" id="playerNote">Sin audio todavía: se añadirá cuando haya archivos.</p>
+          </div>
+        </div>
+      </div>
+      <div class="artists" id="artistGrid"></div>
+    </div>
+  </section>
+
+  <!-- 6. EXPERIENCIA NOCTURNA -->
+  <section class="night" id="noche" aria-labelledby="nightTitle">
+    <div class="night-sticky">
+      <div class="night-sky" id="nightSky" aria-hidden="true">
+        <div class="night-sun"></div>
+        <div class="night-stars"></div>
+        <div class="night-glow"></div>
+      </div>
+      <div class="night-content wrap">
+        <p class="night-clock" id="nightClock" aria-hidden="true">17:00</p>
+        <h2 id="nightTitle" class="night-title">Cuando cae el sol,<br>empieza otra historia.</h2>
+        <div class="night-giant" aria-hidden="true">
+          <span class="g-day">Tarde</span>
+          <span class="g-night">Noche</span>
+        </div>
+        <ol class="night-steps" id="nightSteps">
+          <li>Tardeo</li><li>Partido</li><li>Directo</li><li>DJ</li><li>Hasta última hora</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. GALERÍA -->
+  <section class="section gallery" id="galeria" aria-labelledby="galleryTitle">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow reveal">Galería</p>
+          <h2 id="galleryTitle" class="h-xl reveal">Así se vive.</h2>
+        </div>
+        <p class="note reveal">Imágenes de ejemplo · sustituir por fotos reales</p>
+      </div>
+      <div class="mosaic" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- 8. RESERVAS -->
+  <section class="section booking" id="reservas" aria-labelledby="bookTitle">
+    <div class="wrap booking-grid">
+      <div class="booking-copy">
+        <p class="eyebrow reveal">Reservas</p>
+        <h2 id="bookTitle" class="h-xl reveal">Tu mesa<br>te espera.</h2>
+        <p class="lead reveal">Para el tardeo, el partido, el concierto o la noche entera. Reserva y llega sin prisa.</p>
+        <a class="btn btn-ghost btn-wa reveal" href="#" id="waBtn"><svg width="20" height="20" aria-hidden="true"><use href="#i-whatsapp"/></svg> Reservar por WhatsApp</a>
+      </div>
+
+      <form class="booking-form" id="bookingForm" novalidate>
+        <div class="booking-context" id="bookingContext" hidden>
+          <div>
+            <p class="ctx-kicker" id="ctxKicker">Reserva para el partido</p>
+            <p class="ctx-name" id="ctxName"></p>
+            <p class="ctx-meta" id="ctxMeta"></p>
+          </div>
+          <button type="button" class="ctx-clear" id="ctxClear" aria-label="Quitar el evento seleccionado"><svg width="18" height="18"><use href="#i-close"/></svg></button>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="fName">Nombre</label>
+            <input id="fName" name="name" type="text" autocomplete="name" required placeholder="Tu nombre">
+          </div>
+          <div class="field">
+            <label for="fPhone">Teléfono</label>
+            <input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="600 000 000">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fDate">Fecha</label>
+            <input id="fDate" name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="fTime">Hora</label>
+            <input id="fTime" name="time" type="time" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fPeople">Personas</label>
+            <div class="stepper">
+              <button type="button" data-step="-1" aria-label="Una persona menos">−</button>
+              <input id="fPeople" name="people" type="number" min="1" max="30" value="4" inputmode="numeric">
+              <button type="button" data-step="1" aria-label="Una persona más">+</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="fType">Tipo de reserva</label>
+            <select id="fType" name="type">
+              <option>Tardeo</option>
+              <option>Partido</option>
+              <option>Música en directo</option>
+              <option>DJ / Noche</option>
+              <option>Grupo / Celebración</option>
+            </select>
+          </div>
+        </div>
+        <p class="form-error" id="formError" role="alert"></p>
+        <button class="btn btn-green btn-block" type="submit" id="submitBtn">Quiero reservar</button>
+        <p class="form-legal">Te confirmaremos la reserva por teléfono o WhatsApp.</p>
+
+        <div class="booking-done" id="bookingDone" hidden tabindex="-1">
+          <div class="done-ring"><svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>¡Solicitud recibida!</h3>
+          <p id="doneText"></p>
+          <button class="btn btn-ghost btn-sm" type="button" id="doneReset">Hacer otra reserva</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 9. INSTAGRAM -->
+  <section class="section insta" id="instagram" aria-labelledby="instaTitle">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow reveal" data-cfg="instagramHandle"></p>
+          <h2 id="instaTitle" class="h-lg reveal">Lo que está pasando ahora.</h2>
+        </div>
+        <a class="btn btn-ghost reveal" href="#" data-instagram><svg width="20" height="20" aria-hidden="true"><use href="#i-instagram"/></svg> Ver Instagram</a>
+      </div>
+      <div class="insta-grid" id="instaGrid"></div>
+    </div>
+  </section>
+
+  <!-- 10. UBICACIÓN -->
+  <section class="section location" id="ubicacion" aria-labelledby="locTitle">
+    <div class="wrap loc-grid">
+      <div class="loc-info">
+        <p class="eyebrow reveal">Dónde estamos</p>
+        <h2 id="locTitle" class="h-lg reveal">Heineken 5mentarios</h2>
+        <dl class="loc-data">
+          <div><dt><svg width="20" height="20" aria-hidden="true"><use href="#i-pin"/></svg>Dirección</dt><dd data-cfg="address"></dd></div>
+          <div><dt><svg width="20" height="20" aria-hidden="true"><use href="#i-clock"/></svg>Horario</dt><dd data-cfg="hours"></dd></div>
+          <div><dt><svg width="20" height="20" aria-hidden="true"><use href="#i-phone"/></svg>Teléfono</dt><dd><a href="#" id="phoneLink" data-cfg="phone"></a></dd></div>
+          <div><dt><svg width="20" height="20" aria-hidden="true"><use href="#i-instagram"/></svg>Instagram</dt><dd><a href="#" data-instagram data-cfg="instagramHandle"></a></dd></div>
+        </dl>
+        <a class="btn btn-green" href="#" id="mapsBtn">Cómo llegar <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="map-ph" role="img" aria-label="Mapa pendiente: se mostrará cuando se añada la dirección">
+        <svg viewBox="0 0 600 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><pattern id="mapgrid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0v40" fill="none" stroke="rgba(245,247,245,.06)"/></pattern></defs>
+          <rect width="600" height="420" fill="url(#mapgrid)"/>
+          <path d="M-20 300C120 260 180 150 320 170s200 110 320 60" stroke="rgba(245,247,245,.12)" stroke-width="18" fill="none"/>
+          <path d="M180 -20c20 140 60 220 40 460" stroke="rgba(245,247,245,.08)" stroke-width="12" fill="none"/>
+          <path d="M430 -20c-30 120 10 230 70 460" stroke="rgba(245,247,245,.07)" stroke-width="10" fill="none"/>
+          <circle class="map-pulse" cx="300" cy="200" r="60"/>
+          <g transform="translate(300 200)"><path d="M0 0c-22-26-34-42-34-58a34 34 0 0 1 68 0c0 16-12 32-34 58Z" fill="#1ecb6b"/><circle cy="-58" r="12" fill="#07090a"/></g>
+        </svg>
+        <p class="map-ph-label">Mapa pendiente de dirección</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <img src="img/logo-5mentarios.png" alt="Heineken 5mentarios" width="96" height="96" loading="lazy">
+      <nav class="footer-nav" aria-label="Pie de página">
+        <a href="#eventos">Eventos</a><a href="#tardeo">Tardeo</a><a href="#futbol">Fútbol</a><a href="#musica">Música</a><a href="#galeria">Galería</a><a href="#reservas">Reservas</a>
+      </nav>
+    </div>
+    <p class="footer-giant" aria-hidden="true">5mentarios</p>
+    <div class="footer-bottom">
+      <p>© <span id="year">2026</span> Heineken 5mentarios · <span data-cfg="address"></span></p>
+      <p>Consumo responsable · Prohibida la venta de alcohol a menores de 18 años · <a href="#">Aviso legal</a> · <a href="#">Privacidad</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="icon-btn modal-close" type="button" data-close aria-label="Cerrar"><svg width="22" height="22"><use href="#i-close"/></svg></button>
+    <div class="modal-media"><img id="modalImg" src="" alt=""></div>
+    <div class="modal-body">
+      <p class="modal-type" id="modalType"></p>
+      <h3 id="modalTitle"></h3>
+      <p class="modal-artist" id="modalArtist"></p>
+      <ul class="modal-meta" id="modalMeta"></ul>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-actions">
+        <button class="btn btn-green" type="button" id="modalReserve">Reservar</button>
+        <button class="btn btn-ghost" type="button" id="modalCal"><svg width="18" height="18" aria-hidden="true"><use href="#i-calendar"/></svg> Añadir al calendario</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Galería ampliada">
+  <button class="icon-btn lb-close" type="button" data-lb="close" aria-label="Cerrar"><svg width="24" height="24"><use href="#i-close"/></svg></button>
+  <button class="icon-btn lb-prev" type="button" data-lb="prev" aria-label="Anterior"><svg width="24" height="24"><use href="#i-left"/></svg></button>
+  <figure class="lb-figure">
+    <img id="lbImg" src="" alt="">
+    <figcaption><span id="lbTag"></span><span id="lbCount"></span></figcaption>
+  </figure>
+  <button class="icon-btn lb-next" type="button" data-lb="next" aria-label="Siguiente"><svg width="24" height="24"><use href="#i-right"/></svg></button>
+</div>
+
+<!-- CTA fija en móvil -->
+<a class="mobile-cta" href="#reservas" data-reserve>Reservar mesa</a>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
