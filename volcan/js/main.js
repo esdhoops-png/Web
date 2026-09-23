@@ -118,14 +118,6 @@
     else byId[m.id] = m;
   });
 
-  const HEAT = [
-    { level: 'Humo', temp: '1/5', id: 'teide', desc: 'La clásica perfecta: carne smash, gouda, tomate, lechuga y salsa de pepinillos. Cuando algo es bueno, no necesita más.' },
-    { level: 'Brasa', temp: '2/5', id: 'campurria', desc: 'Queso de cabra fundido y mermelada de bacon. Dulce, salada y cremosa en cada mordisco.' },
-    { level: 'Fumarola', temp: '3/5', id: 'mojo', desc: 'Mojo verde casero, salsa de gofio y huevo frito. Canarias entre dos panes.' },
-    { level: 'Magma', temp: '4/5', id: 'piopio', desc: 'Pollo crujiente con el toque picante de nuestra salsa Volcán. Imposible comer solo una vez.' },
-    { level: 'Erupción', temp: '5/5', id: 'volcanica', desc: '160 g de carne y una explosión de cheddar. Y en el local, te llega a la mesa con fuego.' }
-  ];
-
   /* ---------------------------------------------------------
      PRELOADER + ENTRADA
      --------------------------------------------------------- */
@@ -197,7 +189,7 @@
         life: 0,
         max: 90 + Math.random() * (burst ? 60 : 160),
         s: 0.8 + Math.random() * (burst ? 2.4 : 2),
-        hue: 18 + Math.random() * 28,
+        hue: 26 + Math.random() * 14,
         wob: Math.random() * Math.PI * 2
       });
     }
@@ -228,9 +220,9 @@
         const t = p.life / p.max;
         if (t >= 1 || p.y < -20) { this.p.splice(i, 1); continue; }
         const a = (t < 0.1 ? t / 0.1 : 1 - (t - 0.1) / 0.9) * (0.6 + 0.4 * Math.sin(p.life * 0.3));
-        ctx.fillStyle = `hsla(${p.hue},100%,55%,${a * 0.18})`;
+        ctx.fillStyle = `hsla(${p.hue},70%,55%,${a * 0.1})`;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 4, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = `hsla(${p.hue + 12},100%,${65 + p.s * 6}%,${a})`;
+        ctx.fillStyle = `hsla(${p.hue + 8},75%,${68 + p.s * 5}%,${a * 0.75})`;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalCompositeOperation = 'source-over';
@@ -509,42 +501,19 @@
   });
 
   /* ---------------------------------------------------------
-     TERMÓMETRO
-     --------------------------------------------------------- */
-  const heatRange = $('#heatRange');
-  const heatCard = $('#heatCard');
-  const heatScale = $$('.heat-scale span');
-  function setHeat(v, animate = true) {
-    const h = HEAT[v - 1];
-    const m = byId[h.id];
-    const f = (v - 1) / 4;
-    $('.heat').style.setProperty('--heat', (0.15 + f * 0.85).toFixed(2));
-    heatRange.style.setProperty('--heat', f.toFixed(2));
-    $('#heatLevel').textContent = `Nivel ${v} · ${h.level}`;
-    $('#heatTemp').textContent = h.temp;
-    $('#heatBurger').textContent = m.name;
-    $('#heatDesc').textContent = h.desc;
-    $('#heatAdd').dataset.add = m.id;
-    heatRange.setAttribute('aria-valuetext', `Nivel ${v}, ${h.level}: ${m.name}`);
-    heatScale.forEach((s, i) => s.classList.toggle('on', i === v - 1));
-    if (animate) { heatCard.classList.remove('swap'); void heatCard.offsetWidth; heatCard.classList.add('swap'); }
-  }
-  heatRange.addEventListener('input', () => setHeat(+heatRange.value));
-  setHeat(+heatRange.value, false);
-
-  /* ---------------------------------------------------------
      SOCIAL / LOCALES
      --------------------------------------------------------- */
+  const INSTAGRAM = 'https://www.instagram.com/volcansmashburger/';
   const GRAM = [
-    { g: 'linear-gradient(135deg,#e0261b,#ff7a1a)', v: burgerMarkup('v-hot', 0), t: 'La volcánica' },
-    { g: 'linear-gradient(135deg,#1c1715,#3a302b)', v: burgerMarkup('v-mojo', 0), t: 'Échale mojo' },
-    { g: 'linear-gradient(135deg,#ffb627,#ff4d1a)', v: '<svg viewBox="0 0 200 200"><use href="#i-nachos"/></svg>', t: 'Nachos Volcán' },
-    { g: 'linear-gradient(135deg,#7a1a10,#e0261b)', v: burgerMarkup('', 1), t: 'La cochina' },
-    { g: 'linear-gradient(135deg,#2b2420,#6a2a12)', v: '<svg viewBox="0 0 200 200"><use href="#i-tequenos"/></svg>', t: 'Tequeños' },
-    { g: 'linear-gradient(135deg,#ff7a1a,#ffd166)', v: burgerMarkup('v-truffle', 0), t: 'La trufada' }
+    { g: 'linear-gradient(135deg,#2a211d,#4a3a30)', v: burgerMarkup('v-hot', 0), t: 'La volcánica' },
+    { g: 'linear-gradient(135deg,#1c1715,#2f2622)', v: burgerMarkup('v-mojo', 0), t: 'Échale mojo' },
+    { g: 'linear-gradient(135deg,#3a2c22,#5a4230)', v: '<svg viewBox="0 0 200 200"><use href="#i-nachos"/></svg>', t: 'Nachos Volcán' },
+    { g: 'linear-gradient(135deg,#241c19,#3d2f28)', v: burgerMarkup('', 1), t: 'La cochina' },
+    { g: 'linear-gradient(135deg,#2b2420,#4a3528)', v: '<svg viewBox="0 0 200 200"><use href="#i-tequenos"/></svg>', t: 'Tequeños' },
+    { g: 'linear-gradient(135deg,#e8dccb,#f4ede4)', v: burgerMarkup('v-truffle', 0), t: 'La trufada' }
   ];
   $('#gram').innerHTML = GRAM.map((x, i) =>
-    `<a href="#carta" class="reveal" style="--g:${x.g};--rd:${i * 0.06}s" aria-label="${x.t}, ver en la carta">${x.v}<span>${x.t}</span></a>`).join('');
+    `<a href="${INSTAGRAM}" target="_blank" rel="noopener" class="reveal" style="--g:${x.g};--rd:${i * 0.06}s" aria-label="${x.t} en Instagram">${x.v}<span>${x.t}</span></a>`).join('');
 
   /* ---------------------------------------------------------
      REVEALS + CONTADORES
