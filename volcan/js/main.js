@@ -16,12 +16,12 @@
      CAPAS DE LA HAMBURGUESA
      --------------------------------------------------------- */
   const LAYERS = [
-    { key: 'bun-top', h: 170, name: 'Pan superior', desc: 'Brioche de obrador local, tostado en mantequilla hasta que brilla. Tierno por dentro, dorado por fuera.', meta: 'Brioche · Sésamo · Mantequilla' },
-    { key: 'patty', h: 86, name: 'Carne smash', desc: '90 g de vaca madurada aplastada contra la plancha a 250°C. Bordes de encaje y costra crujiente de Maillard.', meta: '90 g · 250°C · 10 segundos' },
-    { key: 'cheese', h: 96, name: 'Queso fundido', desc: 'Cheddar americano que se derrama por los lados como lava. Se funde bajo campana en 30 segundos.', meta: 'Cheddar · Fusión lenta' },
-    { key: 'sauce', h: 56, name: 'Salsa Volcán', desc: 'Nuestra receta secreta: mayonesa ahumada, chipotle, pepinillo y un toque de miel. Picante justo.', meta: 'Receta secreta · Picor 2/5' },
-    { key: 'pickles', h: 60, name: 'Pepinillos', desc: 'Encurtidos en casa durante 48 horas con eneldo y mostaza. El golpe ácido que equilibra todo.', meta: 'Eneldo · 48 h de encurtido' },
-    { key: 'onion', h: 52, name: 'Cebolla', desc: 'Cebolla morada en aros finos, cruda y crujiente. Frescura para cortar tanta intensidad.', meta: 'Morada · Corte fino' },
+    { key: 'bun-top', h: 170, name: 'Pan superior', desc: 'Pan brioche tostado en la plancha. Tierno por dentro, dorado por fuera y listo para aguantar la erupción.', meta: 'Brioche · Tostado' },
+    { key: 'patty', h: 86, name: 'Carne smash', desc: 'Carne premium aplastada contra la plancha a fuego alto. Bordes finos y costra crujiente: así nace una smash.', meta: 'Carne premium · Fuego alto' },
+    { key: 'cheese', h: 96, name: 'Queso fundido', desc: 'Queso fundido directamente sobre la carne caliente, hasta que se derrama por los lados como lava.', meta: 'Fundido al momento' },
+    { key: 'sauce', h: 56, name: 'Salsa Volcán', desc: 'Nuestra salsa artesana de la casa, con el toque picante justo. Hay cuatro, pero esta lleva nuestro nombre.', meta: 'Salsa artesana · Toque picante' },
+    { key: 'pickles', h: 60, name: 'Pepinillos', desc: 'El golpe ácido que equilibra la grasa y el queso. Pequeños, crujientes y absolutamente necesarios.', meta: 'Ácido · Crujiente' },
+    { key: 'onion', h: 52, name: 'Cebolla', desc: 'Cebolla en aros finos, fresca y crujiente, para cortar tanta intensidad.', meta: 'Fresca · Corte fino' },
     { key: 'bun-bottom', h: 92, name: 'Pan inferior', desc: 'La base que lo sostiene todo. Tostado para resistir los jugos sin perder ni una gota de sabor.', meta: 'Brioche · Base tostada' }
   ];
 
@@ -59,60 +59,71 @@
   /* ---------------------------------------------------------
      DATOS
      --------------------------------------------------------- */
+  // Carta real del local (C. Gourié, 5 · Arucas)
   const MENU = [
-    { id: 'crater', cat: 'burgers', name: 'El Cráter', price: 9.9, heat: 1, badge: 'La original', variant: '', extra: 0,
-      desc: 'Doble smash, doble cheddar, salsa Volcán, pepinillos y cebolla morada. La que lo empezó todo.' },
-    { id: 'pompeya', cat: 'burgers', name: 'Pompeya', price: 11.5, heat: 2, variant: '', extra: 0,
-      desc: 'Smash doble, bacon crujiente, cebolla caramelizada 6 horas y BBQ ahumada con whisky.' },
-    { id: 'ceniza', cat: 'burgers', name: 'Ceniza Negra', price: 12.5, heat: 2, badge: 'Nueva', variant: 'v-black', extra: 0,
-      desc: 'Pan de carbón vegetal, cheddar ahumado, mayo de ajo negro y cebolla crujiente.' },
-    { id: 'fumarola', cat: 'burgers', name: 'Fumarola', price: 12.9, heat: 3, variant: '', extra: 0,
-      desc: 'Chipotle ahumado, jalapeños asados, pepper jack fundido y lima. Humo con carácter.' },
-    { id: 'lava', cat: 'burgers', name: 'Lava Picante', price: 12.9, heat: 4, badge: 'Top ventas', hot: true, variant: 'v-hot', extra: 0,
-      desc: 'Salsa de habanero y mango, jalapeños frescos, queso picante y cebolla encurtida.' },
-    { id: 'erupcion', cat: 'burgers', name: 'Erupción Total', price: 14.9, heat: 5, badge: 'Solo valientes', hot: true, variant: 'v-hot', extra: 1,
-      desc: 'Triple smash, triple queso y salsa Carolina Reaper. Firmas un papel antes de pedirla.' },
-    { id: 'basalto', cat: 'burgers', name: 'Basalto Verde', price: 11.5, heat: 1, badge: 'Veggie', variant: 'v-veggie', extra: 0,
-      desc: 'Smash vegetal de garbanzo y remolacha con costra, cheddar vegano y salsa Volcán.' },
+    { id: 'volcanica', cat: 'burgers', name: 'La volcánica', tag: 'La burger que nos ha hecho famosos', price: 11.95, badge: '🔥 Con fuego en local', hot: true, variant: 'v-hot',
+      desc: '160 g de carne premium, bacon crujiente, cebolla asada lentamente, queso Monterey y barbacoa ahumada, todo coronado con una explosión de cheddar fundido.' },
+    { id: 'mojo', cat: 'burgers', name: 'Échale mojo', tag: 'La auténtica Canarias entre dos panes', price: 11.9, badge: 'Sabor canario', variant: 'v-mojo',
+      desc: 'Doble smash burger, queso ahumado, mojo verde casero, cremosa salsa de gofio, bacon crujiente y huevo frito.' },
+    { id: 'cochina', cat: 'burgers', name: 'La cochina', tag: 'Para los que nunca tienen suficiente carne', price: 12.5, extra: 1,
+      desc: 'Doble smash burger con costilla desmenuzada a baja temperatura, bacon, cheddar, cebolla roja y nuestra inconfundible salsa Pecado.' },
+    { id: 'trufada', cat: 'burgers', name: 'La trufada', tag: 'El lujo convertido en hamburguesa', price: 13.95, badge: 'Premium', variant: 'v-truffle',
+      desc: 'Mantequilla de trufa, champiñones al ajillo, provolone fundido, cebolla caramelizada y mayonesa trufada sobre una carne increíblemente jugosa.' },
+    { id: 'campurria', cat: 'burgers', name: 'La campurria', tag: 'La favorita de los amantes del queso', price: 11.9,
+      desc: 'Carne premium, rulo de cabra fundido, mermelada de bacon, cebolla crispy, rúcula fresca y alioli de ajo asado.' },
+    { id: 'piopio', cat: 'burgers', name: 'Pio pio', tag: 'Crujiente por fuera, brutal por dentro', price: 12.5, badge: 'Pollo', variant: 'v-chicken',
+      desc: 'Pollo crujiente, mozzarella fundida, pimiento rojo asado, coleslaw casera y el toque picante de nuestra salsa Volcán.' },
+    { id: 'teide', cat: 'burgers', name: 'Teide', tag: 'La clásica perfecta', price: 10.9, badge: 'La clásica',
+      desc: 'Carne smash recién hecha, queso gouda fundido, tomate fresco, cebolla, lechuga y nuestra salsa especial de pepinillos.' },
+    { id: 'graciosa', cat: 'burgers', name: 'La graciosa', tag: 'La vegetariana que sorprende incluso a los carnívoros', price: 11.9, badge: 'Vegetariana', variant: 'v-veggie',
+      desc: 'Medallón vegetal, queso fundido, cebolla caramelizada, rúcula fresca y nuestro cremoso alioli.' },
+    { id: 'peques', cat: 'burgers', name: 'Para los peques', tag: 'Hasta los grandes la quieren', price: 5.5, badge: 'Menú infantil', variant: 'v-kids',
+      desc: 'Pan brioche, carne de 80 g, queso, alioli y huevo. Acompañada de papas.' },
 
-    { id: 'piedra', cat: 'sides', name: 'Patatas Piedra', price: 4.5, heat: 0, icon: 'i-fries',
-      desc: 'Patata natural en doble fritura con sal de ceniza volcánica. Crujientes de verdad.' },
-    { id: 'lavafries', cat: 'sides', name: 'Lava Fries', price: 6.9, heat: 2, badge: 'Para compartir', icon: 'i-fries',
-      desc: 'Patatas cubiertas de salsa de cheddar, bacon, jalapeño y cebollino.' },
-    { id: 'aros', cat: 'sides', name: 'Aros de Obsidiana', price: 5.5, heat: 0, icon: 'i-rings',
-      desc: 'Aros de cebolla rebozados en cerveza negra. Con mayo de chipotle.' },
-    { id: 'bombas', cat: 'sides', name: 'Bombas de Lava', price: 6.5, heat: 3, icon: 'i-bites',
-      desc: 'Bocados de mac & cheese con corazón de jalapeño que explotan al morder.' },
+    { id: 'teq-chistorra', cat: 'starters', name: 'Tequeños de chistorra', tag: 'El picoteo que nunca falla', icon: 'i-tequenos',
+      options: [{ id: 'teq-chistorra-3', label: '3 uds', price: 5.5 }, { id: 'teq-chistorra-6', label: '6 uds', price: 9.5 }],
+      desc: 'Doraditos y extra crujientes, rellenos de chistorra. Súmales salsa Pecado por +0,30 €.' },
+    { id: 'teq-queso', cat: 'starters', name: 'Tequeños de queso', tag: 'El picoteo que nunca falla', icon: 'i-tequenos',
+      options: [{ id: 'teq-queso-3', label: '3 uds', price: 5.5 }, { id: 'teq-queso-6', label: '6 uds', price: 9.5 }],
+      desc: 'Doraditos y extra crujientes, rellenos de queso fundido. Súmales salsa Pecado por +0,30 €.' },
+    { id: 'teq-mixtos', cat: 'starters', name: 'Tequeños mixtos', tag: 'Chistorra y queso', price: 9.5, icon: 'i-tequenos',
+      desc: 'Lo mejor de los dos mundos en una sola ración. Súmales salsa Pecado, rosa de naranja con un pelín de picante, por +0,30 €.' },
+    { id: 'batata', cat: 'starters', name: 'Batata frita', tag: 'Dulce y crujiente', price: 5.5, icon: 'i-fries', variant: 'v-batata',
+      desc: 'Bastones de batata súper crujientes con ese toque dulce brutal, listos para mojar en nuestro alioli de trufa casero.' },
+    { id: 'bravas', cat: 'starters', name: 'Papas bravas', tag: 'Con un giro', price: 6.5, icon: 'i-bravas',
+      desc: 'Papas doradas cubiertas con salsa brava, alioli casero y rematadas con cacahuetes caramelizados.' },
+    { id: 'nachos-volcan', cat: 'starters', name: 'Nachos Volcán', tag: 'Cargados hasta arriba', price: 8.9, badge: 'De la casa', hot: true, icon: 'i-nachos',
+      desc: 'Nachos cargados con carne molida jugosa, guacamole casero, hilos de queso, salsa de yogur y rodajas de jalapeño.' },
+    { id: 'nachos-mex', cat: 'starters', name: 'Nachos Mexicanos', tag: 'Baño de cheddar', price: 8.5, icon: 'i-nachos',
+      desc: 'Nachos crocantes en un baño de salsa cheddar fundida, guacamole fresco y pico de gallo.' },
+    { id: 'tiras', cat: 'starters', name: 'Tiras de pollo', tag: 'Crocantes y jugosas', price: 10.9, icon: 'i-strips',
+      desc: 'Tiras de pollo súper crocantes por fuera y jugosas por dentro, con nuestra clásica salsa de miel y mostaza.' },
 
-    { id: 'azufre', cat: 'drinks', name: 'Limonada Azufre', price: 3.5, heat: 0, icon: 'i-cup',
-      desc: 'Limonada casera con jengibre y cúrcuma. Apaga cualquier incendio.' },
-    { id: 'refresco', cat: 'drinks', name: 'Refresco', price: 2.9, heat: 0, icon: 'i-cup',
-      desc: 'Cola, naranja, limón o zero. Con mucho hielo.' },
-    { id: 'basaltobeer', cat: 'drinks', name: 'Cerveza Basalto', price: 3.9, heat: 0, icon: 'i-beer',
-      desc: 'IPA de cervecera local con notas cítricas. Nuestra pareja perfecta.' },
-
-    { id: 'shake', cat: 'desserts', name: 'Shake Magma', price: 5.9, heat: 0, badge: 'Adictivo', icon: 'i-shake',
-      desc: 'Batido de vainilla con dulce de leche, galleta tostada y nata.' },
-    { id: 'brownie', cat: 'desserts', name: 'Brownie Carbón', price: 5.5, heat: 0, icon: 'i-brownie',
-      desc: 'Brownie de cacao negro con corazón fundido y sal en escamas. Se sirve caliente.' }
+    { id: 'side', cat: 'extras', name: 'Papas o batata', tag: 'Para acompañar tu burger', icon: 'i-fries', badge: 'El 80% las pide',
+      options: [{ id: 'side-papas', label: 'Papas', name: 'Ración de papas', price: 2 }, { id: 'side-batata', label: 'Batata', name: 'Ración de batata', price: 2 }],
+      desc: 'Añade a tu hamburguesa una ración de papas o de batata frita por solo 2,00 €.' },
+    { id: 'salsa-trufa', cat: 'extras', name: 'Alioli de trufa', tag: 'Salsa artesana', price: 0.8, icon: 'i-sauce', color: '#e9dcb8',
+      desc: 'Cremoso, casero y con todo el aroma de la trufa.' },
+    { id: 'salsa-miel', cat: 'extras', name: 'Miel y mostaza', tag: 'Salsa artesana', price: 0.8, icon: 'i-sauce', color: '#e8b830',
+      desc: 'Dulce y suave. La pareja perfecta de las tiras de pollo.' },
+    { id: 'salsa-pecado', cat: 'extras', name: 'Salsa Pecado', tag: 'Salsa artesana', price: 0.8, icon: 'i-sauce', color: '#f08a6a',
+      desc: 'Adictiva salsa rosa de naranja con un pelín de picante que te va a volver loco.' },
+    { id: 'salsa-volcan', cat: 'extras', name: 'Salsa Volcán', tag: 'Salsa artesana', price: 0.8, icon: 'i-sauce', color: '#e0261b', hot: true,
+      desc: 'La salsa que lleva nuestro nombre. Con el toque picante de la casa.' }
   ];
-  const byId = Object.fromEntries(MENU.map((m) => [m.id, m]));
+  // cada opción (3 uds / 6 uds, papas / batata) es un artículo propio del pedido
+  const byId = {};
+  MENU.forEach((m) => {
+    if (m.options) m.options.forEach((o) => { byId[o.id] = { ...m, id: o.id, name: o.name || `${m.name} · ${o.label}`, price: o.price }; });
+    else byId[m.id] = m;
+  });
 
   const HEAT = [
-    { level: 'Humo', temp: '90°', id: 'crater', desc: 'Sabor puro sin picante. La smash como debe ser: carne, queso y costra.' },
-    { level: 'Brasa', temp: '140°', id: 'pompeya', desc: 'Dulce, ahumada y con un calor muy suave. Para empezar a jugar con fuego.' },
-    { level: 'Fumarola', temp: '180°', id: 'fumarola', desc: 'Chipotle y jalapeño asado. Pica, pero te deja disfrutar cada bocado.' },
-    { level: 'Magma', temp: '220°', id: 'lava', desc: 'Habanero y mango. El picante sube poco a poco… y se queda.' },
-    { level: 'Erupción', temp: '250°', id: 'erupcion', desc: 'Carolina Reaper y triple carne. Si la terminas, sales en nuestro muro.' }
-  ];
-
-  const PLACES = [
-    { city: 'Madrid', name: 'Malasaña', addr: 'C/ del Espíritu Santo, 21', hours: 'Lun–Jue 13:00–16:30 · 20:00–00:00<br>Vie–Dom 13:00–01:00',
-      sched: { weekday: [[780, 990], [1200, 1440]], weekend: [[780, 1500]] } },
-    { city: 'Valencia', name: 'Ruzafa', addr: 'C/ de Cádiz, 58', hours: 'Todos los días 13:00–16:00 · 20:00–23:30',
-      sched: { weekday: [[780, 960], [1200, 1410]], weekend: [[780, 960], [1200, 1410]] } },
-    { city: 'Barcelona', name: 'Gràcia', addr: 'Carrer de Verdi, 34', hours: 'Mar–Dom 13:00–00:00<br>Lunes cerrado',
-      sched: { weekday: [[780, 1440]], weekend: [[780, 1440]], closed: [1] } }
+    { level: 'Humo', temp: '1/5', id: 'teide', desc: 'La clásica perfecta: carne smash, gouda, tomate, lechuga y salsa de pepinillos. Cuando algo es bueno, no necesita más.' },
+    { level: 'Brasa', temp: '2/5', id: 'campurria', desc: 'Queso de cabra fundido y mermelada de bacon. Dulce, salada y cremosa en cada mordisco.' },
+    { level: 'Fumarola', temp: '3/5', id: 'mojo', desc: 'Mojo verde casero, salsa de gofio y huevo frito. Canarias entre dos panes.' },
+    { level: 'Magma', temp: '4/5', id: 'piopio', desc: 'Pollo crujiente con el toque picante de nuestra salsa Volcán. Imposible comer solo una vez.' },
+    { level: 'Erupción', temp: '5/5', id: 'volcanica', desc: '160 g de carne y una explosión de cheddar. Y en el local, te llega a la mesa con fuego.' }
   ];
 
   /* ---------------------------------------------------------
@@ -424,11 +435,13 @@
   /* ---------------------------------------------------------
      CARTA
      --------------------------------------------------------- */
-  const flameSVG = (on) => `<svg viewBox="0 0 24 24" class="${on ? 'on' : ''}"><use href="#i-flame"/></svg>`;
-  const flames = (n) => `<span class="flames" aria-label="Picante ${n} de 5">${[1, 2, 3, 4, 5].map((i) => flameSVG(i <= n)).join('')}</span>`;
+  const plus = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
   const visualFor = (m) => m.icon
-    ? `<svg viewBox="0 0 200 200" aria-hidden="true"><use href="#${m.icon}"/></svg>`
+    ? `<svg viewBox="0 0 200 200" aria-hidden="true" class="${m.variant || ''}"${m.color ? ` style="color:${m.color}"` : ''}><use href="#${m.icon}"/></svg>`
     : burgerMarkup(m.variant, m.extra);
+  const priceOf = (m) => m.options ? m.options.map((o) => euro(o.price)).join(' / ') : euro(m.price);
+  const addButtons = (m) => (m.options || [{ id: m.id, label: 'Añadir' }]).map((o) =>
+    `<button class="add-btn" data-add="${o.id}" data-label="${o.label}" type="button" aria-label="Añadir ${byId[o.id].name} a tu selección">${plus}<span>${o.label}</span></button>`).join('');
 
   const grid = $('#menuGrid');
   function renderMenu(cat) {
@@ -440,15 +453,10 @@
           ${visualFor(m)}
         </div>
         <div class="card-body">
-          <div class="card-top"><h3>${m.name}</h3><span class="price">${euro(m.price)}</span></div>
+          <p class="card-tag">${m.tag}</p>
+          <div class="card-top"><h3>${m.name}</h3><span class="price">${priceOf(m)}</span></div>
           <p>${m.desc}</p>
-          <div class="card-foot">
-            ${m.heat ? flames(m.heat) : '<span></span>'}
-            <button class="add-btn" data-add="${m.id}" type="button" aria-label="Añadir ${m.name} al pedido">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
-              <span>Añadir</span>
-            </button>
-          </div>
+          <div class="card-foot">${addButtons(m)}</div>
         </div>
       </article>`).join('');
   }
@@ -492,9 +500,11 @@
     cart.add(btn.dataset.add);
     btn.classList.add('added');
     const label = btn.querySelector('span');
-    if (label) {
+    if (label && btn.dataset.label) {
       label.textContent = '¡Dentro!';
-      setTimeout(() => { btn.classList.remove('added'); label.textContent = 'Añadir'; }, 1200);
+      setTimeout(() => { btn.classList.remove('added'); label.textContent = btn.dataset.label; }, 1200);
+    } else {
+      setTimeout(() => btn.classList.remove('added'), 1200);
     }
   });
 
@@ -526,50 +536,15 @@
      SOCIAL / LOCALES
      --------------------------------------------------------- */
   const GRAM = [
-    { g: 'linear-gradient(135deg,#e0261b,#ff7a1a)', v: burgerMarkup('', 0), t: '#ElCráter' },
-    { g: 'linear-gradient(135deg,#1c1715,#3a302b)', v: burgerMarkup('v-black', 0), t: '#CenizaNegra' },
-    { g: 'linear-gradient(135deg,#ffb627,#ff4d1a)', v: '<svg viewBox="0 0 200 200"><use href="#i-fries"/></svg>', t: '#LavaFries' },
-    { g: 'linear-gradient(135deg,#7a1a10,#e0261b)', v: burgerMarkup('v-hot', 1), t: '#ErupciónTotal' },
-    { g: 'linear-gradient(135deg,#2b2420,#6a2a12)', v: '<svg viewBox="0 0 200 200"><use href="#i-shake"/></svg>', t: '#ShakeMagma' },
-    { g: 'linear-gradient(135deg,#ff7a1a,#ffd166)', v: burgerMarkup('', 0), t: '#VolcánSmash' }
+    { g: 'linear-gradient(135deg,#e0261b,#ff7a1a)', v: burgerMarkup('v-hot', 0), t: 'La volcánica' },
+    { g: 'linear-gradient(135deg,#1c1715,#3a302b)', v: burgerMarkup('v-mojo', 0), t: 'Échale mojo' },
+    { g: 'linear-gradient(135deg,#ffb627,#ff4d1a)', v: '<svg viewBox="0 0 200 200"><use href="#i-nachos"/></svg>', t: 'Nachos Volcán' },
+    { g: 'linear-gradient(135deg,#7a1a10,#e0261b)', v: burgerMarkup('', 1), t: 'La cochina' },
+    { g: 'linear-gradient(135deg,#2b2420,#6a2a12)', v: '<svg viewBox="0 0 200 200"><use href="#i-tequenos"/></svg>', t: 'Tequeños' },
+    { g: 'linear-gradient(135deg,#ff7a1a,#ffd166)', v: burgerMarkup('v-truffle', 0), t: 'La trufada' }
   ];
   $('#gram').innerHTML = GRAM.map((x, i) =>
-    `<a href="#" class="reveal" style="--g:${x.g};--rd:${i * 0.06}s" aria-label="Publicación de Instagram ${x.t}">${x.v}<span>${x.t}</span></a>`).join('');
-
-  function madridNow() {
-    try {
-      const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
-      const get = (t) => parts.find((p) => p.type === t)?.value;
-      const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-      return { day: days[get('weekday')], min: +get('hour') * 60 + +get('minute') };
-    } catch (_) {
-      const d = new Date();
-      return { day: d.getDay(), min: d.getHours() * 60 + d.getMinutes() };
-    }
-  }
-  function isOpen(s) {
-    const { day, min } = madridNow();
-    const check = (d, m) => {
-      if (s.closed?.includes(d)) return false;
-      const w = (d === 5 || d === 6 || d === 0) ? s.weekend : s.weekday;
-      return w.some(([a, b]) => m >= a && m < b);
-    };
-    // franjas que cruzan medianoche cuentan para el día anterior
-    return check(day, min) || check((day + 6) % 7, min + 1440);
-  }
-  $('#placesGrid').innerHTML = PLACES.map((p, i) => {
-    const open = isOpen(p.sched);
-    const q = encodeURIComponent(`${p.addr}, ${p.city}`);
-    return `<article class="place reveal" style="--rd:${i * 0.1}s">
-      <span class="place-city">${p.city}</span>
-      <h3>${p.name}</h3>
-      <span class="status ${open ? 'open' : 'closed'}">${open ? 'Abierto ahora' : 'Cerrado ahora'}</span>
-      <address>${p.addr}<br>${p.city}</address>
-      <p class="place-hours">${p.hours}</p>
-      <a class="place-link" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Cómo llegar
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </article>`;
-  }).join('');
+    `<a href="#carta" class="reveal" style="--g:${x.g};--rd:${i * 0.06}s" aria-label="${x.t}, ver en la carta">${x.v}<span>${x.t}</span></a>`).join('');
 
   /* ---------------------------------------------------------
      REVEALS + CONTADORES
@@ -615,19 +590,18 @@
   const foot = $('#cartFoot');
   const fab = $('.cart-fab');
   const toast = $('#toast');
-  const DELIVERY = 2.5;
+  const PHONE = '+34928424823';
   let lastFocus = null;
   let toastTimer;
 
   const cart = {
     items: Object.fromEntries(Object.entries(store.get()).filter(([id, q]) => byId[id] && q > 0)),
-    mode: 'pickup',
     count() { return Object.values(this.items).reduce((a, b) => a + b, 0); },
     subtotal() { return Object.entries(this.items).reduce((a, [id, q]) => a + byId[id].price * q, 0); },
     add(id) {
       this.items[id] = (this.items[id] || 0) + 1;
       this.save();
-      showToast(`🔥 ${byId[id].name} añadida al pedido`);
+      showToast(`🔥 ${byId[id].name} añadido a tu selección`);
       $$('[data-cart-count]').forEach((c) => { c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); });
     },
     change(id, d) {
@@ -654,7 +628,7 @@
       body.innerHTML = `<div class="cart-empty">
         <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><use href="#i-flame"/></svg>
         <strong>El cráter está vacío</strong>
-        <p>Añade alguna burger de la carta y empezamos a calentar la plancha.</p>
+        <p>Añade lo que te apetezca de la carta y te preparamos el resumen para pedirlo por teléfono.</p>
         <a href="#carta" class="btn btn-outline btn-sm" data-close-cart>Ver la carta</a>
       </div>`;
       $('.cart-empty svg').style.fill = 'var(--fire)';
@@ -673,10 +647,13 @@
       }).join('');
     }
     const sub = cart.subtotal();
-    const del = cart.mode === 'delivery' ? DELIVERY : 0;
     $('#cartSubtotal').textContent = euro(sub);
-    $('#cartTotal').textContent = euro(sub + del);
-    $('.delivery-row').hidden = cart.mode !== 'delivery';
+    $('#cartTotal').textContent = euro(sub);
+    // sugerencia: burger sin papas ni batata
+    const ids = Object.keys(cart.items);
+    const hasBurger = ids.some((id) => byId[id].cat === 'burgers' && id !== 'peques');
+    const hasSide = ids.some((id) => id.startsWith('side-') || id === 'batata' || id === 'bravas');
+    $('#upsell').hidden = !(hasBurger && !hasSide);
   }
 
   body.addEventListener('click', (e) => {
@@ -684,12 +661,6 @@
     if (b) cart.change(b.dataset.qty, +b.dataset.d);
     if (e.target.closest('[data-close-cart]')) closeCart();
   });
-
-  $$('.mode-toggle [role="radio"]').forEach((b) => b.addEventListener('click', () => {
-    cart.mode = b.dataset.mode;
-    $$('.mode-toggle [role="radio"]').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
-    renderCart();
-  }));
 
   function openCart() {
     lastFocus = document.activeElement;
@@ -705,7 +676,7 @@
     drawer.classList.remove('open');
     drawer.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('no-scroll');
-    setTimeout(() => { backdrop.hidden = true; if (!cart.count()) renderCart(); }, 400);
+    setTimeout(() => { backdrop.hidden = true; renderCart(); }, 400);
     lastFocus?.focus?.();
   }
   document.addEventListener('click', (e) => {
@@ -730,41 +701,21 @@
 
   $('#checkoutBtn').addEventListener('click', () => {
     if (!cart.count()) return;
-    const code = 'VS-' + Math.floor(1000 + Math.random() * 9000);
-    const eta = cart.mode === 'delivery' ? '30–40 min' : '12–15 min';
-    const where = cart.mode === 'delivery' ? 'Te lo llevamos a casa' : 'Recógelo en tu volcán más cercano';
-    cart.items = {};
-    store.set({});
-    $$('[data-cart-count]').forEach((c) => { c.textContent = 0; c.hidden = true; });
-    fab.hidden = true;
+    const lines = Object.entries(cart.items).map(([id, q]) => `<li><span>${q} × ${byId[id].name}</span><span>${euro(byId[id].price * q)}</span></li>`).join('');
     foot.hidden = true;
     body.innerHTML = `<div class="order-done">
-      <div class="ring"><svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>¡Pedido en la plancha!</h3>
-      <p>${where}. Tiempo estimado: <strong>${eta}</strong>.</p>
-      <span class="code">${code}</span>
-      <p style="font-size:13px">Demo: aquí se conectaría la pasarela de pago y el TPV del local.</p>
-      <button class="btn btn-outline btn-sm" type="button" data-close-cart>Seguir mirando</button>
+      <div class="ring"><svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1Z" fill="currentColor"/></svg></div>
+      <h3>Llama y pide</h3>
+      <p>Llama al local y dicta este resumen. Así no se te olvida nada.</p>
+      <ul class="order-summary">${lines}<li class="sum"><span>Total</span><span>${euro(cart.subtotal())}</span></li></ul>
+      <a class="btn btn-fire btn-block" href="tel:${PHONE}">Llamar al 928 42 48 23</a>
+      <button class="btn btn-outline btn-sm" type="button" data-back-cart>Volver a mi selección</button>
     </div>`;
-    $('.order-done [data-close-cart]').focus();
+    $('.order-done a').focus();
   });
+  body.addEventListener('click', (e) => { if (e.target.closest('[data-back-cart]')) renderCart(); });
 
   renderCart();
-
-  /* ---------------------------------------------------------
-     CLUB MAGMA
-     --------------------------------------------------------- */
-  $('#clubForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const input = $('#clubEmail');
-    const msg = $('#clubMsg');
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.value.trim());
-    msg.classList.toggle('err', !ok);
-    if (!ok) { msg.textContent = 'Ese email no parece válido. Revísalo.'; input.focus(); return; }
-    msg.textContent = '¡Bienvenido al cráter! Revisa tu bandeja: tu primer secreto está en camino.';
-    input.value = '';
-    clubEmbers?.burst(70);
-  });
 
   $('#year').textContent = new Date().getFullYear();
 })();

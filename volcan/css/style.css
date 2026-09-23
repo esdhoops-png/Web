@@ -176,7 +176,7 @@ html:not(.js) .preloader { display: none; }
 .brand img { width: 48px; height: 48px; transition: transform .6s var(--ease-spring); }
 .brand:hover img { transform: rotate(-12deg) scale(1.06); }
 .brand-name { font-family: var(--font-display); font-size: 24px; letter-spacing: .04em; line-height: .9; }
-.brand-name small { display: block; font-family: var(--font-body); font-size: 9.5px; font-weight: 800; letter-spacing: .32em; color: var(--fire); margin-top: 4px; }
+.brand-name small { display: block; white-space: nowrap; font-family: var(--font-body); font-size: 9.5px; font-weight: 800; letter-spacing: .32em; color: var(--fire); margin-top: 4px; }
 
 .main-nav { display: flex; gap: 34px; }
 .main-nav a {
@@ -493,7 +493,8 @@ html:not(.js) .preloader { display: none; }
 .card h3 { font-family: var(--font-display); font-size: 30px; letter-spacing: .02em; line-height: 1.05; }
 .price { font-family: var(--font-display); font-size: 24px; color: var(--gold); white-space: nowrap; }
 .card p { margin-top: 8px; color: rgba(244, 237, 228, .66); font-size: 15px; line-height: 1.55; }
-.card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 18px; }
+.card-tag { font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--fire); margin: 0 0 6px !important; }
+.card-foot { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 18px; }
 .flames { display: flex; gap: 2px; }
 .flames svg { width: 18px; height: 18px; fill: var(--ash); }
 .flames svg.on { fill: var(--fire); filter: drop-shadow(0 0 5px rgba(255, 122, 26, .6)); }
@@ -510,6 +511,11 @@ html:not(.js) .preloader { display: none; }
 .menu-note { margin-top: 36px; font-size: 14px; color: var(--muted); }
 
 /* variantes visuales de burger en la carta */
+.burger.v-chicken .b-layer[data-layer="patty"] svg { filter: hue-rotate(18deg) saturate(1.3) brightness(1.9); }
+.burger.v-mojo .b-layer[data-layer="sauce"] svg { filter: hue-rotate(95deg) saturate(.9) brightness(.9); }
+.burger.v-truffle .b-layer[data-layer="cheese"] svg { filter: saturate(.35) brightness(1.1); }
+.burger.v-kids { transform: scale(.82); }
+.card-visual > svg.v-batata { filter: hue-rotate(-18deg) saturate(1.5) brightness(.95); }
 .burger.v-black .b-layer[data-layer^="bun"] svg { filter: brightness(.32) saturate(.2) contrast(1.2); }
 .burger.v-veggie .b-layer[data-layer="patty"] svg { filter: hue-rotate(55deg) saturate(.8) brightness(1.2); }
 .burger.v-hot .b-layer[data-layer="sauce"] svg { filter: saturate(1.4) brightness(1.1); }
@@ -795,7 +801,10 @@ html:not(.js) .preloader { display: none; }
 @media (max-width: 560px) {
   body { font-size: 16px; }
   .brand-name { font-size: 21px; }
-  .brand-name small { font-size: 8.5px; }
+  .brand-name small { font-size: 8px; letter-spacing: .22em; }
+  .brand img { width: 42px; height: 42px; }
+  .menu-tabs { display: flex; width: 100%; }
+  .menu-tabs button { flex: 1 0 auto; padding: 10px 11px; font-size: 12px; letter-spacing: .02em; }
   .hero-sticker { width: 92px; height: 92px; right: 0; top: 2%; }
   .hero-sticker span { width: 50px; height: 50px; font-size: 22px; }
   .hero-sticker text { font-size: 10px; }
@@ -820,4 +829,57 @@ html:not(.js) .preloader { display: none; }
   .js .reveal, .js .reveal-hero, .js .burger-hero .b-inner { opacity: 1 !important; transform: none !important; filter: none !important; }
   .lava-flow { transform: none; }
   .ticker-track { animation: none; }
+}
+
+/* =========================================================
+   CARTA REAL · LOCAL · PEDIDO POR TELÉFONO
+   ========================================================= */
+.menu-callout {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px 24px;
+  margin-bottom: 26px; padding: 18px 22px; border-radius: 18px;
+  background: linear-gradient(100deg, rgba(255, 182, 39, .14), rgba(255, 77, 26, .08)); border: 1px solid rgba(255, 182, 39, .3);
+}
+.menu-callout p { font-size: 16px; color: rgba(244, 237, 228, .85); }
+.menu-callout strong { color: var(--gold); }
+
+.place-main {
+  display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+  border-radius: 28px; background: var(--coal-2); border: 1px solid var(--line);
+}
+.place-info { display: flex; flex-direction: column; gap: 16px; padding: clamp(28px, 4vw, 48px); }
+.place-info h3 { font-family: var(--font-display); font-size: clamp(34px, 4vw, 52px); line-height: 1; }
+.place-data { display: grid; gap: 18px; margin: 8px 0 0; }
+.place-data dt { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.place-data dd { margin: 4px 0 0; font-size: 19px; }
+.place-data address { font-style: normal; }
+.place-phone { font-family: var(--font-display); font-size: 30px; letter-spacing: .03em; color: var(--gold); }
+.place-phone:hover { color: var(--fire); }
+.place-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+.place-art { position: relative; min-height: 300px; background: radial-gradient(closest-side, rgba(224, 38, 27, .18), transparent), #100c0b; border-left: 1px solid var(--line); }
+.place-art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pin { animation: pinDrop 2.4s var(--ease-spring) infinite; }
+@keyframes pinDrop { 0%, 60%, 100% { transform: translate(200px, 150px); } 30% { transform: translate(200px, 138px); } }
+.pin-pulse { transform-origin: 200px 150px; animation: pinPulse 2.4s ease-out infinite; }
+@keyframes pinPulse { from { transform: scale(.5); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+
+.club-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px; }
+
+.upsell { padding: 14px 16px; border-radius: 16px; background: rgba(255, 182, 39, .1); border: 1px solid rgba(255, 182, 39, .28); display: grid; gap: 10px; }
+.upsell[hidden] { display: none; }
+.upsell p { font-size: 14px; color: rgba(244, 237, 228, .85); }
+.upsell strong { color: var(--gold); }
+.upsell-btns { display: flex; gap: 8px; }
+.upsell-btns .btn { flex: 1; }
+
+.order-summary { width: 100%; margin: 6px 0 10px; padding: 14px 16px; list-style: none; border-radius: 16px; background: var(--coal-3); text-align: left; }
+.order-summary li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 14.5px; border-bottom: 1px dashed var(--line); }
+.order-summary li.sum { border: 0; padding-top: 10px; font-weight: 800; color: var(--gold); font-size: 16px; }
+
+@media (max-width: 900px) {
+  .place-main { grid-template-columns: 1fr; }
+  .place-art { min-height: 220px; border-left: 0; border-top: 1px solid var(--line); order: -1; }
+}
+@media (max-width: 560px) {
+  .place-actions .btn, .club-actions .btn { flex: 1 1 100%; }
+  .menu-callout .btn { width: 100%; }
 }
