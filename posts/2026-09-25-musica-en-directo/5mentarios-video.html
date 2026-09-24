@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Fin de semana en 5mentarios</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+  :root { --paper: #efece4; --ink: #121212; --green: #0b7a3a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    background: #0b0d0a; color: #fff; font-family: "Inter", sans-serif;
+  }
+
+  /* fondo: ambiente de club desenfocado */
+  .bg img { position: absolute; object-fit: cover; filter: blur(34px) brightness(.42) saturate(1.2); }
+  .bg .tint {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(520px 420px at 12% 58%, rgba(255,150,40,.35), transparent 70%),
+      radial-gradient(600px 500px at 90% 30%, rgba(20,170,80,.38), transparent 70%),
+      radial-gradient(500px 420px at 70% 88%, rgba(255,120,30,.3), transparent 70%),
+      radial-gradient(700px 500px at 30% 8%, rgba(20,150,70,.25), transparent 70%),
+      linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.15) 30%, rgba(0,0,0,.2) 70%, rgba(0,0,0,.75));
+  }
+  svg.fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .bg img { will-change: transform; }
+  #beams { position: absolute; inset: 0; mix-blend-mode: screen; filter: blur(16px); }
+  .beam { position: absolute; width: 360px; height: 2300px; transform-origin: 50% 0;
+    clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%); }
+  .beam.g { background: linear-gradient(180deg, rgba(90,255,150,.55), rgba(20,170,80,.12) 50%, transparent 80%); }
+  .beam.a { background: linear-gradient(180deg, rgba(255,190,90,.5), rgba(255,130,40,.1) 50%, transparent 80%); }
+  #flash { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, #fff, rgba(255,255,255,.3) 60%); mix-blend-mode: overlay; opacity: 0; z-index: 2; pointer-events: none; }
+  svg.grain { z-index: 40; mix-blend-mode: overlay; opacity: .55; pointer-events: none; }
+
+  /* cabecera */
+  .logo { position: absolute; top: 58px; left: 50%; width: 230px; transform: translateX(-50%); z-index: 30; filter: drop-shadow(0 10px 24px rgba(0,0,0,.6)); }
+  .corner { position: absolute; top: 118px; z-index: 30; line-height: 1.15; }
+  .corner b { display: block; font-weight: 800; font-size: 34px; letter-spacing: .02em; }
+  .corner span { font-size: 24px; font-weight: 500; opacity: .9; }
+  .corner.l { left: 64px; } .corner.r { right: 64px; text-align: right; }
+
+  /* polaroids */
+  .pol {
+    position: absolute; background: var(--paper);
+    padding: 22px 22px 0;
+    box-shadow: 0 30px 60px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.4) inset;
+    transform: translateY(var(--y, 0px)) rotate(calc(var(--r) + var(--w, 0deg)));
+  }
+  .pol::after { /* textura de papel */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,.35), transparent 40%, rgba(0,0,0,.06));
+  }
+  .pol .ph { position: relative; overflow: hidden; background: #111; }
+  .pol .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: contrast(1.12) saturate(.9) sepia(.12) brightness(.97); }
+  .pol .ph::after { /* flash y viñeta */
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 45% 35%, rgba(255,255,255,.12), transparent 45%),
+                radial-gradient(circle, transparent 55%, rgba(0,0,0,.35));
+  }
+  .pol .cap {
+    font-family: "Permanent Marker", cursive; color: var(--ink);
+    text-align: center; line-height: 1;
+    height: 132px; display: flex; flex-direction: column; justify-content: center;
+    transform: rotate(-1.5deg);
+  }
+  .pol .cap .n { font-size: 50px; }
+  .pol .cap .t { font-size: 30px; margin-top: 8px; }
+  .pol .cap .t em { font-style: normal; color: var(--green); }
+
+  .center .ph {
+    display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(255,255,255,.25), transparent 55%),
+      repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,.06) 0 6deg, transparent 6deg 12deg),
+      radial-gradient(circle at 50% 45%, #13914a, #064423 80%);
+  }
+  .center .ph .badge { width: 74%; filter: drop-shadow(0 18px 30px rgba(0,0,0,.5)); position: relative; z-index: 1; }
+  .center .cap { height: 150px; }
+  .center .cap .n { font-size: 60px; }
+
+  .tape {
+    position: absolute; width: 150px; height: 42px; top: -18px; left: 50%;
+    transform: translateX(-50%) rotate(var(--tr, -4deg));
+    background: rgba(240,232,200,.55); box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    backdrop-filter: blur(1px);
+  }
+
+  /* pie */
+  .foot { position: absolute; left: 64px; right: 64px; bottom: 46px; z-index: 30; display: flex; align-items: flex-end; justify-content: space-between; }
+  .foot h2 { font-family: "Anton", sans-serif; font-weight: 400; font-size: 60px; line-height: .95; letter-spacing: .01em; }
+  .foot h2 small { display: block; font-family: "Inter", sans-serif; font-weight: 800; font-size: 22px; letter-spacing: .2em; margin-top: 8px; color: #d8f5e2; }
+  .foot .days { text-align: right; font-family: "Permanent Marker", cursive; font-size: 34px; line-height: 1.15; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="bg">
+    <img src="img/dj-ake.jpg" style="left:-10%; top:-5%; width:70%; height:55%;" alt="">
+    <img src="img/dj-asped.jpg" style="right:-10%; top:20%; width:70%; height:60%;" alt="">
+    <img src="img/son-karibe.jpg" style="left:-15%; top:55%; width:75%; height:50%; filter: blur(40px) brightness(.3) saturate(1.1);" alt="">
+    <div class="tint"></div>
+  </div>
+  <div id="beams"></div>
+  <svg class="fx" id="bokeh" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="flash"></div>
+
+  <img class="logo" src="logo/5mentarios-original.png" alt="5mentarios · Heineken">
+  <div class="corner l"><b>VIERNES</b><span>Son Karibe · DJ AKE</span></div>
+  <div class="corner r"><b>SÁBADO</b><span>Son Aldea · DJ ASPED</span></div>
+
+  <!-- polaroids -->
+  <div class="pol" style="--r:-6deg; left: 26px; top: 300px; width: 440px; z-index: 6;">
+    <div class="ph" style="height: 360px;"><img src="img/son-karibe.jpg" style="object-position: 42% 30%; transform: scale(1.12); transform-origin: 30% 20%;" alt="Son Karibe"></div>
+    <div class="cap"><div class="n">SON KARIBE</div><div class="t">VIERNES · <em>22:30</em></div></div>
+  </div>
+
+  <div class="pol" style="--r:6deg; right: 26px; top: 290px; width: 440px; z-index: 6;">
+    <div class="tape" style="--tr: 5deg"></div>
+    <div class="ph" style="height: 360px;"><img src="img/dj-ake.jpg" style="object-position: 50% 30%; transform: scale(1.6); transform-origin: 62% 32%; filter: contrast(1.1) saturate(.95) sepia(.1) brightness(1.18);" alt="DJ AKE"></div>
+    <div class="cap"><div class="n">DJ AKE</div><div class="t">VIERNES · <em>00:00</em></div></div>
+  </div>
+
+  <div class="pol" style="--r:5deg; left: 22px; top: 1262px; width: 460px; z-index: 4;">
+    <div class="ph" style="height: 330px;"><img src="img/son-aldra.jpg" style="object-position: 50% 8%; transform: scale(1.3); transform-origin: 50% 0;" alt="Son Aldea"></div>
+    <div class="cap"><div class="n">SON ALDEA</div><div class="t">SÁBADO · <em>22:30</em></div></div>
+  </div>
+
+  <div class="pol" style="--r:-5deg; right: 26px; top: 1250px; width: 440px; z-index: 4;">
+    <div class="tape" style="--tr: -6deg"></div>
+    <div class="ph" style="height: 350px;"><img src="img/dj-asped.jpg" style="object-position: 55% 30%;" alt="DJ ASPED"></div>
+    <div class="cap"><div class="n">DJ ASPED</div><div class="t">SÁBADO · <em>00:00</em></div></div>
+  </div>
+
+  <div class="pol center" style="--r:-3deg; left: 50%; margin-left: -215px; top: 800px; width: 430px; z-index: 5;">
+    <div class="tape"></div>
+    <div class="ph" style="height: 350px;"><img class="badge" src="logo/5mentarios-original.png" alt="" style="position: relative; inset: auto; width: 74%; height: auto; filter: drop-shadow(0 18px 30px rgba(0,0,0,.5));"></div>
+    <div class="cap"><div class="n">FIN DE SEMANA</div></div>
+  </div>
+
+  <div class="foot">
+    <h2>FIN DE SEMANA<small>EN 5MENTARIOS</small></h2>
+    <div class="days">Viernes<br>&amp; Sábado</div>
+  </div>
+
+  <svg class="fx grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="g"><feTurbulence id="turb" seed="1" type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#g)"/>
+  </svg>
+</div>
+<script>
+  const T = 8, TAU = Math.PI * 2;          // bucle perfecto de 8 s
+  let seed = 9; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  // luces desenfocadas
+  const svg = document.getElementById("bokeh");
+  svg.innerHTML = `<defs><filter id="b"><feGaussianBlur stdDeviation="12"/></filter></defs><g id="bk" filter="url(#b)"></g>`;
+  const bk = document.getElementById("bk");
+  const dots = Array.from({ length: 40 }, () => {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const d = { el: c, x: rnd() * 1080, y: rnd() * 1920, r: 14 + rnd() * 46,
+      col: ["#ffb347", "#ff8a2a", "#2bd46a", "#f4f0d8"][Math.floor(rnd() * 4)],
+      o: .08 + rnd() * .22, k: 1 + Math.floor(rnd() * 2), m: 1 + Math.floor(rnd() * 3), ph: rnd() * TAU, sway: 10 + rnd() * 30 };
+    c.setAttribute("r", d.r); c.setAttribute("fill", d.col); bk.appendChild(c); return d;
+  });
+
+  // haces de luz
+  const beamsEl = document.getElementById("beams");
+  const beams = [
+    { x: 80,  y: -80, base: -28, amp: 22, cls: "g", ph: 0 },
+    { x: 1000, y: -80, base: 28, amp: 22, cls: "g", ph: Math.PI },
+    { x: 540, y: -120, base: 0, amp: 30, cls: "a", ph: Math.PI / 2 },
+    { x: 300, y: 1960, base: 180 - 20, amp: 18, cls: "a", ph: 1 },
+    { x: 800, y: 1960, base: 180 + 20, amp: 18, cls: "g", ph: 2.4 },
+  ].map(b => { const el = document.createElement("div"); el.className = "beam " + b.cls; beamsEl.appendChild(el); return { ...b, el }; });
+
+  const bgImgs = [...document.querySelectorAll(".bg img")];
+  const pols = [...document.querySelectorAll(".pol")];
+  const flash = document.getElementById("flash");
+  const turb = document.getElementById("turb");
+
+  window.setT = (t) => {
+    const u = t / T;
+    bgImgs.forEach((im, i) => {
+      const sc = 1.1 + .06 * Math.sin(TAU * u + i * 2);
+      im.style.transform = `translate(${Math.sin(TAU * u + i) * 30}px, ${Math.cos(TAU * u + i) * 24}px) scale(${sc})`;
+    });
+    beams.forEach(b => {
+      const a = b.base + b.amp * Math.sin(TAU * u * 2 + b.ph);
+      b.el.style.left = (b.x - 180) + "px"; b.el.style.top = b.y + "px";
+      b.el.style.transform = `rotate(${a}deg)`;
+      b.el.style.opacity = .75 + .25 * Math.sin(TAU * u * 4 + b.ph);
+    });
+    dots.forEach(d => {
+      const y = ((d.y - d.k * 1920 * u) % 1920 + 1920) % 1920;
+      d.el.setAttribute("cx", d.x + Math.sin(TAU * u * d.m + d.ph) * d.sway);
+      d.el.setAttribute("cy", y);
+      d.el.setAttribute("opacity", d.o * (.6 + .4 * Math.sin(TAU * u * d.m + d.ph)));
+    });
+    // golpes de luz a 120 bpm
+    const beat = (t % .5) / .5;
+    flash.style.opacity = (.16 * Math.exp(-beat * 9)).toFixed(3);
+    pols.forEach((p, i) => {
+      p.style.setProperty("--w", (.7 * Math.sin(TAU * u + i * 1.3)).toFixed(3) + "deg");
+      p.style.setProperty("--y", (5 * Math.sin(TAU * u * 2 + i)).toFixed(2) + "px");
+    });
+    turb.setAttribute("seed", 1 + Math.floor(t * 30) % 24);
+  };
+  setT(0);
+</script>
+</body>
+</html>
