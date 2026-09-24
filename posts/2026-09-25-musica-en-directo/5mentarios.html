@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Weekend at 5mentarios</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+  :root {
+    --green: #00a13a;
+    --green-neon: #3dff7a;
+    --green-deep: #04210f;
+    --black: #010a05;
+    --red: #e3001b;
+    --white: #ffffff;
+    --foam: #f4f1e6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas {
+    width: 1080px; height: 1920px;
+    position: relative; overflow: hidden;
+    background: var(--black);
+    font-family: "Inter", sans-serif; color: var(--white);
+  }
+  .abs { position: absolute; inset: 0; }
+
+  /* ---------- atmósfera ---------- */
+  .glow {
+    background:
+      radial-gradient(700px 520px at 78% 30%, rgba(0,161,58,.55), transparent 70%),
+      radial-gradient(600px 500px at 10% 62%, rgba(0,161,58,.30), transparent 70%),
+      radial-gradient(900px 600px at 50% 100%, rgba(0,120,45,.45), transparent 70%),
+      linear-gradient(180deg, #021309 0%, var(--black) 40%, #020f07 100%);
+  }
+  .beams { mix-blend-mode: screen; filter: blur(14px); opacity: .55; }
+  .beam {
+    position: absolute; top: 120px; width: 260px; height: 1900px;
+    transform-origin: 50% 0;
+    background: linear-gradient(180deg, rgba(120,255,160,.55), rgba(0,161,58,.12) 45%, transparent 75%);
+    clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  }
+  svg.fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .grain { mix-blend-mode: overlay; opacity: .55; z-index: 30; pointer-events: none; }
+
+  /* ---------- cabecera: espuma ---------- */
+  .foam { position: absolute; left: 0; right: 0; top: 0; height: 250px; z-index: 6; }
+  .header {
+    position: absolute; top: 44px; left: 0; right: 0; z-index: 7;
+    text-align: center; color: var(--green-deep);
+  }
+  .header .h1 { font-weight: 800; font-size: 22px; letter-spacing: .62em; padding-left: .62em; }
+  .header .h2 { font-family: "Anton", sans-serif; font-size: 78px; line-height: 1; margin-top: 8px; letter-spacing: .02em; }
+  .header .h2 i { display: inline-block; width: 12px; height: 12px; background: var(--red); border-radius: 50%; margin: 0 0 14px 10px; vertical-align: middle; }
+  .logo-slot {
+    position: absolute; top: 48px; z-index: 7;
+    width: 170px; height: 104px;
+    border: 2px dashed rgba(4,33,15,.35); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-size: 12px; font-weight: 700; letter-spacing: .14em; color: rgba(4,33,15,.45);
+  }
+  .logo-slot.l { left: 40px; } .logo-slot.r { right: 40px; }
+  body.clean .logo-slot { border-color: transparent; color: transparent; }
+
+  /* ---------- titular ---------- */
+  .five { position: absolute; left: 330px; top: 110px; width: 900px; height: 1100px; z-index: 2; }
+  .headline { position: absolute; left: 56px; right: 56px; top: 300px; z-index: 5; }
+  .weekend {
+    font-family: "Anton", sans-serif; font-size: 292px; line-height: .86;
+    letter-spacing: -.005em; text-transform: uppercase;
+    text-shadow: 0 10px 40px rgba(0,0,0,.55);
+  }
+  .at {
+    display: flex; align-items: center; gap: 22px;
+    font-weight: 800; font-size: 44px; letter-spacing: .5em; padding-left: .5em;
+    margin: 26px 0 18px;
+  }
+  .at::before, .at::after { content: ""; flex: 1; height: 3px; background: var(--white); opacity: .85; }
+  .at::after { background: linear-gradient(90deg, var(--white), var(--white) 70%, var(--red) 70%); }
+  .brand {
+    font-family: "Anton", sans-serif; font-size: 186px; line-height: .9; letter-spacing: -.005em;
+    color: var(--green-neon);
+    text-shadow: 0 0 18px rgba(61,255,122,.55), 0 0 60px rgba(0,161,58,.8);
+    white-space: nowrap;
+  }
+
+  /* ---------- ecualizador ---------- */
+  .eq { position: absolute; left: 56px; right: 56px; top: 918px; height: 70px; z-index: 5; }
+
+  /* ---------- noches ---------- */
+  .night { position: absolute; left: 40px; right: 40px; height: 420px; z-index: 5; }
+  .night.fri { top: 1010px; } .night.sat { top: 1440px; }
+  .day {
+    display: flex; align-items: flex-end; gap: 20px; height: 118px;
+  }
+  .day b {
+    font-family: "Anton", sans-serif; font-weight: 400; font-size: 132px; line-height: .8;
+    color: transparent; -webkit-text-stroke: 3px var(--white);
+    letter-spacing: .01em;
+  }
+  .day .rule { flex: 1; height: 3px; margin-bottom: 8px; background: linear-gradient(90deg, var(--green-neon), rgba(61,255,122,.1)); }
+  .day .tick { width: 16px; height: 16px; background: var(--red); margin-bottom: 1px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 22px; height: 280px; }
+  .card {
+    position: relative; border-radius: 18px;
+    background:
+      radial-gradient(120% 90% at 80% 100%, rgba(0,161,58,.55), transparent 60%),
+      linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 40%, rgba(0,0,0,.25));
+    border: 1.5px solid rgba(61,255,122,.45);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 0 40px rgba(0,161,58,.25), 0 25px 50px rgba(0,0,0,.5);
+  }
+  .card .photo {
+    position: absolute; right: 0; bottom: 0; z-index: 1;
+    border-bottom-right-radius: 18px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 28%);
+  }
+  .card .shade {
+    position: absolute; inset: 0; z-index: 2; border-radius: 18px;
+    background: linear-gradient(180deg, transparent 45%, rgba(1,10,5,.85) 100%);
+  }
+  .card .txt { position: absolute; left: 24px; right: 20px; bottom: 20px; z-index: 3; }
+  .card .name {
+    font-family: "Anton", sans-serif; font-size: 78px; line-height: .92; text-transform: uppercase;
+    text-shadow: 0 4px 18px rgba(0,0,0,.8);
+  }
+  .card .time {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 10px;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; color: var(--green-neon);
+  }
+  .card .time::before { content: ""; width: 26px; height: 3px; background: var(--red); }
+
+  /* ---------- pie ---------- */
+  .footer { position: absolute; left: 56px; right: 56px; bottom: 34px; height: 22px; z-index: 5; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="abs glow"></div>
+  <div class="abs beams" id="beams"></div>
+  <svg class="fx" id="bokeh" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <!-- gran "5" de cristal verde con condensación -->
+  <svg class="five" viewBox="0 0 900 1100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#2bd164" stop-opacity=".75"/>
+        <stop offset=".35" stop-color="#00a13a" stop-opacity=".55"/>
+        <stop offset=".7" stop-color="#035a22" stop-opacity=".6"/>
+        <stop offset="1" stop-color="#012a10" stop-opacity=".8"/>
+      </linearGradient>
+      <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+        <stop offset=".5" stop-color="#fff" stop-opacity=".55"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="drop" cx=".35" cy=".3" r=".7">
+        <stop offset="0" stop-color="#fff" stop-opacity=".95"/>
+        <stop offset=".35" stop-color="#bfffd2" stop-opacity=".35"/>
+        <stop offset=".8" stop-color="#003d16" stop-opacity=".25"/>
+        <stop offset="1" stop-color="#001a09" stop-opacity=".55"/>
+      </radialGradient>
+      <clipPath id="fiveClip"><text x="450" y="1030" text-anchor="middle" font-family="Anton" font-size="1240">5</text></clipPath>
+    </defs>
+    <text x="450" y="1030" text-anchor="middle" font-family="Anton" font-size="1240" fill="url(#glass)" stroke="rgba(160,255,190,.55)" stroke-width="3">5</text>
+    <g clip-path="url(#fiveClip)">
+      <rect x="170" y="-100" width="70" height="1400" fill="url(#shine)" transform="rotate(14 450 550)"/>
+      <rect x="270" y="-100" width="22" height="1400" fill="url(#shine)" transform="rotate(14 450 550)"/>
+      <g id="drops"></g>
+    </g>
+  </svg>
+
+  <!-- espuma -->
+  <svg class="foam" viewBox="0 0 1080 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="foamTex">
+        <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="4" seed="4"/>
+        <feColorMatrix values="0 0 0 0 .96  0 0 0 0 .95  0 0 0 0 .90  0 0 0 -1.1 1.35"/>
+        <feComposite in2="SourceGraphic" operator="in"/>
+      </filter>
+      <linearGradient id="foamShade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fbfaf4"/><stop offset=".85" stop-color="#ece8d8"/><stop offset="1" stop-color="#cfe8d4"/>
+      </linearGradient>
+    </defs>
+    <path id="foamPath" fill="url(#foamShade)"/>
+    <g id="foamBubbles"></g>
+  </svg>
+
+  <div class="logo-slot l">LOGO<br>5MENTARIOS</div>
+  <div class="logo-slot r">LOGO<br>HEINEKEN</div>
+  <div class="header">
+    <div class="h1">HEINEKEN</div>
+    <div class="h2">5MENTARIOS<i></i></div>
+  </div>
+
+  <div class="headline">
+    <div class="weekend">WEEKEND</div>
+    <div class="at">AT</div>
+    <div class="brand">5MENTARIOS</div>
+  </div>
+
+  <svg class="eq" id="eq" viewBox="0 0 968 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <section class="night fri">
+    <div class="day"><b>FRIDAY</b><span class="rule"></span><span class="tick"></span></div>
+    <div class="cards">
+      <div class="card">
+        <img class="photo" src="duotone/son-karibe.png" style="height: 330px" alt="">
+        <div class="shade"></div>
+        <div class="txt"><div class="name">SON KARIBE</div><div class="time">22:30</div></div>
+      </div>
+      <div class="card">
+        <img class="photo" src="duotone/dj-ake.png" style="height: 310px" alt="">
+        <div class="shade"></div>
+        <div class="txt"><div class="name">DJ AKE</div><div class="time">00:00</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="night sat">
+    <div class="day"><b>SATURDAY</b><span class="rule"></span><span class="tick"></span></div>
+    <div class="cards">
+      <div class="card">
+        <img class="photo" src="duotone/son-aldra.png" style="height: 300px" alt="">
+        <div class="shade"></div>
+        <div class="txt"><div class="name">SON ALDRA</div><div class="time">22:30</div></div>
+      </div>
+      <div class="card">
+        <img class="photo" src="duotone/dj-asped.png" style="height: 310px" alt="">
+        <div class="shade"></div>
+        <div class="txt"><div class="name">DJ ASPED</div><div class="time">00:00</div></div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="footer" id="wave" viewBox="0 0 968 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <svg class="fx grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#n)"/>
+  </svg>
+</div>
+
+<script>
+  if (new URLSearchParams(location.search).get("logos") === "0") document.body.classList.add("clean");
+  let seed = 5; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  // haces de luz de discoteca
+  const beams = document.getElementById("beams");
+  [[-26, 60], [-12, 300], [8, 620], [22, 860], [-4, 980]].forEach(([deg, x]) => {
+    const b = document.createElement("div"); b.className = "beam";
+    b.style.left = x - 130 + "px"; b.style.transform = `rotate(${deg}deg)`;
+    beams.appendChild(b);
+  });
+
+  // bokeh de luces de bar + burbujas subiendo
+  let bk = `<defs><filter id="bl"><feGaussianBlur stdDeviation="10"/></filter>
+    <radialGradient id="bub" cx=".35" cy=".3" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".4" stop-color="#9fffc0" stop-opacity=".15"/><stop offset="1" stop-color="#9fffc0" stop-opacity=".5"/></radialGradient></defs><g filter="url(#bl)">`;
+  for (let i = 0; i < 26; i++) {
+    const r = 18 + rnd() * 50, c = rnd() > .85 ? "#e3001b" : (rnd() > .5 ? "#3dff7a" : "#c9ffd9");
+    bk += `<circle cx="${rnd() * 1080}" cy="${260 + rnd() * 1600}" r="${r}" fill="${c}" opacity="${.08 + rnd() * .18}"/>`;
+  }
+  bk += `</g>`;
+  for (let i = 0; i < 90; i++) {
+    const x = rnd() * 1080, y = 260 + rnd() * 1640, r = 1.5 + Math.pow(rnd(), 3) * 9;
+    bk += `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#bub)" opacity="${.35 + rnd() * .5}"/>`;
+  }
+  document.getElementById("bokeh").innerHTML = bk;
+
+  // condensación sobre el "5"
+  let dr = "";
+  for (let i = 0; i < 420; i++) {
+    const r = 2 + Math.pow(rnd(), 2.4) * 16;
+    const x = rnd() * 900, y = rnd() * 1100;
+    dr += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * (1 + rnd() * .35)}" fill="url(#drop)"/>`;
+    if (r > 13 && rnd() > .7) dr += `<path d="M${x} ${y + r} q ${rnd() * 10 - 5} ${20 + rnd() * 30} ${rnd() * 6 - 3} ${30 + rnd() * 50}" stroke="rgba(210,255,225,.22)" stroke-width="${r * .3}" stroke-linecap="round" fill="none"/>`;
+  }
+  document.getElementById("drops").innerHTML = dr;
+
+  // borde de espuma ondulado y burbujas
+  let d = "M0 0 H1080 V190";
+  for (let x = 1080; x >= 0; x -= 36) d += ` Q ${x - 18} ${205 + rnd() * 34} ${x - 36} ${186 + rnd() * 16}`;
+  d += " Z";
+  document.getElementById("foamPath").setAttribute("d", d);
+  let fb = "";
+  for (let i = 0; i < 160; i++) {
+    const x = rnd() * 1080, y = 150 + rnd() * 60, r = 2 + rnd() * 9;
+    fb += `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="rgba(120,150,120,.28)" stroke-width="1.2"/>`;
+  }
+  document.getElementById("foamBubbles").innerHTML = fb;
+
+  // ecualizador
+  let eq = "";
+  const n = 64, w = 968 / n;
+  for (let i = 0; i < n; i++) {
+    const t = i / n, h = 8 + Math.abs(Math.sin(t * 9.4) * Math.cos(t * 3.1)) * 52 + rnd() * 10;
+    const red = i === 47;
+    eq += `<rect x="${i * w + 2}" y="${70 - h}" width="${w - 5}" height="${h}" rx="2" fill="${red ? "#e3001b" : "#3dff7a"}" opacity="${red ? 1 : .35 + h / 110}"/>`;
+  }
+  document.getElementById("eq").innerHTML = eq;
+
+  // onda de sonido en el pie
+  let wv = "M0 11";
+  for (let x = 0; x <= 968; x += 4) wv += ` L${x} ${11 + Math.sin(x / 9) * Math.sin(x / 97) * 9}`;
+  document.getElementById("wave").innerHTML = `<path d="${wv}" stroke="#3dff7a" stroke-width="2" fill="none" opacity=".7"/>`;
+</script>
+</body>
+</html>
