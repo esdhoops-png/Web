@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Fin de semana en 5mentarios</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+  :root { --bg: #ebe7e1; --green: #0b7a3a; --ink: #111; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    background: var(--bg);
+    color: var(--ink); font-family: "Inter", sans-serif;
+  }
+  svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; mix-blend-mode: multiply; opacity: .35; }
+
+  .logo { position: absolute; top: 40px; left: 50%; width: 190px; transform: translateX(-50%); z-index: 20; }
+  .title {
+    position: absolute; top: 250px; left: 0; right: 0; text-align: center; z-index: 12;
+    font-family: "Playfair Display", serif; font-weight: 900; font-size: 116px; line-height: 1;
+    letter-spacing: -.01em; color: var(--green);
+    text-shadow: 0 3px 0 #064d24, 0 14px 30px rgba(0,0,0,.18);
+  }
+  .script {
+    position: absolute; top: 372px; left: 0; right: 0; text-align: center; z-index: 13;
+    font-family: "Mrs Saint Delafield", cursive; font-size: 140px; line-height: 1; color: var(--ink);
+    text-shadow: 0 0 18px rgba(246,243,238,.9), 0 0 4px rgba(246,243,238,.9);
+  }
+
+  /* paneles */
+  .panel {
+    position: absolute; overflow: hidden; z-index: 5;
+    background:
+      radial-gradient(160px 120px at 30% 12%, rgba(255,255,255,.55), transparent 70%),
+      radial-gradient(120px 90px at 80% 30%, rgba(255,255,255,.3), transparent 70%),
+      radial-gradient(260px 300px at 50% 55%, rgba(170,200,185,.35), transparent 70%),
+      linear-gradient(180deg, #6f8277 0%, #3b4d43 55%, #1f2a24 100%);
+    box-shadow: 0 20px 40px rgba(0,0,0,.18);
+  }
+  .panel::before { /* haces de luz de escenario */
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    background: repeating-linear-gradient(100deg, transparent 0 60px, rgba(255,255,255,.07) 60px 70px, transparent 70px 140px);
+    filter: blur(6px);
+  }
+  .panel img.fadeb { -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 96%); mask-image: linear-gradient(180deg, #000 62%, transparent 96%); }
+  .panel img { position: absolute; z-index: 1; filter: contrast(1.1) brightness(1.02) drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
+
+  /* niebla inferior que funde los paneles con el fondo */
+  .fade {
+    position: absolute; left: 0; right: 0; top: 1380px; height: 260px; z-index: 8;
+    background: linear-gradient(180deg, rgba(235,231,225,0) 0%, rgba(235,231,225,.9) 60%, var(--bg) 85%);
+  }
+
+  .names { position: absolute; top: 1560px; left: 42px; width: 996px; z-index: 10;
+    display: grid; grid-template-columns: 220px 220px 300px 220px; column-gap: 12px; text-align: center; }
+  .names .n { font-family: "Anton", sans-serif; font-size: 48px; line-height: 1; }
+  .names .t { font-weight: 800; font-size: 30px; letter-spacing: .06em; color: var(--green); margin-top: 8px; }
+
+  .days { position: absolute; top: 1700px; left: 42px; width: 996px; z-index: 10;
+    display: grid; grid-template-columns: 452px 532px; column-gap: 12px; }
+  .days div {
+    display: flex; align-items: center; gap: 16px; justify-content: center;
+    font-weight: 900; font-size: 50px; letter-spacing: .04em; color: var(--green);
+  }
+  .days div::before, .days div::after { content: ""; flex: 1; height: 3px; background: var(--green); opacity: .35; }
+
+  .foot { position: absolute; left: 0; right: 0; bottom: 60px; text-align: center; z-index: 10;
+    font-weight: 800; font-size: 26px; letter-spacing: .3em; }
+  .foot span { color: var(--green); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <img class="logo" src="logo/5mentarios-original.png" alt="5mentarios · Heineken">
+  <div class="title">FIN DE SEMANA</div>
+  <div class="script">en 5mentarios</div>
+
+  <div class="panel" style="left: 42px;  width: 220px; top: 560px; height: 980px;"><img src="bw/son-karibe.png" style="height: 900px; left: -200px; bottom: -60px;" alt="Son Karibe"></div>
+  <div class="panel" style="left: 274px; width: 220px; top: 480px; height: 1060px;"><img src="bw/dj-ake.png" style="height: 860px; left: -218px; bottom: -40px;" alt="DJ AKE"></div>
+  <div class="panel" style="left: 506px; width: 300px; top: 480px; height: 1060px;"><img class="fadeb" src="bw/son-aldra.png" style="height: 420px; left: -152px; bottom: 300px;" alt="Son Aldea"></div>
+  <div class="panel" style="left: 818px; width: 220px; top: 560px; height: 980px;"><img src="bw/dj-asped.png" style="height: 860px; left: -290px; bottom: -60px;" alt="DJ ASPED"></div>
+
+  <div class="fade"></div>
+
+  <div class="names">
+    <div><div class="n">SON KARIBE</div><div class="t">22:30</div></div>
+    <div><div class="n">DJ AKE</div><div class="t">00:00</div></div>
+    <div><div class="n">SON ALDEA</div><div class="t">22:30</div></div>
+    <div><div class="n">DJ ASPED</div><div class="t">00:00</div></div>
+  </div>
+  <div class="days"><div>VIERNES</div><div>SÁBADO</div></div>
+
+  <div class="foot">FIN DE SEMANA <span>·</span> 5MENTARIOS</div>
+
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#g)"/>
+  </svg>
+</div>
+</body>
+</html>
