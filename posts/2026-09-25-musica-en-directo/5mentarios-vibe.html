@@ -36,8 +36,11 @@
   .panel .strip { position: absolute; top: 0; bottom: 0; width: 64px; }
   .panel .strip.l { left: 10px; } .panel .strip.r { right: 10px; }
   .presents { margin-top: 30px; font-size: 16px; letter-spacing: .34em; opacity: .75; font-weight: 500; }
-  .date { font-family: "Bebas Neue", sans-serif; font-size: 92px; line-height: 1; margin-top: 70px; margin-bottom: 18px; text-shadow: 0 6px 24px rgba(0,0,0,.18); }
+  .date { font-family: "Bebas Neue", sans-serif; font-size: 92px; line-height: 1; margin-top: 34px; margin-bottom: 14px; text-shadow: 0 6px 24px rgba(0,0,0,.18); }
   .big { font-family: "Bebas Neue", sans-serif; font-size: 214px; line-height: .8; letter-spacing: -.01em; text-shadow: 0 10px 34px rgba(0,0,0,.22); }
+  .sub { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 20px;
+    font-family: "Bebas Neue", sans-serif; font-size: 64px; line-height: 1; letter-spacing: .12em; color: #fff; }
+  .sub::before, .sub::after { content: ""; width: 70px; height: 3px; background: rgba(255,255,255,.8); }
   .glow { position: relative; height: 150px; margin-top: 34px; }
   .glow span { position: absolute; left: 0; right: 0; line-height: 1; }
   .glow .back { top: 0; font-family: "Bebas Neue", sans-serif; font-size: 150px; letter-spacing: .12em; color: rgba(255,255,255,.2);
@@ -49,7 +52,7 @@
   .figs img { position: absolute; }
   .figs img.back { -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 90%); mask-image: linear-gradient(180deg, #000 55%, transparent 90%); }
   .figs img { filter: drop-shadow(0 20px 40px rgba(0,0,0,.45)); }
-  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 900px; z-index: 20;
+  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 820px; z-index: 20;
     background: linear-gradient(180deg, rgba(6,40,22,0) 0%, rgba(6,40,22,.35) 28%, rgba(5,34,19,.82) 55%, #041d10 80%); }
 
   .names { position: absolute; top: 1590px; left: 0; right: 0; height: 60px; z-index: 22; }
@@ -73,15 +76,15 @@
     <div class="presents">5MENTARIOS PRESENTA</div>
     <div class="date">VIERNES &amp; SÁBADO</div>
     <div class="big">FIN DE<br>SEMANA</div>
-    <div class="glow"><span class="back">FINDE</span><span class="front">EN 5MENTARIOS</span></div>
+    <div class="sub">EN 5MENTARIOS</div>
   </div>
 
   <div class="figs" id="figs">
-    <img class="back" src="col/son-aldea-2.png" style="z-index: 4;" data-h="560" data-cx="622" data-top="1015" alt="Son Aldea">
-    <img class="back" src="col/son-aldea-1.png" style="z-index: 4;" data-h="560" data-cx="780" data-top="1005" alt="Son Aldea">
-    <img src="col/dj-ake.png"     style="z-index: 5;" data-h="750" data-cx="395" data-top="1030" alt="DJ AKE">
-    <img src="col/dj-asped.png"   style="z-index: 6;" data-h="650" data-cx="960" data-top="1020" alt="DJ ASPED">
-    <img src="col/son-karibe.png" style="z-index: 7;" data-h="825" data-cx="172" data-top="1010" alt="Son Karibe">
+    <img class="back" src="col/son-aldea-2.png" style="z-index: 4;" data-h="560" data-cx="622" data-top="925" alt="Son Aldea">
+    <img class="back" src="col/son-aldea-1.png" style="z-index: 4;" data-h="560" data-cx="780" data-top="915" alt="Son Aldea">
+    <img src="col/dj-ake.png"     style="z-index: 5;" data-h="750" data-cx="395" data-top="910" alt="DJ AKE">
+    <img src="col/dj-asped.png"   style="z-index: 6;" data-h="650" data-cx="960" data-top="900" alt="DJ ASPED">
+    <img src="col/son-karibe.png" style="z-index: 7;" data-h="825" data-cx="172" data-top="890" alt="Son Karibe">
   </div>
   <div class="fade"></div>
 
