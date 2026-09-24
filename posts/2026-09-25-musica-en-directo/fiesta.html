@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Finde de fiesta</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #ffd23f;
+    --pink: #ff3d7f;
+    --orange: #ff8a1f;
+    --purple: #2a0845;
+    --cream: #fff7e8;
+    --w: 1080px;
+    --h: 1350px;
+  }
+  body.story { --h: 1920px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas {
+    width: var(--w); height: var(--h);
+    position: relative; overflow: hidden;
+    color: var(--cream);
+    font-family: "Inter", sans-serif;
+    background:
+      radial-gradient(900px 700px at 50% 8%, rgba(255,210,63,.45), transparent 60%),
+      linear-gradient(165deg, #ff5f6d 0%, #c2185b 30%, #6a1b9a 62%, var(--purple) 100%);
+    display: flex; flex-direction: column;
+    padding: 56px 56px 48px;
+  }
+  /* rayos de sol tipo cartel de fiesta */
+  .rays {
+    position: absolute; left: 50%; top: 11%;
+    width: 2600px; height: 2600px; transform: translate(-50%, -50%);
+    background: repeating-conic-gradient(rgba(255,255,255,.10) 0 6deg, transparent 6deg 12deg);
+    -webkit-mask: radial-gradient(circle, #000 0 20%, transparent 55%);
+            mask: radial-gradient(circle, #000 0 20%, transparent 55%);
+  }
+  /* confeti */
+  .confetti i {
+    position: absolute; display: block; border-radius: 3px;
+    transform: rotate(var(--r));
+  }
+  header { position: relative; text-align: center; z-index: 2; }
+  .tag {
+    display: inline-block;
+    background: var(--cream); color: var(--pink);
+    font-weight: 800; font-size: 26px; letter-spacing: .22em; text-transform: uppercase;
+    padding: 10px 26px; border-radius: 999px;
+    transform: rotate(-2deg);
+    box-shadow: 6px 6px 0 var(--purple);
+  }
+  h1 {
+    font-family: "Anton", sans-serif; font-weight: 400;
+    text-transform: uppercase; line-height: 1.12;
+    margin-top: 18px;
+    font-size: 118px;
+    color: var(--yellow);
+    text-shadow: 7px 7px 0 var(--pink), 14px 14px 0 var(--purple);
+    transform: rotate(-3deg);
+    white-space: nowrap;
+  }
+  h1 span { display: block; margin-bottom: 0; color: var(--cream); font-size: .62em; text-shadow: 5px 5px 0 var(--purple); }
+  .sub {
+    margin-top: 22px;
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 600;
+    font-size: 32px; color: var(--cream);
+  }
+  .nights { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; gap: 30px; margin-top: 30px; min-height: 0; }
+  .night { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .day {
+    align-self: flex-start;
+    font-family: "Anton", sans-serif; font-weight: 400; text-transform: uppercase;
+    font-size: 42px; line-height: 1;
+    background: var(--yellow); color: var(--purple);
+    padding: 8px 22px 10px;
+    transform: rotate(-2deg);
+    box-shadow: 6px 6px 0 var(--purple);
+    margin-bottom: 14px; margin-left: 6px;
+  }
+  .day small { font-family: "Inter", sans-serif; font-weight: 800; font-size: 26px; letter-spacing: .12em; margin-left: 10px; color: var(--pink); }
+  .night:nth-child(2) .day { align-self: flex-end; transform: rotate(2deg); margin-right: 6px; }
+  .acts { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; min-height: 0; }
+  .act {
+    position: relative;
+    background: var(--cream);
+    padding: 12px 12px 0;
+    border-radius: 10px;
+    box-shadow: 10px 12px 0 rgba(42,8,69,.75);
+    display: flex; flex-direction: column;
+    transform: rotate(var(--r, -1.5deg));
+  }
+  .act:nth-child(2) { --r: 1.5deg; }
+  .photo { position: relative; flex: 1; border-radius: 6px; overflow: hidden; min-height: 0; }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .label { padding: 8px 6px 10px; color: var(--purple); }
+  .name { font-family: "Anton", sans-serif; font-weight: 400; font-size: 40px; line-height: 1; text-transform: uppercase; }
+  .role { font-weight: 800; font-size: 16px; letter-spacing: .16em; text-transform: uppercase; color: var(--pink); margin-top: 4px; }
+  .sticker {
+    position: absolute; top: -26px; right: -20px; z-index: 3;
+    width: 124px; height: 124px; border-radius: 50%;
+    background: var(--pink); color: var(--cream);
+    border: 5px solid var(--cream);
+    box-shadow: 5px 5px 0 var(--purple);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transform: rotate(10deg);
+    text-align: center;
+  }
+  .sticker b { font-family: "Anton", sans-serif; font-weight: 400; font-size: 42px; line-height: 1; }
+  .sticker em { font-style: normal; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+  .act.dj .sticker { background: var(--orange); }
+  footer { position: relative; z-index: 2; margin-top: 28px; text-align: center; }
+  .cta {
+    display: inline-block;
+    font-family: "Anton", sans-serif; font-weight: 400; text-transform: uppercase;
+    font-size: 40px; letter-spacing: .02em;
+    background: var(--cream); color: var(--purple);
+    padding: 10px 34px 12px; border-radius: 14px;
+    box-shadow: 7px 7px 0 var(--pink);
+    transform: rotate(-1deg);
+  }
+  .venue { margin-top: 16px; font-weight: 800; font-size: 26px; letter-spacing: .3em; text-transform: uppercase; color: var(--yellow); }
+
+  body.story .canvas { padding: 120px 56px 110px; }
+  body.story h1 { font-size: 150px; }
+  body.story .sub { font-size: 38px; }
+  body.story .name { font-size: 48px; }
+  body.story .nights { gap: 44px; margin-top: 44px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="rays"></div>
+  <div class="confetti" id="confetti"></div>
+
+  <header>
+    <div class="tag">Este finde en Gil²</div>
+    <h1><span>¡Se viene</span>fiestón!</h1>
+    <p class="sub">Música en directo + DJ hasta que el cuerpo aguante</p>
+  </header>
+
+  <section class="nights">
+    <div class="night">
+      <div class="day">Viernes<small>25 sep</small></div>
+      <div class="acts">
+        <div class="act">
+          <div class="sticker"><b>22:30</b><em>En directo</em></div>
+          <div class="photo"><img src="img/son-karibe.jpg" style="object-position: 45% 25%" alt="Son Karibe"></div>
+          <div class="label"><div class="name">Son Karibe</div><div class="role">Live show</div></div>
+        </div>
+        <div class="act dj">
+          <div class="sticker"><b>00:00</b><em>DJ set</em></div>
+          <div class="photo"><img src="img/dj-ake.jpg" style="object-position: 50% 30%" alt="DJ AKE"></div>
+          <div class="label"><div class="name">DJ AKE</div><div class="role">Hasta cerrar</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="night">
+      <div class="day">Sábado<small>26 sep</small></div>
+      <div class="acts">
+        <div class="act">
+          <div class="sticker"><b>22:30</b><em>En directo</em></div>
+          <div class="photo"><img src="img/son-aldra.jpg" style="object-position: 50% 20%" alt="Son Aldra"></div>
+          <div class="label"><div class="name">Son Aldra</div><div class="role">Live show</div></div>
+        </div>
+        <div class="act dj">
+          <div class="sticker"><b>00:00</b><em>DJ set</em></div>
+          <div class="photo"><img src="img/dj-asped.jpg" style="object-position: 55% 30%" alt="DJ ASPED"></div>
+          <div class="label"><div class="name">DJ ASPED</div><div class="role">Hasta cerrar</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="cta">¡Trae a tu gente y reserva ya!</div>
+    <div class="venue">Gil² Restaurante</div>
+  </footer>
+</div>
+<script>
+  if (new URLSearchParams(location.search).get("f") === "story") document.body.classList.add("story");
+  // confeti con semilla fija para que el render sea siempre igual
+  let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const colors = ["#ffd23f", "#fff7e8", "#ff8a1f", "#3ee0c5", "#ff3d7f"];
+  const c = document.getElementById("confetti");
+  for (let i = 0; i < 70; i++) {
+    const el = document.createElement("i");
+    const w = 8 + rnd() * 14;
+    el.style.cssText = `left:${rnd() * 100}%;top:${rnd() * 100}%;width:${w}px;height:${w * (rnd() > .5 ? .4 : 1)}px;background:${colors[i % colors.length]};--r:${rnd() * 360}deg;opacity:${.55 + rnd() * .45}`;
+    if (rnd() > .7) el.style.borderRadius = "50%";
+    c.appendChild(el);
+  }
+</script>
+</body>
+</html>
