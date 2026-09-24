@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Fin de semana en 5mentarios</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+  :root {
+    --paper: #ece8df;
+    --ink: #0f3b28;
+    --mint: #bfe8cf;
+    --green: #1f9a55;
+    --green-deep: #06331c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas { width: 1080px; height: 1920px; position: relative; overflow: hidden; background: var(--paper); font-family: "Inter", sans-serif; }
+  svg.layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+  svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 50; pointer-events: none; mix-blend-mode: soft-light; opacity: .6; }
+
+  .logo { position: absolute; top: 34px; left: 50%; width: 150px; transform: translateX(-50%); z-index: 6; }
+
+  /* panel central */
+  .panel {
+    position: absolute; left: 180px; right: 180px; top: 262px; height: 1180px; z-index: 3; overflow: hidden;
+    color: #fff; text-align: center;
+    background:
+      radial-gradient(700px 420px at 50% 0%, rgba(210,255,225,.55), transparent 70%),
+      linear-gradient(180deg, #8fd3a8 0%, #3fae6c 30%, #1a8a4a 58%, #0d5e31 82%, #06331c 100%);
+    box-shadow: 0 30px 70px rgba(0,0,0,.35);
+  }
+  .panel::after { /* grano propio del panel */
+    content: ""; position: absolute; inset: 0; opacity: .5; mix-blend-mode: overlay;
+    background: repeating-radial-gradient(circle at 30% 30%, rgba(255,255,255,.05) 0 1px, transparent 1px 3px);
+  }
+  .panel .strip { position: absolute; top: 0; bottom: 0; width: 64px; }
+  .panel .strip.l { left: 10px; } .panel .strip.r { right: 10px; }
+  .presents { margin-top: 30px; font-size: 16px; letter-spacing: .34em; opacity: .75; font-weight: 500; }
+  .date { font-family: "Bebas Neue", sans-serif; font-size: 92px; line-height: 1; margin-top: 70px; margin-bottom: 18px; text-shadow: 0 6px 24px rgba(0,0,0,.18); }
+  .big { font-family: "Bebas Neue", sans-serif; font-size: 214px; line-height: .8; letter-spacing: -.01em; text-shadow: 0 10px 34px rgba(0,0,0,.22); }
+  .glow { position: relative; height: 150px; margin-top: 34px; }
+  .glow span { position: absolute; left: 0; right: 0; line-height: 1; }
+  .glow .back { top: 0; font-family: "Bebas Neue", sans-serif; font-size: 150px; letter-spacing: .12em; color: rgba(255,255,255,.2);
+    -webkit-text-stroke: 2px rgba(255,255,255,.85); filter: blur(2.2px); }
+  .glow .front { top: 38px; font-family: "Anton", sans-serif; font-size: 58px; letter-spacing: .04em; color: #fff;
+    filter: blur(1.4px); text-shadow: 0 0 10px #fff, 0 0 26px rgba(255,255,255,.95), 0 0 60px rgba(220,255,230,.8); }
+
+  /* artistas */
+  .figs img { position: absolute; }
+  .figs img.back { -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 90%); mask-image: linear-gradient(180deg, #000 55%, transparent 90%); }
+  .figs img { filter: drop-shadow(0 20px 40px rgba(0,0,0,.45)); }
+  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 900px; z-index: 20;
+    background: linear-gradient(180deg, rgba(6,40,22,0) 0%, rgba(6,40,22,.35) 28%, rgba(5,34,19,.82) 55%, #041d10 80%); }
+
+  .names { position: absolute; top: 1590px; left: 0; right: 0; height: 60px; z-index: 22; }
+  .names div { position: absolute; transform: translateX(-50%); white-space: nowrap;
+    font-family: "Bebas Neue", sans-serif; font-size: 66px; line-height: 1; color: #fff; letter-spacing: .02em;
+    text-shadow: 0 3px 16px rgba(0,0,0,.6); }
+
+  .info { position: absolute; left: 0; right: 0; top: 1690px; z-index: 22; text-align: center; color: #fff; }
+  .info p { font-weight: 700; font-size: 25px; letter-spacing: .04em; line-height: 1.55; }
+  .info p b { font-weight: 900; color: var(--mint); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <svg class="layer" id="pattern" xmlns="http://www.w3.org/2000/svg"></svg>
+  <img class="logo" src="logo/5mentarios-original.png" alt="5mentarios · Heineken">
+
+  <div class="panel">
+    <svg class="strip l" id="stripL"></svg>
+    <svg class="strip r" id="stripR"></svg>
+    <div class="presents">5MENTARIOS PRESENTA</div>
+    <div class="date">VIERNES &amp; SÁBADO</div>
+    <div class="big">FIN DE<br>SEMANA</div>
+    <div class="glow"><span class="back">FINDE</span><span class="front">EN 5MENTARIOS</span></div>
+  </div>
+
+  <div class="figs" id="figs">
+    <img class="back" src="col/son-aldra.png" style="z-index: 4;" data-h="480" data-cx="703" data-top="1000" alt="Son Aldea">
+    <img src="col/dj-ake.png"     style="z-index: 5;" data-h="750" data-cx="395" data-top="1030" alt="DJ AKE">
+    <img src="col/dj-asped.png"   style="z-index: 6;" data-h="650" data-cx="960" data-top="1020" alt="DJ ASPED">
+    <img src="col/son-karibe.png" style="z-index: 7;" data-h="825" data-cx="172" data-top="1010" alt="Son Karibe">
+  </div>
+  <div class="fade"></div>
+
+  <div class="names">
+    <div style="left: 172px;">SON KARIBE</div>
+    <div style="left: 395px;">DJ AKE</div>
+    <div style="left: 690px;">SON ALDEA</div>
+    <div style="left: 938px;">DJ ASPED</div>
+  </div>
+
+  <div class="info">
+    <p><b>VIERNES:</b> SON KARIBE 22:30 · DJ AKE 00:00</p>
+    <p><b>SÁBADO:</b> SON ALDEA 22:30 · DJ ASPED 00:00</p>
+  </div>
+
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#g)"/>
+  </svg>
+</div>
+<script>
+  let seed = 23; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const glyphs = [
+    () => `<path d="M10 20 L30 50 L10 80 M40 20 L60 50 L40 80 M70 20 L90 50 L70 80"/>`,
+    () => `<circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="12" class="f"/>`,
+    () => `<path d="M15 15 H85 M15 35 H85 M15 55 H85 M15 75 H85"/>`,
+    () => `<path d="M50 12 L88 82 H12 Z"/><path d="M50 40 L66 70 H34 Z" class="f"/>`,
+    () => `<path d="M20 20 L80 80 M80 20 L20 80"/>`,
+    () => `<path d="M15 85 V20 M35 85 V20 M55 85 V20 M75 85 V20 M10 20 H85"/>`,
+    () => `<rect x="18" y="18" width="64" height="64"/><rect x="38" y="38" width="24" height="24" class="f"/>`,
+    () => `<path d="M10 50 Q30 15 50 50 T90 50"/><path d="M10 78 Q30 43 50 78 T90 78"/>`,
+    () => `<circle cx="25" cy="25" r="8" class="f"/><circle cx="75" cy="25" r="8" class="f"/><circle cx="25" cy="75" r="8" class="f"/><circle cx="75" cy="75" r="8" class="f"/><circle cx="50" cy="50" r="8" class="f"/>`,
+    () => `<path d="M50 10 V90 M10 50 H90"/><circle cx="50" cy="50" r="18"/>`,
+    () => `<path d="M15 20 H85 V40 H15 V60 H85 V80 H15"/>`,
+    () => `<path d="M20 15 V85 M20 50 H80 M80 15 V85"/>`,
+  ];
+  const cell = (x, y, s, color, sw) => {
+    const g = glyphs[Math.floor(rnd() * glyphs.length)]();
+    const rot = [0, 90, 180, 270][Math.floor(rnd() * 4)];
+    return `<g transform="translate(${x} ${y}) scale(${s / 100}) rotate(${rot} 50 50)" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="square">${g.replaceAll('class="f"', `fill="${color}" stroke="none"`)}</g>`;
+  };
+  const ink = "#0f3b28";
+  let out = "";
+  // bordes laterales con glifos grandes, recortados por el lienzo
+  for (let y = -30; y < 1920; y += 130) { out += cell(-62, y, 130, ink, 12); out += cell(1080 - 68, y, 130, ink, 12); }
+  // marco denso detrás del panel
+  const fx = 124, fy = 200, fw = 1080 - 2 * fx, fh = 1180;
+  out += `<rect x="${fx}" y="${fy}" width="${fw}" height="${fh}" fill="#e4dfd4"/>`;
+  for (let y = fy; y < fy + fh - 4; y += 62) for (let x = fx; x < fx + fw - 4; x += 62) out += cell(x + 5, y + 5, 52, ink, 10);
+  document.getElementById("pattern").innerHTML = out;
+  for (const id of ["stripL", "stripR"]) {
+    let t = ""; for (let y = 0; y < 1180; y += 66) t += cell(4, y + 4, 58, "rgba(255,255,255,.9)", 9);
+    document.getElementById(id).innerHTML = t;
+  }
+  // figuras: data-cx = centro de la cara, calculado con la posición real de la cara en cada recorte
+  const faceX = { "col/son-karibe.png": .64, "col/dj-ake.png": .40, "col/son-aldra.png": .52, "col/dj-asped.png": .55 };
+  document.querySelectorAll("#figs img").forEach(img => {
+    const go = () => {
+      const h = +img.dataset.h, w = h * img.naturalWidth / img.naturalHeight;
+      img.style.height = h + "px";
+      img.style.left = (+img.dataset.cx - w * faceX[img.getAttribute("src")]) + "px";
+      img.style.top = img.dataset.top + "px";
+    };
+    img.complete ? go() : img.addEventListener("load", go);
+  });
+</script>
+</body>
+</html>
