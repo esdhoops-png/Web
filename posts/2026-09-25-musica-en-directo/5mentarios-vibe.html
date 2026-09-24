@@ -54,7 +54,7 @@
 
   .names { position: absolute; top: 1590px; left: 0; right: 0; height: 60px; z-index: 22; }
   .names div { position: absolute; transform: translateX(-50%); white-space: nowrap;
-    font-family: "Bebas Neue", sans-serif; font-size: 66px; line-height: 1; color: #fff; letter-spacing: .02em;
+    font-family: "Bebas Neue", sans-serif; font-size: 60px; line-height: 1; color: #fff; letter-spacing: .02em;
     text-shadow: 0 3px 16px rgba(0,0,0,.6); }
 
   .info { position: absolute; left: 0; right: 0; top: 1690px; z-index: 22; text-align: center; color: #fff; }
@@ -77,7 +77,8 @@
   </div>
 
   <div class="figs" id="figs">
-    <img class="back" src="col/son-aldra.png" style="z-index: 4;" data-h="480" data-cx="703" data-top="1000" alt="Son Aldea">
+    <img class="back" src="col/son-aldea-2.png" style="z-index: 4;" data-h="560" data-cx="622" data-top="1015" alt="Son Aldea">
+    <img class="back" src="col/son-aldea-1.png" style="z-index: 4;" data-h="560" data-cx="780" data-top="1005" alt="Son Aldea">
     <img src="col/dj-ake.png"     style="z-index: 5;" data-h="750" data-cx="395" data-top="1030" alt="DJ AKE">
     <img src="col/dj-asped.png"   style="z-index: 6;" data-h="650" data-cx="960" data-top="1020" alt="DJ ASPED">
     <img src="col/son-karibe.png" style="z-index: 7;" data-h="825" data-cx="172" data-top="1010" alt="Son Karibe">
@@ -85,10 +86,10 @@
   <div class="fade"></div>
 
   <div class="names">
-    <div style="left: 172px;">SON KARIBE</div>
-    <div style="left: 395px;">DJ AKE</div>
-    <div style="left: 690px;">SON ALDEA</div>
-    <div style="left: 938px;">DJ ASPED</div>
+    <div style="left: 158px;">SON KARIBE</div>
+    <div style="left: 405px;">DJ AKE</div>
+    <div style="left: 700px;">SON ALDEA</div>
+    <div style="left: 952px;">DJ ASPED</div>
   </div>
 
   <div class="info">
@@ -136,7 +137,7 @@
     document.getElementById(id).innerHTML = t;
   }
   // figuras: data-cx = centro de la cara, calculado con la posición real de la cara en cada recorte
-  const faceX = { "col/son-karibe.png": .64, "col/dj-ake.png": .40, "col/son-aldra.png": .52, "col/dj-asped.png": .55 };
+  const faceX = { "col/son-karibe.png": .64, "col/dj-ake.png": .40, "col/son-aldea-1.png": .42, "col/son-aldea-2.png": .64, "col/dj-asped.png": .55 };
   document.querySelectorAll("#figs img").forEach(img => {
     const go = () => {
       const h = +img.dataset.h, w = h * img.naturalWidth / img.naturalHeight;
