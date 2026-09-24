@@ -16,6 +16,12 @@
   html, body { background: #000; }
   .canvas { width: 1080px; height: 1920px; position: relative; overflow: hidden; background: var(--paper); font-family: "Inter", sans-serif; }
   svg.layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tex { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .tex.paper { z-index: 45; mix-blend-mode: multiply; opacity: .28; }
+  .tex.dust  { z-index: 46; mix-blend-mode: screen; opacity: .35; }
+  .panel .halftone { position: absolute; inset: 0; z-index: 0; mix-blend-mode: multiply; opacity: .35;
+    background: radial-gradient(rgba(0,40,20,.55) 1.1px, transparent 1.7px) 0 0 / 7px 7px;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 70%); mask-image: linear-gradient(180deg, transparent 0%, #000 70%); }
   svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 50; pointer-events: none; mix-blend-mode: soft-light; opacity: .6; }
 
   .logo { position: absolute; top: 34px; left: 50%; width: 150px; transform: translateX(-50%); z-index: 6; }
@@ -72,6 +78,7 @@
   <img class="logo" src="logo/5mentarios-original.png" alt="5mentarios · Heineken">
 
   <div class="panel">
+    <div class="halftone"></div>
     <svg class="strip l" id="stripL"></svg>
     <svg class="strip r" id="stripR"></svg>
     <div class="presents">5MENTARIOS PRESENTA</div>
@@ -101,6 +108,19 @@
     <p><b>SÁBADO:</b> SON ALDEA 22:30 · DJ ASPED 00:00</p>
   </div>
 
+  <svg class="tex paper" xmlns="http://www.w3.org/2000/svg">
+    <filter id="mottle" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".006 .009" numOctaves="4" seed="7"/>
+      <feColorMatrix values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 -2.2 1.5"/>
+    </filter>
+    <filter id="fibers" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9 .015" numOctaves="2" seed="3"/>
+      <feColorMatrix values="0 0 0 0 .4  0 0 0 0 .38  0 0 0 0 .33  0 0 0 -3 1.9"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#mottle)"/>
+    <rect width="100%" height="100%" filter="url(#fibers)" opacity=".6"/>
+  </svg>
+  <svg class="tex dust" id="dust" xmlns="http://www.w3.org/2000/svg"></svg>
   <svg class="grain" xmlns="http://www.w3.org/2000/svg">
     <filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
     <rect width="100%" height="100%" filter="url(#g)"/>
@@ -151,6 +171,12 @@
     };
     img.complete ? go() : img.addEventListener("load", go);
   });
+  // polvo y arañazos
+  { let d = "";
+    for (let i = 0; i < 260; i++) { const r = rnd() * 1.6 + .4; d += `<circle cx="${rnd()*1080}" cy="${rnd()*1920}" r="${r}" fill="#fff" opacity="${.25 + rnd()*.5}"/>`; }
+    for (let i = 0; i < 22; i++) { const x = rnd()*1080, y = rnd()*1920, l = 20 + rnd()*90, a = rnd()*Math.PI;
+      d += `<path d="M${x} ${y} q ${Math.cos(a)*l/2} ${Math.sin(a)*l/2 + (rnd()*10-5)} ${Math.cos(a)*l} ${Math.sin(a)*l}" stroke="#fff" stroke-width="${.6 + rnd()*.8}" fill="none" opacity="${.2 + rnd()*.35}"/>`; }
+    document.getElementById("dust").innerHTML = d; }
 </script>
 </body>
 </html>
