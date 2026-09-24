@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Fin de semana en 5mentarios</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+  :root {
+    --green: #0b6a33;
+    --green-dark: #063d1d;
+    --green-mid: #0e7f3e;
+    --cream: #f4ecd8;
+    --ink: #0d0f0c;
+    --red: #d2182a;
+    --D: 370px;      /* diámetro del medallón */
+    --POP: 90px;     /* cuánto sobresale la cabeza */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    color: var(--cream); font-family: "Inter", sans-serif;
+    background:
+      radial-gradient(700px 520px at 50% 210px, rgba(255,255,255,.16), transparent 70%),
+      radial-gradient(1200px 900px at 50% 110%, rgba(0,0,0,.45), transparent 70%),
+      var(--green);
+  }
+  .rays {
+    position: absolute; left: 50%; top: 210px; width: 3200px; height: 3200px;
+    transform: translate(-50%, -50%);
+    background: repeating-conic-gradient(rgba(255,255,255,.055) 0 5deg, transparent 5deg 10deg);
+    -webkit-mask: radial-gradient(circle, #000 0 12%, transparent 45%);
+            mask: radial-gradient(circle, #000 0 12%, transparent 45%);
+  }
+  .frame { position: absolute; inset: 22px; border: 2px solid rgba(244,236,216,.55); pointer-events: none; z-index: 1; }
+  svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 30; pointer-events: none; mix-blend-mode: overlay; opacity: .5; }
+
+  /* cabecera */
+  .logo { position: absolute; top: 44px; left: 50%; width: 262px; transform: translateX(-50%); z-index: 31; filter: drop-shadow(0 12px 24px rgba(0,0,0,.35)); }
+  .title {
+    position: absolute; top: 322px; left: 0; right: 0; text-align: center; z-index: 5;
+    font-family: "Anton", sans-serif; font-size: 156px; line-height: 1; letter-spacing: -.003em;
+    color: var(--cream);
+    text-shadow: 7px 7px 0 var(--ink);
+  }
+  .sub {
+    position: absolute; top: 500px; left: 110px; right: 110px; z-index: 5;
+    display: flex; align-items: center; gap: 22px;
+  }
+  .sub::before, .sub::after { content: ""; flex: 1; height: 2px; background: var(--cream); opacity: .7; }
+  .sub .script { font-family: "Mrs Saint Delafield", cursive; font-size: 88px; line-height: .5; transform: translateY(6px); padding-right: 8px; }
+  .sub b { font-family: "Anton", sans-serif; font-weight: 400; font-size: 58px; line-height: 1; letter-spacing: .03em; }
+  .sub b span { color: var(--red); }
+
+  /* noches */
+  .night { position: absolute; left: 0; right: 0; height: 610px; z-index: 5; }
+  .banner {
+    position: absolute; left: 50%; top: 0; transform: translateX(-50%) rotate(-2deg);
+    background: var(--ink); color: var(--cream);
+    font-family: "Anton", sans-serif; font-size: 50px; line-height: 1; letter-spacing: .12em;
+    padding: 10px 44px 12px 56px;
+    box-shadow: 6px 6px 0 var(--red);
+    z-index: 8;
+  }
+  .banner::before, .banner::after {
+    content: ""; position: absolute; top: 10px; bottom: -10px; width: 34px; background: #000; z-index: -1;
+  }
+  .banner::before { left: -26px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 40% 50%); }
+  .banner::after { right: -26px; clip-path: polygon(0 0, 100% 0, 60% 50%, 100% 100%, 0 100%); }
+
+  .act { position: absolute; top: 58px; width: var(--D); }
+  .act.l { left: 110px; } .act.r { right: 110px; }
+  .medal { position: relative; width: var(--D); height: calc(var(--D) + var(--POP)); }
+  .medal .disc {
+    position: absolute; left: 0; bottom: 0; width: var(--D); height: var(--D); border-radius: 50%;
+    background:
+      radial-gradient(rgba(0,0,0,.16) 1.4px, transparent 2px) 0 0 / 10px 10px,
+      repeating-conic-gradient(from 0deg at 50% 60%, rgba(255,255,255,.07) 0 6deg, transparent 6deg 12deg),
+      radial-gradient(circle at 50% 35%, var(--green-mid), var(--green-dark) 75%);
+    box-shadow: 0 0 0 8px var(--cream), 0 0 0 14px var(--ink), 0 24px 50px rgba(0,0,0,.45);
+  }
+  .medal svg.scallop { position: absolute; left: -32px; bottom: -32px; width: calc(var(--D) + 64px); height: calc(var(--D) + 64px); z-index: 0; }
+  .medal .disc { z-index: 1; }
+  .medal img { position: absolute; z-index: 2; }
+  .medal .inwrap { position: absolute; inset: 0; z-index: 2; clip-path: circle(calc(var(--D) / 2) at 50% calc(100% - var(--D) / 2)); }
+  .medal .inwrap img { position: absolute; }
+  .medal .popwrap { position: absolute; inset: 0; z-index: 3;
+    clip-path: polygon(12% 0, 88% 0, 88% calc(var(--POP) + var(--D) * .16), 12% calc(var(--POP) + var(--D) * .16)); }
+  .medal .popwrap img { position: absolute; }
+
+  .plate {
+    position: relative; z-index: 6; margin: -44px auto 0; width: 340px; text-align: center;
+    background: var(--ink); padding: 14px 10px 18px;
+    box-shadow: 0 16px 30px rgba(0,0,0,.35);
+  }
+  .plate .name { font-family: "Anton", sans-serif; font-size: 62px; line-height: 1; color: var(--cream); letter-spacing: .01em; }
+  .plate .time {
+    display: inline-block; margin-top: 10px;
+    background: var(--red); color: #fff;
+    font-family: "Anton", sans-serif; font-size: 32px; line-height: 1; letter-spacing: .08em;
+    padding: 6px 18px 7px;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="rays"></div>
+  <div class="frame"></div>
+
+  <img class="logo" src="logo/5mentarios-original.png" alt="5mentarios · Heineken">
+  <div class="title">FIN DE SEMANA</div>
+  <div class="sub"><span class="script">en</span><b>5MENTARIOS</b></div>
+
+  <section class="night" style="top: 596px;">
+    <div class="banner">VIERNES</div>
+    <div class="act l" data-img="bw/son-karibe.png" data-h="520" data-x="6" data-b="-110">
+      <div class="plate"><div class="name">SON KARIBE</div><div class="time">22:30</div></div>
+    </div>
+    <div class="act r" data-img="bw/dj-ake.png" data-h="520" data-x="-36" data-b="-130">
+      <div class="plate"><div class="name">DJ AKE</div><div class="time">00:00</div></div>
+    </div>
+  </section>
+
+  <section class="night" style="top: 1222px;">
+    <div class="banner">SÁBADO</div>
+    <div class="act l" data-img="bw/son-aldra.png" data-h="370" data-x="-30" data-b="-20">
+      <div class="plate"><div class="name">SON ALDRA</div><div class="time">22:30</div></div>
+    </div>
+    <div class="act r" data-img="bw/dj-asped.png" data-h="520" data-x="-18" data-b="-120">
+      <div class="plate"><div class="name">DJ ASPED</div><div class="time">00:00</div></div>
+    </div>
+  </section>
+
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <rect width="100%" height="100%" filter="url(#g)"/>
+  </svg>
+</div>
+<script>
+  // borde festoneado como el del sello del logo
+  const scallop = (() => {
+    const R = 232, c = 232, n = 44; let s = "";
+    for (let i = 0; i < n; i++) {
+      const t = i / n * Math.PI * 2;
+      s += `<circle cx="${c + Math.cos(t) * (R - 22)}" cy="${c + Math.sin(t) * (R - 22)}" r="17" fill="#0d0f0c"/>`;
+    }
+    return `<svg class="scallop" viewBox="0 0 464 464" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+  })();
+
+  document.querySelectorAll(".act").forEach(act => {
+    const { img, h, x, b } = act.dataset;
+    const medal = document.createElement("div");
+    medal.className = "medal";
+    const style = `height:${h}px;left:calc(50% - ${h}px * var(--ar) / 2 + ${x}px);bottom:${b}px`;
+    medal.innerHTML = `${scallop}<div class="disc"></div>
+      <div class="inwrap"><img src="${img}" style="${style}"></div>
+      <div class="popwrap"><img src="${img}" style="${style}"></div>`;
+    act.prepend(medal);
+    const probe = new Image();
+    probe.onload = () => medal.style.setProperty("--ar", probe.naturalWidth / probe.naturalHeight);
+    probe.src = img;
+  });
+</script>
+</body>
+</html>
