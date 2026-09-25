@@ -71,11 +71,23 @@
   .info p { font-weight: 700; font-size: 25px; letter-spacing: .04em; line-height: 1.55; }
   .info p b { font-weight: 900; color: var(--mint); }
   .big1 { font-family: "Bebas Neue", sans-serif; font-size: 240px; line-height: .85; margin-top: 24px; letter-spacing: .01em; text-shadow: 0 10px 34px rgba(0,0,0,.22); }
-  .acts { position: absolute; top: 1575px; left: 0; right: 0; z-index: 22; }
+  .acts { position: absolute; top: 1478px; left: 0; right: 0; z-index: 22; }
   .acts > div { position: absolute; text-align: center; color: #fff; }
   .acts .n { font-family: "Bebas Neue", sans-serif; font-size: 96px; line-height: 1; letter-spacing: .02em; text-shadow: 0 3px 16px rgba(0,0,0,.6); white-space: nowrap; }
   .acts .t { display: inline-block; margin-top: 10px; font-family: "Bebas Neue", sans-serif; font-size: 54px; line-height: 1; letter-spacing: .08em; color: var(--mint); }
-  .foot1 { position: absolute; left: 0; right: 0; bottom: 70px; z-index: 22; text-align: center; color: rgba(255,255,255,.8); font-weight: 800; font-size: 24px; letter-spacing: .34em; }
+  .foot1 { position: absolute; left: 0; right: 0; bottom: 58px; z-index: 22; text-align: center; }
+  .foot1 span { display: inline-block; background: #fff; color: #0a4a28; font-family: "Bebas Neue", sans-serif; font-size: 58px; line-height: 1;
+    letter-spacing: .06em; padding: 16px 44px 12px; border-radius: 999px; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+  .acts .tag { display: inline-block; margin-top: 10px; padding: 6px 14px 4px; border: 2px solid rgba(255,255,255,.75); border-radius: 6px;
+    font-family: "Bebas Neue", sans-serif; font-size: 30px; letter-spacing: .14em; color: #fff; }
+  .acts .t { display: block !important; }
+  .outro { position: absolute; inset: 0; z-index: 44; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fff;
+    background: radial-gradient(900px 700px at 50% 45%, #14713f, #0a4a28 55%, #05281a 100%); }
+  .outro img { width: 330px; margin-bottom: 50px; filter: drop-shadow(0 14px 30px rgba(0,0,0,.4)); }
+  .outro .o { display: block; font-family: "Bebas Neue", sans-serif; line-height: .9; }
+  .outro .o1 { font-size: 110px; letter-spacing: .08em; color: var(--mint); }
+  .outro .o2 { font-size: 200px; margin: 6px 0; }
+  .outro .o3 { font-size: 92px; letter-spacing: .06em; }
   .intro { position: absolute; inset: 0; z-index: 44; display: flex; flex-direction: column; align-items: center; justify-content: center;
     background: radial-gradient(900px 700px at 50% 42%, #14713f, #0a4a28 55%, #05281a 100%); color: #fff; text-align: center; }
   .intro .w { display: block; font-family: "Bebas Neue", sans-serif; line-height: .88; letter-spacing: .01em; }
@@ -107,10 +119,10 @@
   <div class="fade"></div>
 
   <div class="acts">
-    <div style="left: 300px;" data-x="300"><div class="n">SON KARIBE</div><div class="t">22:30</div></div>
-    <div style="left: 790px;" data-x="790"><div class="n">DJ AKE</div><div class="t">00:00</div></div>
+    <div style="left: 300px;" data-x="300"><div class="n">SON KARIBE</div><div class="tag">EN DIRECTO</div><div class="t">22:30</div></div>
+    <div style="left: 790px;" data-x="790"><div class="n">DJ AKE</div><div class="tag">DJ SET</div><div class="t">00:00</div></div>
   </div>
-  <div class="foot1">VIERNES · 5MENTARIOS</div>
+  <div class="foot1"><span>¡NO TE LO PIERDAS!</span></div>
 
   <div class="intro" id="intro">
     <span class="w w1">RECUERDA</span>
@@ -118,6 +130,13 @@
     <span class="w w3">HOY</span>
     <span class="w w4">TENEMOS…</span>
     <div class="bar"></div>
+  </div>
+
+  <div class="outro" id="outro">
+    <img src="logo/5mentarios-original.png" alt="">
+    <span class="o o1">ESTA NOCHE</span>
+    <span class="o o2">TE ESPERAMOS</span>
+    <span class="o o3">EN 5MENTARIOS</span>
   </div>
 
   <svg class="tex paper" xmlns="http://www.w3.org/2000/svg">
@@ -244,11 +263,13 @@
       n.style.opacity = k; n.style.transform = `translateX(-50%) translateY(${(1 - k) * 30}px)`;
     });
     const ki = ease((t - 3.8) / .6);
-    info.style.opacity = ki; info.style.transform = `translateY(${(1 - ki) * 20}px)`;
+    const pulse = t > 4.4 ? 1 + .045 * Math.max(0, Math.sin((t - 4.4) * 5)) : 1;
+    info.style.opacity = ki; info.style.transform = `translateY(${(1 - ki) * 20}px) scale(${pulse})`;
     turb.setAttribute("seed", 1 + Math.abs(Math.floor(t * 24)) % 20);
   };
   const intro = document.getElementById("intro");
   const iw = [...intro.querySelectorAll(".w")], ibar = intro.querySelector(".bar");
+  const outro = document.getElementById("outro"), ow = [...outro.querySelectorAll("img, .o")];
   const D = 3.2;   // duración de la entrada
   window.setT = t => {
     mainSet(t - D + .3);
@@ -261,6 +282,14 @@
     const out = ease((t - D + .45) / .55);
     intro.style.transform = `translateY(${-out * 105}%)`;
     intro.style.display = out >= 1 ? "none" : "flex";
+    // cierre con llamada a la acción
+    const T2 = 11.4, oin = ease((t - T2) / .55);
+    outro.style.display = t >= T2 ? "flex" : "none";
+    outro.style.transform = `translateY(${(1 - oin) * 100}%)`;
+    ow.forEach((w, i) => {
+      const k = back((t - T2 - .45 - i * .3) / .5), a = ease((t - T2 - .45 - i * .3) / .3);
+      w.style.opacity = a; w.style.transform = `translateY(${(1 - k) * 70}px) scale(${.85 + .15 * k})`;
+    });
   };
   setT(0);
 </script>
