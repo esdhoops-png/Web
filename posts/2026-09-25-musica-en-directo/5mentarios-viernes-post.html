@@ -24,11 +24,11 @@
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 70%); mask-image: linear-gradient(180deg, transparent 0%, #000 70%); }
   svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 50; pointer-events: none; mix-blend-mode: soft-light; opacity: .6; }
 
-  .logo { position: absolute; top: 22px; left: 50%; width: 112px; transform: translateX(-50%); z-index: 6; }
+  .logo { position: absolute; top: 14px; left: 50%; width: 176px; transform: translateX(-50%); z-index: 6; }
 
   /* panel central */
   .panel {
-    position: absolute; left: 180px; right: 180px; top: 196px; height: 860px; z-index: 3; overflow: hidden;
+    position: absolute; left: 180px; right: 180px; top: 250px; height: 810px; z-index: 3; overflow: hidden;
     color: #fff; text-align: center;
     background:
       radial-gradient(700px 420px at 50% 0%, rgba(210,255,225,.55), transparent 70%),
@@ -41,7 +41,7 @@
   }
   .panel .strip { position: absolute; top: 0; bottom: 0; width: 64px; }
   .panel .strip.l { left: 10px; } .panel .strip.r { right: 10px; }
-  .presents { margin-top: 30px; font-size: 16px; letter-spacing: .34em; opacity: .75; font-weight: 500; }
+  .presents { margin-top: 26px; font-size: 16px; letter-spacing: .34em; opacity: .75; font-weight: 500; }
   .date { font-family: "Bebas Neue", sans-serif; font-size: 92px; line-height: 1; margin-top: 34px; margin-bottom: 14px; text-shadow: 0 6px 24px rgba(0,0,0,.18); }
   .big { font-family: "Bebas Neue", sans-serif; font-size: 214px; line-height: .8; letter-spacing: -.01em; text-shadow: 0 10px 34px rgba(0,0,0,.22); }
   .sub { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 20px;
@@ -71,11 +71,11 @@
   .info p { font-weight: 700; font-size: 25px; letter-spacing: .04em; line-height: 1.55; }
   .info p b { font-weight: 900; color: var(--mint); }
   .big1 { font-family: "Bebas Neue", sans-serif; font-size: 226px; line-height: .85; margin-top: 18px; letter-spacing: .01em; text-shadow: 0 10px 34px rgba(0,0,0,.22); }
-  .acts { position: absolute; top: 1112px; left: 0; right: 0; z-index: 22; }
+  .acts { position: absolute; top: 1126px; left: 0; right: 0; z-index: 22; }
   .acts > div { position: absolute; transform: translateX(-50%); text-align: center; color: #fff; }
   .acts .n { font-family: "Bebas Neue", sans-serif; font-size: 84px; line-height: 1; letter-spacing: .02em; text-shadow: 0 3px 16px rgba(0,0,0,.6); white-space: nowrap; }
   .acts .t { display: inline-block; margin-top: 8px; font-family: "Bebas Neue", sans-serif; font-size: 46px; line-height: 1; letter-spacing: .08em; color: var(--mint); }
-  .foot1 { position: absolute; left: 0; right: 0; bottom: 34px; z-index: 22; text-align: center; color: rgba(255,255,255,.8); font-weight: 800; font-size: 20px; letter-spacing: .34em; }
+  .foot1 { position: absolute; left: 0; right: 0; bottom: 26px; z-index: 22; text-align: center; color: rgba(255,255,255,.8); font-weight: 800; font-size: 20px; letter-spacing: .34em; }
 </style>
 </head>
 <body>
@@ -93,8 +93,8 @@
   </div>
 
   <div class="figs" id="figs">
-    <img src="col/dj-ake.png"     style="z-index: 5;" data-h="620" data-cx="745" data-top="560" alt="DJ AKE">
-    <img src="col/son-karibe.png" style="z-index: 7;" data-h="700" data-cx="330" data-top="530" alt="Son Karibe">
+    <img src="col/dj-ake.png"     style="z-index: 5;" data-h="610" data-cx="745" data-top="600" alt="DJ AKE">
+    <img src="col/son-karibe.png" style="z-index: 7;" data-h="690" data-cx="330" data-top="572" alt="Son Karibe">
   </div>
   <div class="fade"></div>
 
@@ -148,12 +148,12 @@
   // bordes laterales con glifos grandes, recortados por el lienzo
   for (let y = -30; y < 1350; y += 130) { out += cell(-62, y, 130, ink, 12); out += cell(1080 - 68, y, 130, ink, 12); }
   // marco denso detrás del panel
-  const fx = 124, fy = 136, fw = 1080 - 2 * fx, fh = 860;
+  const fx = 124, fy = 206, fw = 1080 - 2 * fx, fh = 800;
   out += `<rect x="${fx}" y="${fy}" width="${fw}" height="${fh}" fill="#e4dfd4"/>`;
   for (let y = fy; y < fy + fh - 4; y += 62) for (let x = fx; x < fx + fw - 4; x += 62) out += cell(x + 5, y + 5, 52, ink, 10);
   document.getElementById("pattern").innerHTML = out;
   for (const id of ["stripL", "stripR"]) {
-    let t = ""; for (let y = 0; y < 860; y += 66) t += cell(4, y + 4, 58, "rgba(255,255,255,.9)", 9);
+    let t = ""; for (let y = 0; y < 810; y += 66) t += cell(4, y + 4, 58, "rgba(255,255,255,.9)", 9);
     document.getElementById(id).innerHTML = t;
   }
   // figuras: data-cx = centro de la cara, calculado con la posición real de la cara en cada recorte
