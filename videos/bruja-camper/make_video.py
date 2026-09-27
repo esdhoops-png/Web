@@ -288,7 +288,9 @@ def text_layer(txt, size, alpha, y):
     return L
 
 # ---------------------------------------------------------------- jump scare: giant cockroach
-import cucaracha
+# real cockroach photo (background removed, rotated head-down, upscaled)
+ROACH = Image.open('cucaracha_foto.png').convert('RGBA')
+ROACH_ANCHOR = (ROACH.width * 0.62, ROACH.height * 0.5)
 
 
 def scare(frame, u):
@@ -297,11 +299,11 @@ def scare(frame, u):
     frame = Image.blend(frame, frame.point(lambda v: int(v * 0.45)), min(1, u * 8))
     frame = frame.convert('RGBA')
     pop = 1.0 + 0.35 * math.exp(-u * 18)
-    sc = (0.74 + 0.22 * ease(seg(u, 0.3, 2.5))) * pop
-    x = W / 2 + 25 * math.sin(u * 9)
+    sc = (0.95 + 0.3 * ease(seg(u, 0.3, 2.5))) * pop * (1 + 0.015 * math.sin(u * 40))
+    x = W / 2 + 25 * math.sin(u * 9) + random.uniform(-4, 4)
     y = 600 + 150 * ease(seg(u, 0.3, 2.5))
-    ang = 8 * math.sin(u * 6)
-    place(frame, cucaracha.render(u), cucaracha.ANCHOR, (x, y), sc, ang)
+    ang = 8 * math.sin(u * 6) + 2.5 * math.sin(u * 37)
+    place(frame, ROACH, ROACH_ANCHOR, (x, y), sc, ang)
     ta = seg(u, 0.12, 0.3)
     if ta > 0:
         tl = text_layer_color('¡¡CUCARACHA!!', 62, ta, 90)
