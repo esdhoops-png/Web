@@ -288,62 +288,8 @@ def text_layer(txt, size, alpha, y):
     return L
 
 # ---------------------------------------------------------------- jump scare: giant cockroach
-def cockroach(t):
-    L = Image.new('RGBA', (900, 1400), (0, 0, 0, 0))
-    d = ImageDraw.Draw(L)
-    dark, mid, light = (26, 12, 5, 255), (62, 30, 11, 255), (92, 48, 20, 255)
-    # legs: three per side, alternating tripod gait
-    for side in (-1, 1):
-        for i, (ly, base) in enumerate([(640, -35), (780, 5), (900, 45)]):
-            ph = t * 22 + (i + (side > 0)) * math.pi
-            sw = 14 * math.sin(ph)
-            a1 = math.radians(base + sw)
-            x0, y0 = 450 + side * 150, ly
-            x1 = x0 + side * 190 * math.cos(a1); y1 = y0 + 190 * math.sin(a1)
-            a2 = a1 + math.radians(35 if i == 2 else -30)
-            x2 = x1 + side * 230 * math.cos(a2); y2 = y1 + 230 * math.sin(a2) + 60
-            d.line([(x0, y0), (x1, y1)], fill=mid, width=38)
-            d.line([(x1, y1), (x2, y2)], fill=dark, width=24)
-            for k in range(1, 6):
-                f = k / 6
-                sx, sy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
-                d.line([(sx, sy), (sx + side * 26, sy - 22)], fill=dark, width=5)
-            d.ellipse((x1 - 18, y1 - 18, x1 + 18, y1 + 18), fill=mid)
-    # cerci at the rear
-    for side in (-1, 1):
-        d.line([(450 + side * 50, 250), (450 + side * 120, 90)], fill=mid, width=14)
-    # abdomen + wings
-    d.ellipse((260, 210, 640, 950), fill=dark)
-    d.ellipse((275, 240, 448, 930), fill=mid)
-    d.ellipse((452, 240, 625, 930), fill=mid)
-    d.line([(450, 240), (450, 930)], fill=dark, width=6)
-    for k in range(6):
-        y = 330 + k * 95
-        d.arc((300, y, 600, y + 80), 20, 160, fill=dark, width=3)
-    hl = Image.new('RGBA', L.size, (0, 0, 0, 0))
-    ImageDraw.Draw(hl).ellipse((330, 320, 400, 700), fill=(255, 225, 190, 110))
-    ImageDraw.Draw(hl).ellipse((505, 360, 560, 640), fill=(255, 220, 180, 45))
-    L.alpha_composite(hl.filter(ImageFilter.GaussianBlur(12)))
-    # pronotum shield and head
-    d.ellipse((245, 850, 655, 1070), fill=dark)
-    d.ellipse((290, 875, 610, 1045), fill=light)
-    d.ellipse((370, 900, 530, 1020), fill=(40, 18, 7, 255))
-    d.ellipse((375, 1030, 525, 1150), fill=dark)
-    for side in (-1, 1):
-        d.ellipse((450 + side * 55 - 20, 1060, 450 + side * 55 + 20, 1100), fill=(10, 5, 5, 255))
-        d.line([(450 + side * 25, 1140), (450 + side * 40, 1185)], fill=mid, width=10)
-    # long twitchy antennae
-    for side in (-1, 1):
-        pts = []
-        for k in range(26):
-            f = k / 25
-            ang = math.radians(side * (10 + 55 * f) + 25 * f * math.sin(t * 13 + side + f * 3))
-            if not pts:
-                pts.append((450 + side * 40, 1120))
-            px, py = pts[-1]
-            pts.append((px + 34 * math.sin(ang), py + 34 * math.cos(ang) - 6 * f))
-        d.line(pts, fill=mid, width=7, joint='curve')
-    return L
+import cucaracha
+
 
 def scare(frame, u):
     """u = seconds since the scare started."""
@@ -351,11 +297,11 @@ def scare(frame, u):
     frame = Image.blend(frame, frame.point(lambda v: int(v * 0.45)), min(1, u * 8))
     frame = frame.convert('RGBA')
     pop = 1.0 + 0.35 * math.exp(-u * 18)
-    sc = (0.95 + 0.25 * ease(seg(u, 0.3, 2.5))) * pop
+    sc = (0.74 + 0.22 * ease(seg(u, 0.3, 2.5))) * pop
     x = W / 2 + 25 * math.sin(u * 9)
-    y = 640 + 170 * ease(seg(u, 0.3, 2.5))
+    y = 600 + 150 * ease(seg(u, 0.3, 2.5))
     ang = 8 * math.sin(u * 6)
-    place(frame, cockroach(u), (450, 700), (x, y), sc, ang)
+    place(frame, cucaracha.render(u), cucaracha.ANCHOR, (x, y), sc, ang)
     ta = seg(u, 0.12, 0.3)
     if ta > 0:
         tl = text_layer_color('¡¡CUCARACHA!!', 62, ta, 90)
