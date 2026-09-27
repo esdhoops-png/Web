@@ -5,7 +5,8 @@ import imageio.v2 as imageio
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageChops
 
 random.seed(7)
-W, H, FPS, DUR = 720, 1280, 30, 12.5
+W, H, FPS, DUR = 720, 1280, 30, 15.5
+T_SCARE = 13.0
 SRC = Image.open('src.png').convert('RGB')
 CUT = Image.open('cut.png').convert('RGBA')
 SW, SH = SRC.size
@@ -286,12 +287,135 @@ def text_layer(txt, size, alpha, y):
     d.text((x, y), txt, font=font, fill=(255, 236, 150, int(255 * alpha)), stroke_width=3, stroke_fill=(50, 10, 70, int(255 * alpha)))
     return L
 
+# ---------------------------------------------------------------- jump scare: giant cockroach
+def cockroach(t):
+    L = Image.new('RGBA', (900, 1400), (0, 0, 0, 0))
+    d = ImageDraw.Draw(L)
+    dark, mid, light = (26, 12, 5, 255), (62, 30, 11, 255), (92, 48, 20, 255)
+    # legs: three per side, alternating tripod gait
+    for side in (-1, 1):
+        for i, (ly, base) in enumerate([(640, -35), (780, 5), (900, 45)]):
+            ph = t * 22 + (i + (side > 0)) * math.pi
+            sw = 14 * math.sin(ph)
+            a1 = math.radians(base + sw)
+            x0, y0 = 450 + side * 150, ly
+            x1 = x0 + side * 190 * math.cos(a1); y1 = y0 + 190 * math.sin(a1)
+            a2 = a1 + math.radians(35 if i == 2 else -30)
+            x2 = x1 + side * 230 * math.cos(a2); y2 = y1 + 230 * math.sin(a2) + 60
+            d.line([(x0, y0), (x1, y1)], fill=mid, width=38)
+            d.line([(x1, y1), (x2, y2)], fill=dark, width=24)
+            for k in range(1, 6):
+                f = k / 6
+                sx, sy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
+                d.line([(sx, sy), (sx + side * 26, sy - 22)], fill=dark, width=5)
+            d.ellipse((x1 - 18, y1 - 18, x1 + 18, y1 + 18), fill=mid)
+    # cerci at the rear
+    for side in (-1, 1):
+        d.line([(450 + side * 50, 250), (450 + side * 120, 90)], fill=mid, width=14)
+    # abdomen + wings
+    d.ellipse((260, 210, 640, 950), fill=dark)
+    d.ellipse((275, 240, 448, 930), fill=mid)
+    d.ellipse((452, 240, 625, 930), fill=mid)
+    d.line([(450, 240), (450, 930)], fill=dark, width=6)
+    for k in range(6):
+        y = 330 + k * 95
+        d.arc((300, y, 600, y + 80), 20, 160, fill=dark, width=3)
+    hl = Image.new('RGBA', L.size, (0, 0, 0, 0))
+    ImageDraw.Draw(hl).ellipse((330, 320, 400, 700), fill=(255, 225, 190, 110))
+    ImageDraw.Draw(hl).ellipse((505, 360, 560, 640), fill=(255, 220, 180, 45))
+    L.alpha_composite(hl.filter(ImageFilter.GaussianBlur(12)))
+    # pronotum shield and head
+    d.ellipse((245, 850, 655, 1070), fill=dark)
+    d.ellipse((290, 875, 610, 1045), fill=light)
+    d.ellipse((370, 900, 530, 1020), fill=(40, 18, 7, 255))
+    d.ellipse((375, 1030, 525, 1150), fill=dark)
+    for side in (-1, 1):
+        d.ellipse((450 + side * 55 - 20, 1060, 450 + side * 55 + 20, 1100), fill=(10, 5, 5, 255))
+        d.line([(450 + side * 25, 1140), (450 + side * 40, 1185)], fill=mid, width=10)
+    # long twitchy antennae
+    for side in (-1, 1):
+        pts = []
+        for k in range(26):
+            f = k / 25
+            ang = math.radians(side * (10 + 55 * f) + 25 * f * math.sin(t * 13 + side + f * 3))
+            if not pts:
+                pts.append((450 + side * 40, 1120))
+            px, py = pts[-1]
+            pts.append((px + 34 * math.sin(ang), py + 34 * math.cos(ang) - 6 * f))
+        d.line(pts, fill=mid, width=7, joint='curve')
+    return L
+
+def scare(frame, u):
+    """u = seconds since the scare started."""
+    frame = frame.convert('RGB')
+    frame = Image.blend(frame, frame.point(lambda v: int(v * 0.45)), min(1, u * 8))
+    frame = frame.convert('RGBA')
+    pop = 1.0 + 0.35 * math.exp(-u * 18)
+    sc = (0.95 + 0.25 * ease(seg(u, 0.3, 2.5))) * pop
+    x = W / 2 + 25 * math.sin(u * 9)
+    y = 640 + 170 * ease(seg(u, 0.3, 2.5))
+    ang = 8 * math.sin(u * 6)
+    place(frame, cockroach(u), (450, 700), (x, y), sc, ang)
+    ta = seg(u, 0.12, 0.3)
+    if ta > 0:
+        tl = text_layer_color('¡¡CUCARACHA!!', 62, ta, 90)
+        jx, jy = random.randint(-8, 8), random.randint(-8, 8)
+        frame.alpha_composite(tl, (jx, jy) if min(jx, jy) >= 0 else (0, 0))
+    frame = frame.convert('RGB')
+    flash = math.exp(-u * 14)
+    if flash > 0.02:
+        frame = Image.blend(frame, Image.new('RGB', (W, H), (255, 255, 255)), 0.85 * flash)
+    red = 0.25 * math.exp(-u * 3)
+    frame = Image.blend(frame, Image.new('RGB', (W, H), (200, 0, 0)), red)
+    amp = 40 * math.exp(-u * 3.5) + 4
+    dx, dy = random.randint(-int(amp), int(amp)), random.randint(-int(amp), int(amp))
+    shaken = Image.new('RGB', (W, H))
+    shaken.paste(frame.resize((int(W * 1.08), int(H * 1.08))), (int(-W * 0.04) + dx, int(-H * 0.04) + dy))
+    return shaken.convert('RGBA')
+
+def text_layer_color(txt, size, alpha, y):
+    L = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    font = ImageFont.truetype(FONT, size)
+    d = ImageDraw.Draw(L)
+    x = (W - d.textlength(txt, font=font)) / 2
+    d.text((x, y), txt, font=font, fill=(255, 40, 40, int(255 * alpha)), stroke_width=6, stroke_fill=(255, 255, 255, int(255 * alpha)))
+    return L
+
+def make_audio(path, sr=44100):
+    """Silence until the scare, then a horror stinger plus cockroach scuttling."""
+    import wave
+    n = int(DUR * sr)
+    a = np.zeros(n)
+    rng = np.random.default_rng(3)
+    # soft magic shimmer at the transformation
+    t0 = int((T_FLASH - 0.4) * sr); tt = np.arange(int(1.2 * sr)) / sr
+    env = np.exp(-tt * 3) * np.minimum(1, tt * 10)
+    shim = sum(np.sin(2 * np.pi * f * tt) for f in (1318, 1568, 1976, 2637)) * env * 0.05
+    a[t0:t0 + len(tt)] += shim
+    # stinger
+    s0 = int(T_SCARE * sr); tt = np.arange(n - s0) / sr
+    env = np.exp(-tt * 1.6)
+    chord = sum(np.sign(np.sin(2 * np.pi * f * tt * (1 + 0.01 * np.sin(2 * np.pi * 6 * tt)))) for f in (110, 116.5, 155.6, 233.1, 311.1))
+    hit = rng.normal(0, 1, len(tt)) * np.exp(-tt * 9)
+    boom = np.sin(2 * np.pi * (60 - 25 * np.minimum(tt, 1)) * tt) * np.exp(-tt * 4)
+    a[s0:] += chord * env * 0.12 + hit * 0.6 + boom * 0.8
+    # scuttling clicks
+    for c in np.arange(T_SCARE + 0.15, DUR - 0.2, 0.035):
+        i = int((c + rng.uniform(0, 0.02)) * sr)
+        k = np.arange(int(0.006 * sr))
+        a[i:i + len(k)] += rng.normal(0, 1, len(k)) * np.exp(-k / (0.0012 * sr)) * 0.25
+    fade = np.ones(n); m = int(0.3 * sr); fade[-m:] = np.linspace(1, 0, m)
+    a = np.tanh(a * 1.2) * fade
+    a = (a / np.abs(a).max() * 0.9 * 32767).astype(np.int16)
+    with wave.open(path, 'wb') as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes(a.tobytes())
+
 # ---------------------------------------------------------------- timeline
 sparks = Sparks()
 trail = Sparks()
 N = int(DUR * FPS)
 T_FLASH = 3.7
-writer = imageio.get_writer('bruja_camper.mp4', fps=FPS, codec='libx264', quality=8, pixelformat='yuv420p', macro_block_size=8)
+writer = imageio.get_writer('bruja_camper_mudo.mp4', fps=FPS, codec='libx264', quality=8, pixelformat='yuv420p', macro_block_size=8)
 
 ONLY = [int(float(x) * FPS) for x in sys.argv[1:]]
 for fi in range(N):
@@ -372,7 +496,7 @@ for fi in range(N):
             elif t < 11.0:
                 x, y, sc, ang = 560, 470, 0.27, -4
             else:
-                k = ease(seg(t, 11.0, DUR))
+                k = ease(seg(t, 11.0, 12.5))
                 x = 560 + k * 500
                 y = 470 - k * 360
                 sc = 0.27 - 0.17 * k
@@ -391,6 +515,8 @@ for fi in range(N):
         fl = 1 - seg(t, T_FLASH, T_FLASH + 0.5)
         if fl > 0:
             frame = Image.blend(frame, Image.new('RGB', (W, H), (255, 245, 255)), fl ** 2)
+        if t >= T_SCARE:
+            frame = scare(frame, t - T_SCARE).convert('RGB')
     # vignette-free fade in/out
     fade = min(seg(t, 0, 0.3), 1 - seg(t, DUR - 0.3, DUR))
     if fade < 1:
@@ -401,4 +527,9 @@ for fi in range(N):
         print(f'{t:.1f}s'); sys.stdout.flush()
         frame.save(f'prev_{fi:03d}.jpg', quality=80)
 writer.close()
+if not ONLY:
+    import subprocess, imageio_ffmpeg
+    make_audio('audio.wav')
+    subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', 'bruja_camper_mudo.mp4', '-i', 'audio.wav',
+                    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', 'bruja_camper.mp4'], check=True)
 print('done')
