@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>España en 5mentarios</title>
+<link href="../../2026-09-25-musica-en-directo/fonts/fonts.css" rel="stylesheet">
+<style>
+  :root { --red: #c60b1e; --yellow: #ffc400; --mint: #bfe8cf; --H: 1920px; }
+  body.post { --H: 1350px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas { width: 1080px; height: var(--H); position: relative; overflow: hidden; color: #fff; font-family: "Inter", sans-serif;
+    background: #020805 url(fondo-partido-cartel.jpg) center / cover no-repeat; }
+  body.post .canvas { background-image: url(fondo-partido-editada.jpg); background-position: center 42%; }
+  body.post .canvas::before { content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.2) 32%, rgba(0,0,0,0) 50%, rgba(0,0,0,.55) 58%, rgba(0,0,0,.94) 100%); }
+  svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: overlay; opacity: .4; pointer-events: none; z-index: 30; }
+
+  .top { position: absolute; left: 0; right: 0; top: 50px; text-align: center; z-index: 5; }
+  body.post .top { top: 26px; }
+  .logo { width: 150px; filter: drop-shadow(0 8px 20px rgba(0,0,0,.6)); }
+  body.post .logo { width: 118px; }
+  .kicker { margin-top: 18px; display: inline-flex; align-items: center; gap: 16px;
+    font-family: "Bebas Neue", sans-serif; font-size: 44px; letter-spacing: .22em; color: var(--mint); }
+  .kicker::before, .kicker::after { content: ""; width: 60px; height: 3px; background: currentColor; }
+  body.post .kicker { font-size: 36px; margin-top: 10px; }
+  .title { font-family: "Anton", sans-serif; font-size: 220px; line-height: .9; letter-spacing: .01em; margin-top: 8px;
+    text-shadow: 0 10px 40px rgba(0,0,0,.7); }
+  body.post .title { font-size: 130px; margin-top: 2px; }
+  .flag { width: 360px; height: 16px; margin: 18px auto 34px; border-radius: 3px;
+    background: linear-gradient(180deg, var(--red) 0 25%, var(--yellow) 25% 75%, var(--red) 75%); box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+  body.post .flag { width: 260px; height: 10px; margin: 10px auto 18px; }
+
+  .bottom { position: absolute; left: 0; right: 0; bottom: 80px; text-align: center; z-index: 5; }
+  body.post .bottom { bottom: 34px; }
+  .when { display: inline-block; font-family: "Bebas Neue", sans-serif; font-size: 96px; line-height: 1; letter-spacing: .04em;
+    background: #fff; color: #0a3d1f; padding: 14px 44px 8px; border-radius: 10px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+  body.post .when { font-size: 58px; padding: 8px 30px 4px; }
+  .where { margin-top: 22px; font-family: "Bebas Neue", sans-serif; font-size: 64px; letter-spacing: .06em; }
+  .where b { color: #3ec872; font-weight: 400; }
+  body.post .where { font-size: 42px; margin-top: 10px; }
+  .perks { margin-top: 14px; font-weight: 700; font-size: 26px; letter-spacing: .14em; color: rgba(255,255,255,.85); }
+  body.post .perks { font-size: 21px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="top"><img class="logo" src="../../2026-09-25-musica-en-directo/logo/5mentarios-original.png" alt="5mentarios"></div>
+  <div class="bottom">
+    <div><span class="kicker">JUEGA LA SELECCIÓN</span></div>
+    <div class="title">ESPAÑA</div>
+    <div class="flag"></div>
+    <div class="when">MAÑANA</div>
+    <div class="where">EN DIRECTO EN <b>5MENTARIOS</b></div>
+    <div class="perks">PANTALLAS · TERRAZA · HEINEKEN BIEN FRÍA</div>
+  </div>
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+</div>
+<script>if (new URLSearchParams(location.search).get("f") === "post") document.body.classList.add("post");</script>
+</body>
+</html>
