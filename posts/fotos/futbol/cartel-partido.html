@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>España vs Croacia en 5mentarios</title>
+<link href="../../2026-09-25-musica-en-directo/fonts/fonts.css" rel="stylesheet">
+<style>
+  :root { --mint: #bfe8cf; --green: #1f9a55; --H: 1920px; --s: 1; }
+  body.post { --H: 1350px; --s: .74; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  .canvas { width: 1080px; height: var(--H); position: relative; overflow: hidden; color: #fff; font-family: "Inter", sans-serif;
+    background: #020805 url(fondo-partido-editada.jpg) center 30% / cover no-repeat; }
+  body.post .canvas { background-position: center 34%; }
+  .shade { position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.05) 14%, rgba(0,0,0,0) 30%, rgba(0,0,0,.55) 44%, rgba(2,12,6,.93) 58%, #020a05 100%); }
+  body.post .shade { background: linear-gradient(180deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.05) 14%, rgba(0,0,0,0) 22%, rgba(0,0,0,.6) 36%, rgba(2,12,6,.95) 50%, #020a05 100%); }
+  svg.grain { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: overlay; opacity: .4; pointer-events: none; z-index: 30; }
+  .logo { position: absolute; top: calc(46px * var(--s)); left: 50%; width: calc(150px * var(--s)); transform: translateX(-50%); z-index: 5; filter: drop-shadow(0 8px 20px rgba(0,0,0,.6)); }
+  .live { position: absolute; top: calc(66px * var(--s)); right: 46px; z-index: 5; display: flex; align-items: center; gap: 10px;
+    font-family: "Bebas Neue", sans-serif; font-size: calc(34px * var(--s)); letter-spacing: .12em; line-height: 1;
+    background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.25); padding: 9px 16px 5px; border-radius: 6px; }
+  .live i { width: 12px; height: 12px; border-radius: 50%; background: #e3242b; box-shadow: 0 0 12px #e3242b; margin-top: -3px; }
+  .block { position: absolute; left: 0; right: 0; bottom: calc(80px * var(--s)); z-index: 5; text-align: center; }
+  .kicker { display: inline-flex; align-items: center; gap: 16px; font-family: "Bebas Neue", sans-serif; font-size: calc(40px * var(--s)); letter-spacing: .24em; color: var(--mint); }
+  .kicker::before, .kicker::after { content: ""; width: 60px; height: 2px; background: currentColor; }
+  .match { display: flex; align-items: flex-start; justify-content: center; gap: calc(30px * var(--s)); margin-top: calc(40px * var(--s)); }
+  .team { width: calc(330px * var(--s)); display: flex; flex-direction: column; align-items: center; }
+  .badge { width: calc(230px * var(--s)); height: calc(230px * var(--s)); border-radius: 50%; overflow: hidden; position: relative;
+    box-shadow: 0 0 0 calc(8px * var(--s)) #fff, 0 0 0 calc(14px * var(--s)) rgba(255,255,255,.22), 0 20px 50px rgba(0,0,0,.7); }
+  .badge svg { width: 100%; height: 100%; display: block; }
+  .badge::after { content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 32% 25%, rgba(255,255,255,.45), transparent 45%), radial-gradient(circle, transparent 60%, rgba(0,0,0,.35)); }
+  .tname { margin-top: calc(36px * var(--s)); font-family: "Anton", sans-serif; font-size: calc(84px * var(--s)); line-height: 1; letter-spacing: .02em; text-shadow: 0 6px 24px rgba(0,0,0,.7); }
+  .vs { margin-top: calc(63px * var(--s)); width: calc(104px * var(--s)); height: calc(104px * var(--s)); border-radius: 50%; flex: none;
+    display: flex; align-items: center; justify-content: center; background: var(--green);
+    font-family: "Anton", sans-serif; font-size: calc(46px * var(--s)); box-shadow: 0 0 0 4px rgba(255,255,255,.9), 0 0 40px rgba(31,154,85,.7); }
+  .when { margin-top: calc(56px * var(--s)); display: inline-flex; border-radius: 12px; overflow: hidden; box-shadow: 0 18px 44px rgba(0,0,0,.6);
+    font-family: "Bebas Neue", sans-serif; line-height: 1; font-size: calc(92px * var(--s)); }
+  .when .d { background: var(--green); color: #fff; padding: calc(18px * var(--s)) calc(34px * var(--s)) calc(8px * var(--s)); letter-spacing: .04em; }
+  .when .h { background: #fff; color: #0a3d1f; padding: calc(18px * var(--s)) calc(38px * var(--s)) calc(8px * var(--s)); }
+  .where { margin-top: calc(30px * var(--s)); font-family: "Bebas Neue", sans-serif; font-size: calc(60px * var(--s)); letter-spacing: .06em; }
+  .where b { color: #3ec872; font-weight: 400; }
+  .perks { margin-top: calc(12px * var(--s)); font-weight: 700; font-size: calc(25px * var(--s)); letter-spacing: .16em; color: rgba(255,255,255,.8); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="shade"></div>
+  <img class="logo" src="../../2026-09-25-musica-en-directo/logo/5mentarios-original.png" alt="5mentarios">
+  <div class="live"><i></i>EN DIRECTO</div>
+  <div class="block">
+    <div><span class="kicker">JUEGA LA SELECCIÓN</span></div>
+    <div class="match">
+      <div class="team">
+        <div class="badge"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#c60b1e"/><rect y="25" width="100" height="50" fill="#ffc400"/></svg></div>
+        <div class="tname">ESPAÑA</div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="team">
+        <div class="badge"><svg viewBox="0 0 100 100" id="hr"><rect width="100" height="34" fill="#ff0000"/><rect y="33" width="100" height="34" fill="#fff"/><rect y="66" width="100" height="34" fill="#171796"/></svg></div>
+        <div class="tname">CROACIA</div>
+      </div>
+    </div>
+    <div class="when"><span class="d">HOY</span><span class="h">19:45</span></div>
+    <div class="where">EN DIRECTO EN <b>5MENTARIOS</b></div>
+    <div class="perks">PANTALLAS · TERRAZA · HEINEKEN BIEN FRÍA</div>
+  </div>
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  if (q.get("f") === "post") document.body.classList.add("post");
+  if (q.get("d")) document.querySelector(".when .d").textContent = q.get("d");
+  // escudo ajedrezado rojo y blanco de la bandera croata
+  const hr = document.getElementById("hr"), x0 = 35, y0 = 29, c = 6;
+  const shield = `M${x0} ${y0} h${c*5} v${c*3.4} q0 ${c*2.6} -${c*2.5} ${c*3.6} q-${c*2.5} -${c} -${c*2.5} -${c*3.6} z`;
+  let s = `<clipPath id="sh"><path d="${shield}"/></clipPath><g clip-path="url(#sh)">`;
+  for (let r = 0; r < 6; r++) for (let k = 0; k < 5; k++) s += `<rect x="${x0 + k*c}" y="${y0 + r*c}" width="${c}" height="${c}" fill="${(r + k) % 2 ? "#fff" : "#ff0000"}"/>`;
+  s += `</g><path d="${shield}" fill="none" stroke="#171796" stroke-width="1"/>`;
+  hr.insertAdjacentHTML("beforeend", s);
+</script>
+</body>
+</html>
