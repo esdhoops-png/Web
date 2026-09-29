@@ -51,6 +51,15 @@
     background: linear-gradient(105deg, transparent 40%, rgba(180,255,200,.09) 50%, transparent 60%); }
   .spark { position: absolute; left: 50%; width: 10px; height: 10px; z-index: 6; border-radius: 50%; pointer-events: none;
     background: radial-gradient(circle, #fff, rgba(120,255,160,.6) 40%, transparent 70%); transform: translate(-50%,-50%); }
+  .crest { height: 440px; width: auto; max-width: 400px; object-fit: contain; display: block;
+    filter: drop-shadow(0 0 30px rgba(255,255,255,.18)) drop-shadow(0 26px 40px rgba(0,0,0,.85)); }
+  .team { width: 420px !important; height: 560px; justify-content: flex-end; }
+  .match { align-items: center !important; gap: 10px !important; }
+  .vs { margin-top: -110px !important; }
+  .tname { margin-top: 30px !important; }
+  .block { bottom: 150px !important; }
+  .when { margin-top: 70px !important; }
+  .shade { background: linear-gradient(180deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.25) 14%, rgba(0,0,0,.45) 30%, rgba(2,12,6,.82) 42%, rgba(2,12,6,.9) 70%, #020a05 100%) !important; }
 </style>
 </head>
 <body>
@@ -63,12 +72,12 @@
     <div><span class="kicker">JUEGA LA SELECCIÓN</span></div>
     <div class="match">
       <div class="team">
-        <div class="badge"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#c60b1e"/><rect y="25" width="100" height="50" fill="#ffc400"/></svg></div>
+        <img class="crest" src="escudos/espana-rfef.png" alt="España">
         <div class="tname">ESPAÑA</div>
       </div>
       <div class="vs">VS</div>
       <div class="team">
-        <div class="badge"><svg viewBox="0 0 100 100" id="hr"><rect width="100" height="34" fill="#ff0000"/><rect y="33" width="100" height="34" fill="#fff"/><rect y="66" width="100" height="34" fill="#171796"/></svg></div>
+        <img class="crest" src="escudos/croacia-hns.png" alt="Croacia">
         <div class="tname">CROACIA</div>
       </div>
     </div>
@@ -84,17 +93,10 @@
   const q = new URLSearchParams(location.search);
   if (q.get("f") === "post") document.body.classList.add("post");
   if (q.get("d")) document.querySelector(".when .d").textContent = q.get("d");
-  // escudo ajedrezado rojo y blanco de la bandera croata
-  const hr = document.getElementById("hr"), x0 = 35, y0 = 29, c = 6;
-  const shield = `M${x0} ${y0} h${c*5} v${c*3.4} q0 ${c*2.6} -${c*2.5} ${c*3.6} q-${c*2.5} -${c} -${c*2.5} -${c*3.6} z`;
-  let s = `<clipPath id="sh"><path d="${shield}"/></clipPath><g clip-path="url(#sh)">`;
-  for (let r = 0; r < 6; r++) for (let k = 0; k < 5; k++) s += `<rect x="${x0 + k*c}" y="${y0 + r*c}" width="${c}" height="${c}" fill="${(r + k) % 2 ? "#fff" : "#ff0000"}"/>`;
-  s += `</g><path d="${shield}" fill="none" stroke="#171796" stroke-width="1"/>`;
-  hr.insertAdjacentHTML("beforeend", s);
   const $ = s => document.querySelector(s);
   const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.pow(1 - x, 3);
   const back = x => { if (x <= 0) return 0; if (x >= 1) return 1; const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
-  const teams = [...document.querySelectorAll(".team")], badges = [...document.querySelectorAll(".badge")], names = [...document.querySelectorAll(".tname")];
+  const teams = [...document.querySelectorAll(".team")], badges = [...document.querySelectorAll(".crest")], names = [...document.querySelectorAll(".tname")];
   const canvas = $(".canvas");
   window.setT = t => {
     // intro 0-1.8
