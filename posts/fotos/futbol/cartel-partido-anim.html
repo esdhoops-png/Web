@@ -50,7 +50,7 @@
   .sweep { position: absolute; inset: 0; z-index: 4; pointer-events: none; mix-blend-mode: screen;
     background: linear-gradient(105deg, transparent 40%, rgba(180,255,200,.09) 50%, transparent 60%); }
   .spark { position: absolute; left: 50%; width: 10px; height: 10px; z-index: 6; border-radius: 50%; pointer-events: none;
-    background: radial-gradient(circle, #fff, rgba(120,255,160,.6) 40%, transparent 70%); transform: translate(-50%,-50%); }
+    background: radial-gradient(circle, transparent 58%, rgba(255,255,255,.85) 64%, rgba(120,255,160,.35) 67%, transparent 71%); transform: translate(-50%,-50%); }
   .crest { height: 440px; width: auto; max-width: 400px; object-fit: contain; display: block;
     filter: drop-shadow(0 0 30px rgba(255,255,255,.18)) drop-shadow(0 26px 40px rgba(0,0,0,.85)); }
   .team { width: 420px !important; height: 560px; justify-content: flex-end; }
@@ -60,6 +60,17 @@
   .block { bottom: 150px !important; }
   .when { margin-top: 70px !important; }
   .shade { background: linear-gradient(180deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.25) 14%, rgba(0,0,0,.45) 30%, rgba(2,12,6,.82) 42%, rgba(2,12,6,.9) 70%, #020a05 100%) !important; }
+  .cwrap { position: relative; height: 440px; width: 400px; display: flex; align-items: flex-end; justify-content: center; }
+  .cwrap .crest { position: relative; z-index: 2; margin: 0 auto; }
+  .cglow { position: absolute; left: 50%; top: 50%; width: 620px; height: 620px; transform: translate(-50%,-50%); z-index: 1; border-radius: 50%;
+    background: radial-gradient(circle at 42% 45%, var(--g1), transparent 55%), radial-gradient(circle at 60% 58%, var(--g2), transparent 55%);
+    filter: blur(60px); opacity: 0; mix-blend-mode: screen; }
+  .shine { position: absolute; inset: 0; z-index: 3; -webkit-mask-size: contain; -webkit-mask-position: center bottom; -webkit-mask-repeat: no-repeat;
+    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,.75) 48%, rgba(255,255,255,.1) 55%, transparent 62%) no-repeat;
+    background-size: 300% 100%; background-position: 150% 0; mix-blend-mode: overlay; }
+  .vline { position: absolute; left: 50%; width: 2px; background: linear-gradient(180deg, transparent, rgba(255,255,255,.8), transparent); transform: translateX(-50%); }
+  .vs { position: relative; overflow: visible; background: rgba(10,40,22,.85) !important; border: 2px solid rgba(255,255,255,.85);
+    box-shadow: 0 0 30px rgba(31,154,85,.6) !important; }
 </style>
 </head>
 <body>
@@ -72,12 +83,12 @@
     <div><span class="kicker">JUEGA LA SELECCIÓN</span></div>
     <div class="match">
       <div class="team">
-        <img class="crest" src="escudos/espana-rfef.png" alt="España">
+        <div class="cwrap" style="--g1:#e3001b;--g2:#ffc400"><div class="cglow"></div><img class="crest" src="escudos/espana-rfef.png" alt="España"><div class="shine" style="-webkit-mask-image:url(escudos/espana-rfef.png)"></div></div>
         <div class="tname">ESPAÑA</div>
       </div>
-      <div class="vs">VS</div>
+      <div class="vs">VS<i class="vline" id="vl1"></i><i class="vline" id="vl2"></i></div>
       <div class="team">
-        <img class="crest" src="escudos/croacia-hns.png" alt="Croacia">
+        <div class="cwrap" style="--g1:#e3001b;--g2:#1a3fb0"><div class="cglow"></div><img class="crest" src="escudos/croacia-hns.png" alt="Croacia"><div class="shine" style="-webkit-mask-image:url(escudos/croacia-hns.png)"></div></div>
         <div class="tname">CROACIA</div>
       </div>
     </div>
@@ -115,22 +126,36 @@
     $(".logo").style.opacity = kl; $(".logo").style.transform = `translateX(-50%) translateY(${(1 - kl) * -30}px)`;
     $(".live").style.opacity = ease((t - 2.1) / .4); $(".live i").style.opacity = Math.sin(t * 7) > 0 ? 1 : .25;
     $(".kicker").style.opacity = ease((t - 2.1) / .4);
-    // insignias: entran desde los lados girando
-    teams.forEach((tm, i) => {
-      const k = back((t - 2.3 - i * .12) / .7), dir = i ? 1 : -1;
-      badges[i].style.transform = `translateX(${dir * (1 - k) * 700}px) rotate(${dir * (1 - k) * 540}deg) scale(${1 + (t > 3 && t < 3.25 ? .06 : 0)})`;
-      badges[i].style.opacity = ease((t - 2.3 - i * .12) / .3);
-      const kn = ease((t - 3.1 - i * .1) / .4);
-      names[i].style.opacity = kn; names[i].style.transform = `translateY(${(1 - kn) * 30}px)`;
+    // escudos: revelado de abajo arriba, de desenfocado a nítido, acercamiento lento (estilo TV)
+    const expo = x => x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+    const wraps = [...document.querySelectorAll(".cwrap")];
+    wraps.forEach((w, i) => {
+      const t0 = 2.25 + i * .28, k = expo((t - t0) / 1.1), dir = i ? 1 : -1;
+      const crest = w.querySelector(".crest");
+      crest.style.clipPath = `inset(${(1 - ease((t - t0) / .7)) * 100}% 0 0 0)`;
+      crest.style.filter = `blur(${(1 - k) * 18}px) drop-shadow(0 0 30px rgba(255,255,255,.18)) drop-shadow(0 26px 40px rgba(0,0,0,.85))`;
+      const fl = t > t0 + 1 ? Math.sin((t - t0) * 1.4 + i * 1.7) * 6 : 0;
+      w.style.transform = `translate(${dir * (1 - k) * 60}px, ${(1 - k) * 40 + fl}px) scale(${1.18 - .18 * k})`;
+      w.style.opacity = ease((t - t0) / .35);
+      w.querySelector(".cglow").style.opacity = .55 * ease((t - t0 - .3) / .8) * (.85 + .15 * Math.sin(t * 2 + i));
+      // destello metálico que cruza el escudo
+      const sp = (t - (t0 + .9)) / .9;
+      w.querySelector(".shine").style.backgroundPosition = `${150 - Math.min(1, Math.max(0, sp)) * 200}% 0`;
+      w.querySelector(".shine").style.opacity = sp > 0 && sp < 1 ? 1 : 0;
+      const kn = ease((t - t0 - .75) / .6);
+      names[i].style.opacity = kn; names[i].style.letterSpacing = `${.35 - .33 * kn}em`;
+      names[i].style.transform = `translateY(${(1 - kn) * 12}px)`;
     });
-    // VS con destello
-    const kv = back((t - 2.95) / .45);
-    $(".vs").style.opacity = ease((t - 2.95) / .2); $(".vs").style.transform = `scale(${kv * (1 + .05 * Math.sin(t * 5))})`;
-    const sp = t > 2.95 && t < 3.5 ? 1 - (t - 2.95) / .55 : 0;
+    // VS: aparece limpio con onda de luz y líneas
+    const kv = expo((t - 3.0) / .8);
+    $(".vs").style.opacity = ease((t - 3.0) / .3); $(".vs").style.transform = `scale(${.8 + .2 * kv})`;
+    ["#vl1", "#vl2"].forEach((id, j) => { const e = $(id), L = ease((t - 3.2) / .6) * 170;
+      e.style.height = L + "px"; if (j === 0) e.style.bottom = "100%"; else e.style.top = "100%"; e.style.marginBottom = e.style.marginTop = "10px"; });
+    const sp = t > 3.0 && t < 3.7 ? 1 - (t - 3.0) / .7 : 0;
     const vsr = $(".vs").getBoundingClientRect(), cr = canvas.getBoundingClientRect();
     $("#spark").style.top = (vsr.top - cr.top + vsr.height / 2) + "px";
-    $("#spark").style.width = $("#spark").style.height = (40 + (1 - sp) * 900) + "px";
-    $("#spark").style.opacity = sp;
+    $("#spark").style.width = $("#spark").style.height = (60 + (1 - sp) * 700) + "px";
+    $("#spark").style.opacity = sp * .7;
     // hora y textos
     const kw = back((t - 3.6) / .5);
     $(".when").style.opacity = ease((t - 3.6) / .25); $(".when").style.transform = `scale(${kw})`;
