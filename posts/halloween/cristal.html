@@ -1,0 +1,60 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cristal</title>
+<link href="../2026-09-25-musica-en-directo/fonts/fonts.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box} html,body{background:#000}
+.canvas{width:1080px;height:1920px;position:relative;overflow:hidden;background:#1a0002}
+#glow{position:absolute;inset:0;background:radial-gradient(820px 1150px at 50% 40%, #ff0a0a 0%, #d10006 35%, #6e0003 70%, #1c0001 100%)}
+#hand,#logo{position:absolute;left:50%;top:50%}
+#logo{width:760px;transform:translate(-50%,-55%)}
+#frost{position:absolute;inset:0;mix-blend-mode:overlay;opacity:.35}
+#txt{position:absolute;left:0;right:0;bottom:250px;text-align:center;font-family:"Bebas Neue",sans-serif;font-size:66px;letter-spacing:.7em;padding-left:.7em;color:#140000;filter:blur(1px);font-size:84px}
+#dark{position:absolute;inset:0;background:#000}
+</style></head><body><div class="canvas">
+<div id="glow"></div>
+<canvas id="hand" width="1080" height="1920" style="left:0;top:0"></canvas>
+<img id="logo" src="sombra-logo.png">
+<div id="txt">HALLOWEEN</div>
+<svg id="frost" width="1080" height="1920"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency=".6" numOctaves="2"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#f)"/></svg>
+<div id="dark"></div>
+</div><script>
+const $=id=>document.getElementById(id);
+const ease=x=>x<=0?0:x>=1?1:1-Math.pow(1-x,3);
+const cl=x=>Math.max(0,Math.min(1,x));
+const ctx=$("hand").getContext("2d");
+function drawHand(){ctx.clearRect(0,0,1080,1920);ctx.fillStyle="#060000";
+ const cx=540,cy=1120;
+ // palma
+ ctx.beginPath();ctx.moveTo(cx-195,cy-120);ctx.bezierCurveTo(cx-230,cy+60,cx-170,cy+230,cx-110,cy+300);
+ ctx.lineTo(cx-120,1920);ctx.lineTo(cx+150,1920);ctx.lineTo(cx+140,cy+300);
+ ctx.bezierCurveTo(cx+220,cy+200,cx+260,cy+20,cx+225,cy-110);ctx.closePath();ctx.fill();
+ // dedos: base, punta, ancho base, ancho punta
+ const F=[[-140,-60,-235,-500,104,78],[-50,-80,-80,-640,108,84],[50,-80,85,-620,106,82],[145,-50,240,-500,98,74],[-170,90,-440,-160,112,84]];
+ F.forEach(([x1,y1,x2,y2,w1,w2])=>{const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L;
+  ctx.beginPath();ctx.moveTo(cx+x1+nx*w1/2,cy+y1+ny*w1/2);
+  ctx.quadraticCurveTo(cx+(x1+x2)/2+nx*w1*.55,cy+(y1+y2)/2+ny*w1*.55,cx+x2+nx*w2/2,cy+y2+ny*w2/2);
+  ctx.arc(cx+x2,cy+y2,w2/2,Math.atan2(ny,nx),Math.atan2(ny,nx)+Math.PI,true);
+  ctx.quadraticCurveTo(cx+(x1+x2)/2-nx*w1*.55,cy+(y1+y2)/2-ny*w1*.55,cx+x1-nx*w1/2,cy+y1-ny*w1/2);ctx.fill();});}
+drawHand();
+window.setT=t=>{
+ // luz: se enciende con parpadeo, pulsos
+ let g=t<.4?0:t<1.1?(Math.sin(t*60)>0?.9:.3):1; if(t>3.9&&t<4.4) g=Math.sin(t*50)>0?1:.35;
+ g*= .9+.1*Math.sin(t*3);
+ $("glow").style.opacity=g;
+ // mano: se acerca 1.2-2.4, apoyada 2.4-3.8, se va 3.8-4.4
+ let hb,ha,hs;
+ if(t<1.2){ha=0;hb=80;hs=1.25}
+ else if(t<2.4){const k=ease((t-1.2)/1.2);ha=k;hb=80-50*k;hs=1.25-.25*k}
+ else if(t<3.8){ha=1;hb=30-6*Math.sin((t-2.4)*2);hs=1}
+ else {const k=ease((t-3.8)/.6);ha=1-k;hb=30+70*k;hs=1+.2*k}
+ $("hand").style.opacity=ha;$("hand").style.filter=`blur(${hb}px)`;$("hand").style.transform=`scale(${hs})`;
+ // logo: sombra que se pega al cristal 4.6-6.4
+ let la,lb,ls;
+ if(t<4.6){la=0;lb=90;ls=1.3}
+ else if(t<6.4){const k=ease((t-4.6)/1.8);la=k;lb=90-84*k;ls=1.3-.3*k}
+ else {la=1;lb=6+2*Math.sin(t*2);ls=1}
+ $("logo").style.opacity=la;$("logo").style.filter=`blur(${lb}px)`;$("logo").style.transform=`translate(-50%,-55%) scale(${ls})`;
+ const kt=ease((t-6.8)/.8);$("txt").style.opacity=kt;$("txt").style.filter=`blur(${(1-kt)*20+1}px)`;
+ $("dark").style.opacity=t<.4?1:t>8.6?ease((t-8.6)/.4):0;
+};
+setT(0);
+</script></body></html>
