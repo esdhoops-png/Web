@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Viernes separados</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box} html,body{background:#000}
+.canvas{width:1080px;height:1920px;position:relative;overflow:hidden;color:#fff;font-family:"Inter",sans-serif;
+ background:radial-gradient(900px 1100px at 50% 40%,#14713f,#0a4a28 55%,#04210f 100%)}
+.scene,.intro,.outro{position:absolute;inset:0}
+.rays{position:absolute;left:50%;top:42%;width:2600px;height:2600px;transform:translate(-50%,-50%);
+ background:repeating-conic-gradient(rgba(255,255,255,.05) 0 5deg,transparent 5deg 10deg);
+ -webkit-mask:radial-gradient(circle,#000 0 15%,transparent 45%)}
+.logo{position:absolute;top:60px;left:50%;width:210px;transform:translateX(-50%);z-index:9;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.big{position:absolute;left:0;right:0;top:330px;text-align:center;font-family:"Anton",sans-serif;font-size:300px;line-height:.9;
+ color:transparent;-webkit-text-stroke:3px rgba(255,255,255,.55);letter-spacing:.02em;z-index:1}
+.fig{position:absolute;z-index:2;filter:drop-shadow(0 30px 50px rgba(0,0,0,.6))}
+.fade{position:absolute;left:0;right:0;bottom:0;height:760px;z-index:3;background:linear-gradient(180deg,rgba(4,33,15,0),rgba(4,33,15,.85) 45%,#04210f 75%)}
+.info{position:absolute;left:0;right:0;bottom:200px;text-align:center;z-index:4}
+.info .tag{display:inline-block;font-family:"Bebas Neue",sans-serif;font-size:40px;letter-spacing:.2em;padding:8px 22px 4px;border:2px solid rgba(255,255,255,.8);border-radius:6px}
+.info .n{font-family:"Bebas Neue",sans-serif;font-size:150px;line-height:1;margin-top:18px;text-shadow:0 6px 30px rgba(0,0,0,.6)}
+.info .h{display:inline-flex;margin-top:22px;border-radius:12px;overflow:hidden;font-family:"Bebas Neue",sans-serif;font-size:80px;line-height:1;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.info .h span{padding:16px 30px 6px}.info .h .a{background:#1f9a55}.info .h .b{background:#fff;color:#0a3d1f}
+.intro,.outro{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:20;
+ background:radial-gradient(900px 700px at 50% 42%,#14713f,#0a4a28 55%,#05281a 100%)}
+.w{display:block;font-family:"Bebas Neue",sans-serif;line-height:.88}
+.w1,.w2{font-size:118px;letter-spacing:.06em;color:#bfe8cf}.w3{font-size:400px;margin:8px 0 -4px}.w4{font-size:150px;letter-spacing:.04em}
+.bar{width:0;height:6px;background:#fff;margin-top:36px}
+.outro img{width:330px;margin-bottom:50px}
+.o1{font-size:110px;letter-spacing:.08em;color:#bfe8cf}.o2{font-size:200px;margin:6px 0}.o3{font-size:92px;letter-spacing:.06em}
+#wipe{position:absolute;inset:0;z-index:15;background:#1f9a55}
+svg.grain{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:overlay;opacity:.4;z-index:40}
+</style></head><body><div class="canvas">
+<div class="rays"></div>
+<div class="scene" id="s1"><img class="logo" src="logo/5mentarios-original.png"><div class="big">HAVANA<br>500</div>
+ <img class="fig" id="f1" src="col/havana-500.png" style="height:1250px;left:calc(540px - 1250px*686/1069*.5);top:470px">
+ <div class="fade"></div>
+ <div class="info"><div class="tag">EN DIRECTO</div><div class="n">HAVANA 500</div><div class="h"><span class="a">HOY</span><span class="b">22:30</span></div></div></div>
+<div class="scene" id="s2"><img class="logo" src="logo/5mentarios-original.png"><div class="big">DJ JOSE<br>SOSA</div>
+ <img class="fig" id="f2" src="col/dj-jose-sosa.png" style="height:1020px;left:calc(540px - 1020px*1261/1227*.65);top:620px">
+ <div class="fade"></div>
+ <div class="info"><div class="tag">DJ SET</div><div class="n">DJ JOSE SOSA</div><div class="h"><span class="a">HOY</span><span class="b">00:00</span></div></div></div>
+<div id="wipe"></div>
+<div class="intro" id="intro"><span class="w w1">NO TE OLVIDES</span><span class="w w2">QUE</span><span class="w w3">HOY</span><span class="w w4">TENEMOS…</span><div class="bar"></div></div>
+<div class="outro" id="outro"><img src="logo/5mentarios-original.png"><span class="w o1">ESTA NOCHE</span><span class="w o2">TE ESPERAMOS</span><span class="w o3">EN 5MENTARIOS</span></div>
+<svg class="grain"><filter id="g"><feTurbulence id="gt" type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="1"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+</div><script>
+const $=s=>document.querySelector(s);
+const ease=x=>x<=0?0:x>=1?1:1-Math.pow(1-x,3);
+const expo=x=>x<=0?0:x>=1?1:1-Math.pow(2,-10*x);
+const back=x=>{if(x<=0)return 0;if(x>=1)return 1;const c=1.5;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const pop=(el,t0,t)=>{const k=back((t-t0)/.5),a=ease((t-t0)/.3);el.style.opacity=a;el.style.transform=`translateY(${(1-k)*80}px) scale(${.85+.15*k})`};
+function scene(id,t0,t){const s=$(id),t1=t-t0;s.style.display=(t1>=0&&t1<4.6)?"block":"none";if(s.style.display==="none")return;
+ const big=s.querySelector(".big"),fig=s.querySelector(".fig"),info=s.querySelector(".info"),logo=s.querySelector(".logo");
+ const kb=expo(t1/1.2);big.style.opacity=kb*.9;big.style.letterSpacing=`${.3-.28*kb}em`;big.style.transform=`scale(${1.15-.15*kb+t1*.01})`;
+ const kf=expo((t1-.25)/1.1);fig.style.opacity=ease((t1-.25)/.4);fig.style.filter=`blur(${(1-kf)*16}px) drop-shadow(0 30px 50px rgba(0,0,0,.6))`;
+ fig.style.transform=`translateY(${(1-kf)*160}px) scale(${1.08-.08*kf+t1*.008})`;
+ logo.style.opacity=ease((t1-.2)/.4);
+ [...info.children].forEach((c,i)=>pop(c,.9+i*.2,t1));
+ const h=info.querySelector(".h .b");h.style.transform=t1>2?`scale(${1+.05*Math.max(0,Math.sin((t1-2)*4))})`:"none";}
+window.setT=t=>{
+ // intro 0-3.2
+ const iw=[...document.querySelectorAll("#intro .w")];iw.forEach((w,i)=>pop(w,.15+i*.28,t));
+ $("#intro .bar").style.width=ease((t-1.3)/.7)*420+"px";
+ const o=ease((t-2.75)/.5);$("#intro").style.transform=`translateY(${-o*105}%)`;$("#intro").style.display=o>=1?"none":"flex";
+ scene("#s1",3.1,t);scene("#s2",7.5,t);
+ // barrido verde entre artistas
+ const w=t>7.1&&t<7.9?(t<7.5?ease((t-7.1)/.4):1-ease((t-7.5)/.4)):0;
+ $("#wipe").style.clipPath=t<7.5?`inset(0 ${100-w*100}% 0 0)`:`inset(0 0 0 ${100-w*100}%)`;$("#wipe").style.opacity=w>0?1:0;
+ // outro
+ const T2=12.1,oin=ease((t-T2)/.55);$("#outro").style.display=t>=T2?"flex":"none";$("#outro").style.transform=`translateY(${(1-oin)*100}%)`;
+ [...document.querySelectorAll("#outro img,#outro .w")].forEach((e,i)=>pop(e,T2+.45+i*.3,t));
+ $("#gt").setAttribute("seed",1+Math.floor(t*24)%20);
+};
+setT(0);
+</script></body></html>
