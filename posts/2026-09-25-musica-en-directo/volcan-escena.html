@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Volcán</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box} html,body{background:#000}
+.canvas{width:1080px;height:1920px;position:relative;overflow:hidden;color:#fff;font-family:"Inter",sans-serif;background:#000}
+#bg{position:absolute;inset:-4%;background:url(../fotos/cocinero-editada.jpg) center/cover}
+#shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.35) 28%,rgba(0,0,0,.2) 45%,rgba(0,0,0,.7) 62%,rgba(0,0,0,.92) 100%)}
+.top{position:absolute;left:0;right:0;top:150px;text-align:center}
+.q{font-family:"Bebas Neue",sans-serif;font-size:120px;line-height:1;letter-spacing:.04em}
+.q2{font-family:"Bebas Neue",sans-serif;font-size:56px;letter-spacing:.2em;color:#ffcf8a;margin-top:14px}
+.bot{position:absolute;left:0;right:0;bottom:250px;text-align:center}
+.k{font-family:"Bebas Neue",sans-serif;font-size:60px;letter-spacing:.3em;padding-left:.3em;color:#ffcf8a}
+.v{font-family:"Anton",sans-serif;font-size:210px;line-height:.95;margin-top:10px;text-shadow:0 10px 40px rgba(0,0,0,.8)}
+.v2{display:inline-block;margin-top:14px;font-family:"Bebas Neue",sans-serif;font-size:78px;letter-spacing:.12em;line-height:1;
+ background:#ff6a1a;color:#fff;padding:14px 34px 8px;border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+.f{margin-top:40px;font-family:"Bebas Neue",sans-serif;font-size:48px;letter-spacing:.08em;line-height:1.25}
+.f b{color:#3ec872;font-weight:400}
+svg.grain{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:overlay;opacity:.4}
+#ember{position:absolute;inset:0}
+</style></head><body><div class="canvas">
+<div id="bg"></div><div id="shade"></div><svg id="ember"></svg>
+<div class="top"><div class="q" id="q">¿Y SI VIENES ANTES?</div><div class="q2" id="q2">ANTES DEL DJ… A CENAR</div></div>
+<div class="bot">
+ <div class="k" id="k">CENA EN</div>
+ <div class="v" id="v">VOLCÁN</div>
+ <div class="v2" id="v2">SMASH BURGER</div>
+ <div class="f" id="f">VEN PRONTO, CENA Y QUÉDATE<br>A LA FIESTA CON <b>DJ ASPED</b></div>
+</div>
+<svg class="grain"><filter id="g"><feTurbulence id="gt" type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="1"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>
+</div><script>
+const $=id=>document.getElementById(id);
+const ease=x=>x<=0?0:x>=1?1:1-Math.pow(1-x,3);
+const expo=x=>x<=0?0:x>=1?1:1-Math.pow(2,-10*x);
+let seed=4;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+const E=Array.from({length:40},()=>({x:200+rnd()*700,y:900+rnd()*900,r:1+rnd()*3,v:60+rnd()*140,ph:rnd()*6}));
+const up=(el,t0,t,d=40)=>{const k=expo((t-t0)/.7);el.style.opacity=ease((t-t0)/.35);el.style.transform=`translateY(${(1-k)*d}px)`};
+window.setT=t=>{
+ $("bg").style.transform=`scale(${1.12-Math.min(.1,t*.022)})`; $("bg").style.opacity=ease(t/.4);
+ up($("q"),.1,t); up($("q2"),.45,t,25);
+ up($("k"),1.0,t,25);
+ const kv=expo((t-1.25)/.8); $("v").style.opacity=ease((t-1.25)/.3); $("v").style.letterSpacing=`${.3-.3*kv}em`; $("v").style.transform=`scale(${1.15-.15*kv})`;
+ const k2=expo((t-1.7)/.6); $("v2").style.opacity=ease((t-1.7)/.25); $("v2").style.transform=`scaleX(${.6+.4*k2})`;
+ up($("f"),2.3,t,30);
+ let s="";for(const p of E){const y=p.y-((t*p.v)%900);s+=`<circle cx="${p.x+Math.sin(t*2+p.ph)*15}" cy="${y}" r="${p.r}" fill="#ffb15c" opacity="${.35+.4*Math.sin(t*5+p.ph)**2}"/>`}
+ $("ember").innerHTML=s; $("gt").setAttribute("seed",1+Math.floor(t*24)%20);
+};
+setT(0);
+</script></body></html>
