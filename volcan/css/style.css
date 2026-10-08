@@ -828,3 +828,35 @@ html:not(.js) .preloader { display: none; }
 .gram-cta { display: flex; justify-content: center; margin-top: 34px; }
 .kicker a { color: inherit; transition: color .25s; }
 .kicker a:hover { color: var(--cream); }
+
+/* =========================================================
+   FOTOS REALES
+   ========================================================= */
+.hero-photo {
+  position: relative; z-index: 2; margin: 0; width: min(78%, 440px); aspect-ratio: 4 / 5; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8), 0 0 0 1px rgba(244, 237, 228, .08);
+  transform-style: preserve-3d; will-change: transform;
+}
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 52%; }
+.js .hero-photo img { opacity: 0; transform: scale(1.12); filter: blur(12px) brightness(.6); }
+.is-loaded .hero-photo img { animation: photoIn 1.6s var(--ease-out) .25s forwards; }
+@keyframes photoIn { to { opacity: 1; transform: none; filter: none; } }
+.hero-sticker { z-index: 4; }
+
+.method-img { margin: -34px -30px 22px; aspect-ratio: 4 / 3; overflow: hidden; }
+.method-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out); }
+.method-step:hover .method-img img { transform: scale(1.06); }
+
+.place-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+
+.club { position: relative; }
+.club-bg { position: absolute; inset: 0; z-index: 0; }
+.club-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; opacity: .32; filter: grayscale(.2); }
+.club-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--coal) 0%, rgba(11, 9, 8, .55) 40%, rgba(11, 9, 8, .7) 75%, var(--coal) 100%); }
+
+.gram a { aspect-ratio: 4 / 5; }
+.gram a img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease-out); }
+.gram a:hover img { transform: scale(1.06); }
+.gram a span { z-index: 1; text-shadow: 0 1px 8px rgba(0, 0, 0, .7); }
+
+@media (prefers-reduced-motion: reduce) { .js .hero-photo img { opacity: 1 !important; transform: none !important; filter: none !important; } }

@@ -334,16 +334,8 @@
       </div>
 
       <div class="hero-visual" id="heroVisual">
-        <svg class="volcano" viewBox="0 0 600 320" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
-          <ellipse class="crater-glow" cx="300" cy="96" rx="130" ry="40" fill="#c9702f"/>
-          <path d="M0 320 L170 110 Q190 88 214 92 L386 92 Q410 88 430 110 L600 320Z" fill="url(#g-volcano)"/>
-          <path d="M214 92 Q300 118 386 92 Q300 104 214 92Z" fill="#e9a23b"/>
-          <path class="lava-flow" d="M250 96c-6 40-30 70-40 120-6 30-2 70-8 104h20c2-40 6-70 14-100 10-40 28-80 26-124Z" fill="url(#g-lava-flow)"/>
-          <path class="lava-flow lf2" d="M350 96c10 30 34 60 44 104 6 30 8 80 16 120h-16c-8-36-12-80-22-110-12-40-30-70-30-114Z" fill="url(#g-lava-flow)"/>
-          <path d="M120 240l40-30 20 20 30-26M430 220l30 24 26-18" stroke="#3a2a24" stroke-width="3" fill="none" opacity=".7"/>
-        </svg>
         <div class="smoke" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <div class="burger burger-hero" id="heroBurger" role="img" aria-label="Hamburguesa smash doble con queso fundido, salsa, pepinillos y cebolla"></div>
+        <figure class="hero-photo" id="heroBurger"><img src="img/fotos/hero.jpg" alt="Smash burger con huevo y papas, recién servida en Volcán Smash Burger" width="900" height="1600" fetchpriority="high"></figure>
         <div class="hero-sticker" aria-hidden="true">
           <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs>
             <text><textPath href="#circ">HECHA A FUEGO ALTO · HECHA A FUEGO ALTO · </textPath></text></svg>
@@ -427,16 +419,19 @@
       </div>
       <ol class="method-steps">
         <li class="method-step reveal">
+          <div class="method-img"><img src="img/fotos/metodo-carne.jpg" alt="Bolas de carne sobre la plancha antes del smash" loading="lazy" width="900" height="1600"></div>
           <span class="method-num">01</span>
           <h3>La carne</h3>
           <p>Carne premium, recién hecha para cada pedido. Nada de hamburguesas esperando: la tuya empieza cuando la pides.</p>
         </li>
         <li class="method-step reveal" style="--rd:.1s">
+          <div class="method-img"><img src="img/fotos/metodo-smash.jpg" alt="Carne aplastándose contra la plancha" loading="lazy" width="900" height="1600"></div>
           <span class="method-num">02</span>
           <h3>El smash</h3>
           <p>Contra la plancha a fuego alto y aplastada con fuerza. Así nace la costra crujiente que hace que una smash sea una smash.</p>
         </li>
         <li class="method-step reveal" style="--rd:.2s">
+          <div class="method-img"><img src="img/fotos/metodo-queso.jpg" alt="Smash burger con el queso fundido cayendo por los lados" loading="lazy" width="900" height="1600"></div>
           <span class="method-num">03</span>
           <h3>La erupción</h3>
           <p>Vuelta, queso encima y a fundir hasta que se derrama como lava. Y si pides La Volcánica en el local, llega a tu mesa con fuego.</p>
@@ -496,30 +491,14 @@
             <a class="btn btn-outline" href="tel:+34928424823">Llamar</a>
           </div>
         </div>
-        <div class="place-art" aria-hidden="true">
-          <svg viewBox="0 0 400 300">
-            <defs>
-              <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0v28" fill="none" stroke="rgba(244,237,228,.06)"/></pattern>
-              <radialGradient id="pin-glow"><stop offset="0" stop-color="#e9a23b" stop-opacity=".55"/><stop offset="1" stop-color="#e9a23b" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="300" fill="url(#grid)"/>
-            <path d="M-10 210C60 190 90 120 170 130s120 70 250 30" stroke="rgba(244,237,228,.14)" stroke-width="14" fill="none"/>
-            <path d="M120 -10c10 80 40 120 30 320" stroke="rgba(244,237,228,.1)" stroke-width="10" fill="none"/>
-            <path d="M260 -10c-20 90 10 150 60 320" stroke="rgba(244,237,228,.08)" stroke-width="8" fill="none"/>
-            <circle class="pin-pulse" cx="200" cy="150" r="70" fill="url(#pin-glow)"/>
-            <g class="pin" transform="translate(200 150)">
-              <path d="M0 0c-26-30-40-48-40-66a40 40 0 0 1 80 0c0 18-14 36-40 66Z" fill="#c9702f"/>
-              <circle cy="-66" r="16" fill="#0b0908"/>
-            </g>
-            <text x="200" y="196" text-anchor="middle" fill="#f4ede4" font-family="Anton, Impact, sans-serif" font-size="22" letter-spacing="2">C. GOURIÉ, 5</text>
-          </svg>
-        </div>
+        <div class="place-art"><img src="img/fotos/local.jpg" alt="Cartel de Volcán Smash Burger en el local de Arucas" loading="lazy" width="900" height="1600"></div>
       </div>
     </div>
   </section>
 
   <!-- ============ CTA FINAL ============ -->
   <section class="section club" id="fuego" aria-labelledby="clubTitle">
+    <div class="club-bg" aria-hidden="true"><img src="img/fotos/fuego.jpg" alt="" loading="lazy" width="900" height="1600"></div>
     <canvas class="embers" id="clubEmbers" aria-hidden="true"></canvas>
     <div class="container club-inner reveal">
       <img class="club-stamp" src="img/logo.png" alt="" width="150" height="150" loading="lazy">

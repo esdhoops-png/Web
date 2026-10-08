@@ -123,13 +123,6 @@
      --------------------------------------------------------- */
   const root = document.documentElement;
   const heroBurger = $('#heroBurger');
-  const heroLayers = makeBurger(heroBurger, { float: true });
-  // la hamburguesa se construye de abajo arriba
-  heroLayers.forEach((l, i) => {
-    const fromBottom = heroLayers.length - 1 - i;
-    const delay = i === 0 ? 1.25 : 0.25 + fromBottom * 0.14;
-    l.querySelector('.b-inner').style.setProperty('--ld', delay + 's');
-  });
 
   let started = false;
   const start = () => {
@@ -139,7 +132,7 @@
     root.classList.add('is-loaded');
     if (!reduced) {
       // chispazo cuando aterriza el pan superior
-      setTimeout(() => heroEmbers?.burst(90), 1850);
+      setTimeout(() => heroEmbers?.burst(70), 1200);
       setTimeout(() => heroEmbers?.burst(40), 500);
     }
   };
@@ -293,12 +286,7 @@
     mouse.cx = lerp(mouse.cx, mouse.x, 0.08);
     mouse.cy = lerp(mouse.cy, mouse.y, 0.08);
     heroBurger.style.transform =
-      `translate3d(${mouse.cx * 18}px, ${p * 120}px, 0) rotateX(${-mouse.cy * 10 + p * 18}deg) rotateY(${mouse.cx * 14}deg) rotate(${p * -8}deg) scale(${1 + p * 0.12})`;
-    const n = heroLayers.length;
-    heroLayers.forEach((l, i) => {
-      const off = (i - (n - 1) / 2) * p * 26;
-      l.style.transform = `translate3d(0, ${off}px, 0)`;
-    });
+      `translate3d(${mouse.cx * 14}px, ${p * 90}px, 0) rotateX(${-mouse.cy * 6}deg) rotateY(${mouse.cx * 8}deg) rotate(${p * -3}deg) scale(${1 - p * 0.06})`;
     return Math.abs(mouse.cx - mouse.x) > 0.001 || Math.abs(mouse.cy - mouse.y) > 0.001;
   }
 
@@ -505,15 +493,15 @@
      --------------------------------------------------------- */
   const INSTAGRAM = 'https://www.instagram.com/volcansmashburger/';
   const GRAM = [
-    { g: 'linear-gradient(135deg,#2a211d,#4a3a30)', v: burgerMarkup('v-hot', 0), t: 'La volcánica' },
-    { g: 'linear-gradient(135deg,#1c1715,#2f2622)', v: burgerMarkup('v-mojo', 0), t: 'Échale mojo' },
-    { g: 'linear-gradient(135deg,#3a2c22,#5a4230)', v: '<svg viewBox="0 0 200 200"><use href="#i-nachos"/></svg>', t: 'Nachos Volcán' },
-    { g: 'linear-gradient(135deg,#241c19,#3d2f28)', v: burgerMarkup('', 1), t: 'La cochina' },
-    { g: 'linear-gradient(135deg,#2b2420,#4a3528)', v: '<svg viewBox="0 0 200 200"><use href="#i-tequenos"/></svg>', t: 'Tequeños' },
-    { g: 'linear-gradient(135deg,#e8dccb,#f4ede4)', v: burgerMarkup('v-truffle', 0), t: 'La trufada' }
+    { img: 'img/fotos/gal-1.jpg', t: '#VolcánSmash', alt: 'Smash burger con queso fundido y papas' },
+    { img: 'img/fotos/gal-2.jpg', t: '#RecienHecha', alt: 'Smash burger con rúcula y batata' },
+    { img: 'img/fotos/gal-3.jpg', t: '#Batata', alt: 'Ración de batata frita en su caja' },
+    { img: 'img/fotos/gal-4.jpg', t: '#ParaCompartir', alt: 'Varias smash burgers con papas en la barra' },
+    { img: 'img/fotos/gal-5.jpg', t: '#ParaLlevar', alt: 'Bolsa de Volcán Smash Burger con el texto «Cuidado, que esto está caliente»' },
+    { img: 'img/fotos/gal-6.jpg', t: '#ElEquipo', alt: 'Camarero de Volcán sirviendo smash burgers' }
   ];
   $('#gram').innerHTML = GRAM.map((x, i) =>
-    `<a href="${INSTAGRAM}" target="_blank" rel="noopener" class="reveal" style="--g:${x.g};--rd:${i * 0.06}s" aria-label="${x.t} en Instagram">${x.v}<span>${x.t}</span></a>`).join('');
+    `<a href="${INSTAGRAM}" target="_blank" rel="noopener" class="reveal" style="--rd:${i * 0.06}s" aria-label="${x.alt}. Ver en Instagram"><img src="${x.img}" alt="${x.alt}" loading="lazy" width="900" height="1600"><span>${x.t}</span></a>`).join('');
 
   /* ---------------------------------------------------------
      REVEALS + CONTADORES
