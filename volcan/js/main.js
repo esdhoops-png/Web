@@ -296,27 +296,47 @@
   const build = $('#anatomia');
   const buildStage = $('#buildStage');
   const buildBurger = $('#buildBurger');
-  const buildLayers = makeBurger(buildBurger, { tags: true });
+  // Piezas recortadas de una foto real (img/fotos/capa-*.webp, 800×630).
+  // x / y = punto señalado, en píxeles de la foto original (recorte desde 180, 490).
+  const PARTS = [
+    { part: 'top', x: 620, y: 680, name: 'Pan brioche', desc: LAYERS[0].desc, meta: LAYERS[0].meta },
+    { part: 'fill', x: 335, y: 752, name: 'Pepinillo', desc: LAYERS[4].desc, meta: LAYERS[4].meta },
+    { part: 'fill', x: 680, y: 950, name: 'Huevo frito', desc: 'Huevo frito a la plancha, con los bordes crujientes, encima de la carne.', meta: 'Recién hecho' },
+    { part: 'fill', x: 450, y: 940, name: 'Carne smash', desc: LAYERS[1].desc, meta: LAYERS[1].meta },
+    { part: 'fill', x: 830, y: 930, name: 'Queso fundido', desc: LAYERS[2].desc, meta: LAYERS[2].meta },
+    { part: 'bot', x: 600, y: 1065, name: 'Pan inferior', desc: LAYERS[6].desc, meta: LAYERS[6].meta }
+  ];
+  const NP = PARTS.length;
+  const pbWhole = $('.pb-whole', buildBurger);
+  const total = String(NP).padStart(2, '0');
+  const pieces = {};
+  $$('.pb-layer', buildBurger).forEach((el) => { pieces[el.dataset.part] = el; });
+  const dots = PARTS.map((s, i) => {
+    const d = document.createElement('span');
+    d.className = 'pb-dot' + (s.x > 700 ? ' is-left' : '');
+    d.style.left = ((s.x - 180) / 8) + '%';
+    d.style.top = ((s.y - 490) / 6.3) + '%';
+    d.innerHTML = `<i></i><span class="pb-label"><b>${String(i + 1).padStart(2, '0')}</b>${s.name}</span>`;
+    pieces[s.part].appendChild(d);
+    return d;
+  });
   const buildPanel = $('.build-panel');
   const bIndex = $('#buildIndex'), bName = $('#buildName'), bDesc = $('#buildDesc'), bMeta = $('#buildMeta');
   const bDone = $('#buildDone'), bBar = $('#buildBar'), bHalo = $('.build-halo');
   const stepsEl = $('#buildSteps');
-  stepsEl.innerHTML = LAYERS.map(() => '<li></li>').join('');
+  stepsEl.innerHTML = PARTS.map(() => '<li></li>').join('');
   const steps = $$('li', stepsEl);
-  const B = { p: 0, target: 0, gap: 60, active: -2 };
+  const B = { p: 0, target: 0, w: 400, active: -2 };
 
   function measureBuild() {
     const r = buildStage.getBoundingClientRect();
     const mobile = window.innerWidth <= 900;
-    // proporción alto/ancho de la burger montada
-    buildBurger.style.setProperty('--bw', '400px');
-    const ratio = buildBurger.offsetHeight / 400;
-    const spread = mobile ? 0.62 : 0.95;           // hueco total entre capas, relativo al ancho
+    const ratio = 630 / 800;
+    const spread = 0.46;                            // hueco total entre piezas, relativo al ancho
     const availH = r.height * (mobile ? 0.86 : 0.84);
-    const maxW = mobile ? r.width * 0.78 : Math.min(r.width * 0.56, 440);
-    const w = Math.max(160, Math.min(maxW, availH / (ratio + spread)));
-    buildBurger.style.setProperty('--bw', w + 'px');
-    B.gap = (w * spread) / (LAYERS.length - 1);
+    const maxW = mobile ? r.width * 0.96 : Math.min(r.width * 0.78, 620);
+    B.w = Math.max(200, Math.min(maxW, availH / (ratio + spread)));
+    buildBurger.style.setProperty('--bw', B.w + 'px');
   }
 
   function setPanel(idx) {
@@ -326,28 +346,27 @@
     void buildPanel.offsetWidth;
     buildPanel.classList.add('swap');
     if (idx < 0) {
-      bIndex.textContent = '00 / 07';
+      bIndex.textContent = `00 / ${total}`;
       bName.textContent = 'Haz scroll';
-      bDesc.textContent = 'Desmonta la burger capa a capa y descubre qué hay dentro de cada erupción.';
+      bDesc.textContent = 'Haz scroll y ábrela: esto es lo que hay dentro de una smash de Volcán.';
       bMeta.textContent = '';
-    } else if (idx >= LAYERS.length) {
-      bIndex.textContent = '07 / 07';
+    } else if (idx >= NP) {
+      bIndex.textContent = `${total} / ${total}`;
       bName.textContent = 'Todo junto';
-      bDesc.textContent = 'Siete capas, un bocado. Así suena una smash bien hecha: crac, y después lava.';
-      bMeta.textContent = 'Lista en menos de 4 minutos';
+      bDesc.textContent = 'Todo en un bocado. Así suena una smash bien hecha: crac, y después lava.';
+      bMeta.textContent = 'Recién hecha, a fuego alto';
     } else {
-      const l = LAYERS[idx];
-      bIndex.textContent = `${String(idx + 1).padStart(2, '0')} / 07`;
-      bName.textContent = l.name;
-      bDesc.textContent = l.desc;
-      bMeta.textContent = l.meta;
+      const s = PARTS[idx];
+      bIndex.textContent = `${String(idx + 1).padStart(2, '0')} / ${total}`;
+      bName.textContent = s.name;
+      bDesc.textContent = s.desc;
+      bMeta.textContent = s.meta;
     }
     steps.forEach((s, i) => s.classList.toggle('on', i <= idx));
-    buildLayers.forEach((l, i) => {
-      l.classList.toggle('is-active', i === idx);
-      l.classList.toggle('is-shown', i <= idx && idx < LAYERS.length);
-    });
-    bDone.classList.toggle('on', idx >= LAYERS.length);
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    const part = idx >= 0 && idx < NP ? PARTS[idx].part : '';
+    Object.entries(pieces).forEach(([k, el]) => el.classList.toggle('is-active', k === part));
+    bDone.classList.toggle('on', idx >= NP);
   }
 
   function readBuildTarget() {
@@ -362,22 +381,20 @@
     if (Math.abs(B.p - B.target) < 0.0005) B.p = B.target;
     const p = B.p;
     const e = smooth(0.03, 0.16, p) * (1 - smooth(0.86, 0.95, p));
-    const n = LAYERS.length;
-    const stepStart = 0.12, stepLen = 0.105;
-    const idx = p < stepStart ? -1 : Math.min(n, Math.floor((p - stepStart) / stepLen));
+    const stepStart = 0.13, stepLen = 0.12;
+    const idx = p < stepStart ? -1 : Math.min(NP, Math.floor((p - stepStart) / stepLen));
     setPanel(idx);
-    buildBurger.classList.toggle('is-exploded', e > 0.5 && idx >= 0 && idx < n);
+    buildBurger.classList.toggle('is-exploded', e > 0.5 && idx >= 0 && idx < NP);
 
-    buildLayers.forEach((l, i) => {
-      const y = (i - (n - 1) / 2) * B.gap * e;
-      const rot = (i % 2 ? 1 : -1) * 2.5 * e;
-      const act = i === idx ? 1 : 0;
-      const x = act * (i % 2 ? -1 : 1) * 14 * e;
-      l.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rot}deg) scale(${1 + act * 0.05})`;
-    });
+    const gT = B.w * 0.3 * e, gB = B.w * 0.12 * e, c = (gT - gB) / 2;
+    pbWhole.style.opacity = 1 - clamp(e * 6);
+    buildBurger.classList.toggle('is-open', e > 0.08);
+    pieces.top.style.transform = `translate3d(${e * B.w * 0.02}px, ${c - gT}px, 0) rotate(${-5 * e}deg)`;
+    pieces.fill.style.transform = `translate3d(${-e * B.w * 0.015}px, ${c}px, 0) rotate(${1.5 * e}deg)`;
+    pieces.bot.style.transform = `translate3d(0, ${c + gB}px, 0) rotate(${-1 * e}deg)`;
     // al final, pequeño "smash" de la burger montada
     const land = smooth(0.93, 0.97, p);
-    buildBurger.style.transform = `rotate(${(1 - e) * -2 + e * 2}deg) scale(${1 + land * 0.04})`;
+    buildBurger.style.transform = `scale(${1 + land * 0.04})`;
     bHalo.style.transform = `scale(${0.9 + e * 0.35})`;
     bBar.style.transform = `scaleX(${p})`;
     return B.p !== B.target;
