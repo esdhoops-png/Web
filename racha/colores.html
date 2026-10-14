@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Racha: color de acento</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una ficha por opción, cada una con la misma maqueta (web clara, post, modo oscuro) para comparar sin ruido. */
+:root {
+  --paper: #F3F4EF; --surface: #FFFFFF; --ink: #13202E; --muted: #5B6672; --line: #DADDD4;
+  /* Colores fijos de marca para las maquetas (no cambian con el tema) */
+  --b-paper: #F3F4EF; --b-ink: #13202E; --b-night: #0F161F; --b-cell: #E3E6DD; --b-cell-dk: #1E2936; --b-muted: #5B6672;
+  --display: 'Bricolage Grotesque', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'DM Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0F161F; --surface: #161F2B; --ink: #EEF0EA; --muted: #9AA5B1; --line: #253142; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0F161F; --surface: #161F2B; --ink: #EEF0EA; --muted: #9AA5B1; --line: #253142; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 48px 64px; }
+h1, h2, h3 { font-family: var(--display); letter-spacing: -0.04em; line-height: 1.02; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+header h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; margin-top: 14px; }
+header p { color: var(--muted); font-size: 18px; max-width: 38em; margin-top: 16px; }
+
+.opts { display: grid; gap: 28px; margin-top: 40px; }
+.opt { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 24px; display: grid; gap: 20px; min-width: 0; }
+.opt__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 20px; }
+.opt__head h2 { font-size: 30px; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+.opt__head h2 i { width: 22px; height: 22px; border-radius: 7px; background: var(--a); flex: none; }
+.opt__head code { font: 400 14px/1 var(--mono); color: var(--muted); }
+.opt__head .tag { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.opt__head .tag.rec { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.opt__note { color: var(--muted); max-width: 60em; }
+
+.row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 14px; }
+.row > * { min-width: 0; border-radius: 16px; overflow: hidden; }
+@media (max-width: 900px) { .row { grid-template-columns: 1fr 1fr; } .row > .web { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+
+/* Maqueta web clara */
+.web { background: var(--b-paper); color: var(--b-ink); padding: 22px; display: grid; gap: 16px; border: 1px solid var(--line); }
+.mini-logo { display: inline-flex; align-items: center; gap: 7px; font: 800 18px/1 var(--display); letter-spacing: -0.05em; }
+.mini-logo span { display: inline-flex; gap: 2px; }
+.mini-logo span b { width: 7px; height: 7px; border-radius: 2px; background: currentColor; }
+.mini-logo span b:last-child { background: var(--a); }
+.web h3 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; }
+.web h3 em { font-style: normal; color: var(--a-text); }
+.web .btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pill { font: 600 13px/1 var(--body); padding: 11px 15px; border-radius: 99px; }
+.pill--ink { background: var(--b-ink); color: var(--b-paper); }
+.pill--a { background: var(--a); color: var(--a-on); }
+.chk { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.chk i { width: 20px; height: 20px; border-radius: 6px; background: var(--a); display: grid; place-items: center; color: var(--a-on); font: 700 12px/1 var(--body); font-style: normal; }
+.grid { display: grid; grid-template-columns: repeat(14, 1fr); gap: 3px; }
+.grid i { aspect-ratio: 1; border-radius: 2px; background: var(--b-cell); max-width: 100%; }
+.grid i.d { background: var(--a); }
+
+/* Post 4:5 */
+.post { background: var(--a); color: var(--a-on); padding: 20px; aspect-ratio: 4 / 5; max-width: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+.post .eyebrow { color: inherit; opacity: .8; }
+.post h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 800; }
+.post .mini-logo span b:last-child { background: currentColor; opacity: .55; }
+
+/* Maqueta modo oscuro / story */
+.dark { background: var(--b-night); color: var(--b-paper); padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; aspect-ratio: 4 / 5; max-width: 100%; }
+.dark .mini-logo span b:last-child { background: var(--a-dk); }
+.dark .num { font: 800 64px/0.9 var(--display); letter-spacing: -0.05em; color: var(--a-dk); }
+.dark p { font-size: 14px; opacity: .75; }
+.dark .grid i { background: var(--b-cell-dk); }
+.dark .grid i.d { background: var(--a-dk); }
+
+.contrast { display: flex; flex-wrap: wrap; gap: 8px 18px; font: 400 13px/1.4 var(--mono); color: var(--muted); }
+.contrast b { font-weight: 500; color: var(--ink); }
+
+footer { margin-top: 40px; color: var(--muted); font-size: 15px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Racha · Elección del color de acento</p>
+    <h1>Cuatro acentos. Uno se queda.</h1>
+    <p>Todo lo demás de la marca no cambia: fondo hueso, tinta azul noche y las mismas tipografías. Solo cambia el color fuerte, el que marca lo que está hecho.</p>
+  </header>
+  <div class="opts" id="opts"></div>
+  <footer>Dime cuál prefieres (A, B, C o D) y lo aplico a la web, al logo, al manual de marca y a las plantillas.</footer>
+</div>
+
+<script>
+(function () {
+  var OPTS = [
+    { k: 'A', name: 'Naranja amanecer', a: '#FF5A1F', text: '#E2470E', on: '#13202E', dk: '#FF7040', tag: 'Actual',
+      note: 'Mucha energía y muy visible. Muy parecido al naranja de Strava (#FC4C02), así que en el sector deporte y hábitos se confunde con facilidad.',
+      c: 'Texto tinta sobre acento: 5,3:1 · Blanco sobre acento: 3,1:1 (se lee mal) · Acento sobre hueso: 2,8:1 (solo títulos grandes)' },
+    { k: 'B', name: 'Coral', a: '#FF6F5B', text: '#E5533F', on: '#13202E', dk: '#FF8A78', tag: 'Recomendado', rec: true,
+      note: 'Mantiene la energía del naranja pero es más cálido y amable. Se separa de Strava y encaja con salud y cuidado personal sin parecer médico.',
+      c: 'Texto tinta sobre acento: 6,0:1 · Acento sobre hueso: 2,5:1 (solo títulos grandes)' },
+    { k: 'C', name: 'Azul eléctrico', a: '#3D5AFE', text: '#3D5AFE', on: '#FFFFFF', dk: '#8193FF', tag: 'Más app',
+      note: 'Moderno, tecnológico y muy distinto dentro del sector. Transmite más productividad y disciplina que calidez.',
+      c: 'Texto blanco sobre acento: 5,1:1 · Acento sobre hueso: 4,6:1 (vale también para texto)' },
+    { k: 'D', name: 'Verde menta', a: '#1FB57A', text: '#11875A', on: '#13202E', dk: '#3DD598', tag: 'Clásico',
+      note: 'El color que todo el mundo asocia a "saludable". Funciona a la primera, pero es el más visto y cuesta destacar.',
+      c: 'Texto tinta sobre acento: 6,2:1 · Acento sobre hueso: 2,4:1 (solo títulos grandes)' }
+  ];
+  function grid(n, filled) {
+    var s = '', seed = 3;
+    for (var i = 0; i < n; i++) { seed = (seed * 9301 + 49297) % 233280; s += '<i class="' + ((seed / 233280) < filled + (i % 14) / 30 ? 'd' : '') + '"></i>'; }
+    return s;
+  }
+  var logo = '<span class="mini-logo"><span><b></b><b></b><b></b><b></b></span>racha</span>';
+  document.getElementById('opts').innerHTML = OPTS.map(function (o) {
+    return '<article class="opt" style="--a:' + o.a + ';--a-text:' + o.text + ';--a-on:' + o.on + ';--a-dk:' + o.dk + '">' +
+      '<div class="opt__head"><h2><i></i>' + o.k + ' · ' + o.name + '</h2>' +
+      '<div style="display:flex;gap:10px;align-items:center"><code>' + o.a + '</code><span class="tag' + (o.rec ? ' rec' : '') + '">' + o.tag + '</span></div></div>' +
+      '<p class="opt__note">' + o.note + '</p>' +
+      '<div class="row">' +
+        '<div class="web">' + logo +
+          '<h3>Hoy cuenta.<br>Mañana, <em>también.</em></h3>' +
+          '<div class="btns"><span class="pill pill--ink">Marcar mi día</span><span class="pill pill--a">Me apunto</span><span class="chk"><i>✓</i>Agua al despertar</span></div>' +
+          '<div class="grid" aria-hidden="true">' + grid(56, .35) + '</div>' +
+        '</div>' +
+        '<div class="post"><span class="eyebrow">Hábito 04 · Nutrir</span><h3>Un vaso de agua antes del café.</h3>' + logo + '</div>' +
+        '<div class="dark">' + logo + '<div><div class="num">21</div><p>días de racha</p></div><div class="grid" aria-hidden="true">' + grid(28, .45) + '</div></div>' +
+      '</div>' +
+      '<p class="contrast"><span><b>Contraste</b></span><span>' + o.c + '</span></p>' +
+    '</article>';
+  }).join('');
+})();
+</script>
+</body>
+</html>
