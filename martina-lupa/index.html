@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Martina Lupa Investiga</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Andika:wght@400;700&display=swap">
+<style>
+/* Layout: cuaderno de campo de una detective. Escenario 16:9 arriba, subtítulos y cuaderno de pistas debajo, álbum de pegatinas al final. */
+:root{
+  --paper:#eaf5ef;      /* papel verde menta del cuaderno */
+  --card:#ffffff;
+  --ink:#17324a;        /* tinta azul */
+  --muted:#4f6b7e;
+  --line:#cde2d6;
+  --leaf:#2e8b57;
+  --sun:#ffc93c;
+  --on-sun:#17324a;
+  --coral:#e2553f;
+  --ok:#2e8b57;
+  --shadow:0 10px 30px rgba(23,50,74,.12);
+  --f-display:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Andika","Verdana",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1e2b; --card:#16293a; --ink:#e9f2f7; --muted:#a3bccb; --line:#24425a;
+    --leaf:#5cc68d; --coral:#ff7a63; --ok:#5cc68d; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1e2b; --card:#16293a; --ink:#e9f2f7; --muted:#a3bccb; --line:#24425a;
+  --leaf:#5cc68d; --coral:#ff7a63; --ok:#5cc68d; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:20px 48px;
+  background-image:radial-gradient(var(--line) 1px, transparent 1px); background-size:22px 22px;
+}
+.wrap{max-width:980px; margin:0 auto; display:grid; gap:20px}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; line-height:1.1}
+
+/* Cabecera */
+.head{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.badge{width:68px; height:68px; flex:none}
+.head-text{min-width:0; flex:1}
+.head h1{font-size:clamp(2rem, 6vw, 3.1rem); font-weight:700; letter-spacing:-.01em}
+.head h1 span{color:var(--coral)}
+.head p{margin:4px 0 0; color:var(--muted); max-width:60ch}
+.eyebrow{font-family:var(--f-display); text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; font-weight:600; color:var(--leaf)}
+
+/* Reproductor */
+.player{background:var(--card); border:2px solid var(--line); border-radius:24px; padding:14px; box-shadow:var(--shadow); display:grid; gap:12px}
+.stage{position:relative; aspect-ratio:16/9; width:100%; max-width:100%; border-radius:16px; overflow:hidden; background:#7cc8ef; isolation:isolate}
+.stage svg.scene{display:block; width:100%; height:100%; transition:opacity .35s}
+.stage.fading svg.scene{opacity:0}
+.ov{position:absolute; inset:0; display:flex; pointer-events:none}
+.ov > *{pointer-events:auto}
+.ov-title{flex-direction:column; justify-content:flex-end; align-items:flex-start; gap:8px; padding:clamp(14px,4%,32px);
+  background:linear-gradient(to top, rgba(10,25,40,.78), rgba(10,25,40,.15) 55%, transparent)}
+.ov-title .eyebrow{color:#ffd66b}
+.ov-title h2{color:#fff; font-size:clamp(1.5rem, 5.4vw, 3rem); font-weight:700; text-shadow:0 3px 0 rgba(0,0,0,.25)}
+.ov-fact{justify-content:flex-end; align-items:flex-start; padding:3%}
+.fact-card{background:#fffbea; color:#17324a; border:4px solid #ffc93c; border-radius:18px; padding:10px 14px; max-width:48%;
+  font-family:var(--f-display); font-weight:600; font-size:clamp(.85rem, 2.3vw, 1.35rem); line-height:1.2; animation:pop .6s cubic-bezier(.3,1.5,.5,1) both; transform-origin:top right}
+.fact-card .eyebrow{display:block; color:#c2410c; margin-bottom:4px; font-size:clamp(.6rem,1.5vw,.8rem)}
+.ov-fin{flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(10,25,40,.55); text-align:center; padding:12px}
+.sticker{width:clamp(96px, 26%, 190px); aspect-ratio:1; border-radius:50%; background:#fffbea; border:6px dashed #ffc93c; display:grid; place-items:center;
+  animation:stick .9s cubic-bezier(.3,1.6,.5,1) both; box-shadow:0 8px 0 rgba(0,0,0,.18)}
+.sticker svg{width:82%; height:82%}
+.stamp{margin:0; color:#fff; font-family:var(--f-display); font-weight:700; font-size:clamp(1.3rem, 4.6vw, 2.4rem); transform:rotate(-4deg); text-shadow:0 3px 0 rgba(0,0,0,.3)}
+.fin-row{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+@keyframes stick{from{transform:scale(0) rotate(-40deg)}to{transform:none}}
+
+.confetti{position:absolute; top:-12px; width:10px; height:14px; border-radius:2px; z-index:5; animation:fall 2.2s ease-in forwards}
+@keyframes fall{to{transform:translateY(620px) rotate(720deg); opacity:0}}
+
+/* Subtítulos */
+.subs{display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:start; padding:6px 4px 2px; min-height:7.2em}
+.who{font-family:var(--f-display); font-weight:600; font-size:.9rem; padding:3px 12px; border-radius:999px; color:#17324a; white-space:nowrap; align-self:start; margin-top:4px}
+.line{margin:0; font-size:clamp(1.08rem, 2.5vw, 1.4rem); line-height:1.45; min-width:0}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* Pregunta */
+.quiz{grid-column:1 / -1; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px}
+.opt{font:inherit; color:var(--ink); background:var(--paper); border:3px solid var(--line); border-radius:18px; padding:8px 6px 10px; cursor:pointer;
+  display:grid; justify-items:center; gap:2px; transition:transform .15s, border-color .15s}
+.opt:hover{transform:translateY(-3px); border-color:var(--sun)}
+.opt:focus-visible{outline:4px solid var(--sun); outline-offset:2px}
+.opt svg{width:100%; max-width:120px; height:auto; aspect-ratio:160/130}
+.opt span{font-family:var(--f-display); font-weight:600; font-size:clamp(.95rem, 2.4vw, 1.15rem)}
+.opt.wrong{opacity:.45; animation:shake .45s; cursor:not-allowed}
+.opt.right{border-color:var(--ok); background:color-mix(in srgb, var(--ok) 14%, var(--paper))}
+.hint{grid-column:1 / -1; margin:0; color:var(--coral); font-weight:700; min-height:1.5em}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+
+/* Controles */
+.controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.btn{font-family:var(--f-display); font-weight:600; font-size:1.05rem; border:0; border-radius:999px; padding:10px 20px; cursor:pointer;
+  background:var(--sun); color:var(--on-sun); box-shadow:0 4px 0 #d79b0e; transition:transform .1s, box-shadow .1s}
+.btn:active{transform:translateY(3px); box-shadow:0 1px 0 #d79b0e}
+.btn:focus-visible,.pill:focus-visible,.ep:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+.btn[disabled]{opacity:.4; cursor:not-allowed}
+.btn.ghost{background:transparent; color:var(--ink); box-shadow:inset 0 0 0 2px var(--line)}
+.btn.big{font-size:clamp(1rem, 2.6vw, 1.3rem); padding:12px 26px}
+.dots{display:flex; gap:5px; flex:1; justify-content:center; min-width:0; flex-wrap:wrap}
+.dot{width:9px; height:9px; border-radius:50%; background:var(--line)}
+.dot.on{background:var(--leaf)}
+.dot.now{background:var(--sun); transform:scale(1.4)}
+.toggles{display:flex; gap:8px; flex-wrap:wrap}
+.pill{font:inherit; font-size:.9rem; font-weight:700; color:var(--muted); background:transparent; border:2px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer}
+.pill[aria-pressed="true"]{color:var(--ink); border-color:var(--leaf); background:color-mix(in srgb, var(--leaf) 14%, transparent)}
+
+/* Cuaderno de pistas */
+.notebook{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; border-top:2px dashed var(--line); padding-top:12px}
+.notebook h3{font-size:1rem; font-weight:600; writing-mode:horizontal-tb}
+.clues{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px}
+.clue{display:flex; align-items:center; gap:8px; min-width:0; border:2px dashed var(--line); border-radius:14px; padding:6px; min-height:64px}
+.clue svg{width:48px; height:48px; flex:none}
+.clue p{margin:0; font-size:.88rem; line-height:1.25; min-width:0}
+.clue.empty{justify-content:center; color:var(--muted); font-family:var(--f-display); font-size:1.4rem}
+.clue.found{border-style:solid; border-color:var(--sun); animation:pop .5s cubic-bezier(.3,1.5,.5,1) both}
+
+/* Capítulos */
+.season h2{font-size:1.5rem; margin-bottom:10px}
+.eps{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:12px}
+.ep{font:inherit; color:var(--ink); text-align:left; background:var(--card); border:2px solid var(--line); border-radius:18px; padding:10px; cursor:pointer; display:grid; gap:6px; align-content:start; min-width:0}
+.ep:hover{border-color:var(--sun)}
+.ep[aria-current="true"]{border-color:var(--leaf); box-shadow:0 0 0 3px color-mix(in srgb, var(--leaf) 30%, transparent)}
+.ep .num{font-family:var(--f-display); font-weight:700; color:var(--coral); font-size:.85rem; letter-spacing:.05em; text-transform:uppercase}
+.ep .ttl{font-family:var(--f-display); font-weight:600; font-size:1.05rem; line-height:1.15}
+.ep .hab{color:var(--muted); font-size:.82rem}
+.ep .stk{width:100%; aspect-ratio:160/130; border-radius:12px; background:var(--paper); display:grid; place-items:center}
+.ep .stk svg{width:80%; height:auto}
+.ep .stk.locked svg{filter:brightness(0); opacity:.18}
+.ep .stk.locked{position:relative}
+.ep .stk.locked::after{content:"?"; position:absolute; font-family:var(--f-display); font-weight:700; font-size:2rem; color:var(--muted)}
+.foot{color:var(--muted); font-size:.85rem; text-align:center}
+
+@media (max-width:760px){
+  .eps{grid-template-columns:1fr}
+  .ep{grid-template-columns:84px 1fr; align-items:center; column-gap:12px}
+  .ep .stk{grid-row:1 / span 3}
+  .notebook{grid-template-columns:1fr}
+  .clues{grid-template-columns:1fr}
+  .subs{grid-template-columns:1fr}
+}
+
+/* ===== Animaciones del escenario ===== */
+.ent-pop,.idle-wiggle,.idle-crawl,.talking,.blink,.pulse,.spin,.sway,.splash{transform-box:fill-box}
+.ent-walk{animation:walk 1.5s ease-out both}
+.ent-walkR{animation:walkR 1.5s ease-out both}
+.ent-pop{animation:pop .75s cubic-bezier(.3,1.5,.5,1) both; transform-origin:50% 100%}
+.ent-fly{animation:fly 1.6s ease-out both}
+@keyframes walk{from{transform:translateX(-340px)}to{transform:none}}
+@keyframes walkR{from{transform:translateX(340px)}to{transform:none}}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes fly{from{transform:translate(300px,-240px) rotate(20deg)}to{transform:none}}
+.idle-bob{animation:bob 1.8s ease-in-out infinite}
+.idle-hover{animation:hover 2.6s ease-in-out infinite}
+.idle-wiggle{animation:wig 1.3s ease-in-out infinite; transform-origin:50% 100%}
+.idle-scoot{animation:scoot 5s ease-in-out infinite alternate}
+.idle-crawl{animation:crawl 1.2s ease-in-out infinite; transform-origin:0% 100%}
+.idle-swim{animation:swim 3s ease-in-out infinite}
+.idle-jump{animation:jump .9s ease-in-out 2}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes hover{50%{transform:translateY(-16px)}}
+@keyframes wig{25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+@keyframes scoot{0%{transform:translateX(0)}20%{transform:translate(20px,-3px)}40%{transform:translateX(40px)}60%{transform:translate(70px,-3px)}100%{transform:translateX(110px)}}
+@keyframes crawl{50%{transform:scaleX(.88) translateY(-3px)}}
+@keyframes swim{50%{transform:translate(18px,-8px)}}
+@keyframes jump{40%{transform:translateY(-34px)}70%{transform:translateY(0)}}
+.talking{animation:talk .42s ease-in-out infinite; transform-origin:50% 100%}
+@keyframes talk{50%{transform:scaleY(1.035)}}
+.blink{animation:blink 4.6s infinite; transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.arm{transform-box:view-box; transform-origin:20px -90px; animation:arm 2.2s ease-in-out infinite}
+@keyframes arm{50%{transform:rotate(-10deg)}}
+.wingL{transform-box:view-box; transform-origin:-26px -60px; animation:wingL .45s ease-in-out infinite alternate}
+.wingR{transform-box:view-box; transform-origin:26px -60px; animation:wingR .45s ease-in-out infinite alternate}
+@keyframes wingL{to{transform:rotate(22deg)}}
+@keyframes wingR{to{transform:rotate(-22deg)}}
+.batL{transform-box:view-box; transform-origin:-8px -38px; animation:batL .22s ease-in-out infinite alternate}
+.batR{transform-box:view-box; transform-origin:8px -38px; animation:batR .22s ease-in-out infinite alternate}
+@keyframes batL{from{transform:rotate(-18deg)}to{transform:rotate(16deg)}}
+@keyframes batR{from{transform:rotate(18deg)}to{transform:rotate(-16deg)}}
+.flutter{transform-box:view-box; transform-origin:0px -40px; animation:flutter .28s ease-in-out infinite alternate}
+@keyframes flutter{to{transform:scaleX(.3)}}
+.bugwing{transform-box:view-box; transform-origin:6px -50px; animation:bugwing .12s linear infinite alternate}
+@keyframes bugwing{to{transform:rotate(-14deg)}}
+.glow{animation:glow 1.6s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.25}50%{opacity:1}}
+.twinkle{animation:tw 2.6s ease-in-out infinite}
+@keyframes tw{50%{opacity:.2}}
+.drift{animation:drift 16s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translateX(70px)}}
+.flow{animation:flow 2.6s linear infinite}
+@keyframes flow{to{transform:translateX(80px)}}
+.pulse{animation:pulse 3s ease-in-out infinite; transform-origin:center}
+@keyframes pulse{50%{transform:scale(1.15)}}
+.spin{animation:spin 9s linear infinite; transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ff{animation:ff 3.4s ease-in-out infinite}
+@keyframes ff{0%,100%{opacity:.15; transform:translate(0,0)}35%{opacity:1}50%{transform:translate(14px,-18px)}70%{opacity:.2}}
+.across{animation:across 6s linear infinite}
+@keyframes across{0%{transform:translate(-160px,40px)}50%{transform:translate(420px,-30px)}100%{transform:translate(980px,30px)}}
+.flit{animation:flit 8s ease-in-out infinite alternate}
+@keyframes flit{25%{transform:translate(60px,-40px)}50%{transform:translate(-30px,-80px)}75%{transform:translate(40px,-20px)}100%{transform:translate(-50px,10px)}}
+.sway{animation:sway 3s ease-in-out infinite; transform-origin:50% 0%}
+@keyframes sway{50%{transform:rotate(6deg)}}
+.splash{animation:splash 1.4s ease-out infinite; transform-origin:50% 100%}
+@keyframes splash{0%{transform:scale(.2); opacity:1}100%{transform:scale(1.2) translateY(-20px); opacity:0}}
+.foam{animation:foam 3s ease-in-out infinite}
+@keyframes foam{50%{opacity:.25; transform:translateY(5px)}}
+.flicker{animation:flicker 2.5s ease-in-out infinite}
+@keyframes flicker{50%{opacity:.7}}
+.qm{animation:hover 1.6s ease-in-out infinite}
+
+@media (prefers-reduced-motion: reduce){
+  .stage *, .fact-card, .sticker, .clue.found{animation:none !important}
+  .stage svg.scene{transition:none}
+}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <svg class="badge" viewBox="0 0 68 68" aria-hidden="true">
+      <circle cx="28" cy="28" r="22" fill="#cfefff" stroke="#ffc93c" stroke-width="7"/>
+      <path d="M16 24 Q20 14 30 14" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M44 44 L62 62" stroke="#e2553f" stroke-width="10" stroke-linecap="round"/>
+      <path d="M21 33 q3 -6 7 0 q4 -6 7 0 q-7 7 -14 0z" fill="#17324a" opacity=".8"/>
+    </svg>
+    <div class="head-text">
+      <p class="eyebrow">Serie animada · Temporada 1 · 5 capítulos</p>
+      <h1>Martina <span>Lupa</span> investiga</h1>
+      <p>Martina tiene siete años, una lupa de detective y un amigo búho que se llama Bruno. En cada capítulo hay un misterio con animales: mira, busca las pistas y ayuda a Martina a descubrir quién es.</p>
+    </div>
+  </header>
+
+  <section class="player" aria-label="Reproductor de la serie">
+    <div class="stage" id="stage">
+      <svg class="scene" id="sceneSvg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Escena animada"></svg>
+      <div class="ov" id="overlay"></div>
+    </div>
+
+    <div class="subs" id="subs">
+      <span class="who" id="who">Narrador</span>
+      <p class="line" id="line" aria-hidden="true"></p>
+      <p class="sr" id="lineSr" aria-live="polite"></p>
+    </div>
+
+    <div class="controls">
+      <button class="btn ghost" id="prev" type="button" aria-label="Escena anterior">◀ Atrás</button>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <button class="btn" id="next" type="button">Siguiente ▶</button>
+    </div>
+    <div class="controls">
+      <div class="toggles">
+        <button class="pill" id="tVoice" type="button" aria-pressed="true">Voz narradora</button>
+        <button class="pill" id="tAuto" type="button" aria-pressed="true">Pasar escenas solo</button>
+      </div>
+    </div>
+
+    <div class="notebook">
+      <h3>Cuaderno de pistas</h3>
+      <div class="clues" id="clues"></div>
+    </div>
+  </section>
+
+  <section class="season" aria-labelledby="capTitle">
+    <h2 id="capTitle">Capítulos y álbum de pegatinas</h2>
+    <div class="eps" id="eps"></div>
+  </section>
+
+  <p class="foot">Consejo para mayores: la voz usa el lector del navegador. Si no se oye, sube el volumen o desactiva "Voz narradora" y leed juntos los subtítulos.</p>
+</div>
+
+<script>
+(() => {
+'use strict';
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Personajes ---------- */
+const DRAW = {
+  martina: () => `
+    <rect x="-15" y="-46" width="11" height="42" rx="5" fill="#2f4f8f"/>
+    <rect x="4" y="-46" width="11" height="42" rx="5" fill="#2f4f8f"/>
+    <ellipse cx="-11" cy="-5" rx="12" ry="7" fill="#d6453d"/>
+    <ellipse cx="11" cy="-5" rx="12" ry="7" fill="#d6453d"/>
+    <path d="M-20 -90 Q-34 -70 -32 -52" stroke="#f4b733" stroke-width="11" stroke-linecap="round" fill="none"/>
+    <circle cx="-32" cy="-49" r="6" fill="#c98f66"/>
+    <path d="M-28 -38 Q-26 -80 -18 -94 Q0 -102 18 -94 Q26 -80 28 -38 Q0 -30 -28 -38Z" fill="#f4b733"/>
+    <path d="M0 -96 V-36" stroke="#d99a1c" stroke-width="2"/>
+    <circle cx="5" cy="-80" r="2.6" fill="#a66b12"/><circle cx="5" cy="-66" r="2.6" fill="#a66b12"/><circle cx="5" cy="-52" r="2.6" fill="#a66b12"/>
+    <rect x="-22" y="-58" width="13" height="10" rx="3" fill="#e2a425"/>
+    <g class="arm">
+      <path d="M20 -90 Q38 -100 46 -114" stroke="#f4b733" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <circle cx="47" cy="-116" r="6" fill="#c98f66"/>
+      <line x1="49" y1="-121" x2="56" y2="-132" stroke="#6b4423" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="62" cy="-143" r="13" fill="#cfefff" fill-opacity=".65" stroke="#5a3a1e" stroke-width="4"/>
+      <path d="M55 -147 Q57 -152 63 -152" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </g>
+    <circle cx="0" cy="-122" r="31" fill="#3a2215"/>
+    <circle cx="-27" cy="-106" r="12" fill="#3a2215"/><circle cx="27" cy="-106" r="12" fill="#3a2215"/>
+    <circle cx="-25" cy="-92" r="9" fill="#3a2215"/><circle cx="25" cy="-92" r="9" fill="#3a2215"/>
+    <circle cx="0" cy="-118" r="24" fill="#c98f66"/>
+    <path d="M-24 -122 Q-20 -146 0 -144 Q20 -146 24 -122 Q14 -133 0 -130 Q-12 -135 -24 -122Z" fill="#3a2215"/>
+    <g class="blink"><ellipse cx="-8" cy="-117" rx="3.3" ry="4.2" fill="#1d1d2b"/><ellipse cx="8" cy="-117" rx="3.3" ry="4.2" fill="#1d1d2b"/></g>
+    <circle cx="-7" cy="-119" r="1.2" fill="#fff"/><circle cx="9" cy="-119" r="1.2" fill="#fff"/>
+    <circle cx="-15" cy="-108" r="4.5" fill="#e8705f" opacity=".5"/><circle cx="15" cy="-108" r="4.5" fill="#e8705f" opacity=".5"/>
+    <path d="M-7 -106 Q0 -99 7 -106" stroke="#6e2a1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="0" cy="-140" rx="38" ry="8" fill="#b88a4a"/>
+    <path d="M-22 -141 Q-21 -167 0 -167 Q21 -167 22 -141Z" fill="#d4a862"/>
+    <rect x="-22" y="-149" width="44" height="6" fill="#2e7d4f"/>`,
+
+  bruno: () => `
+    <ellipse cx="-11" cy="-3" rx="8" ry="4" fill="#f0a43a"/><ellipse cx="11" cy="-3" rx="8" ry="4" fill="#f0a43a"/>
+    <g class="wingL"><ellipse cx="-30" cy="-42" rx="11" ry="26" fill="#6e452c"/></g>
+    <g class="wingR"><ellipse cx="30" cy="-42" rx="11" ry="26" fill="#6e452c"/></g>
+    <ellipse cx="0" cy="-42" rx="32" ry="40" fill="#8a5a3b"/>
+    <ellipse cx="0" cy="-30" rx="21" ry="25" fill="#ecd6ad"/>
+    <path d="M-10 -36 l4 4 l4 -4 M2 -26 l4 4 l4 -4 M-12 -20 l4 4 l4 -4" stroke="#b9925f" stroke-width="2" fill="none"/>
+    <path d="M-26 -68 L-32 -95 L-10 -77Z M26 -68 L32 -95 L10 -77Z" fill="#8a5a3b"/>
+    <circle cx="-13" cy="-58" r="14" fill="#fff8e6" stroke="#5a3a25" stroke-width="3"/>
+    <circle cx="13" cy="-58" r="14" fill="#fff8e6" stroke="#5a3a25" stroke-width="3"/>
+    <g class="blink"><circle cx="-12" cy="-57" r="6.5" fill="#1d1d2b"/><circle cx="12" cy="-57" r="6.5" fill="#1d1d2b"/></g>
+    <circle cx="-10" cy="-60" r="2" fill="#fff"/><circle cx="14" cy="-60" r="2" fill="#fff"/>
+    <path d="M-5 -45 L5 -45 L0 -35Z" fill="#f0a43a"/>`,
+
+  castor: () => `
+    <g transform="rotate(-15 -48 -12)"><ellipse cx="-48" cy="-12" rx="26" ry="11" fill="#4a3426"/>
+      <path d="M-68 -12 H-28 M-62 -20 L-34 -4 M-62 -4 L-34 -20" stroke="#6b4f3d" stroke-width="2"/></g>
+    <ellipse cx="-18" cy="-4" rx="13" ry="5" fill="#4a3426"/><ellipse cx="16" cy="-4" rx="13" ry="5" fill="#4a3426"/>
+    <ellipse cx="-2" cy="-32" rx="38" ry="30" fill="#8b5a33"/>
+    <ellipse cx="6" cy="-24" rx="22" ry="18" fill="#b07a4a"/>
+    <circle cx="18" cy="-76" r="6" fill="#6e4426"/><circle cx="44" cy="-76" r="6" fill="#6e4426"/>
+    <circle cx="32" cy="-58" r="22" fill="#8b5a33"/>
+    <ellipse cx="44" cy="-50" rx="12" ry="9" fill="#c79b6e"/>
+    <ellipse cx="50" cy="-55" rx="5" ry="3.5" fill="#2b1d16"/>
+    <g class="blink"><circle cx="27" cy="-63" r="3.6" fill="#1d1d2b"/><circle cx="41" cy="-64" r="3.6" fill="#1d1d2b"/></g>
+    <rect x="40" y="-44" width="5" height="9" rx="1.5" fill="#f08c2a"/><rect x="45.5" y="-44" width="5" height="9" rx="1.5" fill="#f08c2a"/>`,
+
+  conejo: () => `
+    <circle cx="-30" cy="-30" r="9" fill="#fff"/>
+    <ellipse cx="0" cy="-30" rx="30" ry="28" fill="#e9e4dc"/>
+    <ellipse cx="-12" cy="-4" rx="13" ry="5" fill="#d3cabd"/><ellipse cx="14" cy="-4" rx="13" ry="5" fill="#d3cabd"/>
+    <g transform="rotate(-10 10 -96)"><ellipse cx="10" cy="-96" rx="7" ry="22" fill="#e9e4dc"/><ellipse cx="10" cy="-96" rx="3.5" ry="15" fill="#f4b6c2"/></g>
+    <g transform="rotate(12 28 -96)"><ellipse cx="28" cy="-96" rx="7" ry="22" fill="#e9e4dc"/><ellipse cx="28" cy="-96" rx="3.5" ry="15" fill="#f4b6c2"/></g>
+    <circle cx="20" cy="-62" r="20" fill="#e9e4dc"/>
+    <g class="blink"><circle cx="15" cy="-66" r="3.2" fill="#1d1d2b"/><circle cx="28" cy="-66" r="3.2" fill="#1d1d2b"/></g>
+    <circle cx="23" cy="-56" r="3" fill="#e57a92"/>
+    <path d="M28 -55 l12 -2 M28 -53 l12 2" stroke="#9a948a" stroke-width="1.2"/>`,
+
+  pez: () => `
+    <circle cx="44" cy="-74" r="4" fill="none" stroke="#9fdcff" stroke-width="2"/><circle cx="52" cy="-90" r="6" fill="none" stroke="#9fdcff" stroke-width="2"/>
+    <path d="M-36 -40 L-60 -60 L-60 -20Z" fill="#ff8a3d"/>
+    <ellipse cx="0" cy="-40" rx="40" ry="24" fill="#ffa64d"/>
+    <path d="M-6 -62 Q6 -76 20 -60Z" fill="#ff8a3d"/>
+    <path d="M-12 -54 Q-4 -40 -12 -26 M2 -56 Q10 -40 2 -24" stroke="#ff7a1f" stroke-width="2.5" fill="none"/>
+    <circle cx="22" cy="-46" r="6.5" fill="#fff"/><circle cx="24" cy="-46" r="3.2" fill="#1d1d2b"/>
+    <path d="M32 -36 Q37 -34 32 -31" stroke="#7a2e1f" stroke-width="2" fill="none"/>`,
+
+  luciernaga: () => `
+    <g class="glow"><circle cx="-26" cy="-34" r="32" fill="#fff36b" opacity=".35"/><circle cx="-26" cy="-34" r="17" fill="#fff36b" opacity=".7"/></g>
+    <g class="bugwing"><ellipse cx="-4" cy="-56" rx="22" ry="10" fill="#d6ecff" opacity=".85" transform="rotate(-18 -4 -56)"/>
+      <ellipse cx="2" cy="-60" rx="18" ry="8" fill="#eaf5ff" opacity=".85" transform="rotate(-35 2 -60)"/></g>
+    <ellipse cx="-18" cy="-36" rx="22" ry="13" fill="#ffe14d"/>
+    <path d="M-6 -48 Q1 -36 -6 -24" stroke="#3a3a3a" stroke-width="4" fill="none"/>
+    <path d="M4 -30 l-5 12 M10 -30 l0 12 M16 -31 l5 11" stroke="#2b2b33" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="10" cy="-40" rx="12" ry="11" fill="#e2563d"/>
+    <circle cx="24" cy="-42" r="9" fill="#2b2b33"/>
+    <g class="blink"><circle cx="27" cy="-44" r="2.6" fill="#fff"/></g>
+    <path d="M28 -50 Q34 -64 42 -62 M24 -50 Q24 -66 30 -70" stroke="#2b2b33" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+
+  raton: () => `
+    <path d="M-28 -12 Q-60 -8 -62 -34" stroke="#d99a9a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="-12" cy="-3" rx="8" ry="3.5" fill="#e5a8b4"/><ellipse cx="12" cy="-3" rx="8" ry="3.5" fill="#e5a8b4"/>
+    <ellipse cx="-2" cy="-22" rx="30" ry="20" fill="#9ea3ad"/>
+    <circle cx="16" cy="-52" r="11" fill="#9ea3ad"/><circle cx="16" cy="-52" r="6.5" fill="#f2b8c6"/>
+    <circle cx="34" cy="-50" r="10" fill="#9ea3ad"/><circle cx="34" cy="-50" r="6" fill="#f2b8c6"/>
+    <circle cx="26" cy="-33" r="15" fill="#9ea3ad"/>
+    <g class="blink"><circle cx="31" cy="-37" r="2.8" fill="#1d1d2b"/></g>
+    <circle cx="41" cy="-30" r="3.2" fill="#e57a92"/>
+    <path d="M38 -29 l12 -3 M38 -27 l12 2" stroke="#6b6f78" stroke-width="1.2"/>`,
+
+  caracol: () => `
+    <path d="M-44 -2 Q-46 -14 -24 -14 L30 -14 Q42 -14 44 -30 L50 -30 Q54 -4 30 -2Z" fill="#b6d47a"/>
+    <path d="M42 -28 L37 -50 M48 -28 L55 -48" stroke="#9fbd62" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="37" cy="-51" r="3.5" fill="#1d1d2b"/><circle cx="55" cy="-49" r="3.5" fill="#1d1d2b"/>
+    <circle cx="-4" cy="-38" r="26" fill="#d98f4e"/>
+    <path d="M-4 -38 a4 4 0 1 1 7 3 a9 9 0 1 1 -16 -7 a15 15 0 1 1 27 13 a21 21 0 0 1 -34 6" stroke="#a65e2a" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+
+  concha: () => `
+    <path d="M-52 -6 Q-62 -42 -24 -58 Q8 -66 18 -34 Q22 -10 4 -6Z" fill="#f2e1c4" stroke="#c8a77a" stroke-width="2.5"/>
+    <path d="M-38 -14 Q-42 -42 -14 -48 Q4 -50 6 -30 M-24 -16 Q-26 -36 -8 -36" stroke="#c8a77a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="-30" cy="-54" r="5" fill="#f4b6a8"/>`,
+
+  cangrejo: () => `
+    <path d="M10 -10 l16 8 M6 -8 l12 10 M0 -8 l4 10" stroke="#e0533d" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M18 -28 L14 -50 M24 -28 L30 -48" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    <g class="blink"><circle cx="14" cy="-52" r="5" fill="#1d1d2b"/><circle cx="30" cy="-50" r="5" fill="#1d1d2b"/></g>
+    <circle cx="15" cy="-54" r="1.6" fill="#fff"/><circle cx="31" cy="-52" r="1.6" fill="#fff"/>
+    <ellipse cx="34" cy="-20" rx="13" ry="10" fill="#e0533d"/>
+    <path d="M42 -27 Q54 -26 50 -19 L42 -20Z M42 -16 Q54 -12 48 -8 L40 -12Z" fill="#c9412c"/>
+    ${'' /* concha encima */}
+    <path d="M-52 -6 Q-62 -42 -24 -58 Q8 -66 18 -34 Q22 -10 4 -6Z" fill="#f2e1c4" stroke="#c8a77a" stroke-width="2.5"/>
+    <path d="M-38 -14 Q-42 -42 -14 -48 Q4 -50 6 -30 M-24 -16 Q-26 -36 -8 -36" stroke="#c8a77a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="-30" cy="-54" r="5" fill="#f4b6a8"/>`,
+
+  murcielago: () => `
+    <g class="batL"><path d="M-8 -42 Q-30 -66 -62 -54 Q-56 -46 -58 -36 Q-48 -40 -42 -30 Q-34 -38 -26 -28 Q-18 -34 -8 -30Z" fill="#4b3a5e"/></g>
+    <g class="batR"><path d="M8 -42 Q30 -66 62 -54 Q56 -46 58 -36 Q48 -40 42 -30 Q34 -38 26 -28 Q18 -34 8 -30Z" fill="#4b3a5e"/></g>
+    <path d="M-10 -48 L-13 -66 L-2 -53Z M10 -48 L13 -66 L2 -53Z" fill="#5d4975"/>
+    <ellipse cx="0" cy="-36" rx="13" ry="17" fill="#5d4975"/>
+    <ellipse cx="0" cy="-30" rx="8" ry="9" fill="#7a6494"/>
+    <circle cx="-5" cy="-44" r="3.4" fill="#fff"/><circle cx="5" cy="-44" r="3.4" fill="#fff"/>
+    <g class="blink"><circle cx="-5" cy="-44" r="1.8" fill="#1d1d2b"/><circle cx="5" cy="-44" r="1.8" fill="#1d1d2b"/></g>
+    <path d="M-4 -37 Q0 -34 4 -37" stroke="#2a2036" stroke-width="1.6" fill="none"/>
+    <path d="M-3 -36.5 l1 3 l1 -2.6 M3 -36.5 l-1 3 l-1 -2.6" fill="#fff"/>`,
+
+  mariposa: () => {
+    const wing = `<path d="M-2 -46 Q-28 -88 -56 -70 Q-64 -46 -34 -40Z" fill="#f28c1f" stroke="#1d1d2b" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M-2 -40 Q-38 -38 -36 -16 Q-20 -6 -2 -32Z" fill="#f28c1f" stroke="#1d1d2b" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M-4 -46 L-44 -66 M-6 -42 L-28 -24 M-8 -44 L-30 -54" stroke="#1d1d2b" stroke-width="2"/>
+      <circle cx="-52" cy="-64" r="2" fill="#fff"/><circle cx="-56" cy="-54" r="2" fill="#fff"/><circle cx="-36" cy="-20" r="2" fill="#fff"/><circle cx="-30" cy="-14" r="1.6" fill="#fff"/>`;
+    return `<g class="flutter">${wing}</g><g class="flutter"><g transform="scale(-1 1)">${wing}</g></g>
+      <ellipse cx="0" cy="-38" rx="4" ry="18" fill="#1d1d2b"/><circle cx="0" cy="-58" r="5" fill="#1d1d2b"/>
+      <path d="M-2 -62 Q-6 -74 -12 -76 M2 -62 Q6 -74 12 -76" stroke="#1d1d2b" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  },
+
+  oruga: () => {
+    const cols = ['#f6d32d','#1d1d2b','#ffffff','#f6d32d','#1d1d2b','#ffffff','#f6d32d'];
+    const segs = cols.map((c,i)=>`<circle cx="${-42+i*12}" cy="-14" r="11" fill="${c}" stroke="#1d1d2b" stroke-width="1.5"/>`).join('');
+    return `<path d="M-48 -20 Q-56 -30 -60 -26" stroke="#1d1d2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      ${segs}
+      <circle cx="44" cy="-20" r="12" fill="#1d1d2b"/>
+      <path d="M38 -22 h12" stroke="#f6d32d" stroke-width="3"/>
+      <circle cx="47" cy="-26" r="2.4" fill="#fff"/>
+      <path d="M40 -30 Q36 -44 30 -46 M48 -30 Q52 -44 58 -46" stroke="#1d1d2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M44 -12 Q48 -9 52 -13" stroke="#f6d32d" stroke-width="1.8" fill="none"/>`;
+  }
+};
+const DEF_ENTER = {martina:'walk', bruno:'fly', concha:'walkR'};
+const DEF_IDLE = {martina:'bob', bruno:'hover', pez:'swim', luciernaga:'hover', murcielago:'hover', mariposa:'hover', oruga:'crawl', concha:'scoot', cangrejo:'wiggle', castor:'bob', conejo:'bob', raton:'bob', caracol:'crawl'};
+
+const ANIMALS = {
+  castor:'Castor', conejo:'Conejo', pez:'Pez', luciernaga:'Luciérnaga', raton:'Ratón', caracol:'Caracol',
+  cangrejo:'Cangrejo ermitaño', murcielago:'Murciélago', mariposa:'Mariposa'
+};
+const SPK = {
+  narrador:{name:'Narrador', chip:'#d6e6f0', pitch:1, rate:.95},
+  martina:{name:'Martina', chip:'#ffd66b', pitch:1.45, rate:1},
+  bruno:{name:'Bruno el búho', chip:'#e3c7a6', pitch:.7, rate:.9},
+  castor:{name:'Coco el castor', chip:'#f2b98a', pitch:1.15, rate:1},
+  luciernaga:{name:'Chispa la luciérnaga', chip:'#fff08a', pitch:1.7, rate:1.05},
+  cangrejo:{name:'Pancho el cangrejo', chip:'#ffb3a3', pitch:1.2, rate:1},
+  murcielago:{name:'Nora la murciélaga', chip:'#d9cbf5', pitch:1.55, rate:1},
+  mariposa:{name:'Lina la mariposa', chip:'#ffc58a', pitch:1.65, rate:1}
+};
+
+/* ---------- Iconos de pistas (60x60) ---------- */
+const LBG = '<rect x="2" y="2" width="56" height="56" rx="12" fill="#fff6d6"/>';
+const DBG = '<rect x="2" y="2" width="56" height="56" rx="12" fill="#1f2b57"/>';
+const inIcon = (id, x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${DRAW[id]()}</g>`;
+const ICON = {
+  tronco: () => LBG + `<rect x="20" y="24" width="20" height="28" fill="#8b5a33"/><path d="M20 24 L30 7 L40 24Z" fill="#e2ad73"/>
+    <path d="M23 20 l4 3 M29 13 l4 3 M34 20 l3 3" stroke="#8b5a33" stroke-width="2"/><ellipse cx="30" cy="52" rx="13" ry="3.5" fill="#6e4426"/>
+    <circle cx="14" cy="50" r="2" fill="#e2ad73"/><circle cx="46" cy="49" r="2.5" fill="#e2ad73"/>`,
+  huella: () => LBG + `<path d="M30 52 Q18 50 18 40 L11 20 L22 31 L22 13 L30 29 L38 13 L38 31 L49 20 L42 40 Q42 50 30 52Z" fill="#6e4426"/>
+    <path d="M14 23 L22 31 M26 17 L30 29 M34 17 L30 29 M46 23 L38 31" stroke="#a37a58" stroke-width="1.5"/>`,
+  cola: () => LBG + `<ellipse cx="30" cy="40" rx="22" ry="9" fill="#4a3426"/><path d="M12 40 H48 M18 34 L42 46 M18 46 L42 34" stroke="#7a5a44" stroke-width="1.6"/>
+    <circle cx="16" cy="20" r="4" fill="#4aa3d8"/><circle cx="30" cy="13" r="5" fill="#4aa3d8"/><circle cx="44" cy="20" r="4" fill="#4aa3d8"/>
+    <path d="M8 30 Q14 24 20 30 M40 30 Q46 24 52 30" stroke="#4aa3d8" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+  luz: () => DBG + `<circle cx="18" cy="22" r="10" fill="#fff36b" opacity=".4"/><circle cx="18" cy="22" r="4" fill="#ffe14d"/>
+    <circle cx="42" cy="17" r="8" fill="#fff36b" opacity=".3"/><circle cx="42" cy="17" r="3" fill="#ffe14d"/>
+    <circle cx="35" cy="42" r="11" fill="#fff36b" opacity=".45"/><circle cx="35" cy="42" r="4.5" fill="#ffe14d"/>`,
+  vuela: () => DBG + `<path d="M8 46 Q14 14 28 30 Q40 46 50 14" stroke="#fff36b" stroke-width="2.5" stroke-dasharray="3 5" fill="none" stroke-linecap="round"/>
+    <circle cx="50" cy="13" r="9" fill="#fff36b" opacity=".4"/><circle cx="50" cy="13" r="3.5" fill="#ffe14d"/>`,
+  bicho: () => DBG + inIcon('luciernaga', 36, 52, .5),
+  concha: () => LBG + inIcon('concha', 42, 48, .55) + `<path d="M50 24 h6 M50 32 h7 M50 40 h6" stroke="#8fb3c4" stroke-width="3" stroke-linecap="round"/>`,
+  puntos: () => `<rect x="2" y="2" width="56" height="56" rx="12" fill="#f2d494"/>` +
+    [10,20,30,40,50].map((x,i)=>`<ellipse cx="${x}" cy="${22+(i%2)*3}" rx="2.6" ry="1.8" fill="#b88a4a"/><ellipse cx="${x+4}" cy="${38+(i%2)*3}" rx="2.6" ry="1.8" fill="#b88a4a"/>`).join(''),
+  pinza: () => LBG + inIcon('cangrejo', 30, 52, .5),
+  sonido: () => DBG + `<circle cx="13" cy="30" r="5" fill="#d9cbf5"/>
+    <path d="M22 20 Q28 30 22 40 M30 13 Q40 30 30 47 M38 7 Q52 30 38 53" stroke="#d9cbf5" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+  colgados: () => DBG + `<path d="M4 9 Q16 13 30 9 T56 9" stroke="#6a5a86" stroke-width="4" fill="none"/>` +
+    [16,30,44].map(x=>`<path d="M${x} 11 Q${x-8} 26 ${x} 40 Q${x+8} 26 ${x} 11Z" fill="#7a6494"/><path d="M${x-4} 38 l-2 6 l5 -3 M${x+4} 38 l2 6 l-5 -3" fill="#7a6494" stroke="#7a6494" stroke-width="1.5"/>`).join(''),
+  luna: () => DBG + `<circle cx="42" cy="18" r="9" fill="#fff4c7"/>` + inIcon('murcielago', 20, 46, .26) + inIcon('murcielago', 40, 52, .18),
+  hoja: () => LBG + `<path d="M30 54 V20" stroke="#5c8a3a" stroke-width="3"/>
+    <path d="M30 44 Q8 40 10 18 Q30 16 30 44Z" fill="#6aa84f"/><path d="M30 34 Q52 30 50 8 Q30 6 30 34Z" fill="#6aa84f"/>
+    <circle cx="12" cy="24" r="5" fill="#fff6d6"/><circle cx="18" cy="17" r="4" fill="#fff6d6"/><circle cx="48" cy="14" r="5" fill="#fff6d6"/><circle cx="44" cy="8" r="4" fill="#fff6d6"/><circle cx="51" cy="24" r="3.5" fill="#fff6d6"/>`,
+  crisalida: () => LBG + `<path d="M6 10 Q30 6 54 12" stroke="#5c8a3a" stroke-width="4" fill="none"/><path d="M30 10 V16" stroke="#1d1d2b" stroke-width="2"/>
+    <ellipse cx="30" cy="34" rx="11" ry="18" fill="#5fc46b"/><path d="M20 26 Q30 30 40 26" stroke="#e6b422" stroke-width="2" fill="none"/>
+    <circle cx="25" cy="40" r="1.6" fill="#e6b422"/><circle cx="35" cy="42" r="1.6" fill="#e6b422"/><circle cx="30" cy="47" r="1.6" fill="#e6b422"/>`,
+  vacia: () => LBG + `<path d="M6 10 Q30 6 54 12" stroke="#5c8a3a" stroke-width="4" fill="none"/><path d="M30 10 V16" stroke="#1d1d2b" stroke-width="2"/>
+    <ellipse cx="30" cy="34" rx="11" ry="18" fill="#e8f3e0" stroke="#a9c49c" stroke-width="2"/>
+    <path d="M24 52 L28 40 L32 46 L36 38" stroke="#a9c49c" stroke-width="2" fill="none"/>`
+};
+
+/* ---------- Fondos ---------- */
+const rnd = (seed => () => (seed = (seed * 9301 + 49297) % 233280) / 233280);
+function cloud(x,y,s,d){return `<g class="drift" style="animation-delay:-${d}s"><g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="42" ry="15" fill="#fff"/><circle cx="-14" cy="-9" r="16" fill="#fff"/><circle cx="12" cy="-13" r="20" fill="#fff"/></g></g>`}
+function tree(x,y,s,c1='#2f8f4e',c2='#3aa45a'){return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-6" y="-42" width="12" height="42" fill="#7a5032"/><circle cx="0" cy="-64" r="28" fill="${c1}"/><circle cx="-18" cy="-48" r="20" fill="${c2}"/><circle cx="18" cy="-50" r="22" fill="${c1}"/></g>`}
+function waves(y, color, op=.8){let d=`M-400 ${y}`; for(let i=0;i<40;i++) d+=' q20 -6 40 0'; return `<g class="flow"><path d="${d}" stroke="${color}" stroke-width="3" fill="none" opacity="${op}" stroke-linecap="round"/></g>`}
+function sky(id,a,b){return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="800" height="450" fill="url(#${id})"/>`}
+function sun(x,y){return `<g class="pulse"><circle cx="${x}" cy="${y}" r="58" fill="#fff3b0" opacity=".55"/></g><circle cx="${x}" cy="${y}" r="38" fill="#ffd34d"/>`}
+
+const BG = {
+  bosque(f){
+    const r = rnd(7);
+    let dam = '';
+    if (f.presa){
+      for(let i=0;i<16;i++){const x=520+r()*90, y=286+r()*44, a=-30+r()*60; dam+=`<rect x="${x}" y="${y}" width="${46+r()*30}" height="8" rx="4" fill="${i%2?'#7a5032':'#946640'}" transform="rotate(${a} ${x} ${y})"/>`}
+      dam = `<ellipse cx="575" cy="330" rx="62" ry="12" fill="#5a3b24" opacity=".6"/>${dam}`;
+    }
+    const splash = f.splash ? `<g transform="translate(470 312)"><g class="splash"><path d="M-30 0 Q-24 -30 -14 -6 M0 -4 Q0 -40 8 -6 M30 0 Q24 -30 14 -6" stroke="#dff3ff" stroke-width="5" fill="none" stroke-linecap="round"/></g></g>` : '';
+    return sky('gs1','#7cc8ef','#d7f1e6') + sun(690,78) + cloud(120,70,1,0) + cloud(420,50,.8,6) + cloud(600,120,.6,3)
+      + `<path d="M0 250 Q120 170 260 230 Q380 180 520 225 Q650 170 800 220 V450 H0Z" fill="#93c98a"/>`
+      + tree(60,275,.95) + tree(150,268,.8,'#2a8046','#38a058') + tree(420,262,.75) + tree(730,270,1,'#2a8046','#38a058') + tree(780,282,.7)
+      + `<path d="M0 278 Q400 258 800 278 V450 H0Z" fill="#7dbd6c"/>`
+      + `<path d="M0 292 Q200 284 400 292 T800 292 V338 Q600 346 400 338 T0 338Z" fill="#4aa3d8"/>`
+      + waves(306,'#c9ecff') + waves(324,'#a6dcfb',.6)
+      + dam + splash
+      + `<path d="M0 332 Q400 318 800 334 V450 H0Z" fill="#6fb35e"/>`
+      + `<path d="M40 360 l4 -18 l4 18 M60 366 l3 -14 l3 14 M700 372 l4 -18 l4 18 M740 362 l3 -14 l3 14" stroke="#4e8f40" stroke-width="3" fill="none"/>`
+      + `<circle cx="120" cy="400" r="5" fill="#ffd34d"/><circle cx="650" cy="410" r="5" fill="#ff8fab"/><circle cx="420" cy="430" r="4" fill="#fff"/>`
+      + `<path d="M0 424 Q200 412 400 424 T800 422 V450 H0Z" fill="#5fa04f"/>`;
+  },
+  jardin(f){
+    const r = rnd(11); let stars='';
+    for(let i=0;i<34;i++) stars += `<circle class="twinkle" style="animation-delay:-${(r()*3).toFixed(2)}s" cx="${(r()*800).toFixed(0)}" cy="${(r()*190).toFixed(0)}" r="${(1+r()*1.8).toFixed(1)}" fill="#fff"/>`;
+    let ff='';
+    if (f.luces){ for(let i=0;i<16;i++){ const x=300+r()*480, y=200+r()*190; ff += `<g class="ff" style="animation-delay:-${(r()*3.4).toFixed(2)}s"><circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="11" fill="#fff36b" opacity=".35"/><circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="3.5" fill="#fffbd0"/></g>`; } }
+    let fence=''; for(let x=330;x<=800;x+=34) fence += `<rect x="${x}" y="262" width="14" height="78" rx="3" fill="#8f8ab0" opacity=".55"/>`;
+    return sky('gs2','#121e45','#3a4a86') + stars
+      + `<circle cx="660" cy="82" r="34" fill="#fff4c7"/><circle cx="648" cy="74" r="6" fill="#ecdca0"/><circle cx="672" cy="94" r="4" fill="#ecdca0"/>`
+      + `<path d="M0 250 Q160 200 320 240 Q520 200 800 240 V450 H0Z" fill="#1f3f52"/>`
+      + `<rect x="40" y="170" width="170" height="150" fill="#2c3870"/><path d="M28 172 L125 104 L222 172Z" fill="#3c2f5e"/>`
+      + `<rect x="70" y="208" width="44" height="44" rx="4" fill="#ffd86b"/><path d="M92 208 V252 M70 230 H114" stroke="#2c3870" stroke-width="4"/>`
+      + `<rect x="148" y="250" width="40" height="70" rx="4" fill="#4a3a6e"/>`
+      + fence + `<rect x="330" y="282" width="470" height="8" fill="#8f8ab0" opacity=".55"/><rect x="330" y="312" width="470" height="8" fill="#8f8ab0" opacity=".55"/>`
+      + `<path d="M0 330 Q400 312 800 332 V450 H0Z" fill="#1d4a35"/>`
+      + `<circle cx="300" cy="336" r="34" fill="#173d2c"/><circle cx="340" cy="342" r="26" fill="#1a4430"/><circle cx="760" cy="338" r="36" fill="#173d2c"/>`
+      + `<circle cx="420" cy="380" r="4" fill="#c58fd6"/><circle cx="470" cy="396" r="4" fill="#e7a0b8"/><circle cx="700" cy="400" r="4" fill="#c58fd6"/><circle cx="560" cy="412" r="4" fill="#e7a0b8"/>`
+      + ff
+      + `<path d="M0 426 Q200 414 400 426 T800 424 V450 H0Z" fill="#163a2a"/>`;
+  },
+  playa(f){
+    const tracks = f.huellas ? Array.from({length:9},(_,i)=>`<ellipse cx="${380+i*18}" cy="${404+(i%2)*4}" rx="3" ry="2" fill="#c49a58"/><ellipse cx="${386+i*18}" cy="${420+(i%2)*4}" rx="3" ry="2" fill="#c49a58"/>`).join('') : '';
+    return sky('gs3','#8fdcff','#fff0c4') + sun(120,80) + cloud(380,70,.8,2) + cloud(640,50,.7,8)
+      + `<rect y="205" width="800" height="110" fill="#2ea3c7"/><rect y="205" width="800" height="12" fill="#6fcbe5"/>`
+      + waves(238,'#e6f8ff') + waves(266,'#c2ecfa',.7) + waves(292,'#e6f8ff',.9)
+      + `<path d="M0 300 Q200 286 400 300 T800 298 V450 H0Z" fill="#f2d494"/>`
+      + `<g class="foam"><path d="M0 302 Q200 290 400 302 T800 300" stroke="#fff" stroke-width="5" fill="none" opacity=".8"/></g>`
+      + `<path d="M76 440 Q66 340 96 250" stroke="#a5713f" stroke-width="16" fill="none" stroke-linecap="round"/>`
+      + `<g class="sway"><path d="M96 250 Q50 230 20 262 M96 250 Q70 200 40 196 M96 250 Q120 196 160 200 M96 250 Q150 236 172 270 M96 250 Q100 210 96 180" stroke="#3aa45a" stroke-width="12" fill="none" stroke-linecap="round"/></g>`
+      + `<path d="M712 410 l7 -14 l7 14 l15 2 l-11 10 l3 15 l-14 -7 l-14 7 l3 -15 l-11 -10Z" fill="#ff9e7a"/>`
+      + `<path d="M640 430 q10 -16 20 0z" fill="#fff" opacity=".9"/><path d="M260 436 q8 -12 16 0z" fill="#ffd0c2"/>`
+      + tracks;
+  },
+  cueva(f){
+    const night = f.vuelan;
+    let hang='';
+    if (f.colgados && !f.vuelan) [360,410,455,505,550].forEach((x,i)=>{ hang += `<g transform="translate(${x} ${34+(i%2)*10})"><g class="sway" style="animation-delay:-${i*.5}s"><path d="M0 0 V8" stroke="#2a2036" stroke-width="3"/><path d="M0 6 Q-13 26 0 46 Q13 26 0 6Z" fill="#5d4975"/><path d="M-5 44 l-2 7 l5 -3 M5 44 l2 7 l-5 -3" fill="#5d4975" stroke="#5d4975" stroke-width="2"/><circle cx="-3" cy="38" r="1.6" fill="#fff"/><circle cx="3" cy="38" r="1.6" fill="#fff"/></g></g>`; });
+    let fly='';
+    if (f.vuelan) for(let i=0;i<6;i++) fly += `<g class="across" style="animation-delay:-${i*1}s"><g transform="translate(0 ${80+(i%3)*50}) scale(${.35+(i%2)*.12})">${DRAW.murcielago()}</g></g>`;
+    const cone = f.luz ? `<path class="flicker" d="M300 262 L800 150 L800 430Z" fill="#fff3b0" opacity=".2"/>` : '';
+    return sky('gs4', night?'#1d1f4a':'#ff9a6b', night?'#4a3a7a':'#8a5aa8')
+      + (night ? `<circle cx="690" cy="190" r="16" fill="#fff4c7"/>` : `<circle cx="690" cy="300" r="30" fill="#ffd34d"/>`)
+      + `<path fill-rule="evenodd" d="M0 0 H800 V450 H0Z M612 345 Q600 150 690 128 Q772 150 762 345Z" fill="#3a2d52"/>`
+      + `<path d="M0 0 H800 V40 Q760 60 740 30 Q700 70 660 30 Q620 60 590 34 Q540 80 500 30 Q460 66 420 30 Q380 70 340 32 Q300 60 260 30 Q200 80 160 36 Q100 66 60 32 Q30 60 0 40Z" fill="#2c2240"/>`
+      + `<path d="M180 30 l10 50 l10 -50Z M300 30 l8 36 l8 -36Z M620 30 l9 44 l9 -44Z M90 30 l7 30 l7 -30Z" fill="#4a3b66"/>`
+      + hang
+      + `<path d="M0 352 Q400 330 800 352 V450 H0Z" fill="#4b3d63"/>`
+      + `<ellipse cx="520" cy="400" rx="40" ry="14" fill="#5d4f78"/><ellipse cx="120" cy="420" rx="50" ry="16" fill="#5d4f78"/>`
+      + cone + fly;
+  },
+  pradera(f){
+    const r = rnd(5); let flowers='';
+    const cs=['#ff8fab','#ffd34d','#ffffff','#c58fd6','#ff9e5a'];
+    for(let i=0;i<26;i++){const x=(r()*800).toFixed(0), y=(320+r()*120).toFixed(0), c=cs[i%5];
+      flowers+=`<g transform="translate(${x} ${y})"><circle cx="0" cy="-5" r="4" fill="${c}"/><circle cx="5" cy="0" r="4" fill="${c}"/><circle cx="0" cy="5" r="4" fill="${c}"/><circle cx="-5" cy="0" r="4" fill="${c}"/><circle r="3" fill="#f2a516"/></g>`}
+    const leaves = [[592,380,-30],[630,350,28],[588,310,-35],[628,282,30]];
+    const lf = leaves.map(([x,y,a])=>`<g transform="translate(${x} ${y}) rotate(${a})"><ellipse cx="0" cy="0" rx="28" ry="11" fill="#6aa84f" ${f.mordidas?'mask="url(#mbite)"':''}/><path d="M-26 0 H26" stroke="#4f8a3a" stroke-width="1.5"/></g>`).join('');
+    let chrys='';
+    if (f.crisalida && !f.vacia) chrys = `<g transform="translate(646 360)"><g class="sway"><path d="M0 0 V10" stroke="#1d1d2b" stroke-width="2"/><ellipse cx="0" cy="28" rx="10" ry="18" fill="#5fc46b"/><path d="M-9 18 Q0 22 9 18" stroke="#e6b422" stroke-width="2.2" fill="none"/><circle cx="-5" cy="32" r="1.6" fill="#e6b422"/><circle cx="5" cy="35" r="1.6" fill="#e6b422"/><circle cx="0" cy="40" r="1.6" fill="#e6b422"/></g></g>`;
+    if (f.vacia) chrys = `<g transform="translate(646 360)"><path d="M0 0 V10" stroke="#1d1d2b" stroke-width="2"/><ellipse cx="0" cy="28" rx="10" ry="18" fill="#eef7e8" opacity=".85" stroke="#a9c49c" stroke-width="2"/><path d="M-6 46 L-2 34 L2 40 L6 32" stroke="#a9c49c" stroke-width="2" fill="none"/></g>`;
+    let bfl='';
+    if (f.mariposas) for(let i=0;i<6;i++) bfl += `<g class="flit" style="animation-delay:-${i*1.3}s"><g transform="translate(${120+i*110} ${90+(i%3)*45}) scale(.38)">${DRAW.mariposa()}</g></g>`;
+    return `<defs><mask id="mbite" maskUnits="userSpaceOnUse" x="-40" y="-20" width="80" height="40"><rect x="-40" y="-20" width="80" height="40" fill="#fff"/><circle cx="16" cy="-10" r="7" fill="#000"/><circle cx="-8" cy="11" r="6" fill="#000"/><circle cx="26" cy="5" r="6" fill="#000"/><circle cx="-24" cy="-6" r="5" fill="#000"/></mask></defs>`
+      + sky('gs5','#a9defc','#fdf3d2') + sun(690,80) + cloud(160,70,.9,4) + cloud(460,56,.7,9)
+      + `<path d="M0 260 Q200 200 400 250 Q600 200 800 250 V450 H0Z" fill="#a6d98a"/>`
+      + `<path d="M0 300 Q400 280 800 300 V450 H0Z" fill="#8fcf63"/>`
+      + flowers
+      + `<path d="M610 434 Q606 330 612 236" stroke="#5c8a3a" stroke-width="6" fill="none" stroke-linecap="round"/>` + lf
+      + `<g transform="translate(612 228)"><circle cx="-8" cy="0" r="7" fill="#e88fb0"/><circle cx="8" cy="0" r="7" fill="#e88fb0"/><circle cx="0" cy="-8" r="7" fill="#f2a6c2"/><circle cx="0" cy="4" r="6" fill="#d97aa0"/></g>`
+      + chrys + bfl;
+  }
+};
+
+/* ---------- Capítulos ---------- */
+const A = (id,x,y,s=1,o={}) => Object.assign({id,x,y,s},o);
+const M = A('martina',220,435,1.25);
+const Mq = A('martina',220,435,1.25,{q:true});
+const B = A('bruno',395,232,1);
+
+const EPISODES = [
+ { key:'castor', title:'La presa misteriosa', bg:'bosque', habitat:'Bosque y río',
+   short:'Sus dientes son naranjas y nunca dejan de crecer.',
+   scenes:[
+    {type:'titulo', actors:[M,B], sp:'narrador', t:'Capítulo 1: La presa misteriosa. El río del bosque se ha parado. ¿Quién habrá puesto un muro de palos en el agua?'},
+    {sp:'narrador', t:'En un bosque lleno de árboles vive Martina Lupa. Tiene siete años, una lupa de detective y muchas, muchas preguntas.', actors:[M]},
+    {sp:'narrador', t:'Su mejor amigo es Bruno, un búho muy sabio que lo sabe casi todo. ¡Casi!', actors:[M,B]},
+    {sp:'bruno', t:'¡Martina, Martina! ¡El río se ha quedado quieto! Alguien ha puesto un muro de palos en el agua.', flags:{presa:1}},
+    {sp:'martina', t:'¡Un misterio! Las detectives no adivinan: buscan pistas. ¡Lupa preparada!', actors:[A('martina',220,435,1.25,{idle:'jump'}),B]},
+    {sp:'martina', t:'Mira estos troncos. Están mordidos y acabados en punta, como un lápiz. ¡Alguien tiene unos dientes muy fuertes!', actors:[M,B], clue:{icon:'tronco', label:'Troncos mordidos en punta, como un lápiz'}},
+    {sp:'bruno', t:'Y aquí, en el barro, hay huellas. Las patas de atrás tienen los dedos unidos por una piel, como las aletas para bucear.', clue:{icon:'huella', label:'Huellas con los dedos unidos por una piel'}},
+    {sp:'narrador', t:'De repente… ¡PLAF! Algo golpeó el agua con una cola ancha y plana, como una raqueta.', flags:{splash:1}, clue:{icon:'cola', label:'Una cola plana como una raqueta'}},
+    {type:'quiz', sp:'martina', t:'Tengo tres pistas en mi cuaderno. ¿Me ayudas? ¿Quién construyó la presa?', flags:{splash:0}, actors:[Mq,B],
+      options:['conejo','castor','pez'], answer:'castor',
+      hints:{conejo:'Los conejos no tienen cola de raqueta ni nadan en el río. ¡Prueba otra vez!', pez:'Los peces no tienen patas, así que no pueden dejar huellas en el barro. ¡Prueba otra vez!'}},
+    {sp:'castor', t:'¡Hola! Soy Coco, el castor. Construyo presas para que el agua se quede quieta y se forme un estanque. ¡Ahí dentro hago mi casa!', actors:[M,B,A('castor',600,432,1.35)]},
+    {type:'dato', sp:'narrador', t:'¿Sabías que los dientes del castor nunca dejan de crecer? Por eso roe madera todos los días: así los mantiene cortitos. Y son de color naranja porque tienen hierro, que los hace muy duros.'},
+    {type:'fin', sp:'martina', t:'¡Caso resuelto! Gracias por ayudarme, detective. Ya tienes la pegatina del castor en tu álbum.'}
+   ]},
+ { key:'luciernaga', title:'Las lucecitas del jardín', bg:'jardin', habitat:'Jardín de noche',
+   short:'Fabrican luz con su cuerpo y no quema.',
+   scenes:[
+    {type:'titulo', actors:[M,B], sp:'narrador', t:'Capítulo 2: Las lucecitas del jardín. Es de noche y en el jardín se encienden luces misteriosas.', flags:{luces:1}},
+    {sp:'narrador', t:'Es de noche. Martina no puede dormir, porque desde la ventana ve algo muy raro en el jardín.', actors:[A('martina',220,435,1.25)], flags:{luces:0}},
+    {sp:'martina', t:'¡Bruno, despierta! Hay lucecitas que se encienden y se apagan entre la hierba.', flags:{luces:1}, actors:[M,B]},
+    {sp:'bruno', t:'Yo no duermo de noche, Martina. ¡Los búhos somos nocturnos! Vamos a investigar.'},
+    {sp:'narrador', t:'Primera pista: las luces parpadean. Se encienden y se apagan, como si se estuvieran hablando.', clue:{icon:'luz', label:'Luces que se encienden y se apagan'}},
+    {sp:'martina', t:'¡Y se mueven por el aire! Suben y bajan despacito. Sea lo que sea, sabe volar.', clue:{icon:'vuela', label:'Vuela despacito por el aire'}},
+    {sp:'bruno', t:'Una se ha posado en mi ala. Es un bichito pequeño, con seis patas… ¡y la barriguita le brilla de color amarillo!', clue:{icon:'bicho', label:'Bichito de seis patas con la barriga brillante'}},
+    {type:'quiz', sp:'martina', t:'¿Quién hace las luces del jardín? ¡Tú lo sabes!', actors:[Mq,B],
+      options:['raton','luciernaga','caracol'], answer:'luciernaga',
+      hints:{raton:'Los ratones no vuelan y no brillan en la oscuridad. ¡Prueba otra vez!', caracol:'Los caracoles van muy despacio por el suelo y no tienen alas. ¡Prueba otra vez!'}},
+    {sp:'luciernaga', t:'¡Hola, soy Chispa! Soy una luciérnaga. Encendemos nuestra luz para encontrar amigos en la oscuridad.', actors:[M,B,A('luciernaga',590,300,1.3)]},
+    {type:'dato', sp:'narrador', t:'¿Sabías que las luciérnagas fabrican luz dentro de su cuerpo? Se llama bioluminiscencia. Es una luz fría, ¡no quema! Y cada tipo de luciérnaga parpadea con su propio ritmo, como un código secreto.'},
+    {type:'fin', sp:'martina', t:'¡Caso resuelto! Ahora cada vez que veas una lucecita en verano, ya sabrás quién es.'}
+   ]},
+ { key:'cangrejo', title:'La concha que caminaba', bg:'playa', habitat:'Playa',
+   short:'Cuando crecen, se mudan a una concha más grande.',
+   scenes:[
+    {type:'titulo', actors:[M,B], sp:'narrador', t:'Capítulo 3: La concha que caminaba. En la playa, una concha se mueve sola. ¿Cómo puede ser?'},
+    {sp:'narrador', t:'Hoy Martina y Bruno pasan el día en la playa. El sol brilla y las olas hacen ¡shhh, shhh!', actors:[M,B]},
+    {sp:'martina', t:'¡Bruno, mira! ¡Esa concha se mueve sola!', actors:[M,B,A('concha',470,420,1)]},
+    {sp:'bruno', t:'Las conchas no tienen patas… ¿o sí? ¡Esto es un caso para la detective Lupa!'},
+    {sp:'martina', t:'Es una concha de caracol de mar… pero camina de lado. Y los caracoles no caminan de lado.', clue:{icon:'concha', label:'Una concha que camina de lado'}},
+    {sp:'bruno', t:'En la arena hay huellas: muchos puntitos en dos filas. ¡Como si alguien tuviera muchas patas!', flags:{huellas:1}, clue:{icon:'puntos', label:'Huellas de muchas patitas'}},
+    {sp:'narrador', t:'Martina se acerca muy despacito con su lupa… y de la concha asoman dos ojos en palitos y una pinza roja.', actors:[M,B,A('cangrejo',560,425,1.2,{idle:'wiggle'})], clue:{icon:'pinza', label:'Ojos en palitos y una pinza roja'}},
+    {type:'quiz', sp:'martina', t:'¿Quién vive dentro de la concha? ¡Ayúdame a resolverlo!', actors:[Mq,B],
+      options:['caracol','pez','cangrejo'], answer:'cangrejo',
+      hints:{caracol:'Los caracoles no tienen pinzas ni caminan de lado. ¡Prueba otra vez!', pez:'Los peces viven en el agua y no tienen patas para caminar por la arena. ¡Prueba otra vez!'}},
+    {sp:'cangrejo', t:'¡Hola! Soy Pancho, un cangrejo ermitaño. Esta concha no es mía de nacimiento: ¡la encontré vacía y me mudé!', actors:[M,B,A('cangrejo',590,428,1.4)]},
+    {type:'dato', sp:'narrador', t:'¿Sabías que los cangrejos ermitaños tienen la barriga blandita y por eso usan conchas vacías como casa? Cuando crecen, buscan una más grande. ¡A veces hacen una fila del más grande al más pequeño y se cambian las conchas todos a la vez!'},
+    {type:'fin', sp:'martina', t:'¡Caso resuelto! Pancho tiene casa nueva y tú tienes pegatina nueva.'}
+   ]},
+ { key:'murcielago', title:'Chillidos en la cueva', bg:'cueva', habitat:'Cueva de la montaña',
+   short:'Ven con las orejas gracias al eco.',
+   scenes:[
+    {type:'titulo', actors:[M,B], sp:'narrador', t:'Capítulo 4: Chillidos en la cueva. Algo hace ¡clic, clic! en la oscuridad. ¿Quién será?', flags:{luz:1}},
+    {sp:'narrador', t:'Al atardecer, Martina y Bruno encuentran una cueva en la montaña. Martina enciende su linterna.', actors:[M,B]},
+    {sp:'martina', t:'¿Has oído eso? ¡Clic, clic, clic! Viene de dentro de la cueva.'},
+    {sp:'bruno', t:'Shhh… Hablemos bajito para no asustar a nadie.'},
+    {sp:'narrador', t:'Primera pista: se oyen grititos muy agudos, ¡clic, clic!, que rebotan en las paredes de la cueva.', clue:{icon:'sonido', label:'Grititos que rebotan en las paredes'}},
+    {sp:'martina', t:'Mira arriba con la linterna… Hay bultitos colgados del techo. ¡Están durmiendo boca abajo!', flags:{colgados:1}, clue:{icon:'colgados', label:'Duermen colgados boca abajo'}},
+    {sp:'bruno', t:'¡Se ha hecho de noche y salen todos volando! Van rapidísimo y no chocan con nada, aunque está muy oscuro.', flags:{vuelan:1}, clue:{icon:'luna', label:'Vuelan de noche sin chocar'}},
+    {type:'quiz', sp:'martina', t:'¿Quién vive en la cueva? ¡Piensa como una detective!', actors:[Mq,B],
+      options:['murcielago','raton','mariposa'], answer:'murcielago',
+      hints:{raton:'Los ratones no pueden volar. ¡Prueba otra vez!', mariposa:'Las mariposas vuelan de día y no duermen boca abajo en las cuevas. ¡Prueba otra vez!'}},
+    {sp:'murcielago', t:'¡Hola! Soy Nora, la murciélaga. Duermo de día colgada boca abajo y salgo de noche a comer mosquitos.', actors:[M,B,A('murcielago',590,250,1.5)]},
+    {type:'dato', sp:'narrador', t:'¿Sabías que los murciélagos ven con las orejas? Gritan ¡clic, clic! y escuchan el eco que rebota en las cosas. Así saben dónde está todo, aunque esté oscuro. Se llama ecolocalización. ¡Y son los únicos mamíferos que vuelan de verdad!'},
+    {type:'fin', sp:'martina', t:'¡Caso resuelto! Nora ya puede seguir con su cena de mosquitos.'}
+   ]},
+ { key:'mariposa', title:'¿Dónde está Lina?', bg:'pradera', habitat:'Pradera',
+   short:'Las monarca vuelan miles de kilómetros.',
+   scenes:[
+    {type:'titulo', actors:[M,B,A('oruga',520,432,1.1)], sp:'narrador', t:'Capítulo 5: ¿Dónde está Lina? La oruga amiga de Martina ha desaparecido. ¿Adónde habrá ido?'},
+    {sp:'narrador', t:'En la pradera vive Lina, una oruga a rayas amarillas, negras y blancas. Martina la visita todos los días.'},
+    {sp:'narrador', t:'Pero hoy… ¡Lina no está! Martina la busca por todas partes.', actors:[M,B]},
+    {sp:'bruno', t:'No te preocupes, Martina. Las buenas detectives siempre encuentran a sus amigos.'},
+    {sp:'martina', t:'Las hojas de su planta favorita, el algodoncillo, están todas mordisqueadas. ¡Lina ha comido muchísimo!', flags:{mordidas:1}, clue:{icon:'hoja', label:'Hojas muy mordisqueadas'}},
+    {sp:'bruno', t:'¡Mira debajo de esa hoja! Hay una cajita verde, colgada, con puntitos dorados.', flags:{crisalida:1}, clue:{icon:'crisalida', label:'Una cajita verde colgada'}},
+    {sp:'narrador', t:'Pasaron dos semanas. Un día, la cajita verde estaba vacía y abierta, transparente como el papel.', flags:{vacia:1}, clue:{icon:'vacia', label:'La cajita está vacía'}},
+    {type:'quiz', sp:'martina', t:'Esta es la pregunta más difícil. ¿En qué se ha convertido Lina?', actors:[Mq,B],
+      options:['caracol','mariposa','luciernaga'], answer:'mariposa',
+      hints:{caracol:'Los caracoles no salen de una cajita verde colgada. ¡Prueba otra vez!', luciernaga:'Casi… pero las rayas de Lina eran amarillas, negras y blancas. ¿Quién tiene alas naranjas? ¡Prueba otra vez!'}},
+    {sp:'mariposa', t:'¡Martina, soy yo, Lina! Dentro de la cajita, que se llama crisálida, me transformé en mariposa monarca.', flags:{mariposas:1}, actors:[M,B,A('mariposa',560,280,1.4)]},
+    {type:'dato', sp:'narrador', t:'¿Sabías que este cambio se llama metamorfosis? Huevo, oruga, crisálida y mariposa. Las mariposas monarca hacen un viaje enorme: ¡vuelan miles de kilómetros, desde Canadá hasta México, para pasar el invierno!'},
+    {type:'fin', sp:'martina', t:'¡Último caso resuelto! Ahora tú también eres detective de animales. Sal al parque con tus ojos de lupa: ¿qué pistas encontrarás?'}
+   ]}
+];
+
+/* ---------- Estado ---------- */
+const KEY = 'martina-lupa-pegatinas';
+const state = {ep:0, sc:0, voice:true, auto:true, solved:{}, stickers:{}};
+try { state.stickers = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ state.stickers = {}; }
+const saveStickers = () => { try { localStorage.setItem(KEY, JSON.stringify(state.stickers)); } catch(e){} };
+
+const $ = id => document.getElementById(id);
+const svgEl = $('sceneSvg'), overlay = $('overlay'), stage = $('stage');
+let timers = {}, token = 0, voices = [];
+const clearTimers = () => { Object.values(timers).forEach(t => { clearTimeout(t); clearInterval(t); }); timers = {}; };
+
+function loadVoices(){ try { voices = speechSynthesis.getVoices().filter(v => /^es/i.test(v.lang)); } catch(e){ voices = []; } }
+if ('speechSynthesis' in window){ loadVoices(); try { speechSynthesis.onvoiceschanged = loadVoices; } catch(e){} }
+function stopVoice(){ try { speechSynthesis.cancel(); } catch(e){} }
+function speak(text, sp, onend){
+  if (!state.voice || !('speechSynthesis' in window)) return false;
+  try {
+    stopVoice();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'es-ES';
+    const v = voices.find(v => v.lang === 'es-ES') || voices.find(v => /^es/i.test(v.lang));
+    if (v) u.voice = v;
+    const s = SPK[sp] || SPK.narrador;
+    u.pitch = s.pitch; u.rate = s.rate || 1;
+    u.onend = onend; u.onerror = onend;
+    speechSynthesis.speak(u);
+    return true;
+  } catch(e){ return false; }
+}
+
+const ep = () => EPISODES[state.ep];
+const scene = (i = state.sc) => ep().scenes[i];
+function actorsAt(i){ for(let k=i;k>=0;k--){ if (ep().scenes[k].actors) return ep().scenes[k].actors; } return []; }
+function flagsAt(i){ const f={}; for(let k=0;k<=i;k++) Object.assign(f, ep().scenes[k].flags || {}); return f; }
+
+function actorSVG(a, prevIds, sp){
+  const enter = prevIds.has(a.id) ? '' : 'ent-' + (a.enter || DEF_ENTER[a.id] || 'pop');
+  const idle = 'idle-' + (a.idle || DEF_IDLE[a.id] || 'bob');
+  const talk = a.id === sp ? 'talking' : '';
+  const q = a.q ? `<g class="qm"><text x="-6" y="-190" font-family="Fredoka, sans-serif" font-weight="700" font-size="40" fill="#ffc93c" stroke="#17324a" stroke-width="2">?</text><text x="30" y="-170" font-family="Fredoka, sans-serif" font-weight="700" font-size="28" fill="#fff" stroke="#17324a" stroke-width="2">?</text></g>` : '';
+  return `<g transform="translate(${a.x} ${a.y}) scale(${a.flip ? -a.s : a.s} ${a.s})"><g class="${enter}"><g class="${idle}"><g class="${talk}">${DRAW[a.id]()}</g></g>${q}</g></g>`;
+}
+function clueOnStage(c){
+  return `<g transform="translate(${c.x || 590} ${c.y || 210})"><g class="ent-pop"><circle r="66" fill="#fffbe6" stroke="#ffc93c" stroke-width="6"/>
+    <g class="spin"><circle r="78" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 12"/></g>
+    <g transform="translate(-48 -48) scale(1.6)">${ICON[c.icon]()}</g></g></g>`;
+}
+const animalSVG = id => `<svg viewBox="-80 -125 160 130" aria-hidden="true">${DRAW[id]()}</svg>`;
+
+/* ---------- Pintar ---------- */
+function render(){
+  clearTimers(); stopVoice();
+  const my = ++token;
+  const s = scene(), e = ep();
+  const prevIds = new Set(state.sc > 0 ? actorsAt(state.sc - 1).map(a => a.id) : []);
+  const flags = flagsAt(state.sc);
+  let html = BG[s.bg || e.bg](flags);
+  html += actorsAt(state.sc).map(a => actorSVG(a, prevIds, s.sp)).join('');
+  if (s.clue) html += clueOnStage(s.clue);
+  svgEl.innerHTML = html;
+  svgEl.setAttribute('aria-label', 'Capítulo ' + (state.ep + 1) + ': ' + e.title);
+
+  // capa superpuesta
+  overlay.className = 'ov'; overlay.innerHTML = '';
+  if (s.type === 'titulo'){
+    overlay.classList.add('ov-title');
+    overlay.innerHTML = `<p class="eyebrow">Capítulo ${state.ep + 1} · ${e.habitat}</p><h2>${e.title}</h2><button class="btn big" type="button" data-act="start">▶ Ver el capítulo</button>`;
+  } else if (s.type === 'dato'){
+    overlay.classList.add('ov-fact');
+    overlay.innerHTML = `<div class="fact-card"><span class="eyebrow">¿Sabías que…?</span>${e.short}</div>`;
+  } else if (s.type === 'fin'){
+    overlay.classList.add('ov-fin');
+    const last = state.ep === EPISODES.length - 1;
+    overlay.innerHTML = `<div class="sticker">${animalSVG(e.key)}</div><p class="stamp">¡Caso resuelto!</p>
+      <div class="fin-row"><button class="btn ghost" type="button" data-act="again" style="background:#fff;color:#17324a">Ver otra vez</button>
+      <button class="btn" type="button" data-act="${last ? 'first' : 'nextep'}">${last ? 'Volver al capítulo 1' : 'Siguiente capítulo ▶'}</button></div>`;
+    if (!state.stickers[e.key]){ state.stickers[e.key] = true; saveStickers(); }
+  }
+
+  // subtítulos y pregunta
+  const sp = SPK[s.sp] || SPK.narrador;
+  $('who').textContent = sp.name; $('who').style.background = sp.chip;
+  $('lineSr').textContent = sp.name + ': ' + s.t;
+  const subs = $('subs');
+  subs.querySelectorAll('.quiz,.hint').forEach(n => n.remove());
+  if (s.type === 'quiz'){
+    const q = document.createElement('div'); q.className = 'quiz';
+    const solved = state.solved[state.ep];
+    q.innerHTML = s.options.map(o => `<button class="opt${solved && o === s.answer ? ' right' : ''}" type="button" data-opt="${o}">${animalSVG(o)}<span>${ANIMALS[o]}</span></button>`).join('');
+    const h = document.createElement('p'); h.className = 'hint'; h.id = 'hint'; h.setAttribute('aria-live','polite');
+    subs.append(q, h);
+  }
+
+  // texto con efecto máquina de escribir + voz
+  const line = $('line'); const text = s.t;
+  let pending = 1, spoke = false;
+  const autoable = !['titulo','quiz','fin'].includes(s.type);
+  const done = () => {
+    if (my !== token) return;
+    if (--pending > 0) return;
+    if (state.auto && autoable) timers.adv = setTimeout(next, spoke ? 900 : 1400 + text.length * 40);
+  };
+  if (s.type !== 'titulo' || state.started){
+    spoke = speak(text, s.sp, () => { if (my === token && !timers.spokeDone){ timers.spokeDone = 1; done(); } });
+    if (spoke){ pending++; timers.safety = setTimeout(() => { if (!timers.spokeDone){ timers.spokeDone = 1; done(); } }, 4000 + text.length * 95); }
+  }
+  if (reduce){ line.textContent = text; done(); }
+  else {
+    let i = 0; line.textContent = '';
+    timers.type = setInterval(() => {
+      i += 2; line.textContent = text.slice(0, i);
+      if (i >= text.length){ clearInterval(timers.type); done(); }
+    }, 32);
+  }
+
+  // controles
+  $('prev').disabled = state.sc === 0;
+  const blocked = s.type === 'quiz' && !state.solved[state.ep];
+  $('next').disabled = blocked || s.type === 'fin';
+  $('next').textContent = s.type === 'titulo' ? 'Empezar ▶' : 'Siguiente ▶';
+  $('dots').innerHTML = e.scenes.map((_, i) => `<span class="dot${i < state.sc ? ' on' : ''}${i === state.sc ? ' now' : ''}"></span>`).join('');
+  renderClues(); renderEpisodes();
+}
+
+function renderClues(){
+  const found = ep().scenes.slice(0, state.sc + 1).filter(s => s.clue).map(s => s.clue);
+  const total = ep().scenes.filter(s => s.clue).length;
+  let html = '';
+  for (let i = 0; i < total; i++){
+    const c = found[i];
+    html += c ? `<div class="clue found"><svg viewBox="0 0 60 60" aria-hidden="true">${ICON[c.icon]()}</svg><p><strong>Pista ${i + 1}.</strong> ${c.label}</p></div>`
+              : `<div class="clue empty" aria-label="Pista ${i + 1} sin descubrir">?</div>`;
+  }
+  $('clues').innerHTML = html;
+}
+
+function renderEpisodes(){
+  $('eps').innerHTML = EPISODES.map((e, i) => {
+    const got = !!state.stickers[e.key];
+    return `<button class="ep" type="button" data-ep="${i}" aria-current="${i === state.ep}">
+      <span class="stk${got ? '' : ' locked'}">${animalSVG(e.key)}</span>
+      <span class="num">Capítulo ${i + 1}</span>
+      <span class="ttl">${e.title}</span>
+      <span class="hab">${e.habitat}${got ? ' · Pegatina conseguida' : ''}</span></button>`;
+  }).join('');
+}
+
+function go(i){
+  const n = ep().scenes.length;
+  if (i < 0 || i >= n) return;
+  state.sc = i;
+  if (!reduce){ stage.classList.add('fading'); setTimeout(() => stage.classList.remove('fading'), 30); }
+  render();
+}
+function next(){
+  const s = scene();
+  if (s.type === 'titulo') state.started = true;
+  if (s.type === 'quiz' && !state.solved[state.ep]) return;
+  go(state.sc + 1);
+}
+function openEpisode(i, scroll){
+  state.ep = i; state.sc = 0; state.started = false;
+  render();
+  if (scroll) stage.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
+}
+
+function confetti(){
+  if (reduce) return;
+  const cols = ['#ffc93c','#e2553f','#2e8b57','#4aa3d8','#c58fd6','#fff'];
+  for (let i = 0; i < 46; i++){
+    const d = document.createElement('span'); d.className = 'confetti';
+    d.style.left = (Math.random() * 100) + '%'; d.style.background = cols[i % cols.length];
+    d.style.animationDelay = (Math.random() * .5) + 's'; d.style.animationDuration = (1.6 + Math.random()) + 's';
+    stage.appendChild(d); setTimeout(() => d.remove(), 3200);
+  }
+}
+
+/* ---------- Eventos ---------- */
+$('next').addEventListener('click', next);
+$('prev').addEventListener('click', () => go(state.sc - 1));
+overlay.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-act]'); if (!b) return;
+  const act = b.dataset.act;
+  if (act === 'start'){ state.started = true; go(1); }
+  if (act === 'again') openEpisode(state.ep, false);
+  if (act === 'nextep') openEpisode(state.ep + 1, false);
+  if (act === 'first') openEpisode(0, false);
+});
+$('subs').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-opt]'); if (!b || b.classList.contains('wrong')) return;
+  const s = scene(); if (state.solved[state.ep]) return;
+  const hint = $('hint');
+  if (b.dataset.opt === s.answer){
+    state.solved[state.ep] = true;
+    b.classList.add('right'); hint.style.color = 'var(--ok)';
+    hint.textContent = '¡Muy bien, detective! ¡Lo has descubierto!';
+    confetti(); clearTimers();
+    speak('¡Muy bien, detective! ¡Lo has descubierto!', 'martina');
+    $('next').disabled = false;
+    timers.adv = setTimeout(() => go(state.sc + 1), 2600);
+  } else {
+    b.classList.add('wrong'); b.setAttribute('aria-disabled', 'true');
+    hint.style.color = ''; hint.textContent = s.hints[b.dataset.opt];
+    speak(s.hints[b.dataset.opt], 'bruno');
+  }
+});
+$('eps').addEventListener('click', ev => { const b = ev.target.closest('[data-ep]'); if (b) openEpisode(+b.dataset.ep, true); });
+function toggle(btn, key){
+  btn.addEventListener('click', () => {
+    state[key] = !state[key]; btn.setAttribute('aria-pressed', state[key]);
+    if (key === 'voice' && !state.voice) stopVoice();
+    if (key === 'auto'){ clearTimeout(timers.adv); if (state.auto && !['titulo','quiz','fin'].includes(scene().type)) timers.adv = setTimeout(next, 1500); }
+  });
+}
+toggle($('tVoice'), 'voice'); toggle($('tAuto'), 'auto');
+document.addEventListener('keydown', ev => {
+  if (ev.target.closest('input,textarea')) return;
+  if (ev.key === 'ArrowRight' && !$('next').disabled) next();
+  if (ev.key === 'ArrowLeft' && state.sc > 0) go(state.sc - 1);
+});
+
+render();
+})();
+</script>
+</html>
