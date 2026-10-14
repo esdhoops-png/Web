@@ -17,7 +17,7 @@ Proyecto de marca y web para un método de 12 hábitos saludables, un reto de 21
 - **Nombre:** Racha. Una serie de días seguidos: resume el método (no romper la cadena).
 - **Claim:** Hoy cuenta. Mañana, también. / Un 1% mejor cada día.
 - **Logo:** cuatro casillas (tres días hechos + hoy en naranja) y “racha” en minúscula.
-- **Color:** Hueso `#F3F4EF` · Tinta `#13202E` · Amanecer `#FF5A1F` · Salvia `#A9C2B0` · Noche `#0F161F`.
+- **Color (acento confirmado: naranja amanecer, siempre con texto tinta encima, nunca blanco):** Hueso `#F3F4EF` · Tinta `#13202E` · Amanecer `#FF5A1F` · Salvia `#A9C2B0` · Noche `#0F161F`.
 - **Tipografía:** Bricolage Grotesque (titulares), Figtree (texto), DM Mono (datos).
 - **Redes:** `@somosracha` en Instagram y TikTok, canal “Racha” en YouTube y newsletter “El Domingo”. Hashtag: `#MiRacha`.
 
