@@ -50,7 +50,7 @@ Orden de publicación (el grid queda en damero: naranja, claro y oscuro alternad
 | Mié 14 | publicado | `post1-1.png` … `post1-5.png` | Carrusel "Hoy cuenta" |
 | Jue 15 | 08:00 | `semana-2-jue-agua.png` | Hábito 01: agua al despertar |
 | Vie 16 | 18:00 | `semana-3-vie-checklist.png` | Plantilla: finde sin romper la racha |
-| Sáb 17 | 10:00 | `semana-4-sab-mito.png` | Mito o verdad: 10.000 pasos |
+| Sáb 17 | 10:00 | `carruseles/guia-12-habitos/` (13 imágenes) | Guía de los 12 hábitos · fijar en el perfil |
 | Dom 18 | 19:00 | `semana-5-dom-empieza.png` | Mañana empieza el reto |
 
 ## Jue 15 · Agua al despertar
@@ -103,3 +103,20 @@ Lunes 19 · Día 1.
 Comenta "YO" y lo hacemos juntos. Sube tu día en stories con #MiRacha.
 
 #MiRacha #Reto21Racha #habitossaludables #reto21dias #nuevoshabitos #constancia
+
+
+---
+
+# Calendario hasta el 8 de noviembre
+Vista completa en `calendario.png`. Regla: primero el hábito, después la recomendación que lo acompaña.
+- El mito de los 10.000 pasos pasa al jueves 29 de octubre.
+- Los posts de cada hábito reutilizan su imagen de la guía (`carruseles/guia-12-habitos/guia-XX.png`).
+
+## Sáb 17 · Guía de los 12 hábitos
+Los 12 hábitos de Racha Lab, uno por imagen 📌
+
+Cada uno con su versión mínima para los días malos. El lunes empezamos el reto y los vamos sumando de 4 en 4.
+
+Guárdalo y vuelve aquí cuando dudes.
+
+#MiRacha #Reto21Racha #habitossaludables #nuevoshabitos #constancia #rutinasaludable
