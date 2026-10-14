@@ -53,9 +53,11 @@ kora_letters = split_letters(kora, 3)
 # ---------- layout ----------
 logo_src_w = 955 - 578
 logo_src_h = 795 - 266
-S = min(W * 0.62 / logo_src_w, H * 0.50 / logo_src_h)   # source->output scale
+import os
+FIT, YC = float(os.environ.get('FIT', 0.62)), float(os.environ.get('YC', 0.465))
+S = min(W * FIT / logo_src_w, H * 0.50 / logo_src_h)   # source->output scale
 CX = W / 2
-TOP = H * 0.5 - (logo_src_h * S) / 2 - (H * 0.035)
+TOP = H * YC - (logo_src_h * S) / 2
 SRC_CX = (578 + 955) / 2
 
 def place(box):
