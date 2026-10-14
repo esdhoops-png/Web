@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Racha</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Racha: 12 hábitos saludables, un reto de 21 días y un tracker para no romper tu racha. Un 1% mejor cada día.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una sola columna editorial; la cuadrícula de días (la "racha") es el motivo que se repite. */
+:root {
+  --paper: #F3F4EF;
+  --surface: #FFFFFF;
+  --ink: #13202E;
+  --muted: #5B6672;
+  --line: #DADDD4;
+  --sun: #FF5A1F;      /* naranja amanecer: solo para lo que está "hecho" o lo que importa */
+  --sun-ink: #FFFFFF;
+  --sage: #A9C2B0;     /* días parcialmente hechos */
+  --cell: #E3E6DD;     /* casilla vacía */
+  --display: 'Bricolage Grotesque', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --wrap: 1120px;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0F161F; --surface: #161F2B; --ink: #EEF0EA; --muted: #9AA5B1;
+    --line: #253142; --sun: #FF7040; --sun-ink: #13202E; --sage: #4F6F5B; --cell: #1E2936;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0F161F; --surface: #161F2B; --ink: #EEF0EA; --muted: #9AA5B1;
+  --line: #253142; --sun: #FF7040; --sun-ink: #13202E; --sage: #4F6F5B; --cell: #1E2936;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: var(--wrap); margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); line-height: 1.02; margin: 0; text-wrap: balance; letter-spacing: -0.03em; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; border-radius: 6px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer;
+  font: 600 16px/1 var(--body); text-decoration: none; padding: 16px 22px; border-radius: 999px;
+  background: var(--ink); color: var(--paper); transition: transform .15s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn--ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+/* Logo */
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo__mark { display: inline-flex; gap: 3px; }
+.logo__mark i { width: 9px; height: 9px; border-radius: 3px; background: var(--ink); }
+.logo__mark i:last-child { background: var(--sun); }
+.logo__word { font: 800 26px/1 var(--display); letter-spacing: -0.05em; }
+
+/* Header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.top nav { display: flex; align-items: center; gap: 26px; font-weight: 500; font-size: 15px; }
+.top nav a { text-decoration: none; }
+.top nav a:not(.btn):hover { color: var(--sun); }
+.top .btn { padding: 11px 16px; font-size: 14px; }
+@media (max-width: 760px) { .top nav a:not(.btn) { display: none; } }
+
+/* Hero */
+.hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; padding-block: 72px 88px; }
+.hero h1 { font-size: clamp(52px, 8.4vw, 112px); font-weight: 800; letter-spacing: -0.055em; }
+.hero h1 em { font-style: normal; color: var(--sun); }
+.hero__lead { font-size: 20px; color: var(--muted); max-width: 30em; margin-top: 26px; }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero__meta { display: flex; gap: 28px; margin-top: 40px; flex-wrap: wrap; }
+.hero__meta b { display: block; font: 700 30px/1 var(--display); letter-spacing: -0.03em; }
+.hero__meta span { font-size: 14px; color: var(--muted); }
+.board { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 24px; min-width: 0; }
+.board__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+.board__head strong { font: 700 20px/1.1 var(--display); }
+.grid21 { display: grid; grid-template-columns: repeat(21, 1fr); gap: 4px; }
+.grid21 i { aspect-ratio: 1; border-radius: 3px; background: var(--cell); max-width: 100%; }
+.grid21 i.p { background: var(--sage); }
+.grid21 i.d { background: var(--sun); }
+.grid21 i.today { animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .45; } }
+.board__foot { display: flex; justify-content: space-between; margin-top: 12px; font: 400 12px/1 var(--mono); color: var(--muted); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 11px; height: 11px; border-radius: 3px; background: var(--cell); }
+@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; gap: 40px; padding-block: 48px 64px; } }
+
+/* Secciones */
+section { scroll-margin-top: 70px; }
+.sec .wrap { padding-block: 88px; }
+.sec + .sec .wrap { border-top: 1px solid var(--line); }
+.sec__head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 56px; align-items: end; margin-bottom: 48px; }
+.sec__head h2 { font-size: clamp(38px, 5.4vw, 64px); font-weight: 800; margin-top: 14px; }
+.sec__head p { color: var(--muted); font-size: 18px; max-width: 32em; }
+@media (max-width: 800px) { .sec__head { grid-template-columns: 1fr; } .sec .wrap { padding-block: 64px; } }
+
+/* Método */
+.rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 2px solid var(--ink); }
+.rule { padding: 28px 28px 8px 0; min-width: 0; }
+.rule + .rule { padding-left: 28px; border-left: 1px solid var(--line); }
+.rule h3 { font-size: 28px; font-weight: 700; margin: 14px 0 12px; }
+.rule p { color: var(--muted); }
+.rule .ex { margin-top: 16px; font: 400 14px/1.5 var(--mono); color: var(--ink); }
+@media (max-width: 800px) {
+  .rules { grid-template-columns: 1fr; }
+  .rule, .rule + .rule { padding: 24px 0; border-left: 0; }
+  .rule + .rule { border-top: 1px solid var(--line); }
+}
+
+/* Tracker */
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 40px; padding: 22px 26px; background: var(--ink); color: var(--paper); border-radius: var(--r); margin-bottom: 36px; }
+.status__num { font: 800 54px/1 var(--display); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.status__num small { font: 500 15px/1 var(--body); letter-spacing: 0; opacity: .7; margin-left: 6px; }
+.status__bar { flex: 1 1 220px; min-width: 0; }
+.status__bar p { font-size: 14px; opacity: .8; margin-bottom: 10px; }
+.track { height: 10px; border-radius: 99px; background: color-mix(in srgb, var(--paper) 18%, transparent); overflow: hidden; }
+.track b { display: block; height: 100%; width: 0; background: var(--sun); border-radius: inherit; transition: width .35s ease; }
+.hist { display: flex; gap: 4px; }
+.hist i { width: 12px; height: 26px; border-radius: 3px; background: color-mix(in srgb, var(--paper) 16%, transparent); }
+.hist i.p { background: var(--sage); }
+.hist i.d { background: var(--sun); }
+@media (max-width: 520px) { .hist i { width: 8px; } }
+
+.pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 20px; }
+.pillar { min-width: 0; }
+.pillar__name { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 2px solid var(--ink); }
+.pillar__name h3 { font-size: 26px; font-weight: 700; }
+.pillar__name span { font: 400 12px/1 var(--mono); color: var(--muted); }
+.habits { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.habit label {
+  display: grid; grid-template-columns: 28px 1fr; gap: 12px; cursor: pointer;
+  padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  transition: border-color .15s, background .15s;
+}
+.habit label:hover { border-color: var(--ink); }
+.habit input { position: absolute; opacity: 0; pointer-events: none; }
+.habit .box { width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--line); display: grid; place-items: center; transition: background .15s, border-color .15s; }
+.habit .box svg { width: 16px; height: 16px; stroke: var(--sun-ink); stroke-width: 3; fill: none; opacity: 0; }
+.habit input:checked + label .box { background: var(--sun); border-color: var(--sun); }
+.habit input:checked + label .box svg { opacity: 1; }
+.habit input:checked + label { border-color: var(--sun); }
+.habit input:focus-visible + label { outline: 3px solid var(--sun); outline-offset: 2px; }
+.habit strong { display: block; font-weight: 600; line-height: 1.3; }
+.habit .min { display: block; font-size: 14px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.habit .min b { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--sun); margin-right: 4px; }
+@media (max-width: 1000px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .pillars { grid-template-columns: 1fr; } }
+.tracker__note { margin-top: 24px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+.linkbtn { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
+
+/* Reto 21 */
+.weeks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.week { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 28px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.week__n { font: 500 13px/1 var(--mono); color: var(--muted); }
+.week h3 { font-size: 34px; font-weight: 800; }
+.week p { color: var(--muted); }
+.week ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.week li { display: flex; gap: 10px; align-items: center; font-weight: 500; }
+.week li::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--sun); flex: none; }
+.week li.prev::before { background: var(--sage); }
+.week li.prev { color: var(--muted); font-weight: 400; }
+@media (max-width: 860px) { .weeks { grid-template-columns: 1fr; } }
+
+/* Comunidad */
+.social { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 2px solid var(--ink); }
+.net { padding: 24px 20px 24px 0; min-width: 0; }
+.net + .net { padding-left: 20px; border-left: 1px solid var(--line); }
+.net .eyebrow { display: block; margin-bottom: 12px; }
+.net strong { display: block; font: 700 22px/1.15 var(--display); letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.net p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+@media (max-width: 860px) {
+  .social { grid-template-columns: 1fr 1fr; }
+  .net:nth-child(3) { padding-left: 0; border-left: 0; }
+  .net:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 480px) {
+  .social { grid-template-columns: 1fr; }
+  .net, .net + .net { padding-left: 0; border-left: 0; }
+  .net + .net { border-top: 1px solid var(--line); }
+}
+
+.join { margin-top: 56px; background: var(--sun); color: var(--sun-ink); border-radius: 24px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px 48px; align-items: center; }
+.join h3 { font-size: clamp(32px, 4.4vw, 52px); font-weight: 800; }
+.join p { margin-top: 12px; font-size: 18px; }
+.join form { display: flex; gap: 8px; flex-wrap: wrap; }
+.join input { flex: 1 1 220px; min-width: 0; padding: 16px 20px; border-radius: 999px; border: 0; font: 500 16px/1 var(--body); background: var(--paper); color: var(--ink); }
+.join .btn { background: var(--ink); color: var(--paper); }
+.join .ok { font-weight: 600; margin-top: 12px; }
+@media (max-width: 800px) { .join { grid-template-columns: 1fr; } }
+
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding-block: 40px 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .grid21 i.today { animation: none; }
+  .btn, .track b { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Racha, inicio">
+      <span class="logo__mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="logo__word">racha</span>
+    </a>
+    <nav aria-label="Principal">
+      <a href="#metodo">Método</a>
+      <a href="#habitos">Los 12 hábitos</a>
+      <a href="#reto">Reto 21</a>
+      <a href="#comunidad">Comunidad</a>
+      <a class="btn" href="#habitos">Empieza hoy</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">12 hábitos · 21 días · 1% cada día</p>
+        <h1 style="margin-top:18px">Hoy cuenta.<br>Mañana, <em>también.</em></h1>
+        <p class="hero__lead">Racha es un método sencillo para construir hábitos saludables que se quedan: doce acciones pequeñas, un reto de tres semanas y una regla de oro. No rompas la cadena.</p>
+        <div class="hero__cta">
+          <a class="btn" href="#habitos">Marcar mi día</a>
+          <a class="btn btn--ghost" href="#reto">Ver el reto de 21 días</a>
+        </div>
+        <div class="hero__meta">
+          <div><b>12</b><span>hábitos en 4 pilares</span></div>
+          <div><b>5 min</b><span>versión mínima de cada uno</span></div>
+          <div><b>×37</b><span>mejor en un año al 1% diario</span></div>
+        </div>
+      </div>
+
+      <figure class="board" style="margin:0" aria-label="Ejemplo de una racha de 21 días">
+        <div class="board__head">
+          <strong>Así se ve una racha</strong>
+          <span class="eyebrow">Ejemplo</span>
+        </div>
+        <div class="grid21" id="demoGrid" aria-hidden="true"></div>
+        <div class="board__foot"><span>día 1</span><span>día 21</span></div>
+        <div class="legend">
+          <span><i></i>sin hacer</span>
+          <span><i style="background:var(--sage)"></i>versión mínima</span>
+          <span><i style="background:var(--sun)"></i>hecho</span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="metodo">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <p class="eyebrow">El método</p>
+          <h2>Tres reglas. Ninguna excusa.</h2>
+        </div>
+        <p>La fuerza de voluntad se agota. Los sistemas no. Racha convierte cada hábito en algo tan pequeño que es más fácil hacerlo que buscar una excusa.</p>
+      </div>
+      <div class="rules">
+        <article class="rule">
+          <p class="eyebrow">Regla de los 5 minutos</p>
+          <h3>Empieza ridículamente pequeño</h3>
+          <p>Cada hábito tiene una versión mínima. Los días malos haces esa, y la racha sigue viva.</p>
+          <p class="ex">“Leer 10 páginas” → “Leer 1 página”</p>
+        </article>
+        <article class="rule">
+          <p class="eyebrow">Regla del ancla</p>
+          <h3>Engánchalo a algo que ya haces</h3>
+          <p>No busques tiempo libre. Ata el hábito nuevo a una rutina que ya existe.</p>
+          <p class="ex">“Después del café, escribo 3 líneas.”</p>
+        </article>
+        <article class="rule">
+          <p class="eyebrow">Regla del nunca dos</p>
+          <h3>Fallar un día es humano</h3>
+          <p>Fallar dos seguidos es el inicio de otro hábito. Si hoy se rompe, mañana vuelves sí o sí.</p>
+          <p class="ex">Un día perdido no borra 20 ganados.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="habitos">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <p class="eyebrow">Tu día de hoy</p>
+          <h2>Los 12 hábitos de Racha</h2>
+        </div>
+        <p>Marca lo que hayas hecho hoy. Con 4 hábitos o más, el día suma a tu racha. Tus datos se guardan solo en este navegador.</p>
+      </div>
+
+      <div class="status" aria-live="polite">
+        <div class="status__num"><span id="streak">0</span><small id="streakLbl">días de racha</small></div>
+        <div class="status__bar">
+          <p id="todayTxt">0 de 12 hábitos hoy</p>
+          <div class="track"><b id="todayBar"></b></div>
+        </div>
+        <div>
+          <p style="font-size:12px;opacity:.7;margin-bottom:8px;font-family:var(--mono)">ÚLTIMOS 14 DÍAS</p>
+          <div class="hist" id="hist"></div>
+        </div>
+      </div>
+
+      <div class="pillars" id="pillars"></div>
+
+      <div class="tracker__note">
+        <span>Consejo: no intentes los 12 a la vez. Sigue el reto de 21 días y añade 4 por semana.</span>
+        <button class="linkbtn" id="resetToday" type="button">Desmarcar hoy</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="reto">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <p class="eyebrow">Reto 21 días</p>
+          <h2>Cuatro hábitos por semana. Ni uno más.</h2>
+        </div>
+        <p>Tres semanas, tres capas. Cada semana sumas cuatro hábitos nuevos y mantienes los anteriores en su versión mínima.</p>
+      </div>
+      <div class="weeks" id="weeks"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="comunidad">
+    <div class="wrap">
+      <div class="sec__head">
+        <div>
+          <p class="eyebrow">Comunidad</p>
+          <h2>Las rachas se cuidan mejor en compañía.</h2>
+        </div>
+        <p>Comparte tu día con <strong>#MiRacha</strong>. Cada semana destacamos las rachas más largas y los regresos más valientes.</p>
+      </div>
+      <div class="social">
+        <div class="net"><span class="eyebrow">Instagram</span><strong>@somosracha</strong><p>Carruseles de hábitos, retos y tu racha en stories.</p></div>
+        <div class="net"><span class="eyebrow">TikTok</span><strong>@somosracha</strong><p>Hábitos en 30 segundos. Antes y después, sin filtros.</p></div>
+        <div class="net"><span class="eyebrow">YouTube</span><strong>Racha</strong><p>Rutinas completas y la ciencia detrás de cada hábito.</p></div>
+        <div class="net"><span class="eyebrow">Newsletter</span><strong>El Domingo</strong><p>Un email a la semana para planear los 7 días siguientes.</p></div>
+      </div>
+
+      <div class="join">
+        <div>
+          <h3>Empieza el lunes. O mejor, hoy.</h3>
+          <p>Recibe cada domingo el plan de la semana del reto y una idea para no romper la racha.</p>
+        </div>
+        <div>
+          <form id="joinForm">
+            <label for="email" class="eyebrow" style="position:absolute;left:-9999px">Tu email</label>
+            <input id="email" type="email" required placeholder="tu@email.com" autocomplete="email">
+            <button class="btn" type="submit">Me apunto</button>
+          </form>
+          <p class="ok" id="joinOk" hidden>Apuntado. (Versión demo: conecta este formulario a tu herramienta de email.)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Racha, inicio">
+      <span class="logo__mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="logo__word" style="font-size:22px">racha</span>
+    </a>
+    <nav aria-label="Pie">
+      <a href="#habitos">Hábitos</a>
+      <a href="#reto">Reto 21</a>
+      <a href="marca.html">Manual de marca</a>
+    </nav>
+    <span>Hoy cuenta. © 2026 Racha</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var PILLARS = [
+    { name: 'Mover', note: 'cuerpo', habits: [
+      { id: 'mover', t: 'Muévete 20 minutos', m: '5 sentadillas al levantarte' },
+      { id: 'pasos', t: 'Camina 8.000 pasos', m: 'Una vuelta a la manzana tras comer' },
+      { id: 'estirar', t: 'Estira 5 minutos', m: 'Tocar la punta de los pies, 3 veces' }
+    ]},
+    { name: 'Nutrir', note: 'comida', habits: [
+      { id: 'agua', t: 'Agua al despertar', m: 'Un vaso antes del café' },
+      { id: 'plato', t: 'Proteína y verdura en cada plato', m: 'Una pieza de fruta o verdura extra' },
+      { id: 'comer', t: 'Come sin pantallas', m: 'Los primeros 5 minutos sin móvil' }
+    ]},
+    { name: 'Mente', note: 'foco', habits: [
+      { id: 'respirar', t: 'Respira 5 minutos', m: '10 respiraciones lentas' },
+      { id: 'leer', t: 'Lee 10 páginas', m: 'Una página' },
+      { id: 'escribir', t: 'Escribe 3 líneas', m: 'Una cosa buena de hoy' }
+    ]},
+    { name: 'Descansar', note: 'energía', habits: [
+      { id: 'sol', t: '10 minutos de luz natural', m: 'Café junto a la ventana' },
+      { id: 'pantallas', t: 'Una hora sin pantallas antes de dormir', m: 'Móvil fuera del dormitorio' },
+      { id: 'dormir', t: 'Acuéstate siempre a la misma hora', m: 'Alarma para ir a la cama' }
+    ]}
+  ];
+  var WEEKS = [
+    { n: 'Días 1–7', t: 'Cimientos', p: 'Lo básico que todo lo demás necesita: agua, luz, pasos y sueño.', ids: ['agua', 'sol', 'pasos', 'dormir'] },
+    { n: 'Días 8–14', t: 'Energía', p: 'Ahora que duermes mejor, toca mover y nutrir el cuerpo.', ids: ['mover', 'plato', 'respirar', 'pantallas'] },
+    { n: 'Días 15–21', t: 'Enfoque', p: 'La última capa es para la cabeza: atención, calma y claridad.', ids: ['leer', 'escribir', 'comer', 'estirar'] }
+  ];
+  var MIN_DAY = 4, KEY = 'racha.v1';
+  var byId = {};
+  PILLARS.forEach(function (p) { p.habits.forEach(function (h) { byId[h.id] = h; }); });
+
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function daysAgo(n) { var d = new Date(); d.setDate(d.getDate() - n); return iso(d); }
+
+  var data = load();
+  var today = iso(new Date());
+
+  // Hero: cuadrícula de ejemplo (12 hábitos × 21 días), cada vez más llena
+  var g = document.getElementById('demoGrid'), seed = 7;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  for (var r = 0; r < 12; r++) for (var c = 0; c < 21; c++) {
+    var i = document.createElement('i'), x = rnd(), level = 0.25 + c / 30;
+    if (c === 20) { if (r < 7) i.className = 'd today'; }
+    else if (x < level) i.className = 'd';
+    else if (x < level + 0.18) i.className = 'p';
+    g.appendChild(i);
+  }
+
+  // Pilares y hábitos
+  var check = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+  document.getElementById('pillars').innerHTML = PILLARS.map(function (p) {
+    return '<div class="pillar"><div class="pillar__name"><h3>' + p.name + '</h3><span>' + p.note + '</span></div><ul class="habits">' +
+      p.habits.map(function (h) {
+        return '<li class="habit"><input type="checkbox" id="h-' + h.id + '" data-id="' + h.id + '">' +
+          '<label for="h-' + h.id + '"><span class="box">' + check + '</span><span><strong>' + h.t + '</strong>' +
+          '<span class="min"><b>Mínimo</b>' + h.m + '</span></span></label></li>';
+      }).join('') + '</ul></div>';
+  }).join('');
+
+  // Reto 21
+  document.getElementById('weeks').innerHTML = WEEKS.map(function (w, wi) {
+    var prev = WEEKS.slice(0, wi).reduce(function (a, x) { return a.concat(x.ids); }, []);
+    return '<article class="week"><span class="week__n">Semana ' + (wi + 1) + ' · ' + w.n + '</span><h3>' + w.t + '</h3><p>' + w.p + '</p><ul>' +
+      w.ids.map(function (id) { return '<li>' + byId[id].t + '</li>'; }).join('') +
+      (prev.length ? '<li class="prev">+ ' + prev.length + ' hábitos anteriores, en versión mínima</li>' : '') +
+      '</ul></article>';
+  }).join('');
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.habit input'));
+  var done = data[today] || [];
+  boxes.forEach(function (b) { b.checked = done.indexOf(b.dataset.id) > -1; });
+
+  function streak() {
+    var n = 0, start = (data[today] || []).length >= MIN_DAY ? 0 : 1;
+    for (var k = start; k < 3650; k++) { if ((data[daysAgo(k)] || []).length >= MIN_DAY) n++; else break; }
+    return n;
+  }
+  function render() {
+    var count = (data[today] || []).length, s = streak();
+    document.getElementById('streak').textContent = s;
+    document.getElementById('streakLbl').textContent = s === 1 ? 'día de racha' : 'días de racha';
+    document.getElementById('todayTxt').textContent = count + ' de 12 hábitos hoy' +
+      (count >= MIN_DAY ? ' · el día ya suma' : ' · ' + (MIN_DAY - count) + ' más para sumar el día');
+    document.getElementById('todayBar').style.width = (count / 12 * 100) + '%';
+    var h = '';
+    for (var k = 13; k >= 0; k--) {
+      var c = (data[daysAgo(k)] || []).length;
+      h += '<i class="' + (c >= MIN_DAY ? 'd' : c > 0 ? 'p' : '') + '" title="' + daysAgo(k) + ': ' + c + '/12"></i>';
+    }
+    document.getElementById('hist').innerHTML = h;
+  }
+  boxes.forEach(function (b) {
+    b.addEventListener('change', function () {
+      data[today] = boxes.filter(function (x) { return x.checked; }).map(function (x) { return x.dataset.id; });
+      save(data); render();
+    });
+  });
+  document.getElementById('resetToday').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; });
+    delete data[today]; save(data); render();
+  });
+  document.getElementById('joinForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    // TODO: conectar con la herramienta de email (Mailchimp, Brevo, ConvertKit…)
+    document.getElementById('joinOk').hidden = false;
+    e.target.reset();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
