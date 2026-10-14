@@ -47,22 +47,11 @@ Orden de publicación (el grid queda en damero: naranja, claro y oscuro alternad
 
 | Día | Hora | Archivo | Post |
 |---|---|---|---|
-| Mié 14 | 19:00 | `logo-nombre-claro-1080x1350.png` | Presentación del logo |
-| Mié 14 | 19:30 | `post1-1.png` … `post1-5.png` | Carrusel "Hoy cuenta" |
+| Mié 14 | publicado | `post1-1.png` … `post1-5.png` | Carrusel "Hoy cuenta" |
 | Jue 15 | 08:00 | `semana-2-jue-agua.png` | Hábito 01: agua al despertar |
 | Vie 16 | 18:00 | `semana-3-vie-checklist.png` | Plantilla: finde sin romper la racha |
 | Sáb 17 | 10:00 | `semana-4-sab-mito.png` | Mito o verdad: 10.000 pasos |
 | Dom 18 | 19:00 | `semana-5-dom-empieza.png` | Mañana empieza el reto |
-
-## Mié 14 · Logo
-racha + lab.
-
-Racha: días seguidos haciendo algo que te hace bien.
-Lab: porque cada hábito se prueba, se mide y se ajusta.
-
-Hoy cuenta. Mañana, también.
-
-#MiRacha #RachaLab
 
 ## Jue 15 · Agua al despertar
 Hábito 01 de 12. El más fácil y el que más se olvida.
