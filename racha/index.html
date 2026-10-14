@@ -116,14 +116,15 @@ section { scroll-margin-top: 70px; }
 
 /* Método */
 .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 2px solid var(--ink); }
-.rule { padding: 28px 28px 8px 0; min-width: 0; }
-.rule + .rule { padding-left: 28px; border-left: 1px solid var(--line); }
+.rule { padding: 28px 28px 28px 0; min-width: 0; }
+.rule:not(:nth-child(3n+1)) { padding-left: 28px; border-left: 1px solid var(--line); }
+.rule:nth-child(n+4) { border-top: 1px solid var(--line); }
 .rule h3 { font-size: 28px; font-weight: 700; margin: 14px 0 12px; }
 .rule p { color: var(--muted); }
 .rule .ex { margin-top: 16px; font: 400 14px/1.5 var(--mono); color: var(--ink); }
 @media (max-width: 800px) {
   .rules { grid-template-columns: 1fr; }
-  .rule, .rule + .rule { padding: 24px 0; border-left: 0; }
+  .rule, .rule:not(:nth-child(3n+1)) { padding: 24px 0; border-left: 0; }
   .rule + .rule { border-top: 1px solid var(--line); }
 }
 
@@ -242,7 +243,7 @@ footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
       <div>
         <p class="eyebrow">12 hábitos · 21 días · 1% cada día</p>
         <h1 style="margin-top:18px">Hoy cuenta.<br>Mañana, <em>también.</em></h1>
-        <p class="hero__lead">Racha es un método sencillo para construir hábitos saludables que se quedan: doce acciones pequeñas, un reto de tres semanas y una regla de oro. No rompas la cadena.</p>
+        <p class="hero__lead">Racha es un método sencillo para construir hábitos saludables que se quedan: doce acciones pequeñas, seis reglas y un reto de tres semanas. No rompas la cadena.</p>
         <div class="hero__cta">
           <a class="btn" href="#habitos">Marcar mi día</a>
           <a class="btn btn--ghost" href="#reto">Ver el reto de 21 días</a>
@@ -275,7 +276,7 @@ footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
       <div class="sec__head">
         <div>
           <p class="eyebrow">El método</p>
-          <h2>Tres reglas. Ninguna excusa.</h2>
+          <h2>Seis reglas. Ninguna excusa.</h2>
         </div>
         <p>La fuerza de voluntad se agota. Los sistemas no. Racha convierte cada hábito en algo tan pequeño que es más fácil hacerlo que buscar una excusa.</p>
       </div>
@@ -297,6 +298,24 @@ footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
           <h3>Fallar un día es humano</h3>
           <p>Fallar dos seguidos es el inicio de otro hábito. Si hoy se rompe, mañana vuelves sí o sí.</p>
           <p class="ex">Un día perdido no borra 20 ganados.</p>
+        </article>
+        <article class="rule">
+          <p class="eyebrow">Regla del entorno</p>
+          <h3>Prepáralo la noche anterior</h3>
+          <p>Quita fricción a lo bueno y pónsela a lo malo. Tu casa decide más que tu fuerza de voluntad.</p>
+          <p class="ex">Zapatillas junto a la puerta, móvil fuera del dormitorio.</p>
+        </article>
+        <article class="rule">
+          <p class="eyebrow">Regla de la casilla</p>
+          <h3>Hazlo visible</h3>
+          <p>Marca cada hábito en cuanto lo hagas. Ver la cadena crecer engancha más que cualquier recompensa.</p>
+          <p class="ex">Lo que se marca, se repite.</p>
+        </article>
+        <article class="rule">
+          <p class="eyebrow">Regla del equipo</p>
+          <h3>Hazlo con alguien</h3>
+          <p>Comparte tu racha con un amigo o con la comunidad. Es más difícil fallarle a otro que a ti.</p>
+          <p class="ex">Publica tu día con #MiRacha.</p>
         </article>
       </div>
     </div>

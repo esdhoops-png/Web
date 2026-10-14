@@ -21,6 +21,15 @@ Proyecto de marca y web para un método de 12 hábitos saludables, un reto de 21
 - **Tipografía:** Bricolage Grotesque (titulares), Figtree (texto), DM Mono (datos).
 - **Redes:** `@somosracha` en Instagram y TikTok, canal “Racha” en YouTube y newsletter “El Domingo”. Hashtag: `#MiRacha`.
 
+## Las 6 reglas
+
+1. **Empieza ridículamente pequeño:** cada hábito tiene una versión mínima de 5 minutos.
+2. **Engánchalo a algo que ya haces:** “después del café, escribo 3 líneas”.
+3. **Nunca dos días seguidos:** fallar uno es humano; al día siguiente vuelves sí o sí.
+4. **Prepáralo la noche anterior:** quita fricción a lo bueno y pónsela a lo malo.
+5. **Hazlo visible:** marca cada hábito en cuanto lo hagas.
+6. **Hazlo con alguien:** comparte tu racha con un amigo o con #MiRacha.
+
 ## Los 12 hábitos
 
 | Pilar | Hábito | Versión mínima |
