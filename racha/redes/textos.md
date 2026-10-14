@@ -1,8 +1,13 @@
 # Instagram · Racha Lab
 
-## Foto de perfil
-- `perfil-oscuro.png` (recomendada): isotipo "rl." claro sobre negro. Destaca más en el feed.
-- `perfil-claro.png`: alternativa sobre fondo hueso.
+## Foto de perfil (logo con el nombre)
+- `perfil-nombre-oscuro.png` (recomendada): "rachalab." claro sobre negro.
+- `perfil-nombre-claro.png`: "rachalab." sobre fondo hueso.
+- `perfil-apilado-oscuro.png`: versión apilada; se lee mejor cuando el círculo es muy pequeño.
+- `perfil-oscuro.png` / `perfil-claro.png`: isotipo "rl." (alternativa).
+
+## Estilo de redes
+Fondos oscuros con grano y estelas de movimiento, titulares grandes escritos a mano (Gochi Hand), etiquetas pequeñas en mayúsculas en las esquinas (Hanken Grotesk) y el naranja como acento o fondo de la pieza principal. El logo "rachalab." siempre abajo a la izquierda.
 
 ## Nombre (campo "Nombre", se puede buscar)
 Racha Lab · Hábitos saludables
@@ -13,7 +18,7 @@ Método de hábitos saludables
 Hoy cuenta. Mañana, también.
 ↓ Empieza tu racha gratis
 
-## Primer post · carrusel de 5 imágenes (4:5)
+## Primer post · carrusel de 5 imágenes (4:5, 1080×1350)
 Archivos `post1-1.png` a `post1-5.png`, en ese orden.
 
 ### Pie de foto
