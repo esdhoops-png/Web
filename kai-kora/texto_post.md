@@ -30,6 +30,6 @@ Muy pronto, nuestra primera colección. Síguenos ✨
 
 ## Consejos al publicar
 
-- Portada: sube `portada_reel_logo3d_lado_izquierdo.png` (o `portada_reel_logo3d_lado_derecho.png`) en "Editar portada" → "Añadir desde la galería".
+- Portada: sube `portada_reel_logo3d_realista.png` en "Editar portada" → "Añadir desde la galería".
 - Activa "Compartir en el feed" para que el Reel también salga en tu perfil.
 - Primer comentario sugerido: "¿Quién es el rey o la reina de tu casa? 🐶🐱🐰 ¡Preséntanoslo aquí abajo!"
