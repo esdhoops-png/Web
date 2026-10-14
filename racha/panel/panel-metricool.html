@@ -1,0 +1,392 @@
+<title>Panel Racha Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@1&family=Schibsted+Grotesk:wght@700;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: panel de trabajo en una columna ancha; arriba el estado de las cuentas, luego lo programado, el formulario y el mapa de horas. */
+:root {
+  --paper: #EEE9E5; --surface: #F7F4F1; --ink: #111111; --muted: #6B645F; --line: #DCD5CF;
+  --sun: #FF5A1F; --sun-ink: #111111; --soft: #E2DCD7; --ok: #2F7D4F; --bad: #B3261E;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --display: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --body: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #141312; --surface: #1C1A19; --ink: #F1ECE8; --muted: #A39B95; --line: #2E2A28; --sun: #FF7040; --soft: #262321; --ok: #6BC28D; --bad: #F2867E; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #141312; --surface: #1C1A19; --ink: #F1ECE8; --muted: #A39B95; --line: #2E2A28; --sun: #FF7040; --soft: #262321; --ok: #6BC28D; --bad: #F2867E; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 64px; }
+h1, h2 { margin: 0; font-family: var(--display); font-weight: 900; letter-spacing: -0.035em; line-height: 1; text-wrap: balance; }
+h1 { font-size: clamp(40px, 6vw, 64px); }
+h2 { font-size: 30px; }
+h1 em, h2 em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; color: var(--sun); }
+p { margin: 0; }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+header.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 32px; padding-bottom: 24px; border-bottom: 2px solid var(--ink); }
+.accounts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font: 600 13px/1 var(--body); }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.chip.off i { background: var(--muted); }
+section { margin-top: 44px; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; margin-bottom: 18px; }
+.btn { font: 600 15px/1 var(--body); padding: 13px 18px; border-radius: 999px; border: 0; cursor: pointer; background: var(--ink); color: var(--paper); }
+.btn.sun { background: var(--sun); color: var(--sun-ink); }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+.linkbtn { background: none; border: 0; padding: 0; font: 600 14px/1 var(--body); color: var(--muted); text-decoration: underline; cursor: pointer; }
+.note { padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.note.err { border-color: var(--bad); }
+.note.err b { color: var(--bad); }
+.note.okn { border-color: var(--ok); }
+/* Programadas */
+.posts { display: grid; gap: 12px; }
+.post { display: grid; grid-template-columns: 96px 1fr auto; gap: 18px; align-items: center; padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.post img, .post .ph { width: 96px; height: 120px; object-fit: cover; border-radius: 10px; background: var(--soft); display: block; }
+.post .meta { min-width: 0; display: grid; gap: 6px; }
+.post .when { font: 700 18px/1.2 var(--display); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.post .txt { color: var(--muted); font-size: 14px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.post .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 600 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 6px 8px; border-radius: 6px; background: var(--soft); }
+.tag.pend { background: var(--sun); color: var(--sun-ink); }
+.post a { font: 600 14px/1 var(--body); color: var(--ink); white-space: nowrap; }
+@media (max-width: 620px) { .post { grid-template-columns: 72px 1fr; } .post img, .post .ph { width: 72px; height: 90px; } .post a { grid-column: 2; } }
+/* Formulario */
+form.compose { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; padding: 24px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+@media (max-width: 820px) { form.compose { grid-template-columns: 1fr; } }
+.field { display: grid; gap: 8px; min-width: 0; }
+label.lb { font: 600 13px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+input[type=date], input[type=time], select, textarea, input[type=url] { font: 400 16px/1.4 var(--body); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%; }
+textarea { min-height: 190px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.nets { display: flex; flex-wrap: wrap; gap: 8px; }
+.nets label { display: inline-flex; gap: 8px; align-items: center; padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); font: 600 14px/1 var(--body); cursor: pointer; }
+.nets input { accent-color: var(--sun); }
+.previews { display: flex; flex-wrap: wrap; gap: 8px; }
+.previews img { width: 72px; height: 90px; object-fit: cover; border-radius: 8px; background: var(--soft); }
+.counter { font-size: 13px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.hint { font-size: 13px; color: var(--muted); }
+.confirm { grid-column: 1 / -1; display: grid; gap: 14px; padding: 18px; border-radius: 14px; background: var(--paper); border: 2px solid var(--ink); }
+.confirm .acts { display: flex; flex-wrap: wrap; gap: 10px; }
+/* Mapa de horas */
+.heat-wrap { overflow-x: auto; padding: 18px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+table.heat { border-collapse: separate; border-spacing: 3px; min-width: 760px; width: 100%; font: 600 12px/1 var(--body); font-variant-numeric: tabular-nums; }
+table.heat th { color: var(--muted); font-weight: 600; padding: 4px; }
+table.heat th.d { text-align: left; padding-right: 8px; white-space: nowrap; }
+table.heat td { height: 28px; border-radius: 5px; background: var(--soft); cursor: pointer; position: relative; }
+table.heat td.best { outline: 2px solid var(--ink); outline-offset: -2px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; margin-top: 14px; font-size: 13px; color: var(--muted); }
+.ramp { display: inline-flex; height: 12px; width: 140px; border-radius: 6px; background: linear-gradient(90deg, var(--soft), var(--sun)); }
+.top3 { display: flex; flex-wrap: wrap; gap: 8px; }
+.skel { height: 120px; border-radius: 16px; background: linear-gradient(90deg, var(--soft), var(--surface), var(--soft)); background-size: 200% 100%; animation: sk 1.4s linear infinite; }
+@keyframes sk { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skel { animation: none; } }
+footer { margin-top: 48px; color: var(--muted); font-size: 13px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Racha Lab · redes sociales</p>
+      <h1>Panel <em>de publicación</em></h1>
+    </div>
+    <div>
+      <p class="eyebrow" style="margin-bottom:10px">Cuentas conectadas en Metricool</p>
+      <div class="accounts" id="accounts"><span class="chip off"><i></i>Conectando…</span></div>
+    </div>
+  </header>
+
+  <div id="pageNote" hidden style="margin-top:24px"></div>
+
+  <section aria-labelledby="h-prog">
+    <div class="sec-head">
+      <h2 id="h-prog">Próximas <em>publicaciones</em></h2>
+      <div style="display:flex;gap:16px;align-items:center"><span class="muted" id="progStamp" style="font-size:13px"></span><button class="linkbtn" id="refreshBtn" type="button">Actualizar</button></div>
+    </div>
+    <div id="posts" class="posts"><div class="skel"></div><div class="skel"></div></div>
+  </section>
+
+  <section aria-labelledby="h-new">
+    <div class="sec-head">
+      <h2 id="h-new">Programar <em>publicación</em></h2>
+      <p class="muted" style="font-size:14px">Se publica sola a la hora elegida.</p>
+    </div>
+    <form class="compose" id="compose" novalidate>
+      <div class="field" style="gap:18px">
+        <div class="field">
+          <label class="lb">Redes</label>
+          <div class="nets" id="nets"><span class="hint">Cargando tus cuentas…</span></div>
+        </div>
+        <div class="field">
+          <label class="lb" for="ptype">Formato en Instagram</label>
+          <select id="ptype">
+            <option value="POST">Post o carrusel (imágenes)</option>
+            <option value="REEL">Reel (vídeo)</option>
+            <option value="STORY">Story (imagen o vídeo)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lb" for="ptext">Texto</label>
+          <textarea id="ptext" placeholder="Escribe el texto del post con sus hashtags…"></textarea>
+          <p class="counter" id="pcount">0 / 2.200</p>
+        </div>
+      </div>
+      <div class="field" style="gap:18px">
+        <div class="row2">
+          <div class="field"><label class="lb" for="pdate">Día</label><input type="date" id="pdate"></div>
+          <div class="field"><label class="lb" for="ptime">Hora</label><input type="time" id="ptime" value="10:00"></div>
+        </div>
+        <p class="hint" id="tzHint">Hora de tu cuenta de Metricool.</p>
+        <button class="linkbtn" type="button" id="suggestBtn" style="justify-self:start">Usar la mejor hora de ese día</button>
+        <div class="field">
+          <label class="lb" for="pmedia">Imágenes o vídeo (enlaces públicos, uno por línea)</label>
+          <textarea id="pmedia" style="min-height:110px" placeholder="https://…/imagen-1.png"></textarea>
+          <p class="hint">Para un carrusel, pon varias imágenes en orden. Sirven enlaces públicos directos (GitHub, Dropbox…).</p>
+          <div class="previews" id="previews"></div>
+        </div>
+        <button class="btn sun" type="submit" id="reviewBtn">Revisar y programar</button>
+        <div id="formNote" hidden></div>
+      </div>
+      <div class="confirm" id="confirm" hidden>
+        <p class="eyebrow">Confirma antes de programar</p>
+        <p id="confirmText"></p>
+        <div class="acts"><button class="btn" type="button" id="doSchedule">Programar ahora</button><button class="btn ghost" type="button" id="cancelSchedule">Volver a editar</button></div>
+      </div>
+    </form>
+  </section>
+
+  <section aria-labelledby="h-heat">
+    <div class="sec-head">
+      <h2 id="h-heat">Mejores <em>horas</em></h2>
+      <div style="display:flex;gap:10px;align-items:center"><label class="lb" for="heatNet">Red</label><select id="heatNet" style="width:auto"></select></div>
+    </div>
+    <div class="heat-wrap"><div id="heat"><div class="skel"></div></div></div>
+    <div class="legend"><span>Menos actividad</span><span class="ramp"></span><span>Más actividad</span><span>· Toca una casilla para usar ese día y hora en el formulario.</span></div>
+    <div class="top3" id="top3" style="margin-top:12px"></div>
+  </section>
+
+  <footer>Datos y programación vía tu conector de Metricool en claude.ai. Racha Lab · Hoy cuenta.</footer>
+</div>
+
+<script>
+(function () {
+  var SERVER = 'Metricool Social Media Management';
+  var DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  var NET_NAMES = { instagram: 'Instagram', facebook: 'Facebook', tiktok: 'TikTok', linkedin: 'LinkedIn', twitter: 'X', youtube: 'YouTube', pinterest: 'Pinterest', threads: 'Threads', bluesky: 'Bluesky', gmb: 'Google Business' };
+  var BEST_NETS = ['instagram', 'facebook', 'tiktok', 'linkedin', 'twitter', 'youtube'];
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { mcp: null, brand: null, nets: [], best: {}, pending: null };
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tzOffset(tz, dateStr, timeStr) {
+    try {
+      var guess = new Date(dateStr + 'T' + (timeStr || '12:00') + ':00Z');
+      var parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'longOffset' }).formatToParts(guess);
+      var p = parts.find(function (x) { return x.type === 'timeZoneName'; });
+      var m = p && p.value.match(/GMT([+-]\d{2}):?(\d{2})?/);
+      return m ? m[1] + ':' + (m[2] || '00') : '+00:00';
+    } catch (e) { return '+00:00'; }
+  }
+  function todayIn(tz) {
+    try { return new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+    catch (e) { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  }
+  function addDays(iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+  function fmtWhen(dt) {
+    var d = new Date(dt.slice(0, 10) + 'T12:00:00Z');
+    var wd = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][d.getUTCDay()];
+    return wd + ' ' + dt.slice(8, 10) + '/' + dt.slice(5, 7) + ' · ' + dt.slice(11, 16);
+  }
+
+  function errCopy(e, where) {
+    var code = e && e.code;
+    if (code === 'server_not_connected' || code === 'server_not_found') return '<b>Metricool no está conectado.</b> Añádelo en claude.ai → Ajustes → Conectores y recarga esta página.';
+    if (code === 'needs_reauth') return '<b>Hay que volver a conectar Metricool.</b> Ve a claude.ai → Ajustes → Conectores, reconéctalo y recarga.';
+    if (code === 'selection_required') return '<b>Tienes más de un Metricool conectado.</b> Elige cuál usar en el aviso de claude.ai y recarga.';
+    if (code === 'not_in_manifest' || code === 'approval_required' || code === 'consent_required') return '<b>Esta página no tiene permiso para usar Metricool.</b> Permítelo en el menú Permisos de la página y vuelve a intentarlo.';
+    if (code === 'blocked_by_policy') return '<b>Tu organización bloquea esta acción de Metricool.</b>';
+    if (code === 'server_unavailable' || code === 'rate_limited') return '<b>Metricool no responde ahora mismo.</b> Prueba de nuevo en un momento.';
+    if (code === 'tool_error') return '<b>Metricool ha rechazado ' + where + ':</b> ' + esc(e.message || '');
+    return '<b>No se ha podido ' + where + '.</b> ' + esc((e && e.message) || '');
+  }
+  function note(el, html, kind) { el.innerHTML = '<div class="note ' + (kind || '') + '">' + html + '</div>'; el.hidden = false; }
+
+  function call(tool, input, opts) { return state.mcp.callTool(SERVER, tool, input, opts).then(function (r) { return r.payload; }); }
+  function dataOf(p) { if (p && typeof p === 'object' && 'data' in p) return p.data; return p; }
+
+  // ---------- Cuentas ----------
+  function loadBrand() {
+    return call('getBrandSettings', {}, { cache: { staleTime: 60000 } }).then(function (p) {
+      var list = dataOf(p) || [];
+      if (!list.length) { $('accounts').innerHTML = '<span class="chip off"><i></i>Sin marcas en Metricool</span>'; return; }
+      var b = list[0];
+      state.brand = { id: String(b.id), tz: b.timezone || 'Europe/Madrid' };
+      var nd = b.networksData || {};
+      state.nets = Object.keys(nd).map(function (k) { return { key: k.replace(/Data$/, ''), user: nd[k] }; }).filter(function (n) { return NET_NAMES[n.key]; });
+      $('accounts').innerHTML = state.nets.length ? state.nets.map(function (n) { return '<span class="chip"><i></i>' + NET_NAMES[n.key] + (typeof n.user === 'string' ? ' · @' + esc(n.user) : '') + '</span>'; }).join('') : '<span class="chip off"><i></i>Ninguna red conectada</span>';
+      $('nets').innerHTML = state.nets.length ? state.nets.map(function (n, i) { return '<label><input type="checkbox" value="' + n.key + '"' + (i === 0 ? ' checked' : '') + '> ' + NET_NAMES[n.key] + '</label>'; }).join('') : '<span class="hint">Conecta alguna red en Metricool para poder programar.</span>';
+      var hn = state.nets.filter(function (n) { return BEST_NETS.indexOf(n.key) > -1; });
+      $('heatNet').innerHTML = hn.map(function (n) { return '<option value="' + n.key + '">' + NET_NAMES[n.key] + '</option>'; }).join('');
+      $('tzHint').textContent = 'Hora de tu cuenta de Metricool (' + state.brand.tz.replace('_', ' ') + ').';
+      if (!$('pdate').value) $('pdate').value = addDays(todayIn(state.brand.tz), 1);
+      $('pdate').min = todayIn(state.brand.tz);
+    });
+  }
+
+  // ---------- Programadas ----------
+  function loadPosts(refresh) {
+    if (!state.brand) return;
+    var from = todayIn(state.brand.tz), to = addDays(from, 45), tz = state.brand.tz;
+    var input = { brandId: state.brand.id, fromDate: from + 'T00:00:00' + tzOffset(tz, from), toDate: to + 'T23:59:00' + tzOffset(tz, to), timezone: tz };
+    return call('getScheduledPosts', input, { cache: refresh ? { refresh: true, gcTime: 300000 } : { staleTime: 30000 } }).then(function (p) {
+      var list = (dataOf(p) || []).slice().sort(function (a, b) { return (a.publicationDate.dateTime > b.publicationDate.dateTime) ? 1 : -1; });
+      $('progStamp').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      if (!list.length) { $('posts').innerHTML = '<div class="note">No hay nada programado en los próximos 45 días. Usa el formulario de abajo para programar tu primera publicación.</div>'; return; }
+      $('posts').innerHTML = list.map(function (x) {
+        var img = (x.media || [])[0];
+        var isVid = img && /\.(mp4|mov)(\?|$)/i.test(img);
+        var thumb = img && !isVid ? '<img src="' + esc(img) + '" alt="" loading="lazy">' : '<div class="ph"></div>';
+        var nets = (x.providers || []).map(function (pv) { return '<span class="tag">' + (NET_NAMES[pv.network] || esc(pv.network)) + '</span><span class="tag ' + (pv.status === 'PENDING' ? 'pend' : '') + '">' + esc(pv.detailedStatus || pv.status || '') + '</span>'; }).join('');
+        var n = (x.media || []).length;
+        var kind = x.instagramData && x.instagramData.type ? x.instagramData.type : 'POST';
+        var kindLabel = kind === 'REEL' ? 'Reel' : kind === 'STORY' ? 'Story' : (n > 1 ? 'Carrusel · ' + n : 'Post');
+        var url = 'https://app.metricool.com/planner/calendar?blogId=' + encodeURIComponent(state.brand.id) + '&openWithPostUuid=' + encodeURIComponent(x.uuid);
+        return '<article class="post">' + thumb + '<div class="meta"><p class="when">' + fmtWhen(x.publicationDate.dateTime) + '</p><div class="tags">' + nets + '<span class="tag">' + kindLabel + '</span>' + (x.draft ? '<span class="tag">Borrador</span>' : '') + '</div><p class="txt">' + esc(x.text || '') + '</p></div><a href="' + url + '" target="_blank" rel="noopener">Abrir en Metricool ↗</a></article>';
+      }).join('');
+    }).catch(function (e) { note($('posts'), errCopy(e, 'leer tus publicaciones programadas'), 'err'); });
+  }
+
+  // ---------- Mejores horas ----------
+  function loadBest(net) {
+    if (!state.brand || !net) { $('heat').innerHTML = '<p class="hint">Conecta una red compatible para ver sus mejores horas.</p>'; return; }
+    var tz = state.brand.tz, from = todayIn(tz), to = addDays(from, 6);
+    var input = { brandId: state.brand.id, fromDate: from + 'T00:00:00' + tzOffset(tz, from), toDate: to + 'T23:59:00' + tzOffset(tz, to), timezone: tz, socialNetwork: net };
+    $('heat').innerHTML = '<div class="skel"></div>';
+    return call('getBestTimeToPostByNetwork', input, { cache: { staleTime: 300000, gcTime: 3600000 } }).then(function (p) {
+      var days = dataOf(p) || [];
+      var grid = {}; var max = 0; var all = [];
+      days.forEach(function (d) { (d.bestTimesByHour || []).forEach(function (h) { grid[d.dayOfWeek + '-' + h.hourOfDay] = h.value; if (h.value > max) max = h.value; all.push({ d: d.dayOfWeek, h: h.hourOfDay, v: h.value }); }); });
+      state.best[net] = grid;
+      var bestPerDay = {};
+      days.forEach(function (d) { var b = (d.bestTimesByHour || []).reduce(function (a, c) { return c.value > a.value ? c : a; }, { value: -1 }); bestPerDay[d.dayOfWeek] = b.hourOfDay; });
+      var head = '<tr><th></th>' + Array.from({ length: 24 }, function (_, h) { return '<th>' + (h % 3 === 0 ? pad(h) : '') + '</th>'; }).join('') + '</tr>';
+      var rows = [1, 2, 3, 4, 5, 6, 7].map(function (d) {
+        return '<tr><th class="d">' + DAYS[d - 1] + '</th>' + Array.from({ length: 24 }, function (_, h) {
+          var v = grid[d + '-' + h] || 0; var a = max ? Math.max(0.06, v / max) : 0;
+          return '<td data-d="' + d + '" data-h="' + h + '" class="' + (bestPerDay[d] === h ? 'best' : '') + '" style="background:color-mix(in srgb, var(--sun) ' + Math.round(a * 100) + '%, var(--soft))" title="' + DAYS[d - 1] + ' ' + pad(h) + ':00"></td>';
+        }).join('') + '</tr>';
+      }).join('');
+      $('heat').innerHTML = '<table class="heat" aria-label="Actividad por día y hora">' + head + rows + '</table>';
+      all.sort(function (a, b) { return b.v - a.v; });
+      $('top3').innerHTML = '<span class="eyebrow" style="align-self:center;margin-right:6px">Mejores momentos</span>' + all.slice(0, 3).map(function (x) { return '<span class="chip">' + DAYS[x.d - 1] + ' · ' + pad(x.h) + ':00</span>'; }).join('');
+    }).catch(function (e) { note($('heat'), errCopy(e, 'leer las mejores horas'), 'err'); });
+  }
+
+  // ---------- Formulario ----------
+  function mediaList() { return $('pmedia').value.split(/\s+/).map(function (s) { return s.trim(); }).filter(function (s) { return /^https?:\/\//i.test(s); }); }
+  function renderPreviews() { $('previews').innerHTML = mediaList().map(function (u) { return /\.(mp4|mov)(\?|$)/i.test(u) ? '<span class="tag">Vídeo</span>' : '<img src="' + esc(u) + '" alt="">'; }).join(''); }
+  function selectedNets() { return Array.prototype.slice.call(document.querySelectorAll('#nets input:checked')).map(function (i) { return i.value; }); }
+  function dayOfWeek(iso) { var g = new Date(iso + 'T12:00:00Z').getUTCDay(); return g === 0 ? 7 : g; }
+
+  function validate() {
+    var nets = selectedNets(), media = mediaList(), type = $('ptype').value, text = $('ptext').value.trim(), date = $('pdate').value, time = $('ptime').value;
+    if (!state.brand) return 'Todavía no se ha cargado tu cuenta de Metricool.';
+    if (!nets.length) return 'Elige al menos una red.';
+    if (!date || !time) return 'Elige el día y la hora.';
+    var off = tzOffset(state.brand.tz, date, time);
+    if (new Date(date + 'T' + time + ':00' + off) <= new Date()) return 'La fecha tiene que ser en el futuro.';
+    var vids = media.filter(function (u) { return /\.(mp4|mov)(\?|$)/i.test(u); });
+    if (nets.indexOf('instagram') > -1) {
+      if (!media.length) return 'Instagram necesita al menos una imagen o vídeo.';
+      if (type === 'REEL' && !vids.length) return 'Un Reel necesita un vídeo (.mp4 o .mov).';
+    }
+    if (nets.indexOf('tiktok') > -1 && !media.length) return 'TikTok necesita una imagen o vídeo.';
+    if (!text && !(nets.length === 1 && nets[0] === 'instagram' && type === 'STORY')) return 'Escribe el texto de la publicación.';
+    return null;
+  }
+  function buildInfo() {
+    var nets = selectedNets(), type = $('ptype').value, media = mediaList(), date = $('pdate').value, time = $('ptime').value;
+    var info = {
+      autoPublish: true, draft: false, descendants: [], firstCommentText: '', hasNotReadNotes: false,
+      media: media, mediaAltText: [], providers: nets.map(function (n) { return { network: n }; }),
+      publicationDate: { dateTime: date + 'T' + time + ':00', timezone: state.brand.tz },
+      shortener: false, smartLinkData: { ids: [] }
+    };
+    var storyOnly = nets.length === 1 && nets[0] === 'instagram' && type === 'STORY';
+    if (!storyOnly) info.text = $('ptext').value;
+    nets.forEach(function (n) {
+      if (n === 'instagram') info.instagramData = { type: type, collaborators: [], showReelOnFeed: true, isAiGenerated: false };
+      else if (n === 'facebook') info.facebookData = { type: type === 'REEL' ? 'REEL' : type === 'STORY' ? 'STORY' : 'POST' };
+      else info[n + 'Data'] = {};
+    });
+    return { date: date + 'T' + time + ':00' + tzOffset(state.brand.tz, date, time), info: info };
+  }
+
+  $('ptext').addEventListener('input', function () { $('pcount').textContent = $('ptext').value.length.toLocaleString('es-ES') + ' / 2.200'; });
+  $('pmedia').addEventListener('input', renderPreviews);
+  $('compose').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    $('formNote').hidden = true;
+    var err = validate();
+    if (err) { note($('formNote'), '<b>Falta algo:</b> ' + esc(err), 'err'); $('confirm').hidden = true; return; }
+    state.pending = buildInfo();
+    var nets = selectedNets().map(function (n) { return NET_NAMES[n]; }).join(', ');
+    var n = state.pending.info.media.length;
+    $('confirmText').innerHTML = 'Se publicará en <b>' + esc(nets) + '</b> el <b>' + fmtWhen(state.pending.info.publicationDate.dateTime) + '</b> con ' + n + (n === 1 ? ' archivo' : ' archivos') + '. Se publica sola, sin que tengas que hacer nada.';
+    $('confirm').hidden = false;
+    $('doSchedule').focus();
+  });
+  $('cancelSchedule').addEventListener('click', function () { $('confirm').hidden = true; state.pending = null; });
+  $('doSchedule').addEventListener('click', function () {
+    if (!state.pending) return;
+    var btn = $('doSchedule'); btn.disabled = true; btn.textContent = 'Programando…';
+    var job = state.pending;
+    call('createScheduledPost', { blogId: state.brand.id, date: job.date, info: JSON.stringify(job.info) }, { cache: false }).then(function (p) {
+      var d = dataOf(p) || {};
+      var url = d.plannerUrl || ('https://app.metricool.com/planner/calendar?blogId=' + state.brand.id);
+      note($('formNote'), '<b>Programado.</b> Se publicará el ' + fmtWhen(job.info.publicationDate.dateTime) + '. <a href="' + esc(url) + '" target="_blank" rel="noopener">Verlo en Metricool ↗</a>', 'okn');
+      $('confirm').hidden = true; state.pending = null;
+      $('ptext').value = ''; $('pmedia').value = ''; renderPreviews(); $('pcount').textContent = '0 / 2.200';
+      return state.mcp.invalidate(SERVER, 'getScheduledPosts').catch(function () {}).then(function () { return loadPosts(true); });
+    }).catch(function (e) {
+      var amb = e && (e.code === 'server_unavailable' || e.code === 'upstream_error' || e.code === 'cancelled');
+      note($('formNote'), errCopy(e, 'programar la publicación') + (amb ? '<br>Puede que se haya programado igualmente: pulsa «Actualizar» arriba antes de volver a intentarlo.' : ''), 'err');
+    }).then(function () { btn.disabled = false; btn.textContent = 'Programar ahora'; });
+  });
+  $('suggestBtn').addEventListener('click', function () {
+    var net = $('heatNet').value || 'instagram', grid = state.best[net], d = $('pdate').value;
+    if (!grid || !d) { note($('formNote'), 'Primero se tienen que cargar las mejores horas y elegir un día.', ''); return; }
+    var dw = dayOfWeek(d), best = -1, bv = -1;
+    for (var h = 0; h < 24; h++) { var v = grid[dw + '-' + h] || 0; if (v > bv) { bv = v; best = h; } }
+    if (best > -1) $('ptime').value = pad(best) + ':00';
+  });
+  $('heat').addEventListener('click', function (ev) {
+    var td = ev.target.closest('td[data-d]'); if (!td || !state.brand) return;
+    var want = +td.dataset.d, base = todayIn(state.brand.tz), iso = base;
+    for (var i = 1; i <= 7; i++) { var c = addDays(base, i); if (dayOfWeek(c) === want) { iso = c; break; } }
+    $('pdate').value = iso; $('ptime').value = pad(+td.dataset.h) + ':00';
+    $('pdate').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  $('heatNet').addEventListener('change', function () { loadBest($('heatNet').value); });
+  $('refreshBtn').addEventListener('click', function () { loadPosts(true); });
+
+  // ---------- Arranque ----------
+  var boot = window.claude && window.claude.use ? window.claude.use('mcp') : Promise.resolve(null);
+  boot.then(function (mcp) {
+    if (!mcp) {
+      note($('pageNote'), '<b>Esta vista no puede conectarse a Metricool.</b> Abre el panel desde claude.ai con tu sesión iniciada y Metricool conectado en Ajustes → Conectores.', 'err');
+      $('posts').innerHTML = ''; $('heat').innerHTML = ''; $('accounts').innerHTML = '<span class="chip off"><i></i>Sin conexión</span>';
+      $('nets').innerHTML = '<span class="hint">Sin conexión con Metricool.</span>'; $('reviewBtn').disabled = true;
+      return;
+    }
+    state.mcp = mcp;
+    loadBrand().then(function () { loadPosts(false); loadBest($('heatNet').value); }).catch(function (e) {
+      note($('pageNote'), errCopy(e, 'leer tu cuenta de Metricool'), 'err');
+      $('posts').innerHTML = ''; $('heat').innerHTML = ''; $('accounts').innerHTML = '<span class="chip off"><i></i>Sin conexión</span>';
+    });
+  });
+})();
+</script>
