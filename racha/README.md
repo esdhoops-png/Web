@@ -22,7 +22,7 @@ Proyecto de marca y web para un método de 12 hábitos saludables, un reto de 21
 - **Isotipo:** “rl.” (r cursiva + l negra + punto) para avatar, icono y favicon.
 - **Color:** Hueso `#EEE9E5` · Negro `#111111` · Amanecer `#FF5A1F` (solo el punto, lo hecho hoy y la acción principal; con texto negro encima, nunca blanco) · Arena `#CDBFB4` · Carbón `#1F1F1F`.
 - **Tipografía:** DM Serif Display cursiva + Schibsted Grotesk Black en titulares (cada titular mezcla las dos voces), Hanken Grotesk para texto y etiquetas.
-- **Redes:** `@rachalab` en Instagram y TikTok, canal “Racha Lab” en YouTube y newsletter “El Domingo”. Hashtag: `#MiRacha`.
+- **Redes:** `@somosrachalab` en Instagram y TikTok, canal “Racha Lab” en YouTube y newsletter “El Domingo”. Hashtag: `#MiRacha`.
 
 ## Las 6 reglas
 
@@ -54,6 +54,6 @@ Un día suma a la racha cuando completas 4 hábitos o más.
 
 ## Pendiente antes de lanzar
 
-1. Comprobar que `@rachalab` está libre en Instagram, TikTok y YouTube, y registrar el dominio (`rachalab.com` o `rachalab.es`).
+1. Instagram ya está creado (`@somosrachalab`). Registrar el mismo usuario en TikTok y YouTube, y un dominio a juego (`somosrachalab.com`, `rachalab.es` o similar).
 2. Conectar el formulario de newsletter (busca `TODO` en `index.html`) a Brevo, Mailchimp o ConvertKit.
 3. Publicar: la carpeta es estática, sirve tal cual en GitHub Pages, Netlify o Vercel.
