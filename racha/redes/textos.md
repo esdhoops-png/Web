@@ -120,3 +120,23 @@ Cada uno con su versión mínima para los días malos. El lunes empezamos el ret
 Guárdalo y vuelve aquí cuando dudes.
 
 #MiRacha #Reto21Racha #habitossaludables #nuevoshabitos #constancia #rutinasaludable
+
+---
+
+# Posts del feed v2 (`posts-feed/`)
+Cada post del feed tiene su propia composición dentro del mismo estilo. Los carruseles mantienen una plantilla común en su interior, pero su portada es única. Sustituyen a las versiones anteriores de esos días:
+
+| Día | Archivo | Composición |
+|---|---|---|
+| Jue 15 | `jue15-agua.png` | Palabra gigante que sale del borde + sello redondo |
+| Vie 16 | `vie16-finde.png` | Pegatinas giradas con casillas |
+| Sáb 17 | `sab17-guia.png` | Portada de la guía: “12” en contorno gigante + “hábitos” encima |
+| Dom 18 | `dom18-empieza.png` | Fecha gigante 19/10 (relleno + contorno) con textos en vertical |
+| Mar 20 | `mar20-luz.png` | Sol en semitono naranja |
+| Mié 21 | `mie21-luz-carrusel.png` | Portada mínima centrada con círculo |
+| Jue 22 | `jue22-pasos.png` | Cifras sueltas “8.000” repartidas por la imagen |
+| Vie 23 | `vie23-rutas.png` | Pista de atletismo naranja en diagonal |
+| Sáb 24 | `sab24-noche.png` | Agenda centrada “Tu noche” |
+| Dom 25 | `dom25-resumen.png` | “7/7” gigante + puntos de la racha |
+
+Vista del perfil con dos semanas: `grid-dos-semanas.png`. Calendario actualizado: `calendario.png`.
