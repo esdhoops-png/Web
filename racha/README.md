@@ -1,4 +1,4 @@
-# Racha: hábitos saludables
+# Racha Lab: hábitos saludables
 
 > Hoy cuenta. Mañana, también.
 
@@ -10,16 +10,19 @@ Proyecto de marca y web para un método de 12 hábitos saludables, un reto de 21
 |---|---|
 | `index.html` | Web: hero, método, los 12 hábitos con tracker diario (se guarda en `localStorage`), reto de 21 días, redes y newsletter |
 | `marca.html` | Manual de marca: nombre, logo, color, tipografía, voz, plan de redes y plantillas de posts |
-| `logo.svg`, `favicon.svg` | Logo e icono (también sirve como avatar de redes) |
+| `logo/` | Logotipo (claro, oscuro y completo con textos) e isotipo “rl.” en SVG |
+| `logo.svg`, `favicon.svg` | Logotipo principal e icono |
+| `colores.html` | Comparativa de acentos (histórico: la paleta final es la del manual) |
 
 ## Marca en resumen
 
-- **Nombre:** Racha. Una serie de días seguidos: resume el método (no romper la cadena).
-- **Claim:** Hoy cuenta. Mañana, también. / Un 1% mejor cada día.
-- **Logo:** cuatro casillas (tres días hechos + hoy en naranja) y “racha” en minúscula.
-- **Color (acento confirmado: naranja amanecer, siempre con texto tinta encima, nunca blanco):** Hueso `#F3F4EF` · Tinta `#13202E` · Amanecer `#FF5A1F` · Salvia `#A9C2B0` · Noche `#0F161F`.
-- **Tipografía:** Bricolage Grotesque (titulares), Figtree (texto), DM Mono (datos).
-- **Redes:** `@somosracha` en Instagram y TikTok, canal “Racha” en YouTube y newsletter “El Domingo”. Hashtag: `#MiRacha`.
+- **Nombre:** Racha Lab. *Racha* es una serie de días seguidos; *Lab* porque cada hábito se prueba, se mide y se ajusta como un experimento.
+- **Claim:** Hoy cuenta. Mañana, también.
+- **Logotipo:** *racha* en DM Serif Display cursiva + **lab** en Schibsted Grotesk Black, en minúscula y juntas, con un punto naranja final (“hoy”). Usa siempre los archivos de `logo/`, no lo escribas con la fuente.
+- **Isotipo:** “rl.” (r cursiva + l negra + punto) para avatar, icono y favicon.
+- **Color:** Hueso `#EEE9E5` · Negro `#111111` · Amanecer `#FF5A1F` (solo el punto, lo hecho hoy y la acción principal; con texto negro encima, nunca blanco) · Arena `#CDBFB4` · Carbón `#1F1F1F`.
+- **Tipografía:** DM Serif Display cursiva + Schibsted Grotesk Black en titulares (cada titular mezcla las dos voces), Hanken Grotesk para texto y etiquetas.
+- **Redes:** `@rachalab` en Instagram y TikTok, canal “Racha Lab” en YouTube y newsletter “El Domingo”. Hashtag: `#MiRacha`.
 
 ## Las 6 reglas
 
@@ -51,6 +54,6 @@ Un día suma a la racha cuando completas 4 hábitos o más.
 
 ## Pendiente antes de lanzar
 
-1. Comprobar que `@somosracha` está libre en Instagram, TikTok y YouTube, y registrar el dominio (`somosracha.com` o `racha.club`).
+1. Comprobar que `@rachalab` está libre en Instagram, TikTok y YouTube, y registrar el dominio (`rachalab.com` o `rachalab.es`).
 2. Conectar el formulario de newsletter (busca `TODO` en `index.html`) a Brevo, Mailchimp o ConvertKit.
 3. Publicar: la carpeta es estática, sirve tal cual en GitHub Pages, Netlify o Vercel.
