@@ -325,6 +325,7 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
       <div class="f"><label for="fLink">Material (enlace)</label><input id="fLink" type="url" placeholder="https://drive.google.com/…"></div>
     </div>
     <div class="f"><span class="lbl">Diseño / imagen</span><div class="imgbox"><img id="fImgPrev" alt="Diseño de la publicación" hidden><div style="display:flex;flex-direction:column;gap:6px"><label class="btn" id="fImgBtn" style="cursor:pointer">Subir imagen<input type="file" id="fImgFile" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="btn" id="fImgDl" hidden>Descargar imagen</button><button type="button" class="btn ghost danger" id="fImgDel" hidden>Quitar imagen</button><span class="hint" id="fImgMsg"></span></div></div></div>
+    <div class="f"><span class="lbl">Vídeo (Reels)</span><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><button type="button" class="btn" id="fVidDl" hidden>Descargar vídeo</button><label class="btn ghost" id="fVidBtn" style="cursor:pointer">Subir vídeo<input type="file" id="fVidFile" accept="video/mp4,video/quicktime" hidden></label><button type="button" class="btn ghost danger" id="fVidDel" hidden>Quitar vídeo</button><span class="hint" id="fVidMsg"></span></div></div>
     <div class="f"><label for="fNotes">Notas (planos, material, stickers…)</label><textarea id="fNotes" rows="3"></textarea></div>
     <div class="actions">
       <div><button type="button" class="btn danger" id="del">Borrar</button><button type="button" class="btn" id="dup">Duplicar</button></div>
@@ -766,7 +767,8 @@ function fillPilar(cid,val){
   $("#insTpl").innerHTML=`<option value="">+ Plantilla…</option>`+templates.filter(t=>t.clientId===cid).map(t=>`<option value="${esc(t.id)}">${esc(t.name)}</option>`).join("");
   $("#dlgDot").style.setProperty("--c",cColor(cid));
 }
-let curImg="",assetsApi;
+let curImg="",curVid="",assetsApi;
+function showVid(){$("#fVidDl").hidden=!curVid;$("#fVidDel").hidden=!curVid||!canWrite;$("#fVidBtn").hidden=!canWrite;$("#fVidMsg").textContent=curVid?"":(canWrite?"Sin vídeo (máx. 20 MB)":"Sin vídeo")}
 function showImg(){const im=$("#fImgPrev");if(curImg){im.src=curImg;im.hidden=false}else{im.removeAttribute("src");im.hidden=true}$("#fImgDel").hidden=!curImg||!canWrite;$("#fImgDl").hidden=!curImg;$("#fImgBtn").hidden=!canWrite;$("#fImgMsg").textContent=""}
 async function getAssets(){if(assetsApi===undefined){try{assetsApi=await claude.use("assets")}catch(e){assetsApi=null}}return assetsApi}
 function openItem(it,preset={}){
@@ -778,7 +780,7 @@ function openItem(it,preset={}){
   $("#fStatus").value=v.status||"idea";$("#fPrio").value=v.prio||"normal";$("#fTitle").value=v.title||"";$("#fCopy").value=v.copy||"";
   $("#fNotes").value=v.notes||"";$("#fWho").value=v.who||"";$("#fLink").value=v.link||"";$("#fCampaign").value=v.campaign||"";
   fillPilar(v.clientId,v.pilar||"");
-  curImg=v.img||"";showImg();
+  curImg=v.img||"";showImg();curVid=v.video||"";showVid();
   const ch=v.checks||{};
   $("#fChecks").innerHTML=CHECKS.map(([k,l])=>`<label><input type="checkbox" data-c="${k}"${ch[k]?" checked":""}>${l}</label>`).join("");
   $("#dlgTitle").lastElementChild.textContent=it?"Editar contenido":"Nuevo contenido";
@@ -801,23 +803,33 @@ $("#fImgFile").onchange=async()=>{const f=$("#fImgFile").files[0];if(!f)return;c
   try{const r=await a.upload(f);curImg=r.url;showImg();$("#fImgMsg").textContent="Imagen lista: pulsa Guardar."}catch(e){$("#fImgMsg").textContent="No se pudo subir ("+(e.code||"error")+")"}
   $("#fImgFile").value=""};
 $("#fImgDel").onclick=()=>{curImg="";showImg()};
-$("#fImgDl").onclick=async()=>{
-  if(!curImg)return;
+async function dlAsset(url,fallbackExt){
+  if(!url)return;
   if(downloadsApi===undefined){try{downloadsApi=await claude.use("downloads")}catch(e){downloadsApi=null}}
   if(!downloadsApi){toast("Descarga no disponible aquí");return}
+  toast("Preparando descarga…");
   try{
-    const r=await fetch(curImg);if(!r.ok)throw new Error("fetch");const blob=await r.blob();
-    const ext=(blob.type.split("/")[1]||"png").replace("jpeg","jpg");
-    const base=(($("#fDate").value||"")+"-"+($("#fTitle").value||"diseno")).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"diseno";
+    const r=await fetch(url);if(!r.ok)throw new Error("fetch");const blob=await r.blob();
+    const ext=((blob.type.split("/")[1]||fallbackExt).replace("jpeg","jpg").replace("quicktime","mov"));
+    const base=(($("#fDate").value||"")+"-"+($("#fTitle").value||"contenido")).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"contenido";
     await downloadsApi.save({filename:base+"."+ext,data:blob});
   }catch(e){if(e&&e.code!=="declined")toast("No se pudo descargar")}
-};
+}
+$("#fImgDl").onclick=()=>dlAsset(curImg,"png");
+$("#fVidDl").onclick=()=>dlAsset(curVid,"mp4");
+$("#fVidDel").onclick=()=>{curVid="";showVid()};
+$("#fVidFile").onchange=async()=>{const f=$("#fVidFile").files[0];if(!f)return;const a=await getAssets();
+  if(!a){$("#fVidMsg").textContent="No se pueden subir vídeos desde aquí.";return}
+  if(f.size>20*1024*1024){$("#fVidMsg").textContent="Máximo 20 MB.";$("#fVidFile").value="";return}
+  $("#fVidMsg").textContent="Subiendo vídeo…";
+  try{const r=await a.upload(f);curVid=r.url;showVid();$("#fVidMsg").textContent="Vídeo listo: pulsa Guardar."}catch(e){$("#fVidMsg").textContent="No se pudo subir ("+(e.code||"error")+")"}
+  $("#fVidFile").value=""};
 $("#copyCopy").onclick=()=>navigator.clipboard.writeText($("#fCopy").value).then(()=>toast("Texto copiado"),()=>toast("No se pudo copiar"));
 function formData(){
   const checks={};$("#fChecks").querySelectorAll("input").forEach(i=>checks[i.dataset.c]=i.checked);
   return {clientId:$("#fClient").value,format:$("#fFormat").value,date:$("#fDate").value,time:$("#fTime").value,status:$("#fStatus").value,prio:$("#fPrio").value,
     title:$("#fTitle").value.trim(),copy:$("#fCopy").value,notes:$("#fNotes").value,who:$("#fWho").value.trim(),link:$("#fLink").value.trim(),
-    campaign:$("#fCampaign").value.trim(),pilar:$("#fPilar").value,checks,img:curImg||""};
+    campaign:$("#fCampaign").value.trim(),pilar:$("#fPilar").value,checks,img:curImg||"",video:curVid||""};
 }
 $("#form").addEventListener("submit",async e=>{
   e.preventDefault();if(!db||!canWrite)return;
