@@ -198,6 +198,15 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
 .actions div{display:flex;gap:8px;flex-wrap:wrap}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-weight:600;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .toast.on{opacity:1}
+.logos{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.lgc{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.lgv{aspect-ratio:4/3;display:grid;place-items:center;padding:22px;border-bottom:1px solid var(--line)}
+.lgv img{max-width:100%;max-height:100%;display:block}
+.lgm{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.lgm b{font-size:13px} .lgm span{display:flex;gap:6px;flex-wrap:wrap} .lgm .btn{padding:5px 10px;font-size:12px}
+.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.colc{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0 0 10px;overflow:hidden;cursor:pointer}
+.colc span{height:70px;display:block;border-bottom:1px solid var(--line)} .colc b,.colc code,.colc small{padding:0 10px} .colc b{font-size:13px;margin-top:6px} .colc code{font-size:12px;color:var(--muted)} .colc small{font-size:11px;color:var(--muted)}
 .mobnav{display:none}
 /* comunidad */
 .cbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:8px}
@@ -610,12 +619,12 @@ function renderCuentas(){
     `<select class="inp" id="acctSel">${clients.map(x=>`<option value="${esc(x.id)}"${x.id===c.id?" selected":""}>${esc(x.name)}</option>`).join("")}</select>`);
   $("#acctSel").onchange=e=>{S.acct=e.target.value;if(S.sel!=="all")S.sel=S.acct;persist();render()};
   const links=LINKS.filter(([k])=>c[k]&&/^https?:\/\//.test(c[k])).map(([k,l])=>`<a href="${esc(c[k])}" target="_blank" rel="noopener">${l} ↗</a>`).join("");
-  const tabs=[["estrategia","Estrategia"],["objetivos","Objetivos y mix"],["metricas","Métricas"],["plantillas","Plantillas"],["fechas","Fechas clave"]];
+  const tabs=[["estrategia","Estrategia"],["objetivos","Objetivos y mix"],["metricas","Métricas"],["marca","Marca"],["plantillas","Plantillas"],["fechas","Fechas clave"]];
   let html=`<div class="cgrid"><div class="chead" style="--c:${esc(c.color)}">${av(c)}<div><h2>${esc(c.name)}</h2><small>${esc(c.handle||"")}${c.metricool?" · se programa con Metricool":" · organización manual"}</small></div><div class="links">${links}</div></div>
     <div class="panel"><div class="subtabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" data-t="${k}" aria-selected="${S.acctTab===k}">${l}</button>`).join("")}</div><div id="sub"></div></div></div>`;
   $("#view").innerHTML=html;
   $("#view").querySelectorAll(".subtabs button").forEach(b=>b.onclick=()=>{S.acctTab=b.dataset.t;persist();renderCuentas()});
-  ({estrategia:subEstrategia,objetivos:subObjetivos,metricas:subMetricas,plantillas:subPlantillas,fechas:subFechas}[S.acctTab]||subEstrategia)(c);
+  ({estrategia:subEstrategia,objetivos:subObjetivos,metricas:subMetricas,plantillas:subPlantillas,fechas:subFechas,marca:subMarca}[S.acctTab]||subEstrategia)(c);
 }
 function bindFieldSaves(root,c){
   root.querySelectorAll("[data-k]").forEach(t=>t.addEventListener("change",async()=>{
@@ -688,6 +697,40 @@ function subPlantillas(c){
     try{await db.collection("templates").add({clientId:c.id,name,text,createdAt:new Date().toISOString()});toast("Plantilla guardada")}catch(e){toast("No se pudo guardar")}};
   $("#sub").querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{const t=templates.find(x=>x.id===b.dataset.copy);navigator.clipboard.writeText(t.text).then(()=>toast("Copiado"),()=>toast("No se pudo copiar"))});
   $("#sub").querySelectorAll("[data-deltpl]").forEach(b=>b.onclick=async()=>{if(!confirm("¿Borrar plantilla?"))return;try{await db.doc("templates/"+b.dataset.deltpl).delete()}catch(e){toast("No se pudo borrar")}});
+}
+function svgUrl(svg){return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)}
+function safeSvg(t){return typeof t==="string"&&/^\s*<svg[\s>]/i.test(t)&&!/<script|on\w+\s*=|javascript:/i.test(t)}
+let downloadsApi;
+async function saveSvg(name,svg){
+  if(downloadsApi===undefined){try{downloadsApi=await claude.use("downloads")}catch(e){downloadsApi=null}}
+  if(!downloadsApi){toast("Descarga no disponible aquí: usa Copiar SVG");return}
+  try{await downloadsApi.save({filename:name,data:new Blob([svg],{type:"image/svg+xml"})});}catch(e){if(e&&e.code!=="declined")toast("No se pudo descargar")}
+}
+function subMarca(c){
+  const b=c.brand||{};const logos=(b.logos||[]).filter(l=>safeSvg(l.svg));
+  const slug=(c.name||"marca").toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  $("#sub").innerHTML=`
+   <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px">
+     ${b.manual&&/^https?:\/\//.test(b.manual)?`<a class="btn primary" href="${esc(b.manual)}" target="_blank" rel="noopener" style="text-decoration:none">Abrir manual de marca ↗</a>`:""}
+     ${b.files?`<span class="tag">Archivos: ${esc(b.files)}</span>`:""}
+     ${canWrite?`<label class="btn" style="cursor:pointer">+ Subir logo SVG<input type="file" id="logoUp" accept=".svg,image/svg+xml" hidden></label>`:""}
+   </div>
+   <p class="lbl" style="margin:6px 0 10px">Logos</p>
+   ${logos.length?`<div class="logos">${logos.map((l,i)=>`<div class="lgc"><div class="lgv" style="background:${/^#[0-9a-f]{3,8}$/i.test(l.bg||"")?l.bg:"#fff"}"><img alt="${esc(l.name)}" src="${svgUrl(l.svg)}"></div><div class="lgm"><b>${esc(l.name)}</b><span><button class="btn" data-lsave="${i}">Descargar SVG</button><button class="btn ghost" data-lcopy="${i}">Copiar SVG</button>${canWrite?`<button class="btn ghost danger" data-ldel="${i}" aria-label="Quitar ${esc(l.name)}">✕</button>`:""}</span></div></div>`).join("")}</div>`:'<div class="empty">Aún no hay logos. Sube un SVG con el botón de arriba.</div>'}
+   <p class="lbl" style="margin:24px 0 10px">Colores</p>
+   ${(b.colors||[]).length?`<div class="cols">${b.colors.map(k=>`<button class="colc" data-hex="${esc(k.hex)}"><span style="background:${/^#[0-9a-f]{3,8}$/i.test(k.hex)?k.hex:"#ccc"}"></span><b>${esc(k.name)}</b><code>${esc(k.hex)}</code>${k.use?`<small>${esc(k.use)}</small>`:""}</button>`).join("")}</div>`:'<div class="empty">Sin colores definidos.</div>'}
+   <p class="lbl" style="margin:24px 0 10px">Tipografías</p>
+   ${(b.fonts||[]).length?`<div class="rows">${b.fonts.map(f=>`<div class="r" style="cursor:default"><span class="tx"><b>${esc(f.name)}</b><small>${esc(f.role||"")}</small></span></div>`).join("")}</div>`:'<div class="empty">Sin tipografías definidas.</div>'}
+   ${b.notes?`<p class="lbl" style="margin:24px 0 10px">Notas de uso</p><div class="panel" style="white-space:pre-wrap;font-size:14px">${esc(b.notes)}</div>`:""}`;
+  $("#sub").querySelectorAll("[data-hex]").forEach(x=>x.onclick=()=>navigator.clipboard.writeText(x.dataset.hex).then(()=>toast(x.dataset.hex+" copiado"),()=>toast("No se pudo copiar")));
+  $("#sub").querySelectorAll("[data-lsave]").forEach(x=>x.onclick=()=>{const l=logos[+x.dataset.lsave];saveSvg(slug+"-"+l.name.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g,"-")+".svg",l.svg)});
+  $("#sub").querySelectorAll("[data-lcopy]").forEach(x=>x.onclick=()=>navigator.clipboard.writeText(logos[+x.dataset.lcopy].svg).then(()=>toast("SVG copiado"),()=>toast("No se pudo copiar")));
+  $("#sub").querySelectorAll("[data-ldel]").forEach(x=>x.onclick=async()=>{const all=(c.brand&&c.brand.logos)||[];const l=logos[+x.dataset.ldel];const next=all.filter(z=>z!==l);
+    try{await db.doc("clients/"+c.id).update({brand:{...(c.brand||{}),logos:next}});toast("Logo quitado")}catch(e){toast("No se pudo guardar")}});
+  const up=$("#logoUp");if(up)up.onchange=()=>{const f=up.files[0];if(!f)return;if(f.size>300000)return toast("El SVG pesa demasiado (máx. 300 KB)");
+    const rd=new FileReader();rd.onload=async()=>{const t=String(rd.result);if(!safeSvg(t))return toast("Ese archivo no es un SVG válido");
+      const name=f.name.replace(/\.svg$/i,"");const next=[...((c.brand&&c.brand.logos)||[]),{name,svg:t,bg:"#ffffff"}];
+      try{await db.doc("clients/"+c.id).update({brand:{...(c.brand||{}),logos:next}});toast("Logo añadido")}catch(e){toast("No se pudo guardar")}};rd.readAsText(f)};
 }
 function subFechas(c){
   const l=dates.filter(d=>!d.clientId||d.clientId===c.id).sort((a,b)=>a.date.localeCompare(b.date)).filter(d=>d.date>=iso(addDays(new Date(),-7)));
