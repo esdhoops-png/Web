@@ -12,7 +12,7 @@
   - **Fraunces** (serif) para los titulares, con una palabra en cursiva.
   - **DM Sans** para los textos.
   - Una **firma manuscrita** pequeña (Mrs Saint Delafield), en bronce y una sola vez por post. Nunca como titular.
-- **El arco:** el marco de las fotos de producto. Es el elemento propio de la marca.
+- **Fotos enmarcadas:** fotos rectas con un marco fino alrededor, como en una galería. Nada redondeado ni ovalado.
 - **Espacio:** deja aire. Si dudas, quita algo.
 - **Fotos:**
   - Luz natural de ventana, fondos lisos en crema, lino o madera clara.
