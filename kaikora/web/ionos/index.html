@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Kaikora Studio</title>
-<meta name="description" content="Accesorios para tu casa y tu mascota, impresos en 3D, hechos a mano y personalizados con su nombre.">
+<meta name="description" content="Kaikora Studio: muy pronto, accesorios para tu casa y tu mascota impresos en 3D, hechos a mano y con su nombre.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=DM+Sans:opsz,wght@9..40,400..600&family=Mrs+Saint+Delafield&display=swap">
@@ -90,6 +90,14 @@ section.block .wrap{padding-block:110px}
 .card .tag{color:var(--forest-soft)}
 .card .btn{align-self:flex-start;padding:12px 18px;font-size:11px}
 
+/* lo que viene */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px}
+.concept{display:flex;flex-direction:column;gap:16px}
+.concept .frame{aspect-ratio:4/5;overflow:hidden;margin-bottom:12px}
+.concept h3{font-size:clamp(32px,3.4vw,44px)}
+.concept p{color:var(--forest-soft);max-width:30em}
+.soon{align-self:flex-start;border:1.5px solid var(--bronze);color:var(--bronze);padding:9px 14px}
+
 /* configurator */
 .config{background:var(--ivory-2)}
 .config .inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
@@ -166,6 +174,9 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
   section.block .wrap{padding-block:80px}
   .manifesto .wrap{padding-block:88px}
 }
+@media (max-width:640px){
+  .duo{grid-template-columns:1fr}
+}
 @media (max-width:560px){
   .grid{grid-template-columns:1fr}
   .card h3{font-size:24px}
@@ -179,9 +190,9 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
   <div class="wrap">
     <a class="wm" href="#inicio" aria-label="Kaikora Studio, inicio"><b>kaikora</b><span>studio</span></a>
     <nav aria-label="Secciones">
-      <a href="#piezas">Piezas</a><a href="#nombre">Con su nombre</a><a href="#proceso">Cómo se hace</a><a href="#encargar">Cómo encargar</a>
+      <a href="#viene">Lo que viene</a><a href="#nombre">Con su nombre</a><a href="#proceso">Cómo se hace</a><a href="#pronto">Muy pronto</a>
     </nav>
-    <a class="btn" href="#nombre">Encargar</a>
+    <a class="btn" href="https://www.instagram.com/kaikorastudio/" target="_blank" rel="noopener">Síguenos</a>
   </div>
 </header>
 
@@ -189,13 +200,13 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
   <section class="hero" aria-labelledby="h-hero">
     <div class="wrap">
       <div>
-        <p class="lab muted">Accesorios impresos en 3D · hechos a mano</p>
+        <p class="lab muted">Muy pronto · Accesorios impresos en 3D</p>
         <h1 id="h-hero" style="margin-top:22px">Hecho a mano, <em>capa a capa.</em></h1>
         <span class="hand">hecho con amor</span>
-        <p class="lead">Piezas para tu casa y para quien más quieres. Las de mascota llevan su nombre, porque cada uno es único.</p>
+        <p class="lead">Estamos preparando nuestras primeras piezas para tu casa y para quien más quieres. Las de mascota llevarán su nombre, porque cada uno es único.</p>
         <div class="ctas">
-          <a class="btn solid" href="#piezas">Ver piezas</a>
-          <a class="btn" href="#nombre">Personaliza la suya</a>
+          <a class="btn solid" href="#viene">Descubre Kaikora</a>
+          <a class="btn" href="#pronto">Avísame</a>
         </div>
       </div>
       <div>
@@ -215,18 +226,28 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
     </div>
   </section>
 
-  <section class="block" id="piezas" aria-labelledby="h-piezas">
+  <section class="block" id="viene" aria-labelledby="h-viene">
     <div class="wrap">
       <div class="head rise">
-        <h2 id="h-piezas">Las <em>piezas.</em></h2>
-        <p>Cada una se imprime cuando la encargas. Elige el color y, si es para tu mascota, dinos su nombre.</p>
+        <h2 id="h-viene">Lo que <em>viene.</em></h2>
+        <p>Dos colecciones, un mismo cuidado. Cada pieza se imprimirá cuando la encargues.</p>
       </div>
-      <div class="tabs" role="tablist" aria-label="Colecciones">
-        <button role="tab" id="t-casa" aria-selected="true" aria-controls="g-casa">Para <em>casa</em></button>
-        <button role="tab" id="t-ellos" aria-selected="false" aria-controls="g-ellos">Para <em>ellos</em></button>
+      <div class="duo">
+        <article class="concept rise">
+          <div class="frame drift"><div class="ph"><span class="lab">Para casa</span></div></div>
+          <span class="lab muted">Colección i.</span>
+          <h3>Para <em>casa.</em></h3>
+          <p>Pequeños objetos para los rincones que más usas, en colores tranquilos y con el acabado de las capas a la vista.</p>
+          <span class="soon lab">Próximamente</span>
+        </article>
+        <article class="concept rise">
+          <div class="frame drift"><div class="ph" style="background:linear-gradient(165deg,#e6e1cf,#b9b39a 55%,#8f8a70)"><span class="lab">Para ellos</span></div></div>
+          <span class="lab muted">Colección ii.</span>
+          <h3>Para <em>ellos.</em></h3>
+          <p>Accesorios para perros y gatos, hechos a medida y con su nombre impreso capa a capa.</p>
+          <span class="soon lab">Próximamente</span>
+        </article>
       </div>
-      <div class="grid" id="g-casa" role="tabpanel" aria-labelledby="t-casa"></div>
-      <div class="grid" id="g-ellos" role="tabpanel" aria-labelledby="t-ellos" hidden></div>
     </div>
   </section>
 
@@ -234,7 +255,7 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
     <div class="wrap">
       <div class="head rise">
         <h2 id="h-nombre">Con <em>su nombre.</em></h2>
-        <p>Escribe su nombre y elige el color. Así quedará la placa antes de imprimirla.</p>
+        <p>Las piezas para mascotas llevarán su nombre. Escríbelo y mira cómo quedaría.</p>
       </div>
       <div class="inner">
         <div class="frame preview rise">
@@ -248,7 +269,7 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
             <text id="tagName" x="200" y="168" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="300" font-size="72" fill="#34473A">Luna</text>
           </svg>
         </div>
-        <form class="form" id="orderForm" novalidate>
+        <form class="form" id="orderForm" novalidate onsubmit="return false">
           <div class="field">
             <label class="lab muted" for="petName">Su nombre</label>
             <input type="text" id="petName" maxlength="14" value="Luna" autocomplete="off">
@@ -257,15 +278,9 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
             <span class="lab muted" id="lbl-color">Color</span>
             <div class="opts" role="group" aria-labelledby="lbl-color" id="colors"></div>
           </div>
-          <div class="field">
-            <span class="lab muted" id="lbl-pieza">Pieza</span>
-            <div class="opts" role="group" aria-labelledby="lbl-pieza" id="pieces"></div>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-            <button type="submit" class="btn solid" id="orderBtn">Encargar con este nombre</button>
-            <a class="btn" href="https://ig.me/m/kaikorastudio" target="_blank" rel="noopener">Abrir DM</a>
-          </div>
-          <p class="order-msg" id="orderMsg" role="status">Al pulsar, copiamos tu pedido para que lo pegues en nuestro DM de Instagram.</p>
+          <p class="hand" style="font-size:54px">muy pronto, el suyo</p>
+          <p class="muted" style="max-width:30em">Aún no aceptamos encargos. Síguenos en Instagram y serás de los primeros en saber cuándo salen.</p>
+          <div><a class="btn solid" href="https://www.instagram.com/kaikorastudio/" target="_blank" rel="noopener">Seguir a @kaikorastudio</a></div>
         </form>
       </div>
     </div>
@@ -273,7 +288,7 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 
   <section class="block process" id="proceso" aria-labelledby="h-proceso">
     <div class="wrap">
-      <div class="head rise"><h2 id="h-proceso">Cómo se <em>hace.</em></h2><p>Del boceto a tu puerta, siempre en el mismo orden.</p></div>
+      <div class="head rise"><h2 id="h-proceso">Cómo se <em>hace.</em></h2><p>Así nacerá cada pieza, del boceto a tu puerta.</p></div>
       <div class="inner">
         <div class="stick"><div class="frame"><span class="num" id="stepNum">i.</span><span class="lab cap muted" id="stepCap">Diseño</span></div></div>
         <div class="steps">
@@ -286,33 +301,15 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
     </div>
   </section>
 
-  <section class="block quote" aria-label="Opiniones">
+  <section class="final" id="pronto" aria-labelledby="h-final">
     <div class="wrap rise">
-      <span class="mark" aria-hidden="true">“</span>
-      <blockquote>Aquí irá la opinión de un cliente: qué le pareció su pieza y cómo reaccionó su mascota.</blockquote>
-      <footer class="lab">— Nombre y mascota</footer>
-    </div>
-  </section>
-
-  <section class="block" id="encargar" aria-labelledby="h-encargar">
-    <div class="wrap faq">
-      <div class="rise"><h2 id="h-encargar" style="font-size:clamp(40px,5vw,68px)">Cómo <em>encargar.</em></h2><span class="hand" style="font-size:56px;display:block;margin-top:8px">te lo ponemos fácil</span></div>
-      <div>
-        <details open><summary>¿Cómo hago el pedido?</summary><p>Elige la pieza, el color y el nombre en esta página y envíanoslo por DM en Instagram (@kaikorastudio). Te confirmamos precio y plazo.</p></details>
-        <details><summary>¿Cuánto tarda?</summary><p>Plazo pendiente de confirmar: cada pieza se imprime al encargarla.</p></details>
-        <details><summary>¿Hacéis envíos?</summary><p>Zonas y precios de envío pendientes de confirmar.</p></details>
-        <details><summary>¿Puedo pedir otro color o un diseño especial?</summary><p>Escríbenos y lo vemos juntos.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <section class="final" aria-labelledby="h-final">
-    <div class="wrap rise">
-      <h2 id="h-final">Encarga <em>el tuyo.</em></h2>
-      <span class="hand" style="color:var(--forest)">con su nombre</span>
+      <p class="lab" style="margin-bottom:24px">Kaikora Studio</p>
+      <h2 id="h-final">Muy <em>pronto.</em></h2>
+      <span class="hand" style="color:var(--forest)">estamos imprimiendo las primeras</span>
+      <p style="max-width:30em;margin:28px auto 0">Síguenos para ver el proceso y enterarte antes que nadie del lanzamiento. Si tienes una idea para tu casa o tu mascota, cuéntanosla por DM.</p>
       <div class="ctas">
-        <a class="btn solid" href="#nombre">Personalizar</a>
-        <a class="btn" href="https://www.instagram.com/kaikorastudio/" target="_blank" rel="noopener">@kaikorastudio</a>
+        <a class="btn solid" href="https://www.instagram.com/kaikorastudio/" target="_blank" rel="noopener">Seguir a @kaikorastudio</a>
+        <a class="btn" href="https://ig.me/m/kaikorastudio" target="_blank" rel="noopener">Escríbenos</a>
       </div>
     </div>
   </section>
@@ -322,45 +319,14 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
 
 <script>
 (function(){
-  /* ---------- datos editables (pendientes de confirmar) ---------- */
-  var PIEZAS = {
-    casa: [
-      {nombre:"Pieza de hogar 01", nota:"Foto de la pieza en casa", precio:"Desde — €"},
-      {nombre:"Pieza de hogar 02", nota:"Foto de la pieza en casa", precio:"Desde — €"},
-      {nombre:"Pieza de hogar 03", nota:"Foto de la pieza en casa", precio:"Desde — €"}
-    ],
-    ellos: [
-      {nombre:"Placa con su nombre", nota:"Foto con su mascota", precio:"Desde — €", personal:true},
-      {nombre:"Pieza para mascota 02", nota:"Foto con su mascota", precio:"Desde — €", personal:true},
-      {nombre:"Pieza para mascota 03", nota:"Foto con su mascota", precio:"Desde — €"}
-    ]
-  };
   var COLORES = [["Salvia","#A8BFA8","#34473A"],["Marfil","#F3EDDD","#34473A"],["Bronce","#8A6B45","#F8F3E7"],["Bosque","#34473A","#F8F3E7"]];
 
-  /* ---------- productos ---------- */
-  function card(p){
-    return '<article class="card rise">'+
-      '<div class="frame drift"><div class="ph"><span class="lab">'+p.nota+'</span></div></div>'+
-      '<div class="row"><h3>'+p.nombre+'</h3><span class="price">'+p.precio+'</span></div>'+
-      '<span class="tag lab">'+(p.personal?'Personalizable con su nombre':'Elige el color')+'</span>'+
-      '<a class="btn" href="#nombre" data-pieza="'+p.nombre+'">Encargar</a></article>';
-  }
-  var gc=document.getElementById('g-casa'), ge=document.getElementById('g-ellos');
-  gc.innerHTML=PIEZAS.casa.map(card).join(''); ge.innerHTML=PIEZAS.ellos.map(card).join('');
-  var tabs=[document.getElementById('t-casa'),document.getElementById('t-ellos')];
-  tabs.forEach(function(t,i){t.addEventListener('click',function(){
-    tabs.forEach(function(x,j){x.setAttribute('aria-selected',String(i===j));});
-    gc.hidden=i!==0; ge.hidden=i!==1;
-  });});
-
-  /* ---------- configurador ---------- */
-  var state={color:0,pieza:PIEZAS.ellos[0].nombre};
-  var colorsEl=document.getElementById('colors'), piecesEl=document.getElementById('pieces');
+  /* ---------- vista previa con su nombre ---------- */
+  var state={color:0};
+  var colorsEl=document.getElementById('colors');
   var input=document.getElementById('petName'), tagName=document.getElementById('tagName'), tagBody=document.getElementById('tagBody');
   function renderOpts(){
     colorsEl.innerHTML=COLORES.map(function(c,i){return '<button type="button" class="opt" aria-pressed="'+(i===state.color)+'" data-c="'+i+'"><i style="background:'+c[1]+'"></i>'+c[0]+'</button>';}).join('');
-    var all=PIEZAS.ellos.concat(PIEZAS.casa);
-    piecesEl.innerHTML=all.map(function(p){return '<button type="button" class="opt" aria-pressed="'+(p.nombre===state.pieza)+'" data-p="'+p.nombre+'">'+p.nombre+'</button>';}).join('');
   }
   function renderTag(){
     var n=(input.value||'').trim()||'Su nombre', c=COLORES[state.color];
@@ -368,19 +334,7 @@ footer.site .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:
     tagName.setAttribute('font-size', n.length>9?52:72);
   }
   colorsEl.addEventListener('click',function(e){var b=e.target.closest('[data-c]');if(!b)return;state.color=+b.dataset.c;renderOpts();renderTag();});
-  piecesEl.addEventListener('click',function(e){var b=e.target.closest('[data-p]');if(!b)return;state.pieza=b.dataset.p;renderOpts();});
   input.addEventListener('input',renderTag);
-  document.addEventListener('click',function(e){var a=e.target.closest('[data-pieza]');if(a){state.pieza=a.dataset.pieza;renderOpts();}});
-  document.getElementById('orderForm').addEventListener('submit',function(e){
-    e.preventDefault();
-    var n=(input.value||'').trim();
-    var msg='Hola Kaikora 🌿 Quiero encargar: '+state.pieza+(n?' con el nombre «'+n+'»':'')+', en color '+COLORES[state.color][0]+'.';
-    var out=document.getElementById('orderMsg');
-    function show(t){out.innerHTML=t+'<code>'+msg.replace(/</g,'&lt;')+'</code>';}
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(msg).then(function(){show('Pedido copiado. Ábrenos el DM en Instagram (@kaikorastudio) y pégalo:');},function(){show('Copia este texto y pégalo en nuestro DM de Instagram (@kaikorastudio):');});
-    } else show('Copia este texto y pégalo en nuestro DM de Instagram (@kaikorastudio):');
-  });
   renderOpts(); renderTag();
 
   /* ---------- la pieza que se imprime al bajar ---------- */
