@@ -1,0 +1,577 @@
+<title>Volcán Smash Burger</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Volcán Smash Burger, en Arucas (Gran Canaria): smash burgers hechas al momento en la plancha. La Trufada, La Campurria, La Cochina y la burger vegana.">
+<meta property="og:title" content="Volcán Smash Burger · Arucas">
+<meta property="og:description" content="El Volcán ya está encendido. Smash burgers hechas al momento en Arucas.">
+<meta property="og:image" content="img/og.jpg">
+<link rel="icon" href="img/volcan-blanco.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap">
+<style>
+:root{
+  --bg:#0A0A09; --bg2:#121210; --panel:#171714; --line:#2B2A25; --fg:#EFEBE2; --mute:#8F8A7E;
+  --amarillo:#FFC21A; --fuego:#FF6A1A; --rojo:#E3262B;
+  --cond:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Share Tech Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--body);overflow-x:clip}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--cond);font-weight:400;text-transform:uppercase;line-height:.92;margin:0;letter-spacing:.005em}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.y{color:var(--amarillo)}
+.sl{color:var(--amarillo);font-weight:300;margin-right:.18em}
+
+/* ───────── HUD de cámara fijo ───────── */
+.hud{position:fixed;inset:0;z-index:40;pointer-events:none}
+.hud .c{position:absolute;width:26px;height:26px;border:2px solid rgba(239,235,226,.85)}
+.hud .tl{left:max(18px,env(safe-area-inset-left,0px));top:calc(88px + env(safe-area-inset-top,0px));border-right:0;border-bottom:0}
+.hud .tr{right:max(18px,env(safe-area-inset-right,0px));top:calc(88px + env(safe-area-inset-top,0px));border-left:0;border-bottom:0}
+.hud .bl{left:max(18px,env(safe-area-inset-left,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));border-right:0;border-top:0}
+.hud .br{right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));border-left:0;border-top:0}
+.rec{position:absolute;left:max(56px,calc(env(safe-area-inset-left,0px) + 40px));top:calc(80px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:8px;font:12px var(--mono);letter-spacing:.12em;color:var(--fg)}
+.rec i{width:9px;height:9px;border-radius:50%;background:var(--rojo);animation:blink 1.1s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+.cam{position:absolute;right:max(56px,calc(env(safe-area-inset-right,0px) + 40px));top:calc(80px + env(safe-area-inset-top,0px));font:11px var(--mono);letter-spacing:.14em;color:var(--mute)}
+.ruler{position:absolute;left:max(26px,env(safe-area-inset-left,0px));top:22%;bottom:22%;width:12px;border-left:1px solid rgba(239,235,226,.25)}
+.ruler::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(239,235,226,.35) 0 1px,transparent 1px 22px);width:6px}
+.ruler b{position:absolute;left:-5px;top:calc(var(--prog,0)*100%);width:9px;height:9px;border-radius:50%;background:var(--amarillo);box-shadow:0 0 12px var(--amarillo);translate:0 -50%}
+.ruler span{position:absolute;left:14px;top:50%;writing-mode:vertical-rl;rotate:180deg;translate:0 -50%;font:10px var(--mono);letter-spacing:.3em;color:var(--mute);white-space:nowrap}
+.rscale{position:absolute;right:max(24px,env(safe-area-inset-right,0px));top:30%;bottom:30%;width:6px;background:repeating-linear-gradient(180deg,rgba(239,235,226,.3) 0 1px,transparent 1px 8px)}
+@media (max-width:760px){.cam,.rscale,.ruler span{display:none}.hud .c{width:18px;height:18px}.ruler{left:10px}}
+
+/* ───────── nav ───────── */
+nav{position:fixed;inset:0 0 auto 0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:linear-gradient(180deg,rgba(10,10,9,.92),rgba(10,10,9,.6));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{max-width:none;display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:38px;height:38px}
+.brand b{display:block;font:600 19px/1 var(--cond);letter-spacing:.14em}
+.brand small{display:block;font:10px/1.4 var(--mono);letter-spacing:.28em;color:var(--mute)}
+nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+nav ul a{text-decoration:none;font:500 12px var(--mono);letter-spacing:.06em;color:var(--mute);transition:color .2s}
+nav ul a:hover,nav ul a.on{color:var(--fg)}
+nav ul a.on::before{content:"● ";color:var(--amarillo)}
+.navbtn{font:600 13px var(--cond);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;border:1px solid var(--amarillo);color:var(--amarillo);padding:9px 14px;transition:background .2s,color .2s;white-space:nowrap}
+.navbtn:hover{background:var(--amarillo);color:#000}
+@media (max-width:1080px){nav ul{display:none}}
+
+/* ───────── secuencia inicial ───────── */
+.seq{height:520vh;position:relative}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;background:#000}
+.layer{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.layer.on{opacity:1}
+@media (min-aspect-ratio:1/1){.layer img.chef{object-position:50% 92%}}
+.layer img{width:100%;height:100%;object-fit:cover;transform:scale(var(--z,1.1)) translate(var(--tx,0),var(--ty,0));filter:saturate(1.15) contrast(1.08) brightness(.82);will-change:transform}
+.stage::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 60% 45%,transparent 25%,rgba(0,0,0,.75) 85%),linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.2) 55%,transparent 75%)}
+.spot{position:absolute;z-index:3;left:62%;top:-10%;width:46vw;height:90vh;translate:-50% 0;background:conic-gradient(from 180deg at 50% 0,transparent 160deg,rgba(255,194,26,.16) 172deg,rgba(255,230,160,.22) 180deg,rgba(255,194,26,.16) 188deg,transparent 200deg);filter:blur(8px);mix-blend-mode:screen;pointer-events:none}
+#fx{position:absolute;inset:0;z-index:4;width:100%;height:100%;pointer-events:none}
+.steps{position:absolute;inset:0;z-index:5;display:flex;align-items:center}
+.step{position:absolute;left:max(64px,calc(env(safe-area-inset-left,0px) + 52px));right:24px;max-width:560px;opacity:0;transform:translateY(30px);transition:opacity .7s,transform .8s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.step.on{opacity:1;transform:none;pointer-events:auto}
+.step .mono{display:block;margin-bottom:12px}
+.step h1{font-size:clamp(64px,10vw,150px);font-weight:500}
+.step h2{font-size:clamp(46px,6.6vw,96px);font-weight:400}
+.step h2 small{display:block;font-size:.5em;font-weight:300;letter-spacing:.02em;color:var(--fg);opacity:.9}
+.big{font:300 clamp(64px,9vw,124px)/1 var(--cond);color:var(--amarillo);margin-top:14px;font-variant-numeric:tabular-nums;text-shadow:0 0 30px rgba(255,194,26,.35)}
+.big small{font-size:.32em;letter-spacing:.12em;color:var(--mute);margin-left:10px;text-shadow:none}
+.step p{max-width:42ch;color:#D9D4C8;margin:16px 0 0}
+.specs{margin-top:20px;border-top:1px solid var(--line);max-width:380px}
+.specs div{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line);font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.specs div span:first-child{color:var(--mute)}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 20px;font:600 15px/1 var(--cond);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border:1px solid var(--fg);transition:background .2s,color .2s,box-shadow .2s;cursor:pointer;background:none;color:var(--fg)}
+.btn:hover{background:var(--fg);color:#000}
+.btn.y{background:var(--amarillo);border-color:var(--amarillo);color:#000}
+.btn.y:hover{box-shadow:0 0 28px rgba(255,194,26,.55);background:var(--amarillo)}
+.prog{position:absolute;z-index:6;left:0;right:0;bottom:0;height:2px;background:rgba(239,235,226,.12)}
+.prog b{display:block;height:100%;width:calc(var(--sp,0)*100%);background:var(--amarillo);box-shadow:0 0 12px var(--amarillo)}
+.ticks{position:absolute;z-index:6;right:max(64px,calc(env(safe-area-inset-right,0px) + 52px));bottom:calc(36px + env(safe-area-inset-bottom,0px));display:flex;gap:18px;font:11px var(--mono);letter-spacing:.14em;color:var(--mute)}
+.ticks span.on{color:var(--amarillo)}
+.hint{position:absolute;z-index:6;left:50%;bottom:calc(30px + env(safe-area-inset-bottom,0px));translate:-50% 0;font:10px var(--mono);letter-spacing:.3em;color:var(--mute);text-transform:uppercase;transition:opacity .4s}
+@media (max-width:760px){
+  .step{left:28px;right:28px;top:auto;bottom:16vh}
+  .steps{align-items:flex-end}
+  .stage::after{background:radial-gradient(ellipse at 50% 35%,transparent 20%,rgba(0,0,0,.6) 80%),linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.25) 60%,transparent 80%)}
+  .ticks{display:none}.spot{left:50%;width:90vw}
+}
+
+/* ───────── secciones ───────── */
+section.sec{padding-block:clamp(90px,11vw,150px);position:relative}
+.sh{margin-bottom:clamp(36px,5vw,60px)}
+.sh .mono{display:block;margin-bottom:12px}
+.sh h2{font-size:clamp(48px,6.6vw,92px);font-weight:400}
+.sh p{color:var(--mute);max-width:52ch;margin:16px 0 0}
+
+/* carta */
+.carta{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;transition:border-color .3s,transform .3s;position:relative}
+.card:hover{border-color:rgba(255,194,26,.55);transform:translateY(-4px)}
+.card .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:#000}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.card:hover .ph img{transform:scale(1.06)}
+.card .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--panel) 0%,transparent 45%)}
+.card .no{position:absolute;left:14px;top:12px;z-index:2;font:11px var(--mono);letter-spacing:.16em;color:var(--amarillo)}
+.card .body{padding:4px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.card h3{font-size:36px;font-weight:500}
+.card p{margin:0;color:#CFCABD;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);padding:5px 7px}
+.card .btn{margin-top:auto;justify-content:center;padding:12px;font-size:14px;border-color:rgba(255,194,26,.6);color:var(--amarillo)}
+.card .btn:hover{background:var(--amarillo);color:#000}
+.vegan .ph{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 60%,rgba(120,200,90,.25),transparent 60%),#0d120b}
+.vegan .ph img{width:44%;height:auto;object-fit:contain;opacity:.92}
+.vegan .ph::before{content:"100% VEGETAL";position:absolute;bottom:18px;left:50%;translate:-50% 0;z-index:2;font:12px var(--mono);letter-spacing:.3em;color:#9BD27A;white-space:nowrap}
+@media (max-width:1080px){.carta{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.carta{grid-template-columns:1fr}}
+
+/* elige tu volcán */
+.builder{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(24px,4vw,56px);align-items:stretch}
+.pick .mono{display:block;margin:0 0 12px}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opt{position:relative;text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--fg);padding:0;cursor:pointer;overflow:hidden;font:inherit;transition:border-color .2s}
+.opt img{width:100%;aspect-ratio:16/10;object-fit:cover;filter:brightness(.85)}
+.opt span{display:block;padding:10px 12px;font:500 20px/1 var(--cond);letter-spacing:.06em;text-transform:uppercase}
+.opt small{display:block;padding:0 12px 12px;font:10px var(--mono);letter-spacing:.12em;color:var(--mute)}
+.opt[aria-pressed="true"]{border-color:var(--amarillo);box-shadow:0 0 0 1px var(--amarillo),0 0 30px rgba(255,194,26,.18)}
+.opt[aria-pressed="true"]::after{content:"✓";position:absolute;right:10px;top:8px;width:24px;height:24px;display:grid;place-items:center;background:var(--amarillo);color:#000;font-weight:700}
+.opt.veg img{object-fit:contain;padding:14% 30%;background:radial-gradient(circle,rgba(120,200,90,.22),transparent 65%),#0d120b;filter:none}
+.ings{margin-top:22px}
+.ings ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.ings li{display:flex;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);font:500 17px var(--body);opacity:0;transform:translateX(-12px);animation:in .45s forwards}
+.ings li b{font:11px var(--mono);color:var(--amarillo);letter-spacing:.1em;min-width:28px}
+@keyframes in{to{opacity:1;transform:none}}
+.show{position:relative;min-height:520px;background:radial-gradient(ellipse at 50% 100%,rgba(255,194,26,.12),transparent 60%),#070706;border:1px solid var(--line);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.show .cone{position:absolute;left:50%;top:-5%;width:80%;height:95%;translate:-50% 0;background:conic-gradient(from 180deg at 50% 0,transparent 155deg,rgba(255,194,26,.2) 172deg,rgba(255,236,180,.28) 180deg,rgba(255,194,26,.2) 188deg,transparent 205deg);filter:blur(6px)}
+.show .ped{position:absolute;left:50%;bottom:9%;translate:-50% 0;width:62%;height:44px;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#E9B23C,#7A5410 60%,#2a1d06);box-shadow:0 0 60px rgba(255,194,26,.35)}
+.show .hero-b{position:relative;z-index:2;width:72%;max-width:460px;aspect-ratio:4/3;margin-bottom:6%;-webkit-mask:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%);mask:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%);transition:opacity .35s,transform .5s cubic-bezier(.2,1.2,.4,1)}
+.show .hero-b img{width:100%;height:100%;object-fit:cover}
+.show .hero-b.swap{opacity:0;transform:scale(.9) translateY(10px)}
+.show .tag{position:absolute;left:18px;top:16px;font:11px var(--mono);letter-spacing:.16em;color:var(--mute)}
+.show .name{position:absolute;right:18px;bottom:16px;z-index:3;font:500 clamp(30px,3.4vw,48px)/1 var(--cond);text-transform:uppercase;text-align:right}
+.show .name small{display:block;font:11px var(--mono);letter-spacing:.16em;color:var(--amarillo)}
+.show .bx{position:absolute;width:20px;height:20px;border:1.5px solid rgba(239,235,226,.7)}
+.show .bx.a{left:12px;bottom:12px;border-right:0;border-top:0}.show .bx.b{right:12px;top:12px;border-left:0;border-bottom:0}
+#smoke2{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+@media (max-width:900px){.builder{grid-template-columns:1fr}.show{min-height:400px;order:-1}}
+
+/* smash sear */
+.over{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);align-items:center}
+.glitch{position:relative;font:600 clamp(86px,13vw,190px)/.86 var(--cond);text-transform:uppercase}
+.glitch span{display:block;position:relative}
+.glitch span::before,.glitch span::after{content:attr(data-t);position:absolute;inset:0}
+.glitch span::before{color:var(--amarillo);transform:translate(0,.06em);opacity:.35;clip-path:inset(0 0 55% 0);animation:g1 3.5s infinite steps(1)}
+.glitch span::after{color:#fff;transform:translate(0,-.05em);opacity:.25;clip-path:inset(60% 0 0 0);animation:g2 2.7s infinite steps(1)}
+.glitch .y2{color:var(--amarillo)}
+@keyframes g1{0%,92%{transform:translate(0,.06em)}93%{transform:translate(-6px,.02em)}95%{transform:translate(5px,.08em)}}
+@keyframes g2{0%,88%{transform:translate(0,-.05em)}90%{transform:translate(7px,-.02em)}93%{transform:translate(-4px,-.07em)}}
+.over p{color:#CFCABD;max-width:46ch}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:30px;border-top:1px solid var(--line)}
+.stats div{padding:18px 14px 0 0}
+.stats div+div{padding-left:14px;border-left:1px solid var(--line)}
+.stats b{display:block;font:300 clamp(44px,5vw,72px)/1 var(--cond);color:var(--amarillo);font-variant-numeric:tabular-nums}
+.stats span{font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.frame{position:relative;aspect-ratio:4/5;overflow:hidden;max-width:100%}
+.frame img{width:100%;height:100%;object-fit:cover;filter:saturate(1.15) contrast(1.05)}
+.frame::before,.frame::after{content:"";position:absolute;width:34px;height:34px;border:2px solid var(--amarillo);z-index:2}
+.frame::before{left:12px;top:12px;border-right:0;border-bottom:0}
+.frame::after{right:12px;bottom:12px;border-left:0;border-top:0}
+.frame .lbl{position:absolute;left:14px;bottom:12px;z-index:2;font:11px var(--mono);letter-spacing:.16em;color:var(--fg);background:rgba(0,0,0,.6);padding:5px 8px}
+@media (max-width:900px){.over{grid-template-columns:1fr}.frame{aspect-ratio:4/3}}
+
+/* la plancha: el calor sube con el scroll */
+.heat{height:260vh;position:relative}
+.heat .pin{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate}
+.heat .bgimg{position:absolute;inset:-6%;z-index:-2}
+.heat .bgimg img{width:100%;height:100%;object-fit:cover;filter:saturate(calc(.4 + var(--h,0)*1.1)) brightness(calc(.35 + var(--h,0)*.55)) contrast(1.1);transform:scale(calc(1.15 - var(--h,0)*.1))}
+.heat .glow{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 100%,rgba(255,90,20,calc(var(--h,0)*.55)),transparent 60%),linear-gradient(180deg,rgba(0,0,0,.8),transparent 30%,transparent 70%,rgba(0,0,0,.85))}
+#embers{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.heat .wrap{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding-block:110px 60px}
+.heat .meter{position:absolute;right:max(64px,calc(env(safe-area-inset-right,0px) + 52px));top:50%;translate:0 -50%;display:flex;align-items:flex-end;gap:16px}
+.heat .meter .num{font:300 clamp(80px,12vw,170px)/.8 var(--cond);color:var(--amarillo);font-variant-numeric:tabular-nums;text-shadow:0 0 40px rgba(255,140,30,.5)}
+.heat .meter .num small{font-size:.3em;color:var(--fg)}
+.heat .bar{width:8px;height:min(46vh,380px);background:rgba(239,235,226,.12);position:relative}
+.heat .bar b{position:absolute;left:0;right:0;bottom:0;height:calc(var(--h,0)*100%);background:linear-gradient(0deg,var(--amarillo),var(--fuego) 60%,var(--rojo));box-shadow:0 0 18px var(--fuego)}
+.heat .foot{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.heat .foot p{max-width:40ch;margin:0;color:#E6E0D2}
+@media (max-width:760px){.heat .meter{right:28px;top:auto;bottom:22vh;translate:0}.heat .bar{height:28vh}}
+
+/* ingredientes: carril horizontal */
+.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:18px;scrollbar-width:thin;scrollbar-color:var(--amarillo) var(--line)}
+.ing{flex:0 0 min(78vw,360px);scroll-snap-align:start;position:relative;aspect-ratio:3/4;overflow:hidden;background:#000;border:1px solid var(--line)}
+.ing img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.5);transform-origin:var(--o,50% 50%);filter:saturate(1.2) brightness(.7);transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.ing:hover img{transform:scale(1.62)}
+.ing::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92) 8%,transparent 60%)}
+.ing .t{position:absolute;left:18px;right:18px;bottom:18px;z-index:2}
+.ing .t b{display:block;font:300 44px/1 var(--cond);color:var(--amarillo);opacity:.6}
+.ing .t h3{font-size:34px;font-weight:500;margin-top:4px}
+.ing .t span{font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.railnav{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.railnav button{width:46px;height:46px;border:1px solid var(--line);background:none;color:var(--fg);font:18px var(--body);cursor:pointer}
+.railnav button:hover{border-color:var(--amarillo);color:var(--amarillo)}
+
+/* dónde */
+.donde{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+.d-main{position:relative;overflow:hidden;min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(24px,4vw,48px);border:1px solid var(--line);isolation:isolate}
+.d-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(.45) saturate(1.1)}
+.d-main::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent 70%)}
+.d-main h2{font-size:clamp(48px,6.6vw,96px);font-weight:500}
+.d-main p{color:#DDD7CA;max-width:44ch}
+.d-side{display:grid;gap:16px}
+.d-card{border:1px solid var(--line);background:var(--panel);padding:24px;text-decoration:none;display:flex;flex-direction:column;gap:8px;transition:border-color .2s}
+a.d-card:hover{border-color:var(--amarillo)}
+.d-card b{font:500 28px/1 var(--cond);text-transform:uppercase;letter-spacing:.02em}
+.d-card span{color:var(--mute);font-size:15px}
+@media (max-width:900px){.donde{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding-block:40px calc(48px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+
+.rv{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .rec i,.glitch span::before,.glitch span::after{animation:none}
+  .layer img,.heat .bgimg img{transform:none!important}
+  .ings li{animation:none;opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="hud" aria-hidden="true">
+  <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+  <div class="rec"><i></i>REC <span id="tc">00:00:00:00</span></div>
+  <div class="cam">4K · 24FPS · F2.8 · 1/50</div>
+  <div class="ruler"><b></b><span>Baja para explorar</span></div>
+  <div class="rscale"></div>
+</div>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top"><img src="img/volcan-blanco.svg" alt="Logo de Volcán Smash Burger"><span><b>VOLCÁN</b><small>SMASH BURGER</small></span></a>
+  <ul id="menu">
+    <li><a href="#carta">01. Carta</a></li>
+    <li><a href="#elige">02. Elige</a></li>
+    <li><a href="#smash">03. Smash</a></li>
+    <li><a href="#plancha">04. Plancha</a></li>
+    <li><a href="#ingredientes">05. Ingredientes</a></li>
+    <li><a href="#donde">06. Dónde</a></li>
+  </ul>
+  <a class="navbtn" href="#donde">Cómo llegar</a>
+</div></nav>
+
+<!-- 00 · secuencia -->
+<section class="seq" id="top" aria-label="Cómo se hace una Volcán">
+  <div class="stage" id="stage">
+    <div class="layer" data-l="0"><img class="chef" src="img/plancha-chef.jpg" alt="Cocinero de Volcán aplastando la carne en la plancha"></div>
+    <div class="layer" data-l="1"><img src="img/plancha.jpg" alt="Burgers de Volcán saliendo de la plancha"></div>
+    <div class="layer" data-l="2"><img src="img/queso.jpg" alt="Smash burger con el queso fundido"></div>
+    <div class="spot" aria-hidden="true"></div>
+    <canvas id="fx" aria-hidden="true"></canvas>
+    <div class="steps">
+      <div class="step on">
+        <span class="mono">Arucas · Gran Canaria · Smash burgers</span>
+        <h1>Volcán<br><span class="y">ya está</span><br>encendido</h1>
+        <p>Smash burgers hechas al momento, en la plancha, delante de ti.</p>
+      </div>
+      <div class="step">
+        <span class="mono">El proceso // Smash nº 01</span>
+        <h2><span class="sl">//</span>01. La carne<small>Fresca, en bola, directa a la plancha</small></h2>
+        <div class="big" data-count="160">0<small>GRAMOS</small></div>
+        <div class="specs"><div><span>Carne</span><span>160 g</span></div><div><span>La Cochina</span><span>2 × 80 g smash</span></div></div>
+      </div>
+      <div class="step">
+        <span class="mono">El proceso // El momento</span>
+        <h2><span class="sl">//</span>02. El smash<small>Aplastada contra la plancha</small></h2>
+        <p>Se aplasta fina contra el metal caliente para que salga la costra: crujiente por fuera y jugosa por dentro. Ese chisporroteo es el sonido de Volcán.</p>
+        <div class="specs"><div><span>Plancha</span><span>A tope</span></div><div><span>Costra</span><span>Crujiente</span></div><div><span>Al momento</span><span>Siempre</span></div></div>
+      </div>
+      <div class="step">
+        <span class="mono">El proceso // Fundido</span>
+        <h2><span class="sl">//</span>03. El queso<small>Encima, mientras la carne sigue en la plancha</small></h2>
+        <p>Provolone, cheddar, rulo de cabra… cada Volcán tiene el suyo, y todos acaban igual: fundidos.</p>
+      </div>
+      <div class="step">
+        <span class="mono">El resultado</span>
+        <h2><span class="sl">//</span>04. Tu Volcán<small>Pan brioche, carne smash y todo lo demás</small></h2>
+        <div class="ctas"><a class="btn y" href="#carta">Ver la carta</a><a class="btn" href="#donde">Dónde estamos</a></div>
+      </div>
+    </div>
+    <div class="ticks" aria-hidden="true"><span>00 Intro</span><span>01 Carne</span><span>02 Smash</span><span>03 Queso</span><span>04 Volcán</span></div>
+    <div class="hint" id="hint">Baja para encender la plancha</div>
+    <div class="prog"><b></b></div>
+  </div>
+</section>
+
+<!-- 01 · carta -->
+<section class="sec" id="carta">
+  <div class="wrap">
+    <div class="sh rv"><span class="mono">La carta // Smash burgers</span><h2><span class="sl">//</span>01. Las Volcán</h2><p>Cuatro formas de entrar en erupción. Todas hechas al momento.</p></div>
+    <div class="carta">
+      <article class="card rv"><div class="ph"><span class="no">Nº 01</span><img src="img/burger-trufada.jpg" alt="La Trufada" loading="lazy"></div><div class="body"><h3>La Trufada</h3><p>Carne de 160 g, lechuga rizada, queso provolone, champiñones al ajillo, cebolla caramelizada, mantequilla de trufa y un toque de mayonesa.</p><div class="chips"><span>160 g</span><span>Provolone</span><span>Trufa</span></div><a class="btn" href="#elige" data-pick="0">Elegir</a></div></article>
+      <article class="card rv d1"><div class="ph"><span class="no">Nº 02</span><img src="img/burger-campurria.jpg" alt="La Campurria" loading="lazy"></div><div class="body"><h3>La Campurria</h3><p>Carne de 160 g, rúcula, cebolla crujiente, rulo de cabra, mermelada de bacon y alioli de ajo asado.</p><div class="chips"><span>160 g</span><span>Rulo de cabra</span><span>Bacon</span></div><a class="btn" href="#elige" data-pick="1">Elegir</a></div></article>
+      <article class="card rv d2"><div class="ph"><span class="no">Nº 03</span><img src="img/burger-cochina.jpg" alt="La Cochina" loading="lazy"></div><div class="body"><h3>La Cochina</h3><p>2 × 80 g de carne smash, costilla desmenuzada, cebolla roja, bacon, queso cheddar y salsa pecado.</p><div class="chips"><span>2 × 80 g</span><span>Costilla</span><span>Salsa pecado</span></div><a class="btn" href="#elige" data-pick="2">Elegir</a></div></article>
+      <article class="card vegan rv d3"><div class="ph"><span class="no">Nº 04</span><img src="img/volcan-blanco.svg" alt="" loading="lazy"></div><div class="body"><h3>La Vegana</h3><p>Todos quieren probar la burger vegana. ¿Y tú? Pregúntanos por ella en el local.</p><div class="chips"><span>Vegetal</span></div><a class="btn" href="#elige" data-pick="3">Elegir</a></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · elige -->
+<section class="sec" id="elige" style="padding-top:0">
+  <div class="wrap">
+    <div class="sh rv"><span class="mono">Interactivo // Tu elección</span><h2><span class="sl">//</span>02. Elige tu Volcán</h2></div>
+    <div class="builder">
+      <div class="pick rv">
+        <p class="mono">Paso 1 · Elige burger</p>
+        <div class="opts" id="opts"></div>
+        <div class="ings"><p class="mono" style="margin:0 0 10px">Paso 2 · Lo que lleva</p><ul id="ings"></ul></div>
+      </div>
+      <div class="show rv d1">
+        <div class="cone"></div><canvas id="smoke2" aria-hidden="true"></canvas><div class="ped"></div>
+        <div class="hero-b" id="heroB"><img id="heroImg" src="img/burger-trufada.jpg" alt=""></div>
+        <span class="tag">Cámara 02 · Vista previa</span>
+        <div class="name" id="heroName"><small>Nº 01</small>La Trufada</div>
+        <i class="bx a"></i><i class="bx b"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · smash sear -->
+<section class="sec" id="smash" style="padding-top:0">
+  <div class="wrap over">
+    <div class="rv">
+      <span class="mono">03 // Visión general — El smash</span>
+      <div class="glitch" style="margin-top:14px" aria-label="Smash Sear"><span data-t="Smash">Smash</span><span class="y2" data-t="Sear">Sear</span></div>
+      <p>Una bola de carne fresca, aplastada fina contra la plancha caliente. Eso es todo el secreto: máxima costra, todo el sabor, en una burger que se come con las manos.</p>
+      <div class="stats">
+        <div><b data-count="160">0</b><span>Gramos de carne</span></div>
+        <div><b data-count="2" data-pre="×">0</b><span>Smash en La Cochina</span></div>
+        <div><b data-count="4">0</b><span>Volcanes en carta</span></div>
+      </div>
+    </div>
+    <figure class="frame rv d1" style="margin:0"><img src="img/queso.jpg" alt="Smash burger de Volcán con queso fundido" loading="lazy"><span class="lbl">REC · Toma 07</span></figure>
+  </div>
+</section>
+
+<!-- 04 · plancha -->
+<section class="heat" id="plancha" aria-label="La plancha">
+  <div class="pin" id="heatPin">
+    <div class="bgimg"><img src="img/plancha.jpg" alt="" loading="lazy"></div>
+    <div class="glow"></div>
+    <canvas id="embers" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div><span class="mono">Proceso // Plancha de acero</span><h2 style="font-size:clamp(48px,6.6vw,92px);margin-top:12px"><span class="sl">//</span>04. La plancha</h2></div>
+      <div class="foot"><p>Aquí no hay nada precocinado: cada burger se hace cuando la pides. Baja y sube el fuego.</p><span class="mono">Baja para subir el calor</span></div>
+    </div>
+    <div class="meter" aria-hidden="true"><div class="num"><span id="heatNum">0</span><small>%</small></div><div class="bar"><b></b></div></div>
+  </div>
+</section>
+
+<!-- 05 · ingredientes -->
+<section class="sec" id="ingredientes">
+  <div class="wrap">
+    <div class="sh rv"><span class="mono">Ingredientes // Lo que hay dentro</span><h2><span class="sl">//</span>05. Los ingredientes</h2><p>Lo que hace a cada Volcán diferente. Desliza para verlos.</p></div>
+    <div class="rail rv" id="rail">
+      <article class="ing"><img src="img/burger-trufada.jpg" alt="" loading="lazy" style="--o:45% 25%"><div class="t"><b>01</b><h3>Mantequilla de trufa</h3><span>La Trufada</span></div></article>
+      <article class="ing"><img src="img/burger-trufada.jpg" alt="" loading="lazy" style="--o:50% 30%"><div class="t"><b>02</b><h3>Champiñones al ajillo</h3><span>La Trufada</span></div></article>
+      <article class="ing"><img src="img/queso.jpg" alt="" loading="lazy" style="--o:60% 55%"><div class="t"><b>03</b><h3>Queso fundido</h3><span>Provolone · Cheddar</span></div></article>
+      <article class="ing"><img src="img/burger-campurria.jpg" alt="" loading="lazy" style="--o:50% 32%"><div class="t"><b>04</b><h3>Rulo de cabra</h3><span>La Campurria</span></div></article>
+      <article class="ing"><img src="img/burger-campurria.jpg" alt="" loading="lazy" style="--o:50% 40%"><div class="t"><b>05</b><h3>Mermelada de bacon</h3><span>La Campurria</span></div></article>
+      <article class="ing"><img src="img/burger-cochina.jpg" alt="" loading="lazy" style="--o:45% 40%"><div class="t"><b>06</b><h3>Costilla desmenuzada</h3><span>La Cochina</span></div></article>
+      <article class="ing"><img src="img/burger-cochina.jpg" alt="" loading="lazy" style="--o:60% 55%"><div class="t"><b>07</b><h3>Salsa pecado</h3><span>La Cochina</span></div></article>
+      <article class="ing"><img src="img/plancha.jpg" alt="" loading="lazy" style="--o:50% 60%"><div class="t"><b>08</b><h3>Pan brioche</h3><span>Todas</span></div></article>
+    </div>
+    <div class="railnav"><button type="button" id="prev" aria-label="Anterior">←</button><button type="button" id="next" aria-label="Siguiente">→</button></div>
+  </div>
+</section>
+
+<!-- 06 · dónde -->
+<section class="sec" id="donde" style="padding-top:0">
+  <div class="wrap donde">
+    <div class="d-main rv">
+      <img src="img/plancha.jpg" alt="" loading="lazy">
+      <span class="mono">Ubicación // Arucas, Gran Canaria</span>
+      <h2 style="margin-top:12px"><span class="sl">//</span>06. Te esperamos en Arucas</h2>
+      <p>Ven a por tu Volcán. Y si estás en Heineken 5mentarios, pídela y te la llevamos a la mesa.</p>
+      <div class="ctas"><a class="btn y" data-link="maps" href="https://www.google.com/maps/search/?api=1&query=Volc%C3%A1n+Smash+Burger+Arucas" target="_blank" rel="noopener">Cómo llegar</a><a class="btn" href="https://www.instagram.com/volcansmashburger/" target="_blank" rel="noopener">Instagram</a></div>
+    </div>
+    <div class="d-side">
+      <a class="d-card rv d1" href="https://www.instagram.com/volcansmashburger/" target="_blank" rel="noopener"><span class="mono">Instagram</span><b>@volcansmashburger</b><span>Novedades, carta y lo que sale de la plancha</span></a>
+      <a class="d-card rv d2" href="https://www.instagram.com/heineken5mentarios/" target="_blank" rel="noopener"><span class="mono">A la mesa</span><b>Heineken 5mentarios</b><span>Pide tu Volcán en el bar y te la llevamos</span></a>
+      <a class="d-card rv d3" data-link="pedidos" href="#" target="_blank" rel="noopener" hidden><span class="mono">Pedidos</span><b>Pide online</b><span>Para recoger o a domicilio</span></a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <a class="brand" href="#top"><img src="img/volcan-blanco.svg" alt=""><span><b>VOLCÁN</b><small>SMASH BURGER</small></span></a>
+  <span class="mono">© <span id="yr">2026</span> Volcán Smash Burger · Arucas · Grupo 5mentarios</span>
+</div></footer>
+
+<script>
+// ── Enlaces (si se dejan vacíos, el botón no aparece o usa la búsqueda de Google Maps)
+const ENLACES = {
+  maps: "",      // enlace exacto de Google Maps de Volcán
+  pedidos: ""    // enlace de pedidos online (Glovo, Just Eat, web propia…) si lo hay
+};
+document.querySelectorAll('[data-link]').forEach(el => { const v = ENLACES[el.dataset.link]; if (v) { el.href = v; el.hidden = false; } });
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+
+// ── carta para "Elige tu Volcán" (datos reales de los posts de Volcán)
+const CARTA = [
+  { n: 'La Trufada', no: 'Nº 01', img: 'img/burger-trufada.jpg', sub: 'Carne 160 g', ing: ['Carne de 160 g', 'Lechuga rizada', 'Queso provolone', 'Champiñones al ajillo', 'Cebolla caramelizada', 'Mantequilla de trufa', 'Un toque de mayonesa'] },
+  { n: 'La Campurria', no: 'Nº 02', img: 'img/burger-campurria.jpg', sub: 'Carne 160 g', ing: ['Carne de 160 g', 'Rúcula', 'Cebolla crujiente', 'Rulo de cabra', 'Mermelada de bacon', 'Alioli de ajo asado'] },
+  { n: 'La Cochina', no: 'Nº 03', img: 'img/burger-cochina.jpg', sub: '2 × 80 g smash', ing: ['2 × 80 g de carne smash', 'Costilla desmenuzada', 'Cebolla roja', 'Bacon', 'Queso cheddar', 'Salsa pecado'] },
+  { n: 'La Vegana', no: 'Nº 04', img: 'img/volcan-blanco.svg', sub: '100% vegetal', veg: true, ing: ['Burger 100% vegetal', 'Pregunta en el local por sus ingredientes'] }
+];
+const opts = $('#opts'), ings = $('#ings'), heroB = $('#heroB'), heroImg = $('#heroImg'), heroName = $('#heroName');
+CARTA.forEach((b, i) => {
+  const o = document.createElement('button');
+  o.type = 'button'; o.className = 'opt' + (b.veg ? ' veg' : ''); o.setAttribute('aria-pressed', i === 0);
+  o.innerHTML = `<img src="${b.img}" alt=""><span>${b.n}</span><small>${b.sub}</small>`;
+  o.onclick = () => elegir(i);
+  opts.appendChild(o);
+});
+function elegir(i) {
+  const b = CARTA[i];
+  [...opts.children].forEach((o, k) => o.setAttribute('aria-pressed', k === i));
+  ings.innerHTML = b.ing.map((t, k) => `<li style="animation-delay:${k * 60}ms"><b>${String(k + 1).padStart(2, '0')}</b>${t}</li>`).join('');
+  heroB.classList.add('swap');
+  setTimeout(() => {
+    heroImg.src = b.img; heroImg.style.objectFit = b.veg ? 'contain' : 'cover'; heroImg.style.padding = b.veg ? '12% 26%' : '0';
+    heroName.innerHTML = `<small>${b.no}</small>${b.n}`; heroB.classList.remove('swap');
+  }, 260);
+}
+elegir(0);
+document.querySelectorAll('[data-pick]').forEach(a => a.addEventListener('click', () => elegir(+a.dataset.pick)));
+
+// ── humo (canvas genérico)
+function humo(canvas, opts) {
+  const ctx = canvas.getContext('2d'); let w, h, ps = [], vis = true;
+  function size() { const r = Math.min(devicePixelRatio || 1, 2); w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * r; canvas.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0); }
+  size(); addEventListener('resize', size);
+  const nueva = () => ({ x: opts.x() * w, y: h * opts.y0, r: 40 + Math.random() * 90, vx: (Math.random() - .5) * .35, vy: -(.25 + Math.random() * .55), a: 0, life: 0, max: 320 + Math.random() * 260 });
+  for (let i = 0; i < opts.n; i++) { const p = nueva(); p.life = Math.random() * p.max; p.y -= p.life * -p.vy; ps.push(p); }
+  new IntersectionObserver(([e]) => vis = e.isIntersecting).observe(canvas);
+  (function loop() {
+    if (vis) {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of ps) {
+        p.life++; p.x += p.vx + Math.sin(p.life / 60) * .25; p.y += p.vy; p.r += .18;
+        const t = p.life / p.max, a = Math.sin(Math.PI * t) * opts.alpha * (opts.k ? opts.k() : 1);
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        g.addColorStop(0, `rgba(235,228,214,${a})`); g.addColorStop(1, 'rgba(235,228,214,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.29); ctx.fill();
+        if (p.life > p.max) Object.assign(p, nueva());
+      }
+    }
+    requestAnimationFrame(loop);
+  })();
+}
+// ── chispas
+function chispas(canvas, k) {
+  const ctx = canvas.getContext('2d'); let w, h, ps = [], vis = true;
+  function size() { const r = Math.min(devicePixelRatio || 1, 2); w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * r; canvas.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0); }
+  size(); addEventListener('resize', size);
+  const nueva = () => ({ x: Math.random() * w, y: h + 10, vy: -(.6 + Math.random() * 2.2), vx: (Math.random() - .5) * .8, r: .6 + Math.random() * 1.8, l: 0 });
+  for (let i = 0; i < 120; i++) { const p = nueva(); p.y = Math.random() * h; ps.push(p); }
+  new IntersectionObserver(([e]) => vis = e.isIntersecting).observe(canvas);
+  (function loop() {
+    if (vis) {
+      ctx.clearRect(0, 0, w, h); const kk = k();
+      for (const p of ps) {
+        p.l++; p.x += p.vx + Math.sin(p.l / 14) * .4; p.y += p.vy * (0.4 + kk * 1.4);
+        const a = (0.15 + kk * .85) * (0.5 + Math.random() * .5);
+        ctx.fillStyle = `rgba(255,${120 + Math.random() * 90 | 0},30,${a})`;
+        ctx.shadowColor = 'rgba(255,120,30,.9)'; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.29); ctx.fill();
+        if (p.y < -10) Object.assign(p, nueva());
+      }
+      ctx.shadowBlur = 0;
+    }
+    requestAnimationFrame(loop);
+  })();
+}
+let heat = 0;
+if (!reduce) {
+  humo($('#fx'), { n: 26, alpha: .07, x: () => .35 + Math.random() * .6, y0: 1.05 });
+  humo($('#smoke2'), { n: 14, alpha: .06, x: () => .3 + Math.random() * .4, y0: .9 });
+  chispas($('#embers'), () => heat);
+}
+
+// ── contadores
+function contar(el) {
+  const fin = +el.dataset.count, pre = el.dataset.pre || '', small = el.querySelector('small'), t0 = performance.now(), dur = reduce ? 0 : 1400;
+  (function f(t) { const p = dur ? Math.min((t - t0) / dur, 1) : 1, v = Math.round(fin * (1 - Math.pow(1 - p, 3)));
+    el.firstChild.nodeValue = (pre && fin < 10 ? v + pre : String(v)); if (p < 1) requestAnimationFrame(f); })(t0);
+}
+const cio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { contar(e.target); cio.unobserve(e.target); } }), { threshold: .6 });
+document.querySelectorAll('.stats [data-count]').forEach(el => cio.observe(el));
+const bigCount = $('.step [data-count]'); let bigDone = false;
+
+// ── aparición
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+// ── carril de ingredientes
+const rail = $('#rail');
+$('#prev').onclick = () => rail.scrollBy({ left: -rail.clientWidth * .8, behavior: reduce ? 'auto' : 'smooth' });
+$('#next').onclick = () => rail.scrollBy({ left: rail.clientWidth * .8, behavior: reduce ? 'auto' : 'smooth' });
+
+// ── todo lo que depende del scroll
+const seq = $('#top'), stage = $('#stage'), layers = [...stage.querySelectorAll('.layer')], steps = [...stage.querySelectorAll('.step')], ticks = [...stage.querySelectorAll('.ticks span')];
+const heatSec = $('#plancha'), heatPin = $('#heatPin'), heatNum = $('#heatNum'), ruler = $('.ruler'), tc = $('#tc'), hint = $('#hint');
+const menuLinks = [...document.querySelectorAll('#menu a')], secs = menuLinks.map(a => $(a.getAttribute('href')));
+// en horizontal la foto del cocinero (vertical) se ve cortada: arrancamos con el queso y usamos la parte de la plancha
+const horizontal = matchMedia('(min-aspect-ratio: 1/1)');
+let LAYER_OF_STEP = horizontal.matches ? [2, 0, 1, 2, 2] : [0, 0, 1, 2, 2];
+horizontal.addEventListener('change', e => { LAYER_OF_STEP = e.matches ? [2, 0, 1, 2, 2] : [0, 0, 1, 2, 2]; paso = -1; });
+let paso = -1;
+const t0 = performance.now();
+function frame(now) {
+  const y = scrollY, H = document.documentElement.scrollHeight - innerHeight;
+  ruler.style.setProperty('--prog', (y / Math.max(H, 1)).toFixed(4));
+  // código de tiempo tipo cámara
+  const s = (now - t0) / 1000, f = Math.floor((s % 1) * 24);
+  tc.textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, Math.floor(s) % 60, f].map(n => String(n).padStart(2, '0')).join(':');
+  // secuencia
+  const r = seq.getBoundingClientRect(), total = seq.offsetHeight - innerHeight;
+  const sp = Math.min(Math.max(-r.top / total, 0), 1);
+  stage.style.setProperty('--sp', sp.toFixed(4));
+  const n = steps.length, idx = Math.min(n - 1, Math.floor(sp * n * 0.999));
+  if (idx !== paso) {
+    paso = idx;
+    steps.forEach((st, i) => st.classList.toggle('on', i === idx));
+    ticks.forEach((t, i) => t.classList.toggle('on', i === idx));
+    layers.forEach((l, i) => l.classList.toggle('on', i === LAYER_OF_STEP[idx]));
+    if (idx === 1 && !bigDone) { bigDone = true; contar(bigCount); }
+    hint.style.opacity = idx === 0 ? 1 : 0;
+  }
+  if (!reduce) {
+    const local = sp * n - idx;
+    const L = layers[LAYER_OF_STEP[idx]].querySelector('img');
+    L.style.setProperty('--z', (1.08 + (sp * n) * .05).toFixed(3));
+    L.style.setProperty('--ty', ((local - .5) * -2).toFixed(2) + '%');
+  }
+  // plancha
+  const hr = heatSec.getBoundingClientRect(), ht = heatSec.offsetHeight - innerHeight;
+  heat = Math.min(Math.max(-hr.top / ht, 0), 1);
+  heatPin.style.setProperty('--h', heat.toFixed(3));
+  heatNum.textContent = Math.round(heat * 100);
+  // menú activo
+  let act = -1; secs.forEach((sec, i) => { if (sec && sec.getBoundingClientRect().top < innerHeight * .4) act = i; });
+  menuLinks.forEach((a, i) => a.classList.toggle('on', i === act));
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
