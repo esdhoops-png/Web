@@ -324,7 +324,7 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
       <div class="f"><label for="fWho">Responsable</label><input id="fWho" placeholder="Quién graba o diseña" maxlength="60"></div>
       <div class="f"><label for="fLink">Material (enlace)</label><input id="fLink" type="url" placeholder="https://drive.google.com/…"></div>
     </div>
-    <div class="f"><span class="lbl">Diseño / imagen</span><div class="imgbox"><img id="fImgPrev" alt="Diseño de la publicación" hidden><div style="display:flex;flex-direction:column;gap:6px"><label class="btn" id="fImgBtn" style="cursor:pointer">Subir imagen<input type="file" id="fImgFile" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="btn ghost danger" id="fImgDel" hidden>Quitar imagen</button><span class="hint" id="fImgMsg"></span></div></div></div>
+    <div class="f"><span class="lbl">Diseño / imagen</span><div class="imgbox"><img id="fImgPrev" alt="Diseño de la publicación" hidden><div style="display:flex;flex-direction:column;gap:6px"><label class="btn" id="fImgBtn" style="cursor:pointer">Subir imagen<input type="file" id="fImgFile" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="btn" id="fImgDl" hidden>Descargar imagen</button><button type="button" class="btn ghost danger" id="fImgDel" hidden>Quitar imagen</button><span class="hint" id="fImgMsg"></span></div></div></div>
     <div class="f"><label for="fNotes">Notas (planos, material, stickers…)</label><textarea id="fNotes" rows="3"></textarea></div>
     <div class="actions">
       <div><button type="button" class="btn danger" id="del">Borrar</button><button type="button" class="btn" id="dup">Duplicar</button></div>
@@ -398,7 +398,7 @@ const fmtMs=new Intl.DateTimeFormat("es-ES",{month:"short"});
 
 let db=null,canWrite=false;
 let clients=[],items=[],metrics=[],dates=[],templates=[],profiles=[];
-const PCATS=["Running y trail","Cafeterías y brunch","Gimnasios, yoga y pilates","Nutrición y entrenadores","Eventos y tiendas","Otros"];
+const PCATS=["Running y trail","Cafeterías y brunch","Gimnasios, yoga y pilates","Nutrición y entrenadores","Eventos y tiendas","Tiendas y servicios de mascotas","Adiestradores y protectoras","Petfluencers","Decoración y regalos","Creadores de hogar","Impresión 3D","Otros"];
 const PSTAT=[["pendiente","Pendiente"],["seguido","Seguido"],["interactuando","Interactuando"],["colaboracion","Colaboración"]];
 const PGOAL=10;
 const S={pCat:"all",pStat:"all",pDue:false,pQ:"",view:"resumen",sel:"all",calMode:"semana",weekStart:monday(new Date()),month:firstOfMonth(new Date()),boardRange:"14",acct:null,acctTab:"estrategia",ideaFmt:"all"};
@@ -767,7 +767,7 @@ function fillPilar(cid,val){
   $("#dlgDot").style.setProperty("--c",cColor(cid));
 }
 let curImg="",assetsApi;
-function showImg(){const im=$("#fImgPrev");if(curImg){im.src=curImg;im.hidden=false}else{im.removeAttribute("src");im.hidden=true}$("#fImgDel").hidden=!curImg||!canWrite;$("#fImgBtn").hidden=!canWrite;$("#fImgMsg").textContent=""}
+function showImg(){const im=$("#fImgPrev");if(curImg){im.src=curImg;im.hidden=false}else{im.removeAttribute("src");im.hidden=true}$("#fImgDel").hidden=!curImg||!canWrite;$("#fImgDl").hidden=!curImg;$("#fImgBtn").hidden=!canWrite;$("#fImgMsg").textContent=""}
 async function getAssets(){if(assetsApi===undefined){try{assetsApi=await claude.use("assets")}catch(e){assetsApi=null}}return assetsApi}
 function openItem(it,preset={}){
   if(!it&&!canWrite)return;
@@ -801,6 +801,17 @@ $("#fImgFile").onchange=async()=>{const f=$("#fImgFile").files[0];if(!f)return;c
   try{const r=await a.upload(f);curImg=r.url;showImg();$("#fImgMsg").textContent="Imagen lista: pulsa Guardar."}catch(e){$("#fImgMsg").textContent="No se pudo subir ("+(e.code||"error")+")"}
   $("#fImgFile").value=""};
 $("#fImgDel").onclick=()=>{curImg="";showImg()};
+$("#fImgDl").onclick=async()=>{
+  if(!curImg)return;
+  if(downloadsApi===undefined){try{downloadsApi=await claude.use("downloads")}catch(e){downloadsApi=null}}
+  if(!downloadsApi){toast("Descarga no disponible aquí");return}
+  try{
+    const r=await fetch(curImg);if(!r.ok)throw new Error("fetch");const blob=await r.blob();
+    const ext=(blob.type.split("/")[1]||"png").replace("jpeg","jpg");
+    const base=(($("#fDate").value||"")+"-"+($("#fTitle").value||"diseno")).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"diseno";
+    await downloadsApi.save({filename:base+"."+ext,data:blob});
+  }catch(e){if(e&&e.code!=="declined")toast("No se pudo descargar")}
+};
 $("#copyCopy").onclick=()=>navigator.clipboard.writeText($("#fCopy").value).then(()=>toast("Texto copiado"),()=>toast("No se pudo copiar"));
 function formData(){
   const checks={};$("#fChecks").querySelectorAll("input").forEach(i=>checks[i.dataset.c]=i.checked);
@@ -842,7 +853,7 @@ function renderFeed(){
 }
 
 /* ---------- comunidad ---------- */
-const CATC={"Running y trail":"#FF5A1F","Cafeterías y brunch":"#8A5A3C","Gimnasios, yoga y pilates":"#1F8A5B","Nutrición y entrenadores":"#6E7BD9","Eventos y tiendas":"#B556C7","Otros":"#888"};
+const CATC={"Running y trail":"#FF5A1F","Cafeterías y brunch":"#8A5A3C","Gimnasios, yoga y pilates":"#1F8A5B","Nutrición y entrenadores":"#6E7BD9","Eventos y tiendas":"#B556C7","Tiendas y servicios de mascotas":"#34473A","Adiestradores y protectoras":"#6F8F6B","Petfluencers":"#8A6B45","Decoración y regalos":"#A8BFA8","Creadores de hogar":"#B59A7A","Impresión 3D":"#5B6B8A","Otros":"#888"};
 function daysSince(d){if(!d)return null;return Math.round((parse(today())-parse(d))/86400000)}
 function isDue(p){if(p.status==="colaboracion")return false;const n=daysSince(p.lastAt);return n===null||n>=3}
 function renderComunidad(){
@@ -864,7 +875,7 @@ function renderComunidad(){
     <div class="tip"><b>4 · Sin spam</b>No hagas follow/unfollow masivo ni pegues el mismo comentario: Instagram lo penaliza.</div></div>
    <div class="filters">
     <input class="inp" id="pq" placeholder="Buscar…" value="${esc(S.pQ)}" style="min-width:160px">
-    <select class="inp" id="pcat"><option value="all">Todas las categorías</option>${PCATS.map(c=>`<option${S.pCat===c?" selected":""}>${esc(c)}</option>`).join("")}</select>
+    <select class="inp" id="pcat"><option value="all">Todas las categorías</option>${PCATS.filter(c=>all.some(p=>(p.category||"Otros")===c)).map(c=>`<option${S.pCat===c?" selected":""}>${esc(c)}</option>`).join("")}</select>
     <select class="inp" id="pst"><option value="all">Todos los estados</option>${PSTAT.map(([k,l])=>`<option value="${k}"${S.pStat===k?" selected":""}>${l}</option>`).join("")}</select>
     <span class="seg"><button id="pdue" aria-pressed="${S.pDue}">Solo los que tocan hoy</button></span></div>`;
   const q=S.pQ.toLowerCase();
