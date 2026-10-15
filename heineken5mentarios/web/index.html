@@ -1,0 +1,286 @@
+<title>Heineken 5mentarios</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Heineken 5mentarios, bar de copas en Arucas (Gran Canaria): tardeo, conciertos y DJs los fines de semana, partidos grandes y comida de Volcán y Cuor di Pizza a la mesa.">
+<meta property="og:title" content="Heineken 5mentarios · Arucas">
+<meta property="og:description" content="Tardeo, conciertos y DJs, partidos grandes y comida a la mesa. En Arucas.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23070908'/%3E%3Ctext x='32' y='49' font-family='Arial Black,Arial' font-weight='900' font-size='46' text-anchor='middle' fill='%2334C26B'%3E5%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:ital,opsz,wght@1,9..144,400&display=swap">
+<style>
+:root{
+  --bg:#070908; --bg2:#0F1411; --line:#233027; --fg:#F2EFE8; --mute:#9EA89F;
+  --verde:#34C26B; --verde-d:#00843D; --volcan:#C8372D; --cuor:#E9B949;
+  --display:"Anton","Impact","Arial Narrow Bold",sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.55 var(--body);overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.kick{font:700 12px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.92;margin:0;letter-spacing:.005em;text-wrap:balance}
+.it{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0}
+.g{color:var(--verde)}
+
+/* nav */
+nav{position:fixed;inset:0 0 auto 0;z-index:20;padding-top:env(safe-area-inset-top,0px);transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+nav.solid{background:rgba(7,9,8,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{font:400 22px/1 var(--display);text-decoration:none;letter-spacing:.02em}
+.brand b{color:var(--verde);font-weight:400}
+nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;align-items:center}
+nav ul a{text-decoration:none;font-weight:500;font-size:15px;color:var(--mute)}
+nav ul a:hover{color:var(--fg)}
+@media (max-width:760px){nav ul li:not(:last-child){display:none}}
+
+/* hero */
+.hero{min-height:100svh;display:flex;align-items:flex-end;padding-block:120px 56px;position:relative;isolation:isolate;overflow:hidden}
+.hero .glow{position:absolute;z-index:-1;width:120vmax;height:120vmax;left:50%;top:38%;translate:-50% -50%;background:radial-gradient(circle,rgba(0,132,61,.38) 0%,rgba(0,132,61,.1) 32%,transparent 60%);transform:scale(calc(1 + var(--p,0)*.4))}
+.hero .five{position:absolute;z-index:-1;right:-4vw;top:50%;translate:0 -54%;font:400 min(78vw,92vh)/.8 var(--display);color:transparent;-webkit-text-stroke:1.5px rgba(52,194,107,.45);transform:translateY(calc(var(--p,0)*-80px));pointer-events:none;user-select:none}
+.hero h1{font-size:clamp(64px,13.5vw,196px)}
+.hero h1 .l{display:block;overflow:hidden}
+.hero h1 .l span{display:block;transform:translateY(105%);animation:up .9s cubic-bezier(.2,.8,.2,1) forwards}
+.hero h1 .l:nth-child(2) span{animation-delay:.12s}
+.hero h1 .l:nth-child(3) span{animation-delay:.24s}
+@keyframes up{to{transform:none}}
+.hero-foot{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:end;margin-top:36px}
+.hero-foot p{margin:0;max-width:50ch;font-size:clamp(17px,1.6vw,20px);color:#D9D6CE}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
+.hero .ctas{justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 20px;font:700 15px/1 var(--body);text-decoration:none;border:1px solid var(--fg);transition:background .2s,color .2s,filter .2s}
+.btn:hover{background:var(--fg);color:var(--bg)}
+.btn.fill{background:var(--verde);border-color:var(--verde);color:#06120B}
+.btn.fill:hover{filter:brightness(1.12)}
+@media (max-width:760px){.hero-foot{grid-template-columns:1fr}.hero .ctas{justify-content:flex-start}}
+
+/* marquee */
+.marq{border-block:1px solid var(--line);overflow:hidden;background:var(--bg2)}
+.marq .track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.marq span{font:400 clamp(26px,3.4vw,40px)/1 var(--display);text-transform:uppercase;padding:18px 0;white-space:nowrap}
+.marq i{font-style:normal;color:var(--verde);padding:0 .6em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+section{padding-block:clamp(80px,11vw,150px)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,72px)}
+.head h2{font-size:clamp(48px,8vw,112px)}
+.head p{max-width:40ch;margin:0;color:var(--mute)}
+
+/* planes */
+.planes{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.plan{padding:36px 28px 40px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:14px;min-width:0;position:relative;overflow:hidden;transition:background .3s}
+.plan:first-child{padding-left:0}
+.plan:last-child{border-right:0}
+.plan:hover{background:var(--bg2)}
+.plan .n{font:400 16px/1 var(--display);color:var(--verde)}
+.plan h3{font-size:clamp(46px,5.4vw,76px)}
+.plan p{margin:0;color:#CFD3CC;max-width:34ch}
+.plan .when{margin-top:auto;padding-top:18px;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+@media (max-width:860px){.planes{grid-template-columns:1fr}.plan,.plan:first-child{padding:30px 0;border-right:0;border-bottom:1px solid var(--line)}.plan:hover{background:none}}
+
+/* a la mesa */
+.mesa{background:var(--verde-d);color:#F4FBF6;overflow:hidden}
+.mesa .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center}
+.mesa h2{font-size:clamp(52px,8vw,112px)}
+.mesa p{color:#DDF2E5;max-width:44ch}
+.mesa .who{display:flex;flex-direction:column;gap:0;margin-top:28px;border-top:1px solid rgba(255,255,255,.3)}
+.mesa .who div{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.3)}
+.mesa .who strong{font:400 clamp(30px,3.6vw,44px)/1 var(--display);text-transform:uppercase}
+.mesa .who span{font-family:var(--serif);font-style:italic;font-size:18px;color:#DDF2E5;text-align:right}
+.mesa .who a{text-decoration:none}
+.mesa .photo{position:relative;aspect-ratio:4/5;overflow:hidden;max-width:100%}
+.mesa .photo img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;transform:translateY(calc(var(--y,0)*1px))}
+.mesa .photo figcaption{position:absolute;left:0;bottom:0;background:#06120B;color:var(--fg);font:700 13px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;padding:12px 14px}
+@media (max-width:860px){.mesa .grid{grid-template-columns:1fr}}
+
+/* agenda */
+.agenda{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+.agenda h2{font-size:clamp(52px,8vw,112px)}
+.agenda p{color:var(--mute);max-width:44ch}
+.week{border:1px solid var(--line);background:var(--bg2);margin:0}
+.week div{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:20px 22px;border-bottom:1px solid var(--line);align-items:center}
+.week div:last-child{border-bottom:0}
+.week dt{font:400 26px/1 var(--display);text-transform:uppercase}
+.week dd{margin:0;color:var(--mute)}
+.week dd b{color:var(--fg);font-weight:500}
+@media (max-width:860px){.agenda{grid-template-columns:1fr}}
+@media (max-width:420px){.week div{grid-template-columns:1fr;gap:6px}}
+
+/* frase */
+.quote{padding-block:clamp(70px,10vw,130px);border-block:1px solid var(--line)}
+.quote p{margin:0;font:400 clamp(40px,7vw,100px)/.95 var(--display);text-transform:uppercase;text-wrap:balance}
+.quote p .it{color:var(--verde)}
+
+/* contacto */
+.contact{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.contact a,.contact div{background:var(--bg);padding:28px 24px;text-decoration:none;display:flex;flex-direction:column;gap:10px;min-width:0;transition:background .2s}
+.contact a:hover{background:var(--bg2)}
+.contact strong{font:400 30px/1 var(--display);text-transform:uppercase}
+.contact span{color:var(--mute);overflow-wrap:anywhere}
+@media (max-width:760px){.contact{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding-block:40px 48px;color:var(--mute);font-size:14px}
+.big-foot{font:400 clamp(60px,16vw,240px)/.85 var(--display);text-transform:uppercase;color:var(--bg2);-webkit-text-stroke:1px var(--line);margin:0 0 28px;white-space:nowrap;overflow:hidden}
+.foot-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* aparición al bajar */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .hero h1 .l span{animation:none;transform:none}
+  .marq .track{animation:none}
+  .hero .glow,.hero .five,.mesa .photo img{transform:none!important}
+}
+</style>
+
+<nav id="nav"><div class="wrap">
+  <a class="brand" href="#top">HEINEKEN <b>5</b>MENTARIOS</a>
+  <ul>
+    <li><a href="#planes">El bar</a></li>
+    <li><a href="#mesa">Comida</a></li>
+    <li><a href="#agenda">Agenda</a></li>
+    <li><a href="#contacto">Cómo llegar</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="five" aria-hidden="true">5</div>
+  <div class="wrap" style="width:100%">
+    <p class="kick">Bar de copas · Arucas, Gran Canaria</p>
+    <h1 style="margin-top:16px"><span class="l"><span>Tardeo,</span></span><span class="l"><span>música</span></span><span class="l"><span class="g">y los tuyos.</span></span></h1>
+    <div class="hero-foot">
+      <p>Heineken 5mentarios es el punto de encuentro de Arucas: conciertos y DJs los fines de semana, tardeos con ambiente, los partidos grandes y la cena de Volcán y Cuor di Pizza, que te la llevamos a la mesa.</p>
+      <div class="ctas">
+        <a class="btn fill" href="https://www.instagram.com/heineken5mentarios/" target="_blank" rel="noopener">Programación de la semana</a>
+        <a class="btn" data-link="whatsapp" href="#" target="_blank" rel="noopener" hidden>Canal de WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="marq" aria-hidden="true"><div class="track">
+  <span>Tardeo<i>✦</i>Conciertos<i>✦</i>DJs<i>✦</i>Partidos grandes<i>✦</i>Copas<i>✦</i>Cena a la mesa<i>✦</i></span>
+  <span>Tardeo<i>✦</i>Conciertos<i>✦</i>DJs<i>✦</i>Partidos grandes<i>✦</i>Copas<i>✦</i>Cena a la mesa<i>✦</i></span>
+</div></div>
+
+<section id="planes">
+  <div class="wrap">
+    <div class="head rv">
+      <h2>Tres planes,<br><span class="it">un mismo bar</span></h2>
+      <p>Vengas a la hora que vengas, aquí siempre hay algo. Lo importante es con quién.</p>
+    </div>
+    <div class="planes">
+      <article class="plan rv"><span class="n">01</span><h3>Tardeo</h3><p>Buena música, algo fresco y la tarde que se alarga sin darte cuenta.</p><span class="when">El plan del finde</span></article>
+      <article class="plan rv d1"><span class="n">02</span><h3>En directo</h3><p>Conciertos y DJs para que la noche tenga banda sonora. La programación sale cada semana.</p><span class="when">Fines de semana</span></article>
+      <article class="plan rv d2"><span class="n">03</span><h3>Fútbol</h3><p>Los partidos grandes se ven mejor en grupo: Clásicos, Champions y noches de las que se hablan al día siguiente.</p><span class="when">Partidos grandes</span></article>
+    </div>
+  </div>
+</section>
+
+<section class="mesa" id="mesa">
+  <div class="wrap grid">
+    <div class="rv">
+      <p class="kick" style="color:#CFEBD9">Comida a la mesa</p>
+      <h2 style="margin-top:14px">No te muevas,<br><span class="it">te la llevamos</span></h2>
+      <p>En 5mentarios puedes pedir de Volcán Smash Burger y de Cuor di Pizza, y te lo llevamos a la mesa. Sin perderte ni un minuto del concierto o del partido.</p>
+      <div class="who">
+        <a href="https://www.instagram.com/volcansmashburger/" target="_blank" rel="noopener"><div><strong>Volcán</strong><span>smash burgers</span></div></a>
+        <a data-link="cuor" href="#" target="_blank" rel="noopener"><div><strong>Cuor di Pizza</strong><span>pizza para compartir</span></div></a>
+      </div>
+    </div>
+    <figure class="photo rv d1" style="margin:0"><img src="img/volcan.jpg" alt="Smash burger de Volcán con el queso fundido" loading="lazy"><figcaption>Volcán · a tu mesa</figcaption></figure>
+  </div>
+</section>
+
+<section id="agenda">
+  <div class="wrap agenda">
+    <div class="rv">
+      <p class="kick">Agenda</p>
+      <h2 style="margin-top:14px">Cada semana,<br><span class="it g">algo nuevo</span></h2>
+      <p>La programación sale cada semana en Instagram y en el canal de WhatsApp: quién toca, qué DJ pincha y qué partidos ponemos.</p>
+      <div class="ctas" style="margin-top:24px">
+        <a class="btn fill" href="https://www.instagram.com/heineken5mentarios/" target="_blank" rel="noopener">Ver en Instagram</a>
+        <a class="btn" data-link="whatsapp" href="#" target="_blank" rel="noopener" hidden>Unirme al canal</a>
+      </div>
+    </div>
+    <dl class="week rv d1">
+      <div><dt>Tardeo</dt><dd><b>El plan del finde</b> con buena música</dd></div>
+      <div><dt>Directo</dt><dd><b>Conciertos y DJs</b> los fines de semana</dd></div>
+      <div><dt>Fútbol</dt><dd><b>Partidos grandes</b> en pantalla</dd></div>
+      <div><dt>Cena</dt><dd><b>Volcán y Cuor</b> a la mesa</dd></div>
+    </dl>
+  </div>
+</section>
+
+<div class="quote"><div class="wrap"><p class="rv">Lo mejor de la noche <span class="it">siempre</span> empieza con un “¿vamos a 5mentarios?”</p></div></div>
+
+<section id="contacto">
+  <div class="wrap">
+    <div class="head rv"><h2>Nos vemos<br><span class="it">en Arucas</span></h2><p>Etiquétanos en tus fotos: cada lunes subimos las mejores de la semana.</p></div>
+    <div class="contact rv">
+      <a data-link="maps" href="https://www.google.com/maps/search/?api=1&query=Heineken+5mentarios+Arucas" target="_blank" rel="noopener"><strong>Cómo llegar</strong><span>Arucas, Gran Canaria · Abrir en Google Maps</span></a>
+      <a href="https://www.instagram.com/heineken5mentarios/" target="_blank" rel="noopener"><strong>Instagram</strong><span>@heineken5mentarios</span></a>
+      <a data-link="email" href="#" hidden><strong>Escríbenos</strong><span data-text="email"></span></a>
+      <div data-noemail><strong>Celebraciones</strong><span>¿Cumpleaños, despedida o quedada de grupo? Escríbenos por Instagram.</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="big-foot" aria-hidden="true">5mentarios</p>
+    <div class="foot-row">
+      <span>© <span id="yr">2026</span> Heineken 5mentarios · Arucas, Gran Canaria · Grupo 5mentarios</span>
+      <span>Bebe con responsabilidad.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Rellena aquí los enlaces cuando los tengas (si se dejan vacíos, el botón no aparece)
+const ENLACES = {
+  whatsapp: "",   // enlace del canal de WhatsApp del bar
+  cuor: "",       // Instagram de Cuor di Pizza, p. ej. https://www.instagram.com/usuario/
+  maps: "",       // enlace exacto de Google Maps del bar (si no, busca "Heineken 5mentarios Arucas")
+  email: ""       // correo de contacto, p. ej. info@dominio.com
+};
+document.querySelectorAll('[data-link]').forEach(el => {
+  const k = el.dataset.link, v = ENLACES[k];
+  if (!v) { if (k === 'cuor') el.removeAttribute('href'); return; }
+  el.href = k === 'email' ? 'mailto:' + v : v;
+  if (k === 'email') { el.removeAttribute('target'); el.querySelector('[data-text]').textContent = v; document.querySelector('[data-noemail]').hidden = true; }
+  el.hidden = false;
+});
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const nav = document.getElementById('nav');
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hero = document.querySelector('.hero');
+const imgs = [...document.querySelectorAll('.mesa .photo img')];
+let tick = false;
+function onScroll() {
+  const y = scrollY;
+  nav.classList.toggle('solid', y > 40);
+  if (!reduce) {
+    hero.style.setProperty('--p', Math.min(y / innerHeight, 1).toFixed(3));
+    imgs.forEach(im => {
+      const r = im.parentElement.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      im.style.setProperty('--y', ((r.top + r.height / 2 - innerHeight / 2) * -0.08).toFixed(1));
+    });
+  }
+  tick = false;
+}
+addEventListener('scroll', () => { if (!tick) { tick = true; requestAnimationFrame(onScroll); } }, { passive: true });
+onScroll();
+</script>
