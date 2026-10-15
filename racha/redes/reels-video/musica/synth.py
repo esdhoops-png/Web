@@ -133,5 +133,6 @@ def respira():
         a=2.5+k*10; place(b,bell(74,4,0.7),a); place(b,bell(69,5,0.55),a+4)
     place(b,bell(81,4,0.5),0.3); place(b,bell(86,5,0.6),32.5); place(b,bell(78,5,0.4),32.6)
     return reverb(b,3.0,0.4)
-for name,fn in [('manana',manana),('habitos',habitos),('noche',noche),('respira',respira)]:
-    save(fn(),f'{name}.wav'); print(name)
+if __name__=="__main__":
+  for name,fn in [("manana",manana),("habitos",habitos),("noche",noche),("respira",respira)]:
+    save(fn(),f"{name}.wav"); print(name)
