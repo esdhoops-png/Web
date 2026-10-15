@@ -407,10 +407,12 @@ footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
         <div>
           <form id="joinForm">
             <label for="email" class="eyebrow" style="position:absolute;left:-9999px">Tu email</label>
-            <input id="email" type="email" required placeholder="tu@email.com" autocomplete="email">
+            <input id="email" name="email" type="email" required placeholder="tu@email.com" autocomplete="email">
+            <input type="text" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
             <button class="btn" type="submit">Me apunto</button>
           </form>
-          <p class="ok" id="joinOk" hidden>Apuntado. (Versión demo: conecta este formulario a tu herramienta de email.)</p>
+          <p class="ok" id="joinOk" role="status" hidden></p>
+          <p style="font-size:13px;margin-top:10px;opacity:.75">Un email a la semana. Puedes darte de baja cuando quieras.</p>
         </div>
       </div>
     </div>
@@ -538,9 +540,13 @@ footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
   });
   document.getElementById('joinForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    // TODO: conectar con la herramienta de email (Mailchimp, Brevo, ConvertKit…)
-    document.getElementById('joinOk').hidden = false;
-    e.target.reset();
+    var form = e.target, ok = document.getElementById('joinOk'), btn = form.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    fetch('apuntarse.php', { method: 'POST', body: new FormData(form) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) { ok.textContent = res.msg; ok.hidden = false; if (res.ok) form.reset(); })
+      .catch(function () { ok.textContent = 'No se ha podido enviar. Inténtalo de nuevo en un momento.'; ok.hidden = false; })
+      .then(function () { btn.disabled = false; btn.textContent = 'Me apunto'; });
   });
   render();
 })();
