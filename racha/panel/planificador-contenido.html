@@ -112,6 +112,22 @@ select.inp,input.inp{border:1px solid var(--line);background:var(--surface);bord
 .card{border:1px solid var(--line);border-left:4px solid var(--c,#999);border-radius:8px;padding:7px 8px;background:var(--soft);text-align:left;width:100%;display:block}
 .card[draggable="true"]{cursor:grab}
 .card.late{box-shadow:inset 0 0 0 1px var(--danger)}
+.thumb{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:6px;margin-bottom:7px;background:var(--line)}
+.mi img{width:18px;height:22px;object-fit:cover;border-radius:2px;flex:none}
+.feedhead{display:flex;align-items:center;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+.feedhead .avr{width:84px;height:84px;border-radius:50%;overflow:hidden;background:var(--soft);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.feedhead .avr img{width:100%;height:100%;object-fit:contain}
+.feedhead b{font-size:18px} .feedhead small{display:block;color:var(--muted)}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;max-width:720px}
+.ft{position:relative;aspect-ratio:4/5;background:var(--soft);overflow:hidden;border:0;padding:0;cursor:pointer;text-align:left}
+.ft img{width:100%;height:100%;object-fit:cover;display:block}
+.ft .ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:10px;background:linear-gradient(160deg,var(--soft),var(--line));color:var(--ink)}
+.ft .ph b{font-size:13px;line-height:1.25} .ft .ph small{font-size:11px;color:var(--muted)}
+.ft .ic{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;border-radius:4px;padding:2px 5px}
+.ft .dt{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:600;border-radius:4px;padding:2px 6px}
+.ft.past{opacity:.6}
+.imgbox{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.imgbox img{width:120px;aspect-ratio:4/5;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
 .card .t{font-weight:600;font-size:13px;line-height:1.3;word-break:break-word}
 .card .m{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;font-size:11px;color:var(--muted);align-items:center}
 .card p{margin:5px 0 0;font-size:12px;color:var(--muted);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -308,6 +324,7 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
       <div class="f"><label for="fWho">Responsable</label><input id="fWho" placeholder="Quién graba o diseña" maxlength="60"></div>
       <div class="f"><label for="fLink">Material (enlace)</label><input id="fLink" type="url" placeholder="https://drive.google.com/…"></div>
     </div>
+    <div class="f"><span class="lbl">Diseño / imagen</span><div class="imgbox"><img id="fImgPrev" alt="Diseño de la publicación" hidden><div style="display:flex;flex-direction:column;gap:6px"><label class="btn" id="fImgBtn" style="cursor:pointer">Subir imagen<input type="file" id="fImgFile" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="btn ghost danger" id="fImgDel" hidden>Quitar imagen</button><span class="hint" id="fImgMsg"></span></div></div></div>
     <div class="f"><label for="fNotes">Notas (planos, material, stickers…)</label><textarea id="fNotes" rows="3"></textarea></div>
     <div class="actions">
       <div><button type="button" class="btn danger" id="del">Borrar</button><button type="button" class="btn" id="dup">Duplicar</button></div>
@@ -371,7 +388,7 @@ const FIELDS=[["objetivo","Objetivo",0],["publico","Público",0],["pilares","Pil
 const TARGETS=[["tPiezas","Piezas de feed / semana"],["tReels","Reels / semana"],["tStories","Días con stories / semana"],["tSeguidores","Objetivo de seguidores"]];
 const LINKS=[["linkDrive","Carpeta de material"],["linkWeb","Web"],["contacto","Contacto del cliente"]];
 const DAYS=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
-const VIEWS=[["resumen","Resumen",'<path d="M3 3h7v7H3zM14 3h7v4h-7zM14 11h7v10h-7zM3 14h7v7H3z"/>'],["calendario","Calendario",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],["tablero","Tablero",'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="13" rx="1"/>'],["ideas","Ideas",'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'],["comunidad","Comunidad",'<path d="M4 20c0-3 2.5-5 5-5M15 15c2.5 0 5 2 5 5"/><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M11 14l2 2 4-4"/>'],["cuentas","Cuentas",'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 11a3 3 0 1 0 0-6M22 21c0-3-2-5.5-5-6"/>']];
+const VIEWS=[["resumen","Resumen",'<path d="M3 3h7v7H3zM14 3h7v4h-7zM14 11h7v10h-7zM3 14h7v7H3z"/>'],["calendario","Calendario",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],["tablero","Tablero",'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="13" rx="1"/>'],["ideas","Ideas",'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'],["feed","Feed",'<rect x="3" y="3" width="5" height="6"/><rect x="9.5" y="3" width="5" height="6"/><rect x="16" y="3" width="5" height="6"/><rect x="3" y="11" width="5" height="6"/><rect x="9.5" y="11" width="5" height="6"/><rect x="16" y="11" width="5" height="6"/>'],["comunidad","Comunidad",'<path d="M4 20c0-3 2.5-5 5-5M15 15c2.5 0 5 2 5 5"/><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M11 14l2 2 4-4"/>'],["cuentas","Cuentas",'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 11a3 3 0 1 0 0-6M22 21c0-3-2-5.5-5-6"/>']];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmtD=new Intl.DateTimeFormat("es-ES",{day:"numeric",month:"short"});
@@ -416,6 +433,7 @@ function whenLabel(it){if(!it.date)return "Sin fecha";const d=parse(it.date);ret
 function cardHTML(it,opts={}){
   const n=checkCount(it);
   return `<div class="card${isLate(it)?" late":""}" role="button" tabindex="0" data-id="${esc(it.id)}" ${canWrite&&opts.drag!==false?'draggable="true"':""} style="--c:${esc(cColor(it.clientId))}">
+    ${it.img&&opts.thumb!==false?`<img class="thumb" src="${esc(it.img)}" alt="" loading="lazy">`:""}
     <div class="t">${it.prio==="alta"?'<span class="flag">● </span>':""}${esc(it.title||"(sin título)")}</div>
     <div class="m">${S.sel==="all"||opts.showClient?esc(cName(it.clientId))+" · ":""}${esc(it.format||"Post")}${it.time?" · "+esc(it.time):""}${opts.date&&it.date?" · "+esc(fmtD.format(parse(it.date))):""}</div>
     <div class="m">${opts.noStatus?"":pill(it.status)}<span class="prog${n===5?" full":""}">✓ ${n}/5</span>${it.pilar?`<span class="tag">${esc(it.pilar)}</span>`:""}${it.campaign?`<span class="tag">#${esc(it.campaign)}</span>`:""}</div>
@@ -457,7 +475,7 @@ function setTop(title,sub,tools){$("#vtitle").textContent=title;$("#vsub").textC
 
 function render(){
   renderShell();
-  ({resumen:renderResumen,calendario:renderCal,tablero:renderBoard,ideas:renderIdeas,cuentas:renderCuentas,comunidad:renderComunidad}[S.view]||renderResumen)();
+  ({resumen:renderResumen,calendario:renderCal,tablero:renderBoard,ideas:renderIdeas,cuentas:renderCuentas,comunidad:renderComunidad,feed:renderFeed}[S.view]||renderResumen)();
 }
 
 /* ---------- resumen ---------- */
@@ -563,7 +581,7 @@ function renderMonth(){
     const evs=dates.filter(x=>x.date===k&&(S.sel==="all"||!x.clientId||x.clientId===S.sel));
     html+=`<div class="mc${d.getMonth()!==m.getMonth()?" out":""}${k===t?" today":""}" data-date="${k}"><div class="n">${d.getDate()}</div>
       ${evs.map(e=>`<button class="mi" data-ev="${esc(e.id)}"><span>★</span><span class="ef">${esc(e.title)}</span></button>`).join("")}
-      ${list.slice(0,4).map(it=>`<button class="mi" data-id="${esc(it.id)}"><span class="dot" style="--c:${esc(cColor(it.clientId))}"></span><span>${esc((it.time?it.time+" ":"")+it.title)}</span></button>`).join("")}
+      ${list.slice(0,4).map(it=>`<button class="mi" data-id="${esc(it.id)}">${it.img?`<img src="${esc(it.img)}" alt="">`:`<span class="dot" style="--c:${esc(cColor(it.clientId))}"></span>`}<span>${esc((it.time?it.time+" ":"")+it.title)}</span></button>`).join("")}
       ${list.length>4?`<button class="more" data-week="${k}">+${list.length-4} más</button>`:""}</div>`;
   }
   html+=`</div>`;
@@ -748,6 +766,9 @@ function fillPilar(cid,val){
   $("#insTpl").innerHTML=`<option value="">+ Plantilla…</option>`+templates.filter(t=>t.clientId===cid).map(t=>`<option value="${esc(t.id)}">${esc(t.name)}</option>`).join("");
   $("#dlgDot").style.setProperty("--c",cColor(cid));
 }
+let curImg="",assetsApi;
+function showImg(){const im=$("#fImgPrev");if(curImg){im.src=curImg;im.hidden=false}else{im.removeAttribute("src");im.hidden=true}$("#fImgDel").hidden=!curImg||!canWrite;$("#fImgBtn").hidden=!canWrite;$("#fImgMsg").textContent=""}
+async function getAssets(){if(assetsApi===undefined){try{assetsApi=await claude.use("assets")}catch(e){assetsApi=null}}return assetsApi}
 function openItem(it,preset={}){
   if(!it&&!canWrite)return;
   editing=it?it.id:null;
@@ -757,6 +778,7 @@ function openItem(it,preset={}){
   $("#fStatus").value=v.status||"idea";$("#fPrio").value=v.prio||"normal";$("#fTitle").value=v.title||"";$("#fCopy").value=v.copy||"";
   $("#fNotes").value=v.notes||"";$("#fWho").value=v.who||"";$("#fLink").value=v.link||"";$("#fCampaign").value=v.campaign||"";
   fillPilar(v.clientId,v.pilar||"");
+  curImg=v.img||"";showImg();
   const ch=v.checks||{};
   $("#fChecks").innerHTML=CHECKS.map(([k,l])=>`<label><input type="checkbox" data-c="${k}"${ch[k]?" checked":""}>${l}</label>`).join("");
   $("#dlgTitle").lastElementChild.textContent=it?"Editar contenido":"Nuevo contenido";
@@ -773,12 +795,18 @@ $("#fClient").onchange=e=>fillPilar(e.target.value,"");
 $("#insHash").onclick=()=>{const h=clientOf($("#fClient").value)?.hashtags||"";if(!h)return toast("Esta cuenta no tiene hashtags");$("#fCopy").value=($("#fCopy").value.trimEnd()+"\n\n"+h).trim();updCnt()};
 $("#insTpl").onchange=e=>{const t=templates.find(x=>x.id===e.target.value);if(t){$("#fCopy").value=($("#fCopy").value?$("#fCopy").value+"\n\n":"")+t.text;updCnt()}e.target.value=""};
 $("#cancel").onclick=()=>$("#dlg").close();
+$("#fImgFile").onchange=async()=>{const f=$("#fImgFile").files[0];if(!f)return;const a=await getAssets();
+  if(!a){$("#fImgMsg").textContent="No se pueden subir imágenes desde aquí.";return}
+  $("#fImgMsg").textContent="Subiendo…";
+  try{const r=await a.upload(f);curImg=r.url;showImg();$("#fImgMsg").textContent="Imagen lista: pulsa Guardar."}catch(e){$("#fImgMsg").textContent="No se pudo subir ("+(e.code||"error")+")"}
+  $("#fImgFile").value=""};
+$("#fImgDel").onclick=()=>{curImg="";showImg()};
 $("#copyCopy").onclick=()=>navigator.clipboard.writeText($("#fCopy").value).then(()=>toast("Texto copiado"),()=>toast("No se pudo copiar"));
 function formData(){
   const checks={};$("#fChecks").querySelectorAll("input").forEach(i=>checks[i.dataset.c]=i.checked);
   return {clientId:$("#fClient").value,format:$("#fFormat").value,date:$("#fDate").value,time:$("#fTime").value,status:$("#fStatus").value,prio:$("#fPrio").value,
     title:$("#fTitle").value.trim(),copy:$("#fCopy").value,notes:$("#fNotes").value,who:$("#fWho").value.trim(),link:$("#fLink").value.trim(),
-    campaign:$("#fCampaign").value.trim(),pilar:$("#fPilar").value,checks};
+    campaign:$("#fCampaign").value.trim(),pilar:$("#fPilar").value,checks,img:curImg||""};
 }
 $("#form").addEventListener("submit",async e=>{
   e.preventDefault();if(!db||!canWrite)return;
@@ -793,6 +821,25 @@ $("#dup").onclick=async()=>{const data=formData();data.title+=" (copia)";data.st
   try{await db.collection("items").add({...data,createdAt:new Date().toISOString()});$("#dlg").close();toast("Duplicado")}catch(e){toast("No se pudo duplicar")}};
 $("#del").onclick=async()=>{if(!editing||!confirm("¿Borrar este contenido?"))return;
   try{await db.doc("items/"+editing).delete();$("#dlg").close();toast("Borrado")}catch(err){toast("No se pudo borrar")}};
+
+/* ---------- feed (vista previa del perfil) ---------- */
+function renderFeed(){
+  setTop("Feed","Así quedará el perfil, con lo publicado y lo programado","");
+  if(S.sel==="all"){
+    $("#view").innerHTML=`<div class="panel"><h3>Elige una cuenta</h3><div class="rows">${clients.map(c=>`<button class="r" data-pick="${esc(c.id)}">${av(c,1)}<span class="tx"><b>${esc(c.name)}</b><small>${esc(c.handle||"")}</small></span><span class="when">${items.filter(i=>i.clientId===c.id&&i.date&&i.img).length} con diseño</span></button>`).join("")}</div></div>`;
+    $("#view").querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{S.sel=b.dataset.pick;persist();render()});return;
+  }
+  const c=clientOf(S.sel);if(!c){$("#view").innerHTML="";return}
+  const t=today();
+  const list=items.filter(i=>i.clientId===c.id&&i.date&&i.format!=="Story").sort((a,b)=>(b.date+(b.time||"")).localeCompare(a.date+(a.time||"")));
+  const logo=((c.brand&&c.brand.logos)||[]).find(l=>safeSvg(l.svg)&&/iso|sello/i.test(l.name))||((c.brand&&c.brand.logos)||[]).find(l=>safeSvg(l.svg));
+  const withImg=list.filter(i=>i.img).length;
+  $("#view").innerHTML=`<div class="feedhead"><span class="avr" style="background:${logo&&/^#[0-9a-f]{3,8}$/i.test(logo.bg||"")?logo.bg:"var(--soft)"}">${logo?`<img src="${svgUrl(logo.svg)}" alt="">`:av(c)}</span><div><b>${esc(c.handle||c.name)}</b><small>${list.filter(i=>i.date<=t).length} publicadas o de hoy · ${list.filter(i=>i.date>t).length} programadas · ${withImg} con diseño</small></div></div>
+   ${list.length?`<div class="fgrid">${list.map(it=>{const ic=it.format==="Reel"?"▶":it.format==="Carrusel"?"❐":"";
+     return `<button class="ft${it.date<t?" past":""}" data-id="${esc(it.id)}" aria-label="${esc(it.title||"")}">${it.img?`<img src="${esc(it.img)}" alt="" loading="lazy">`:`<span class="ph"><b>${esc(it.title||"")}</b><small>${esc(it.format)} · ${SMAP[it.status]?.[1]||""}</small></span>`}${ic?`<span class="ic">${ic}</span>`:""}<span class="dt">${esc(fmtD.format(parse(it.date)))}</span></button>`}).join("")}</div>`:'<div class="empty">Esta cuenta no tiene publicaciones con fecha.</div>'}
+   <p class="sub" style="margin-top:12px;color:var(--muted);font-size:12px">Arriba lo más reciente, como en Instagram. Las atenuadas ya pasaron. Pulsa una para editarla o subir su diseño.</p>`;
+  $("#view").querySelectorAll(".ft").forEach(b=>b.onclick=()=>openItem(items.find(x=>x.id===b.dataset.id)));
+}
 
 /* ---------- comunidad ---------- */
 const CATC={"Running y trail":"#FF5A1F","Cafeterías y brunch":"#8A5A3C","Gimnasios, yoga y pilates":"#1F8A5B","Nutrición y entrenadores":"#6E7BD9","Eventos y tiendas":"#B556C7","Otros":"#888"};
