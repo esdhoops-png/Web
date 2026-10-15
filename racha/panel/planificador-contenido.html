@@ -727,7 +727,7 @@ function subMarca(c){
   $("#sub").querySelectorAll("[data-lcopy]").forEach(x=>x.onclick=()=>navigator.clipboard.writeText(logos[+x.dataset.lcopy].svg).then(()=>toast("SVG copiado"),()=>toast("No se pudo copiar")));
   $("#sub").querySelectorAll("[data-ldel]").forEach(x=>x.onclick=async()=>{const all=(c.brand&&c.brand.logos)||[];const l=logos[+x.dataset.ldel];const next=all.filter(z=>z!==l);
     try{await db.doc("clients/"+c.id).update({brand:{...(c.brand||{}),logos:next}});toast("Logo quitado")}catch(e){toast("No se pudo guardar")}});
-  const up=$("#logoUp");if(up)up.onchange=()=>{const f=up.files[0];if(!f)return;if(f.size>300000)return toast("El SVG pesa demasiado (máx. 300 KB)");
+  const up=$("#logoUp");if(up)up.onchange=()=>{const f=up.files[0];if(!f)return;if(f.size>120000)return toast("El SVG pesa demasiado (máx. 120 KB). Exporta una versión más ligera");
     const rd=new FileReader();rd.onload=async()=>{const t=String(rd.result);if(!safeSvg(t))return toast("Ese archivo no es un SVG válido");
       const name=f.name.replace(/\.svg$/i,"");const next=[...((c.brand&&c.brand.logos)||[]),{name,svg:t,bg:"#ffffff"}];
       try{await db.doc("clients/"+c.id).update({brand:{...(c.brand||{}),logos:next}});toast("Logo añadido")}catch(e){toast("No se pudo guardar")}};rd.readAsText(f)};
