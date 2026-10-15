@@ -217,6 +217,10 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
 .pc .row2 .btn{padding:5px 10px;font-size:12px}
 .pc .row2 select{padding:4px 8px;font-size:12px}
 .pc .last{font-size:11px;color:var(--muted);margin-left:auto}
+.pc .dm{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.pc .dm summary{cursor:pointer;font-weight:700;font-size:12px}
+.pc .dm p{margin:8px 0;color:var(--ink);white-space:pre-wrap;font-size:13px;line-height:1.45}
+.pc .dm .btn{padding:5px 10px;font-size:12px}
 .pc .note{font-size:12px;background:var(--soft);border-radius:8px;padding:6px 8px;color:var(--ink)}
 .tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:14px}
 .tip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px}
@@ -338,6 +342,7 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
     </div>
     <div class="f"><label for="pWhy">Por qué encaja</label><textarea id="pWhy" rows="2"></textarea></div>
     <div class="f"><label for="pCollab">Idea de colaboración</label><textarea id="pCollab" rows="2"></textarea></div>
+    <div class="f"><label for="pDm">Mensaje para enviar por DM</label><textarea id="pDm" rows="4"></textarea></div>
     <div class="f"><label for="pNotes">Notas (qué les has comentado, respuestas…)</label><textarea id="pNotes" rows="3"></textarea></div>
     <div class="actions">
       <div><button type="button" class="btn danger" id="pDel">Borrar</button></div>
@@ -783,6 +788,7 @@ function renderComunidad(){
   $("#pst").onchange=e=>{S.pStat=e.target.value;renderComunidad()};
   $("#pdue").onclick=()=>{S.pDue=!S.pDue;renderComunidad()};
   $("#view").querySelectorAll("[data-hit]").forEach(b=>b.onclick=()=>hitP(b.dataset.hit));
+  $("#view").querySelectorAll("[data-dm]").forEach(b=>b.onclick=()=>{const p=profiles.find(x=>x.id===b.dataset.dm);navigator.clipboard.writeText(p.dm).then(()=>toast("Mensaje copiado: pégalo en su DM"),()=>toast("No se pudo copiar"))});
   $("#view").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openP(profiles.find(x=>x.id===b.dataset.edit)));
   $("#view").querySelectorAll("select[data-st]").forEach(sel=>sel.onchange=async()=>{try{await db.doc("profiles/"+sel.dataset.st).update({status:sel.value});toast("Estado actualizado")}catch(e){toast("No se pudo guardar")}});
 }
@@ -794,6 +800,7 @@ function pCard(p){
     ${p.why?`<p>${esc(p.why)}</p>`:""}
     <div class="tags">${p.prio==="alta"?'<span class="tag" style="color:var(--danger)">Prioridad</span>':""}${p.verified===false?'<span class="tag warn">Revisar usuario</span>':""}${p.collab?'<span class="tag">Idea de colaboración</span>':""}${p.count?`<span class="tag">${p.count} interacciones</span>`:""}</div>
     ${p.collab?`<div class="note">💡 ${esc(p.collab)}</div>`:""}${p.notes?`<div class="note">${esc(p.notes)}</div>`:""}
+    ${p.dm?`<details class="dm"><summary>Mensaje para enviar</summary><p>${esc(p.dm)}</p><button class="btn" data-dm="${esc(p.id)}">Copiar mensaje</button></details>`:""}
     <div class="row2">${canWrite?`<button class="btn${done?"":" primary"}" data-hit="${esc(p.id)}" ${done?"disabled":""}>${done?"✓ Hecho hoy":"✓ Interactué hoy"}</button>
       <select class="inp" data-st="${esc(p.id)}">${PSTAT.map(([k,l])=>`<option value="${k}"${p.status===k?" selected":""}>${l}</option>`).join("")}</select>
       <button class="btn ghost" data-edit="${esc(p.id)}">Editar</button>`:""}<span class="last">${last}</span></div>
@@ -809,13 +816,13 @@ function openP(p){if(!p&&!canWrite)return;editingP=p?p.id:null;
   $("#pClient").innerHTML=clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
   const v=p||{clientId:S.sel!=="all"?S.sel:"racha",category:S.pCat!=="all"?S.pCat:PCATS[0],status:"pendiente",prio:"normal"};
   $("#pHandle").value=v.handle?"@"+v.handle.replace(/^@/,""):"";$("#pName").value=v.name||"";$("#pCat").value=v.category||"Otros";$("#pZone").value=v.zone||"";
-  $("#pPrio").value=v.prio||"normal";$("#pClient").value=v.clientId||"";$("#pStatus").value=v.status||"pendiente";$("#pWhy").value=v.why||"";$("#pCollab").value=v.collab||"";$("#pNotes").value=v.notes||"";
+  $("#pPrio").value=v.prio||"normal";$("#pClient").value=v.clientId||"";$("#pStatus").value=v.status||"pendiente";$("#pWhy").value=v.why||"";$("#pCollab").value=v.collab||"";$("#pNotes").value=v.notes||"";$("#pDm").value=v.dm||"";
   $("#pDel").hidden=!p||!canWrite;$("#formP").querySelectorAll("input,select,textarea").forEach(e=>e.disabled=!canWrite);
   $("#dlgP").showModal()}
 $("#pCancel").onclick=()=>$("#dlgP").close();
 $("#formP").addEventListener("submit",async e=>{e.preventDefault();if(!db||!canWrite)return;
   const data={handle:$("#pHandle").value.trim().replace(/^@/,""),name:$("#pName").value.trim(),category:$("#pCat").value,zone:$("#pZone").value.trim(),prio:$("#pPrio").value,
-    clientId:$("#pClient").value,status:$("#pStatus").value,why:$("#pWhy").value.trim(),collab:$("#pCollab").value.trim(),notes:$("#pNotes").value.trim()};
+    clientId:$("#pClient").value,status:$("#pStatus").value,why:$("#pWhy").value.trim(),collab:$("#pCollab").value.trim(),notes:$("#pNotes").value.trim(),dm:$("#pDm").value.trim()};
   if(!data.handle)return;
   try{if(editingP)await db.doc("profiles/"+editingP).update(data);else await db.collection("profiles").add({...data,verified:true,count:0,lastAt:"",createdAt:new Date().toISOString()});$("#dlgP").close();toast("Guardado")}catch(err){toast("No se pudo guardar")}});
 $("#pDel").onclick=async()=>{if(!editingP||!confirm("¿Borrar este perfil?"))return;try{await db.doc("profiles/"+editingP).delete();$("#dlgP").close()}catch(e){toast("No se pudo borrar")}};
