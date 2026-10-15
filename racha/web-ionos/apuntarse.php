@@ -93,7 +93,7 @@ $fila = function ($n, $h, $m) {
 $html = '<!doctype html><html><body style="margin:0;background:#EEE9E5">'
       . '<table width="100%" cellpadding="0" cellspacing="0" style="background:#EEE9E5"><tr><td align="center" style="padding:28px 14px">'
       . '<table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#F7F4F1;border-radius:18px"><tr><td style="padding:34px 30px">'
-      . '<div style="font:italic 18px Georgia,serif;color:#111">racha<b style="font:900 18px Arial,sans-serif">lab</b><span style="color:#FF5A1F">.</span></div>'
+      . '<a href="' . $web . '"><img src="' . $web . '/logo-email.png" width="150" height="56" alt="Racha Lab" style="display:block;border:0;width:150px;height:auto;margin-left:-8px;font:italic 20px Georgia,serif;color:#111"></a>'
       . '<h1 style="margin:28px 0 0;font:italic 38px/1.05 Georgia,serif;color:#111">Bienvenido.</h1>'
       . '<div style="font:900 30px/1.1 Arial,sans-serif;color:#111;margin-top:4px">Tu racha empieza hoy.</div>'
       . '<p style="font:16px/1.55 Arial,sans-serif;color:#111;margin:20px 0 0">Cada domingo te llega <b>El Domingo</b>: el plan de la semana del reto y una idea para no romper la racha.</p>'
