@@ -70,4 +70,58 @@ $cabeceras = "From: Racha Lab <$REMITENTE>\r\n"
            . "Content-Type: text/plain; charset=UTF-8\r\n";
 @mail($AVISAR_A, $asunto, $cuerpo, $cabeceras, '-f' . $REMITENTE);
 
+// Correo de bienvenida a la persona que se apunta (solo la primera vez).
+$web = 'https://somosrachalab.com';
+$ig  = 'https://www.instagram.com/somosrachalab/';
+$asuntoB = '=?UTF-8?B?' . base64_encode('Bienvenido a Racha Lab: empieza aquí') . '?=';
+$texto = "¡Bienvenido a Racha Lab!\n\n"
+       . "Desde ahora, cada domingo te llega \"El Domingo\": el plan de la semana del reto y una idea para no romper la racha.\n\n"
+       . "Para empezar, solo 4 hábitos (semana 1):\n"
+       . "1. Agua al despertar. Mínimo: un vaso antes del café.\n"
+       . "2. 10 min de luz natural. Mínimo: café junto a la ventana abierta.\n"
+       . "3. Camina 8.000 pasos. Mínimo: una vuelta a la manzana.\n"
+       . "4. Misma hora para dormir. Mínimo: una alarma para ir a la cama.\n\n"
+       . "Los días malos también cuentan: haz la versión mínima y la racha sigue viva.\n\n"
+       . "Apunta tus días en $web y síguenos en Instagram: $ig\n\n"
+       . "Un 1% mejor cada día.\nRacha Lab\n\n"
+       . "¿No quieres recibir más correos? Responde a este email con la palabra BAJA.";
+$fila = function ($n, $h, $m) {
+    return '<tr><td style="padding:14px 0;border-top:1px solid #DCD5CF;width:44px;vertical-align:top;font:800 18px Arial,sans-serif;color:#FF5A1F">' . $n . '</td>'
+         . '<td style="padding:14px 0;border-top:1px solid #DCD5CF"><div style="font:700 17px Arial,sans-serif;color:#111">' . $h . '</div>'
+         . '<div style="font:14px Arial,sans-serif;color:#6B645F;margin-top:4px">Mínimo: ' . $m . '</div></td></tr>';
+};
+$html = '<!doctype html><html><body style="margin:0;background:#EEE9E5">'
+      . '<table width="100%" cellpadding="0" cellspacing="0" style="background:#EEE9E5"><tr><td align="center" style="padding:28px 14px">'
+      . '<table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#F7F4F1;border-radius:18px"><tr><td style="padding:34px 30px">'
+      . '<div style="font:italic 18px Georgia,serif;color:#111">racha<b style="font:900 18px Arial,sans-serif">lab</b><span style="color:#FF5A1F">.</span></div>'
+      . '<h1 style="margin:28px 0 0;font:italic 38px/1.05 Georgia,serif;color:#111">Bienvenido.</h1>'
+      . '<div style="font:900 30px/1.1 Arial,sans-serif;color:#111;margin-top:4px">Tu racha empieza hoy.</div>'
+      . '<p style="font:16px/1.55 Arial,sans-serif;color:#111;margin:20px 0 0">Cada domingo te llega <b>El Domingo</b>: el plan de la semana del reto y una idea para no romper la racha.</p>'
+      . '<p style="font:700 12px Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#6B645F;margin:30px 0 4px">Semana 1 · solo 4 hábitos</p>'
+      . '<table width="100%" cellpadding="0" cellspacing="0">'
+      . $fila('01', 'Agua al despertar', 'un vaso antes del café.')
+      . $fila('10', '10 min de luz natural', 'café junto a la ventana abierta.')
+      . $fila('05', 'Camina 8.000 pasos', 'una vuelta a la manzana.')
+      . $fila('12', 'Misma hora para dormir', 'una alarma para ir a la cama.')
+      . '</table>'
+      . '<p style="font:16px/1.55 Arial,sans-serif;color:#111;margin:24px 0 0">Los días malos también cuentan: haz la versión mínima y la racha sigue viva.</p>'
+      . '<table cellpadding="0" cellspacing="0" style="margin-top:26px"><tr><td style="background:#111;border-radius:999px">'
+      . '<a href="' . $web . '" style="display:inline-block;padding:14px 26px;font:700 15px Arial,sans-serif;color:#EEE9E5;text-decoration:none">Apuntar mi primer día</a></td></tr></table>'
+      . '<p style="font:14px/1.55 Arial,sans-serif;color:#6B645F;margin:26px 0 0">Comparte tu día en stories con <b style="color:#111">#MiRacha</b> y menciona a <a href="' . $ig . '" style="color:#FF5A1F">@somosrachalab</a>.</p>'
+      . '</td></tr></table>'
+      . '<p style="font:12px/1.5 Arial,sans-serif;color:#6B645F;max-width:520px;margin:16px auto 0">Recibes este correo porque te apuntaste en somosrachalab.com. ¿No quieres más correos? Responde con la palabra <b>BAJA</b>.</p>'
+      . '</td></tr></table></body></html>';
+$limiteB = 'b' . md5(uniqid('', true));
+$cabB = "From: Racha Lab <$REMITENTE>\r\n"
+      . "Reply-To: $REMITENTE\r\n"
+      . "MIME-Version: 1.0\r\n"
+      . "List-Unsubscribe: <mailto:$REMITENTE?subject=BAJA>\r\n"
+      . "Content-Type: multipart/alternative; boundary=\"$limiteB\"\r\n";
+$cuerpoB = "--$limiteB\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n"
+         . chunk_split(base64_encode($texto))
+         . "--$limiteB\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n"
+         . chunk_split(base64_encode($html))
+         . "--$limiteB--\r\n";
+@mail($email, $asuntoB, $cuerpoB, $cabB, '-f' . $REMITENTE);
+
 responder(true, '¡Apuntado! El domingo te llega el primer plan.');
