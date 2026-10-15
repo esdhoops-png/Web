@@ -128,6 +128,13 @@ select.inp,input.inp{border:1px solid var(--line);background:var(--surface);bord
 .ft.past{opacity:.6}
 .imgbox{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .imgbox img{width:120px;aspect-ratio:4/5;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.imgbox .pv{position:relative}.imgbox .pv .n{position:absolute;right:6px;top:6px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;font-weight:700;padding:2px 6px;border-radius:999px}
+.strip{display:flex;gap:6px;flex-wrap:wrap;width:100%;margin-top:4px}
+.strip button{position:relative;padding:0;border:2px solid transparent;border-radius:6px;background:none;line-height:0}
+.strip button[aria-current="true"]{border-color:var(--ink)}
+.strip img{width:46px;aspect-ratio:4/5;object-fit:cover;border-radius:4px;border:1px solid var(--line)}
+.strip .x{position:absolute;right:-6px;top:-6px;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:11px;line-height:18px;text-align:center}
+.strip .mv{display:flex;gap:2px;justify-content:center;margin-top:2px}.strip .mv i{font-style:normal;font-size:11px;color:var(--muted);cursor:pointer;padding:0 3px;line-height:1.2}
 .card .t{font-weight:600;font-size:13px;line-height:1.3;word-break:break-word}
 .card .m{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;font-size:11px;color:var(--muted);align-items:center}
 .card p{margin:5px 0 0;font-size:12px;color:var(--muted);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -405,7 +412,7 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
       <div class="f"><label for="fWho">Responsable</label><input id="fWho" placeholder="Quién graba o diseña" maxlength="60"></div>
       <div class="f"><label for="fLink">Material (enlace)</label><input id="fLink" type="url" placeholder="https://drive.google.com/…"></div>
     </div>
-    <div class="f"><span class="lbl">Diseño / imagen</span><div class="imgbox"><img id="fImgPrev" alt="Diseño de la publicación" hidden><div style="display:flex;flex-direction:column;gap:6px"><label class="btn" id="fImgBtn" style="cursor:pointer">Subir imagen<input type="file" id="fImgFile" accept="image/png,image/jpeg,image/webp" hidden></label><button type="button" class="btn" id="fImgDl" hidden>Descargar imagen</button><button type="button" class="btn ghost danger" id="fImgDel" hidden>Quitar imagen</button><span class="hint" id="fImgMsg"></span></div></div></div>
+    <div class="f"><span class="lbl">Diseño / imagen</span><div class="imgbox"><div class="pv"><img id="fImgPrev" alt="Diseño de la publicación" hidden><span class="n" id="fImgN" hidden></span></div><div style="display:flex;flex-direction:column;gap:6px"><label class="btn" id="fImgBtn" style="cursor:pointer">Subir imágenes<input type="file" id="fImgFile" accept="image/png,image/jpeg,image/webp" multiple hidden></label><button type="button" class="btn" id="fImgDl" hidden>Descargar imagen</button><button type="button" class="btn" id="fImgDlAll" hidden>Descargar todas</button><button type="button" class="btn ghost danger" id="fImgDel" hidden>Quitar imagen</button><span class="hint" id="fImgMsg"></span></div><div class="strip" id="fStrip"></div></div></div>
     <div class="f"><span class="lbl">Vídeo (Reels)</span><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><button type="button" class="btn" id="fVidDl" hidden>Descargar vídeo</button><label class="btn ghost" id="fVidBtn" style="cursor:pointer">Subir vídeo<input type="file" id="fVidFile" accept="video/mp4,video/quicktime" hidden></label><button type="button" class="btn ghost danger" id="fVidDel" hidden>Quitar vídeo</button><span class="hint" id="fVidMsg"></span></div></div>
     <div class="f"><label for="fNotes">Notas (planos, material, stickers…)</label><textarea id="fNotes" rows="3"></textarea></div>
     <div class="actions">
@@ -1140,9 +1147,19 @@ function fillPilar(cid,val){
   $("#insTpl").innerHTML=`<option value="">+ Plantilla…</option>`+templates.filter(t=>t.clientId===cid).map(t=>`<option value="${esc(t.id)}">${esc(t.name)}</option>`).join("");
   $("#dlgDot").style.setProperty("--c",cColor(cid));
 }
-let curImg="",curVid="",assetsApi;
+let curImg="",curImgs=[],curIdx=0,curVid="",assetsApi;
 function showVid(){$("#fVidDl").hidden=!curVid;$("#fVidDel").hidden=!curVid||!canWrite;$("#fVidBtn").hidden=!canWrite;$("#fVidMsg").textContent=curVid?"":(canWrite?"Sin vídeo (máx. 20 MB)":"Sin vídeo")}
-function showImg(){const im=$("#fImgPrev");if(curImg){im.src=curImg;im.hidden=false}else{im.removeAttribute("src");im.hidden=true}$("#fImgDel").hidden=!curImg||!canWrite;$("#fImgDl").hidden=!curImg;$("#fImgBtn").hidden=!canWrite;$("#fImgMsg").textContent=""}
+function showImg(){
+  if(curIdx>=curImgs.length)curIdx=Math.max(0,curImgs.length-1);curImg=curImgs[curIdx]||"";
+  const im=$("#fImgPrev");if(curImg){im.src=curImg;im.hidden=false}else{im.removeAttribute("src");im.hidden=true}
+  const n=$("#fImgN");n.hidden=curImgs.length<2;n.textContent=(curIdx+1)+"/"+curImgs.length;
+  $("#fImgDel").hidden=!curImg||!canWrite;$("#fImgDel").textContent=curImgs.length>1?"Quitar esta imagen":"Quitar imagen";
+  $("#fImgDl").hidden=!curImg;$("#fImgDl").textContent=curImgs.length>1?"Descargar esta":"Descargar imagen";$("#fImgDlAll").hidden=curImgs.length<2;$("#fImgBtn").hidden=!canWrite;$("#fImgMsg").textContent="";
+  const st=$("#fStrip");
+  st.innerHTML=curImgs.length>1||canWrite&&curImgs.length?curImgs.map((u,i)=>`<div><button type="button" data-si="${i}" aria-current="${i===curIdx}" aria-label="Imagen ${i+1}"><img src="${esc(u)}" alt="">${canWrite?`<span class="x" data-sx="${i}" role="button" aria-label="Quitar imagen ${i+1}">✕</span>`:""}</button>${canWrite&&curImgs.length>1?`<div class="mv"><i data-sm="${i}" data-d="-1">◀</i><i data-sm="${i}" data-d="1">▶</i></div>`:""}</div>`).join(""):"";
+  st.querySelectorAll("[data-si]").forEach(b=>b.onclick=e=>{const x=e.target.closest("[data-sx]");if(x){curImgs.splice(+x.dataset.sx,1);showImg();return}curIdx=+b.dataset.si;showImg()});
+  st.querySelectorAll("[data-sm]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sm,j=i+ +b.dataset.d;if(j<0||j>=curImgs.length)return;[curImgs[i],curImgs[j]]=[curImgs[j],curImgs[i]];curIdx=j;showImg()});
+}
 async function getAssets(){if(assetsApi===undefined){try{assetsApi=await claude.use("assets")}catch(e){assetsApi=null}}return assetsApi}
 function openItem(it,preset={}){
   if(!it&&!canWrite)return;
@@ -1153,7 +1170,7 @@ function openItem(it,preset={}){
   $("#fStatus").value=v.status||"idea";$("#fPrio").value=v.prio||"normal";$("#fTitle").value=v.title||"";$("#fCopy").value=v.copy||"";
   $("#fNotes").value=v.notes||"";$("#fWho").value=v.who||"";$("#fLink").value=v.link||"";$("#fCampaign").value=v.campaign||"";
   fillPilar(v.clientId,v.pilar||"");
-  curImg=v.img||"";showImg();curVid=v.video||"";showVid();
+  curImgs=Array.isArray(v.imgs)&&v.imgs.length?[...v.imgs]:(v.img?[v.img]:[]);curIdx=0;showImg();curVid=v.video||"";showVid();
   const ch=v.checks||{};
   $("#fChecks").innerHTML=CHECKS.map(([k,l])=>`<label><input type="checkbox" data-c="${k}"${ch[k]?" checked":""}>${l}</label>`).join("");
   $("#dlgTitle").lastElementChild.textContent=it?"Editar contenido":"Nuevo contenido";
@@ -1170,13 +1187,15 @@ $("#fClient").onchange=e=>fillPilar(e.target.value,"");
 $("#insHash").onclick=()=>{const h=clientOf($("#fClient").value)?.hashtags||"";if(!h)return toast("Esta cuenta no tiene hashtags");$("#fCopy").value=($("#fCopy").value.trimEnd()+"\n\n"+h).trim();updCnt()};
 $("#insTpl").onchange=e=>{const t=templates.find(x=>x.id===e.target.value);if(t){$("#fCopy").value=($("#fCopy").value?$("#fCopy").value+"\n\n":"")+t.text;updCnt()}e.target.value=""};
 $("#cancel").onclick=()=>$("#dlg").close();
-$("#fImgFile").onchange=async()=>{const f=$("#fImgFile").files[0];if(!f)return;const a=await getAssets();
+$("#fImgFile").onchange=async()=>{const fs=[...$("#fImgFile").files];if(!fs.length)return;const a=await getAssets();
   if(!a){$("#fImgMsg").textContent="No se pueden subir imágenes desde aquí.";return}
-  $("#fImgMsg").textContent="Subiendo…";
-  try{const r=await a.upload(f);curImg=r.url;showImg();$("#fImgMsg").textContent="Imagen lista: pulsa Guardar."}catch(e){$("#fImgMsg").textContent="No se pudo subir ("+(e.code||"error")+")"}
+  let ok=0;
+  for(const [k,f] of fs.entries()){$("#fImgMsg").textContent=`Subiendo ${k+1} de ${fs.length}…`;try{const r=await a.upload(f);curImgs.push(r.url);ok++}catch(e){}}
+  curIdx=curImgs.length-1;showImg();$("#fImgMsg").textContent=ok===fs.length?(ok>1?ok+" imágenes listas: pulsa Guardar.":"Imagen lista: pulsa Guardar."):`Se subieron ${ok} de ${fs.length}.`;
+  if(curImgs.length>10)$("#fImgMsg").textContent+=" Ojo: Instagram admite 10 por carrusel (20 desde la app).";
   $("#fImgFile").value=""};
-$("#fImgDel").onclick=()=>{curImg="";showImg()};
-async function dlAsset(url,fallbackExt){
+$("#fImgDel").onclick=()=>{curImgs.splice(curIdx,1);showImg()};
+async function dlAsset(url,fallbackExt,suffix=""){
   if(!url)return;
   if(downloadsApi===undefined){try{downloadsApi=await claude.use("downloads")}catch(e){downloadsApi=null}}
   if(!downloadsApi){toast("Descarga no disponible aquí");return}
@@ -1185,10 +1204,11 @@ async function dlAsset(url,fallbackExt){
     const r=await fetch(url);if(!r.ok)throw new Error("fetch");const blob=await r.blob();
     const ext=((blob.type.split("/")[1]||fallbackExt).replace("jpeg","jpg").replace("quicktime","mov"));
     const base=(($("#fDate").value||"")+"-"+($("#fTitle").value||"contenido")).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"contenido";
-    await downloadsApi.save({filename:base+"."+ext,data:blob});
+    await downloadsApi.save({filename:base+suffix+"."+ext,data:blob});
   }catch(e){if(e&&e.code!=="declined")toast("No se pudo descargar")}
 }
-$("#fImgDl").onclick=()=>dlAsset(curImg,"png");
+$("#fImgDl").onclick=()=>dlAsset(curImg,"png",curImgs.length>1?"-"+String(curIdx+1).padStart(2,"0"):"");
+$("#fImgDlAll").onclick=async()=>{for(let i=0;i<curImgs.length;i++){await dlAsset(curImgs[i],"png","-"+String(i+1).padStart(2,"0"))}};
 $("#fVidDl").onclick=()=>dlAsset(curVid,"mp4");
 $("#fVidDel").onclick=()=>{curVid="";showVid()};
 $("#fVidFile").onchange=async()=>{const f=$("#fVidFile").files[0];if(!f)return;const a=await getAssets();
@@ -1202,7 +1222,7 @@ function formData(){
   const checks={};$("#fChecks").querySelectorAll("input").forEach(i=>checks[i.dataset.c]=i.checked);
   return {clientId:$("#fClient").value,format:$("#fFormat").value,date:$("#fDate").value,time:$("#fTime").value,status:$("#fStatus").value,prio:$("#fPrio").value,
     title:$("#fTitle").value.trim(),copy:$("#fCopy").value,notes:$("#fNotes").value,who:$("#fWho").value.trim(),link:$("#fLink").value.trim(),
-    campaign:$("#fCampaign").value.trim(),pilar:$("#fPilar").value,checks,img:curImg||"",video:curVid||""};
+    campaign:$("#fCampaign").value.trim(),pilar:$("#fPilar").value,checks,img:curImgs[0]||"",imgs:curImgs.length>1?[...curImgs]:[],video:curVid||""};
 }
 $("#form").addEventListener("submit",async e=>{
   e.preventDefault();if(!db||!canWrite)return;
@@ -1231,7 +1251,7 @@ function renderFeed(){
   const logo=((c.brand&&c.brand.logos)||[]).find(l=>safeSvg(l.svg)&&/iso|sello/i.test(l.name))||((c.brand&&c.brand.logos)||[]).find(l=>safeSvg(l.svg));
   const withImg=list.filter(i=>i.img).length;
   $("#view").innerHTML=`<div class="feedhead"><span class="avr" style="background:${logo&&/^#[0-9a-f]{3,8}$/i.test(logo.bg||"")?logo.bg:"var(--soft)"}">${logo?`<img src="${svgUrl(logo.svg)}" alt="">`:av(c)}</span><div><b>${esc(c.handle||c.name)}</b><small>${list.filter(i=>i.date<=t).length} publicadas o de hoy · ${list.filter(i=>i.date>t).length} programadas · ${withImg} con diseño</small></div></div>
-   ${list.length?`<div class="fgrid">${list.map(it=>{const ic=it.format==="Reel"?"▶":it.format==="Carrusel"?"❐":"";
+   ${list.length?`<div class="fgrid">${list.map(it=>{const ni=Array.isArray(it.imgs)?it.imgs.length:0,ic=it.format==="Reel"?"▶":it.format==="Carrusel"||ni>1?"❐"+(ni>1?" "+ni:""):"";
      return `<button class="ft${it.date<t?" past":""}" data-id="${esc(it.id)}" aria-label="${esc(it.title||"")}">${it.img?`<img src="${esc(it.img)}" alt="" loading="lazy">`:`<span class="ph"><b>${esc(it.title||"")}</b><small>${esc(it.format)} · ${SMAP[it.status]?.[1]||""}</small></span>`}${ic?`<span class="ic">${ic}</span>`:""}<span class="dt">${esc(fmtD.format(parse(it.date)))}</span></button>`}).join("")}</div>`:'<div class="empty">Esta cuenta no tiene publicaciones con fecha.</div>'}
    <p class="sub" style="margin-top:12px;color:var(--muted);font-size:12px">Arriba lo más reciente, como en Instagram. Las atenuadas ya pasaron. Pulsa una para editarla o subir su diseño.</p>`;
   $("#view").querySelectorAll(".ft").forEach(b=>b.onclick=()=>openItem(items.find(x=>x.id===b.dataset.id)));
