@@ -199,6 +199,28 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-weight:600;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .toast.on{opacity:1}
 .mobnav{display:none}
+/* comunidad */
+.cbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:8px}
+.cbar span{display:block;height:100%;background:var(--ok)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.pc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:9px}
+.pc.done{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.pc .hd{display:flex;align-items:center;gap:10px}
+.pc .hd a{font-weight:800;color:var(--ink);text-decoration:none;font-size:14px;word-break:break-all}
+.pc .hd a:hover{text-decoration:underline}
+.pc .hd small{display:block;color:var(--muted);font-size:12px}
+.pc p{margin:0;font-size:13px;color:var(--muted)}
+.pc .tags{display:flex;flex-wrap:wrap;gap:4px}
+.pc .warn{color:var(--warn);border-color:var(--warn)}
+.pc .row2{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pc .row2 .btn{padding:5px 10px;font-size:12px}
+.pc .row2 select{padding:4px 8px;font-size:12px}
+.pc .last{font-size:11px;color:var(--muted);margin-left:auto}
+.pc .note{font-size:12px;background:var(--soft);border-radius:8px;padding:6px 8px;color:var(--ink)}
+.tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:14px}
+.tip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px}
+.tip b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
 @media (max-width:1100px){
   .two{grid-template-columns:1fr}
   .week{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -298,6 +320,32 @@ dialog h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
   </form>
 </dialog>
 
+<dialog id="dlgP">
+  <form method="dialog" id="formP">
+    <h2>Perfil</h2>
+    <div class="row">
+      <div class="f"><label for="pHandle">@usuario</label><input id="pHandle" required maxlength="40" placeholder="@cuenta"></div>
+      <div class="f"><label for="pName">Nombre</label><input id="pName" maxlength="80"></div>
+    </div>
+    <div class="row3">
+      <div class="f"><label for="pCat">Categoría</label><select id="pCat"></select></div>
+      <div class="f"><label for="pZone">Zona</label><input id="pZone" maxlength="60"></div>
+      <div class="f"><label for="pPrio">Prioridad</label><select id="pPrio"><option value="alta">Alta</option><option value="normal">Normal</option></select></div>
+    </div>
+    <div class="row">
+      <div class="f"><label for="pClient">Para la cuenta</label><select id="pClient"></select></div>
+      <div class="f"><label for="pStatus">Estado</label><select id="pStatus"></select></div>
+    </div>
+    <div class="f"><label for="pWhy">Por qué encaja</label><textarea id="pWhy" rows="2"></textarea></div>
+    <div class="f"><label for="pCollab">Idea de colaboración</label><textarea id="pCollab" rows="2"></textarea></div>
+    <div class="f"><label for="pNotes">Notas (qué les has comentado, respuestas…)</label><textarea id="pNotes" rows="3"></textarea></div>
+    <div class="actions">
+      <div><button type="button" class="btn danger" id="pDel">Borrar</button></div>
+      <div><button type="button" class="btn" id="pCancel">Cerrar</button><button class="btn primary">Guardar</button></div>
+    </div>
+  </form>
+</dialog>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -309,7 +357,7 @@ const FIELDS=[["objetivo","Objetivo",0],["publico","Público",0],["pilares","Pil
 const TARGETS=[["tPiezas","Piezas de feed / semana"],["tReels","Reels / semana"],["tStories","Días con stories / semana"],["tSeguidores","Objetivo de seguidores"]];
 const LINKS=[["linkDrive","Carpeta de material"],["linkWeb","Web"],["contacto","Contacto del cliente"]];
 const DAYS=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
-const VIEWS=[["resumen","Resumen",'<path d="M3 3h7v7H3zM14 3h7v4h-7zM14 11h7v10h-7zM3 14h7v7H3z"/>'],["calendario","Calendario",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],["tablero","Tablero",'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="13" rx="1"/>'],["ideas","Ideas",'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'],["cuentas","Cuentas",'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 11a3 3 0 1 0 0-6M22 21c0-3-2-5.5-5-6"/>']];
+const VIEWS=[["resumen","Resumen",'<path d="M3 3h7v7H3zM14 3h7v4h-7zM14 11h7v10h-7zM3 14h7v7H3z"/>'],["calendario","Calendario",'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],["tablero","Tablero",'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="13" rx="1"/>'],["ideas","Ideas",'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'],["comunidad","Comunidad",'<path d="M4 20c0-3 2.5-5 5-5M15 15c2.5 0 5 2 5 5"/><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M11 14l2 2 4-4"/>'],["cuentas","Cuentas",'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 11a3 3 0 1 0 0-6M22 21c0-3-2-5.5-5-6"/>']];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmtD=new Intl.DateTimeFormat("es-ES",{day:"numeric",month:"short"});
@@ -318,8 +366,11 @@ const fmtM=new Intl.DateTimeFormat("es-ES",{month:"long",year:"numeric"});
 const fmtMs=new Intl.DateTimeFormat("es-ES",{month:"short"});
 
 let db=null,canWrite=false;
-let clients=[],items=[],metrics=[],dates=[],templates=[];
-const S={view:"resumen",sel:"all",calMode:"semana",weekStart:monday(new Date()),month:firstOfMonth(new Date()),boardRange:"14",acct:null,acctTab:"estrategia",ideaFmt:"all"};
+let clients=[],items=[],metrics=[],dates=[],templates=[],profiles=[];
+const PCATS=["Running y trail","Cafeterías y brunch","Gimnasios, yoga y pilates","Nutrición y entrenadores","Eventos y tiendas","Otros"];
+const PSTAT=[["pendiente","Pendiente"],["seguido","Seguido"],["interactuando","Interactuando"],["colaboracion","Colaboración"]];
+const PGOAL=10;
+const S={pCat:"all",pStat:"all",pDue:false,pQ:"",view:"resumen",sel:"all",calMode:"semana",weekStart:monday(new Date()),month:firstOfMonth(new Date()),boardRange:"14",acct:null,acctTab:"estrategia",ideaFmt:"all"};
 let editing=null,editingEv=null;
 try{const saved=JSON.parse(localStorage.getItem("planner.ui")||"{}");["view","sel","calMode","acctTab"].forEach(k=>{if(saved[k])S[k]=saved[k]})}catch(e){}
 function persist(){try{localStorage.setItem("planner.ui",JSON.stringify({view:S.view,sel:S.sel,calMode:S.calMode,acctTab:S.acctTab}))}catch(e){}}
@@ -392,7 +443,7 @@ function setTop(title,sub,tools){$("#vtitle").textContent=title;$("#vsub").textC
 
 function render(){
   renderShell();
-  ({resumen:renderResumen,calendario:renderCal,tablero:renderBoard,ideas:renderIdeas,cuentas:renderCuentas}[S.view]||renderResumen)();
+  ({resumen:renderResumen,calendario:renderCal,tablero:renderBoard,ideas:renderIdeas,cuentas:renderCuentas,comunidad:renderComunidad}[S.view]||renderResumen)();
 }
 
 /* ---------- resumen ---------- */
@@ -695,6 +746,80 @@ $("#dup").onclick=async()=>{const data=formData();data.title+=" (copia)";data.st
 $("#del").onclick=async()=>{if(!editing||!confirm("¿Borrar este contenido?"))return;
   try{await db.doc("items/"+editing).delete();$("#dlg").close();toast("Borrado")}catch(err){toast("No se pudo borrar")}};
 
+/* ---------- comunidad ---------- */
+const CATC={"Running y trail":"#FF5A1F","Cafeterías y brunch":"#8A5A3C","Gimnasios, yoga y pilates":"#1F8A5B","Nutrición y entrenadores":"#6E7BD9","Eventos y tiendas":"#B556C7","Otros":"#888"};
+function daysSince(d){if(!d)return null;return Math.round((parse(today())-parse(d))/86400000)}
+function isDue(p){if(p.status==="colaboracion")return false;const n=daysSince(p.lastAt);return n===null||n>=3}
+function renderComunidad(){
+  const t=today();
+  const all=profiles.filter(p=>S.sel==="all"||p.clientId===S.sel);
+  const doneToday=all.filter(p=>p.lastAt===t).length;
+  setTop("Comunidad","Perfiles con los que interactuar para crecer",canWrite?'<button class="btn primary" id="newP">+ Añadir perfil</button>':"");
+  if($("#newP"))$("#newP").onclick=()=>openP(null);
+  const pct=Math.min(100,doneToday/PGOAL*100);
+  let html=`<div class="kpis">
+    <div class="kpi"><b>${doneToday}<small style="font-size:16px;color:var(--muted)"> / ${PGOAL}</small></b><span>Interacciones hoy</span><div class="cbar"><span style="width:${pct}%"></span></div></div>
+    <div class="kpi"><b>${all.filter(isDue).length}</b><span>Toca hoy (3+ días sin interactuar)</span></div>
+    <div class="kpi"><b>${all.filter(p=>p.status!=="pendiente").length}</b><span>Seguidos o en contacto</span></div>
+    <div class="kpi"><b>${all.filter(p=>p.status==="colaboracion").length}</b><span>Colaboraciones</span></div></div>
+   <div class="tips">
+    <div class="tip"><b>1 · Comenta de verdad</b>Una frase que aporte o una pregunta. Nada de "🔥🔥" ni comentarios genéricos.</div>
+    <div class="tip"><b>2 · Responde a sus stories</b>Las respuestas por DM crean relación mucho más rápido que los likes.</div>
+    <div class="tip"><b>3 · Compártelos</b>Menciona a una cuenta de la lista en tus stories cada día: suelen devolver la mención.</div>
+    <div class="tip"><b>4 · Sin spam</b>No hagas follow/unfollow masivo ni pegues el mismo comentario: Instagram lo penaliza.</div></div>
+   <div class="filters">
+    <input class="inp" id="pq" placeholder="Buscar…" value="${esc(S.pQ)}" style="min-width:160px">
+    <select class="inp" id="pcat"><option value="all">Todas las categorías</option>${PCATS.map(c=>`<option${S.pCat===c?" selected":""}>${esc(c)}</option>`).join("")}</select>
+    <select class="inp" id="pst"><option value="all">Todos los estados</option>${PSTAT.map(([k,l])=>`<option value="${k}"${S.pStat===k?" selected":""}>${l}</option>`).join("")}</select>
+    <span class="seg"><button id="pdue" aria-pressed="${S.pDue}">Solo los que tocan hoy</button></span></div>`;
+  const q=S.pQ.toLowerCase();
+  const list=all.filter(p=>(S.pCat==="all"||p.category===S.pCat)&&(S.pStat==="all"||p.status===S.pStat)&&(!S.pDue||isDue(p))&&(!q||(p.handle+" "+(p.name||"")+" "+(p.zone||"")).toLowerCase().includes(q)))
+    .sort((a,b)=>(b.prio==="alta")-(a.prio==="alta")||(isDue(b)-isDue(a))||(a.lastAt||"").localeCompare(b.lastAt||"")||a.handle.localeCompare(b.handle));
+  const groups=PCATS.filter(c=>list.some(p=>(p.category||"Otros")===c));
+  html+=groups.length?groups.map(c=>`<div class="panel" style="margin-bottom:10px"><h3><span style="display:flex;align-items:center;gap:8px"><span class="dot" style="--c:${CATC[c]}"></span>${esc(c)}</span><small>${list.filter(p=>(p.category||"Otros")===c).length} perfiles</small></h3><div class="pgrid">${list.filter(p=>(p.category||"Otros")===c).map(pCard).join("")}</div></div>`).join(""):`<div class="empty">${all.length?"Ningún perfil con estos filtros":"Todavía no hay perfiles para esta cuenta"}</div>`;
+  $("#view").innerHTML=html;
+  $("#pq").oninput=e=>{S.pQ=e.target.value;clearTimeout(renderComunidad.t);renderComunidad.t=setTimeout(()=>{renderComunidad();const i=$("#pq");i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)};
+  $("#pcat").onchange=e=>{S.pCat=e.target.value;renderComunidad()};
+  $("#pst").onchange=e=>{S.pStat=e.target.value;renderComunidad()};
+  $("#pdue").onclick=()=>{S.pDue=!S.pDue;renderComunidad()};
+  $("#view").querySelectorAll("[data-hit]").forEach(b=>b.onclick=()=>hitP(b.dataset.hit));
+  $("#view").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openP(profiles.find(x=>x.id===b.dataset.edit)));
+  $("#view").querySelectorAll("select[data-st]").forEach(sel=>sel.onchange=async()=>{try{await db.doc("profiles/"+sel.dataset.st).update({status:sel.value});toast("Estado actualizado")}catch(e){toast("No se pudo guardar")}});
+}
+function pCard(p){
+  const h=(p.handle||"").replace(/^@/,""),n=daysSince(p.lastAt),done=p.lastAt===today();
+  const last=n===null?"Nunca":n===0?"Hoy":n===1?"Ayer":`Hace ${n} días`;
+  return `<div class="pc${done?" done":""}">
+    <div class="hd"><span class="av" style="--c:${CATC[p.category]||"#888"}">${esc(initials(p.name||h))}</span><div style="min-width:0"><a href="https://www.instagram.com/${encodeURIComponent(h)}/" target="_blank" rel="noopener">@${esc(h)} ↗</a><small>${esc(p.name||"")}${p.zone?" · "+esc(p.zone):""}</small></div></div>
+    ${p.why?`<p>${esc(p.why)}</p>`:""}
+    <div class="tags">${p.prio==="alta"?'<span class="tag" style="color:var(--danger)">Prioridad</span>':""}${p.verified===false?'<span class="tag warn">Revisar usuario</span>':""}${p.collab?'<span class="tag">Idea de colaboración</span>':""}${p.count?`<span class="tag">${p.count} interacciones</span>`:""}</div>
+    ${p.collab?`<div class="note">💡 ${esc(p.collab)}</div>`:""}${p.notes?`<div class="note">${esc(p.notes)}</div>`:""}
+    <div class="row2">${canWrite?`<button class="btn${done?"":" primary"}" data-hit="${esc(p.id)}" ${done?"disabled":""}>${done?"✓ Hecho hoy":"✓ Interactué hoy"}</button>
+      <select class="inp" data-st="${esc(p.id)}">${PSTAT.map(([k,l])=>`<option value="${k}"${p.status===k?" selected":""}>${l}</option>`).join("")}</select>
+      <button class="btn ghost" data-edit="${esc(p.id)}">Editar</button>`:""}<span class="last">${last}</span></div>
+  </div>`;
+}
+async function hitP(id){const p=profiles.find(x=>x.id===id);if(!p||!db)return;
+  const data={lastAt:today(),count:(p.count||0)+1};if(p.status==="pendiente"||!p.status)data.status="interactuando";
+  try{await db.doc("profiles/"+id).update(data);toast("¡Bien! "+(profiles.filter(x=>x.lastAt===today()).length+1)+" hoy")}catch(e){toast("No se pudo guardar")}}
+let editingP=null;
+function openP(p){if(!p&&!canWrite)return;editingP=p?p.id:null;
+  $("#pCat").innerHTML=PCATS.map(c=>`<option>${esc(c)}</option>`).join("");
+  $("#pStatus").innerHTML=PSTAT.map(([k,l])=>`<option value="${k}">${l}</option>`).join("");
+  $("#pClient").innerHTML=clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+  const v=p||{clientId:S.sel!=="all"?S.sel:"racha",category:S.pCat!=="all"?S.pCat:PCATS[0],status:"pendiente",prio:"normal"};
+  $("#pHandle").value=v.handle?"@"+v.handle.replace(/^@/,""):"";$("#pName").value=v.name||"";$("#pCat").value=v.category||"Otros";$("#pZone").value=v.zone||"";
+  $("#pPrio").value=v.prio||"normal";$("#pClient").value=v.clientId||"";$("#pStatus").value=v.status||"pendiente";$("#pWhy").value=v.why||"";$("#pCollab").value=v.collab||"";$("#pNotes").value=v.notes||"";
+  $("#pDel").hidden=!p||!canWrite;$("#formP").querySelectorAll("input,select,textarea").forEach(e=>e.disabled=!canWrite);
+  $("#dlgP").showModal()}
+$("#pCancel").onclick=()=>$("#dlgP").close();
+$("#formP").addEventListener("submit",async e=>{e.preventDefault();if(!db||!canWrite)return;
+  const data={handle:$("#pHandle").value.trim().replace(/^@/,""),name:$("#pName").value.trim(),category:$("#pCat").value,zone:$("#pZone").value.trim(),prio:$("#pPrio").value,
+    clientId:$("#pClient").value,status:$("#pStatus").value,why:$("#pWhy").value.trim(),collab:$("#pCollab").value.trim(),notes:$("#pNotes").value.trim()};
+  if(!data.handle)return;
+  try{if(editingP)await db.doc("profiles/"+editingP).update(data);else await db.collection("profiles").add({...data,verified:true,count:0,lastAt:"",createdAt:new Date().toISOString()});$("#dlgP").close();toast("Guardado")}catch(err){toast("No se pudo guardar")}});
+$("#pDel").onclick=async()=>{if(!editingP||!confirm("¿Borrar este perfil?"))return;try{await db.doc("profiles/"+editingP).delete();$("#dlgP").close()}catch(e){toast("No se pudo borrar")}};
+
 /* ---------- event dialog ---------- */
 function openEv(ev,preset={}){
   if(!ev&&!canWrite)return;
@@ -732,5 +857,6 @@ render();
   sub("metrics",v=>metrics=v);
   sub("dates",v=>dates=v);
   sub("templates",v=>templates=v);
+  sub("profiles",v=>profiles=v);
 })();
 </script>

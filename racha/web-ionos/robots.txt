@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://somosrachalab.com/sitemap.xml
