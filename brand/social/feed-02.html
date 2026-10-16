@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Feed 02 · Ya estamos entrenando</title>
+<link rel="stylesheet" href="social.css">
+<style>
+  .canvas { --w: 1080px; --h: 1350px; }
+  .phone { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 620px; border-radius: 64px; }
+  .phone > .in { border-radius: 52px; background: var(--hueso); padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .card { position: relative; background: var(--papel); border-radius: 44px; padding: 40px 36px 34px; overflow: hidden; }
+  .ttl { font-size: 100px; margin: 12px 0 24px; }
+  .photo { width: 100%; height: 470px; border-radius: 34px; overflow: hidden; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .row { display: flex; gap: 8px; background: var(--papel); border-radius: 999px; padding: 10px; }
+  .row .chip { flex: 1; }
+  .cta { display: flex; justify-content: center; }
+</style></head>
+<body>
+<div class="canvas ">
+  <svg class="arches"></svg>
+  <div class="phone glass"><div class="in">
+    <div class="card">
+      <p class="label">ESD Training</p>
+      <h1 class="big ttl">Ya estamos<br>entrenando</h1>
+      <div class="photo"><img src="../../assets/img/fotos/accion-balon.jpg" alt=""></div>
+    </div>
+    <div class="row"><span class="chip">Técnica</span><span class="chip">Tiro</span><span class="chip">Físico</span></div>
+    <div class="cta"><span class="pill pill-dark" style="width:100%">Pide info por DM</span></div>
+  </div></div>
+</div>
+<script src="social.js"></script>
+</body></html>

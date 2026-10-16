@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Feed 12 · Arma tu equipo</title>
+<link rel="stylesheet" href="social.css">
+<style>
+  .canvas { --w: 1080px; --h: 1350px; }
+  .cap { left: 50%; top: 50%; translate: -50% -50%; width: 560px; height: 1010px; }
+  .cap > .in { padding: 34px 34px 50px; }
+  .orb { width: 492px; }
+  .orb .ball { width: 66%; }
+  .lbl { margin-top: 44px; }
+  .ttl { margin-top: 16px; font-size: 118px; }
+  .cap .pill { margin-top: auto; }
+  .foot { position: absolute; left: 0; right: 0; bottom: 44px; text-align: center; }
+  .team { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 492px; }
+  .team .circle { width: 238px; height: 238px; }
+  .team .circle img { object-position: 50% 25%; }
+  .team .sub { display: grid; place-items: center; background: var(--hueso); box-shadow: inset 0 0 0 2px var(--linea); font-family: var(--display); font-size: 64px; color: var(--suave); }
+</style></head>
+<body>
+<div class="canvas stone">
+  <svg class="arches"></svg>
+  <div class="cap glass" style="height:1040px"><div class="in">
+    <div class="team"><span class="circle"><img src="../../assets/img/fotos/accion-tiro.jpg" alt=""></span><span class="circle"><img src="../../assets/img/fotos/accion-street-flavour.jpg" alt=""></span><span class="circle"><img src="../../assets/img/fotos/accion-carrera.jpg" alt=""></span><span class="circle sub">+1</span></div>
+    <p class="label lbl">Winter Classic · 26 DIC</p>
+    <h1 class="big ttl">Arma tu<br>equipo</h1>
+    <span class="pill pill-dark">3 + 1 · Torneo 3x3</span>
+  </div></div>
+  <p class="mono foot">Etiqueta a tus 3 · @esdhoops</p>
+</div>
+<script src="social.js"></script>
+</body></html>
