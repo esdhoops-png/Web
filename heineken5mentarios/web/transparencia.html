@@ -80,6 +80,13 @@ dd{font-weight:500;overflow-wrap:anywhere}
 .box h3{margin-top:0}
 .box .cartel{width:100%;max-width:640px;border-radius:6px;margin:16px 0 14px;background:#fff}
 .box .doc{background:var(--bg2)}
+.box > p{margin-top:16px}
+.tbl{overflow-x:auto;margin:18px 0 22px;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14.5px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--verde);background:var(--card)}
+td{color:#D5D2CA}tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;color:var(--fg);font-weight:700}
 .sello{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
 .sello img{width:160px;height:auto}
 .sello .ph{width:160px;aspect-ratio:1;border:1px dashed var(--warn);border-radius:8px;display:grid;place-items:center;text-align:center;color:var(--warn);font-size:13px;padding:12px}
@@ -235,14 +242,22 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <!-- ═════════ AYUDAS ═════════ -->
     <section class="sec" id="ayudas">
       <div class="sh"><h2>Ayudas y subvenciones</h2><span class="rev" data-rev></span></div>
-      <p>La empresa publica de forma clara y comprensible las subvenciones y ayudas públicas percibidas, con indicación de su importe, objetivo o finalidad.</p>
+      <p>En aplicación del artículo 8.1.c) de la Ley 12/2014, Eventos Josué Arucas LP5 publica de forma clara y comprensible las subvenciones y ayudas públicas percibidas. A continuación se recoge la información sobre las subvenciones públicas recibidas:</p>
+      <div class="tbl"><table id="ayudasTabla"><thead><tr><th>Institución</th><th>Objeto</th><th>Proyecto / servicio</th><th>Periodo</th><th>Importe</th></tr></thead><tbody></tbody></table></div>
       <div id="ayudasList"></div>
+      <p>La empresa se compromete a mantener actualizada esta información, incorporando en el futuro cualquier otra ayuda pública que se obtenga, así como las justificaciones y resultados derivados de su ejecución.</p>
     </section>
 
     <!-- ═════════ CONTRATOS ═════════ -->
     <section class="sec" id="contratos">
       <div class="sh"><h2>Contratos públicos</h2><span class="rev" data-rev></span></div>
       <p>Durante los ejercicios 2022, 2023, 2024 y 2025, la sociedad no ha celebrado contratos mayores ni menores con Administraciones Públicas, por lo que no existen datos estadísticos sobre adjudicaciones, procedimientos, modificaciones, desistimientos o renuncias.</p>
+      <ul>
+        <li>No se han celebrado contratos mayores con Administraciones Públicas; por lo tanto, no concurren datos estadísticos sobre el porcentaje en volumen presupuestario de contratos adjudicados a través de cada uno de los procedimientos previstos en la legislación de contratos del sector público.</li>
+        <li>No se han celebrado contratos mayores con Administraciones Públicas; por lo tanto, no concurren modificaciones.</li>
+        <li>No se han celebrado contratos menores; por lo tanto, no concurre la relación de contratos menores.</li>
+        <li>No se han celebrado contratos menores; por lo tanto, no existen decisiones de desistimiento y renuncia de los contratos.</li>
+      </ul>
     </section>
 
     <!-- ═════════ CONVENIOS ═════════ -->
@@ -254,8 +269,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <!-- ═════════ COMPROMISOS ═════════ -->
     <section class="sec" id="compromisos">
       <div class="sh"><h2>Compromisos</h2><span class="rev" data-rev></span></div>
-      <p>La empresa asume un firme compromiso con la excelencia, la sostenibilidad y la responsabilidad social.</p>
-      <div class="box sello">
+      <h3>Excelencia, sostenibilidad, calidad y medioambiente</h3>
+      <p>La empresa asume un firme compromiso con la <b>excelencia, la sostenibilidad y la responsabilidad social</b>, entendidos como pilares de su cultura corporativa. Su actuación se articula en tres dimensiones: <b>social, ambiental y económica</b>.</p>
+      <h4>Social</h4>
+      <p>Promueve la inclusión laboral de colectivos en riesgo de exclusión, el respeto a la diversidad y la igualdad efectiva entre hombres y mujeres. Colabora con entidades locales y fomenta la formación continua de su personal, garantizando un entorno de trabajo respetuoso, equitativo y saludable.</p>
+      <h4>Ambiental</h4>
+      <p>Impulsa la reducción del impacto ecológico de sus actividades mediante la gestión responsable de residuos, el uso eficiente de recursos energéticos y la colaboración con proveedores de proximidad. La empresa fomenta la reutilización y el reciclaje de materiales, así como la adopción de prácticas sostenibles en su operativa diaria.</p>
+      <h4>Económica</h4>
+      <p>Busca un equilibrio entre rentabilidad, crecimiento y sostenibilidad, garantizando la viabilidad de su proyecto empresarial a largo plazo. La gestión eficiente y transparente de los recursos constituye la base de la confianza que la empresa genera entre sus clientes, empleados, proveedores y administraciones públicas.</p>
+      <div class="box sello" style="margin-top:24px">
         <div id="selloImg"></div>
         <div style="min-width:0;flex:1">
           <h3>Sello de calidad</h3>
@@ -269,6 +291,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="sh"><h2>Contacto</h2><span class="rev" data-rev></span></div>
       <p>Cualquier persona puede solicitar información relativa a esta entidad sujeta a la normativa de transparencia dirigiéndose a la Dirección de la sociedad:</p>
       <dl>
+        <dt>Entidad</dt><dd>Eventos Josué Arucas LP5, S.L.U.</dd>
+        <dt>Administrador</dt><dd>Cayetano Josué González Pérez</dd>
         <dt>Teléfono</dt><dd id="dTel"></dd>
         <dt>Correo electrónico</dt><dd data-mail></dd>
         <dt>Dirección</dt><dd id="dDom"></dd>
@@ -306,15 +330,15 @@ const DOCS = {
 
 const CUENTAS = [
   { year: 2022, docs: [
-    { t: "Balance de situación 2022", epub: "docs/balance-de-situacion-2022.epub", docx: "docs/balance-de-situacion-2022.docx", odt: "docs/balance-de-situacion-2022.odt" },
-    { t: "Cuenta de pérdidas y ganancias 2022", epub: "docs/perdidas-y-ganancias-2022.epub", docx: "docs/perdidas-y-ganancias-2022.docx", odt: "docs/perdidas-y-ganancias-2022.odt" } ] },
+    { t: "Balance de situación 2022", pdf: "docs/balance-de-situacion-2022.pdf", epub: "docs/balance-de-situacion-2022.epub", docx: "docs/balance-de-situacion-2022.docx", odt: "docs/balance-de-situacion-2022.odt" },
+    { t: "Cuenta de pérdidas y ganancias 2022", pdf: "docs/perdidas-y-ganancias-2022.pdf", epub: "docs/perdidas-y-ganancias-2022.epub", docx: "docs/perdidas-y-ganancias-2022.docx", odt: "docs/perdidas-y-ganancias-2022.odt" } ] },
   { year: 2023, docs: [
-    { t: "Cuentas anuales 2023", epub: "docs/cuentas-anuales-2023.epub", docx: "docs/cuentas-anuales-2023.docx", odt: "docs/cuentas-anuales-2023.odt" },
-    { t: "Balance de situación 2023", epub: "docs/balance-de-situacion-2023.epub", docx: "docs/balance-de-situacion-2023.docx", odt: "docs/balance-de-situacion-2023.odt" },
-    { t: "Cuenta de pérdidas y ganancias 2023", epub: "docs/perdidas-y-ganancias-2023.epub", docx: "docs/perdidas-y-ganancias-2023.docx", odt: "docs/perdidas-y-ganancias-2023.odt" } ] },
+    { t: "Cuentas anuales 2023", pdf: "docs/cuentas-anuales-2023.pdf", epub: "docs/cuentas-anuales-2023.epub", docx: "docs/cuentas-anuales-2023.docx", odt: "docs/cuentas-anuales-2023.odt" },
+    { t: "Balance de situación 2023", pdf: "docs/balance-de-situacion-2023.pdf", epub: "docs/balance-de-situacion-2023.epub", docx: "docs/balance-de-situacion-2023.docx", odt: "docs/balance-de-situacion-2023.odt" },
+    { t: "Cuenta de pérdidas y ganancias 2023", pdf: "docs/perdidas-y-ganancias-2023.pdf", epub: "docs/perdidas-y-ganancias-2023.epub", docx: "docs/perdidas-y-ganancias-2023.docx", odt: "docs/perdidas-y-ganancias-2023.odt" } ] },
   { year: 2024, docs: [
-    { t: "Balance de situación 2024", epub: "docs/balance-de-situacion-2024.epub", docx: "docs/balance-de-situacion-2024.docx", odt: "docs/balance-de-situacion-2024.odt" },
-    { t: "Cuenta de pérdidas y ganancias 2024", epub: "docs/perdidas-y-ganancias-2024.epub", docx: "docs/perdidas-y-ganancias-2024.docx", odt: "docs/perdidas-y-ganancias-2024.odt" } ] },
+    { t: "Balance de situación 2024", pdf: "docs/balance-de-situacion-2024.pdf", epub: "docs/balance-de-situacion-2024.epub", docx: "docs/balance-de-situacion-2024.docx", odt: "docs/balance-de-situacion-2024.odt" },
+    { t: "Cuenta de pérdidas y ganancias 2024", pdf: "docs/perdidas-y-ganancias-2024.pdf", epub: "docs/perdidas-y-ganancias-2024.epub", docx: "docs/perdidas-y-ganancias-2024.docx", odt: "docs/perdidas-y-ganancias-2024.odt" } ] },
   { year: 2025, docs: [
     { t: "Cuentas anuales y memoria 2025" },
     { t: "Balance de situación 2025" },
@@ -331,30 +355,42 @@ const LEYES = [
   ["Real Decreto Legislativo 1175/1990", "de 28 de septiembre, por el que se aprueban las tarifas y la instrucción del Impuesto sobre Actividades Económicas.", "https://www.boe.es/eli/es/rdlg/1990/09/28/1175/con"]
 ];
 
-// Cada ayuda: filas [etiqueta, valor] (valor "" = pendiente), cartel (imagen) y documento descargable.
+// Cada ayuda: fila de la tabla (inst, objeto, proyecto, periodo, importe), detalle [etiqueta, valor] ("" = pendiente),
+// texto explicativo, cartel (imagen) y documentos descargables.
 const AYUDAS = [
-  { titulo: "Modernización del Pub Terraza Heineken 5mentarios",
+  { inst: "Consejería de Turismo y Empleo", objeto: "Subvenciones a empresas privadas · Convenio resiliencia turística en Canarias (C14.I03)",
+    proyecto: "Modernización del local 5mentarios", periodo: "2024", importe: "76.574,30 €",
+    titulo: "Modernización del Pub Terraza Heineken 5mentarios",
     filas: [
       ["Línea de ayuda", "Subvenciones para financiar proyectos de la estrategia de Resiliencia Turística en Canarias, dentro del programa de actuaciones con entidades del sector privado en infraestructuras turísticas, en el marco del Plan de Recuperación, Transformación y Resiliencia."],
       ["Organismo concedente", "Gobierno de Canarias · Consejería de Turismo y Empleo"],
       ["Financiación", "Unión Europea · NextGenerationEU (Plan de Recuperación, Transformación y Resiliencia)"],
       ["Establecimiento", "Heineken 5mentarios · Arucas"],
-      ["Importe", "76.574,30 €"],
-      ["Fecha de concesión", ""]
+      ["Importe", "76.574,30 €"]
+    ],
+    texto: [
+      "Gracias a esta ayuda, la empresa ha acometido una modernización integral del Pub Terraza Heineken 5mentarios, ubicado en el casco histórico de Arucas, con el fin de mejorar su infraestructura y ofrecer una experiencia más atractiva y cómoda a los clientes. Las actuaciones realizadas han incluido la renovación del mobiliario interior y exterior, la reforma de los baños para garantizar la accesibilidad y la higiene, la actualización estética del local y la instalación de un sistema de aire acondicionado y ventilación eficiente que mejora el confort y reduce el consumo energético.",
+      "Estas mejoras han contribuido a potenciar la oferta turística y cultural de Arucas, reforzando el papel del establecimiento como punto de encuentro para residentes y visitantes. Asimismo, la modernización ha favorecido la sostenibilidad ambiental y energética del negocio, mejorando su competitividad y consolidando a Eventos Josué Arucas LP5, S.L. como un referente del ocio y la hostelería en Gran Canaria."
     ],
     img: "img/cartel-ayuda-resiliencia-turistica.jpg",
-    doc: { t: "Cartel informativo de la ayuda", epub: "docs/cartel-ayuda-resiliencia-turistica.epub", docx: "docs/cartel-ayuda-resiliencia-turistica.docx", odt: "docs/cartel-ayuda-resiliencia-turistica.odt" } },
-  { titulo: "Mejora de las instalaciones y equipamiento del local",
+    docs: [
+      { t: "Subvención CTE", s: "Consejería de Turismo y Empleo", pdf: "", epub: "", docx: "", odt: "" },
+      { t: "Cartel informativo de la ayuda", pdf: "docs/cartel-ayuda-resiliencia-turistica.pdf", epub: "docs/cartel-ayuda-resiliencia-turistica.epub", docx: "docs/cartel-ayuda-resiliencia-turistica.docx", odt: "docs/cartel-ayuda-resiliencia-turistica.odt" } ] },
+  { inst: "Consejería de Economía, Industria, Comercio y Autónomos", objeto: "Subvención de la Línea 2 del Programa de subvenciones para la mejora de la competitividad, la sostenibilidad, la creación y el crecimiento empresarial de Canarias",
+    proyecto: "Puesta en marcha de establecimiento, bar cafetería", periodo: "2024", importe: "13.662,76 €",
+    titulo: "Puesta en marcha de establecimiento, bar cafetería",
     filas: [
-      ["Organismo concedente", "Gobierno de Canarias"],
+      ["Organismo concedente", "Gobierno de Canarias · Consejería de Economía, Industria, Comercio y Autónomos"],
       ["Nº de expediente", "PI2024010958"],
       ["Tipo de proyecto", "Mejorar la productividad y competitividad de una empresa ya existente"],
       ["Objetivo o finalidad", "Mejora de las instalaciones del local gestionado por Eventos Josué Arucas LP5, S.L.U., mediante la adquisición de equipos como lavavajillas, vitrinas y envasadoras al vacío, para mejorar la gestión del establecimiento y ofrecer un servicio más eficiente a los clientes."],
       ["Inversión aprobada", "22.717,84 €"],
-      ["Periodo de ejecución", "01/01/2023 – 31/12/2023"]
+      ["Importe de la subvención", "13.662,76 €"],
+      ["Ejecución del proyecto", "01/01/2023 – 31/12/2023"]
     ],
     img: "img/cartel-ayuda-gobierno-canarias.jpg",
-    doc: { t: "Cartel informativo de la ayuda", epub: "docs/cartel-ayuda-gobierno-canarias.epub", docx: "docs/cartel-ayuda-gobierno-canarias.docx", odt: "" } }
+    docs: [
+      { t: "Cartel informativo de la ayuda", pdf: "docs/cartel-ayuda-gobierno-canarias.pdf", epub: "docs/cartel-ayuda-gobierno-canarias.epub", docx: "docs/cartel-ayuda-gobierno-canarias.docx", odt: "docs/cartel-ayuda-gobierno-canarias.odt" } ] }
 ];
 
 const SELLO = { img: "", texto: "" };   // p. ej. img: "img/sello-transparencia.png"
@@ -377,10 +413,12 @@ $("#iDom").textContent = ENTIDAD.domicilio; $("#dDom").textContent = ENTIDAD.dom
 $("#dTel").innerHTML = `<a href="tel:${ENTIDAD.telefono.replace(/\s/g, "")}">${esc(ENTIDAD.telefono)}</a>`;
 $("#leyes").innerHTML = LEYES.map(([n, d, u]) => `<div class="law"><p><b>${esc(n)}</b>, ${esc(d)}</p><a class="fmt ext" href="${u}" target="_blank" rel="noopener">BOE</a></div>`).join("");
 $("#cuentas").innerHTML = CUENTAS.map(c => `<div class="year"><h3>Ejercicio <span>${c.year}</span></h3>${c.docs.map(docHTML).join("")}</div>`).join("");
+$("#ayudasTabla tbody").innerHTML = AYUDAS.map(a => `<tr><td>${esc(a.inst)}</td><td>${esc(a.objeto)}</td><td>${esc(a.proyecto)}</td><td>${esc(a.periodo)}</td><td class="num">${esc(a.importe)}</td></tr>`).join("");
 $("#ayudasList").innerHTML = AYUDAS.map(a => `<div class="box"><h3>${esc(a.titulo)}</h3><dl>
   ${a.filas.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${pend(v)}</dd>`).join("")}</dl>
+  ${(a.texto || []).map(t => `<p>${esc(t)}</p>`).join("")}
   ${a.img ? `<img class="cartel" src="${esc(a.img)}" alt="Cartel informativo: ${esc(a.titulo)}" loading="lazy">` : ""}
-  ${a.doc ? docHTML(a.doc) : ""}</div>`).join("");
+  ${(a.docs || []).map(docHTML).join("")}</div>`).join("");
 $("#selloImg").innerHTML = SELLO.img ? `<img src="${esc(SELLO.img)}" alt="Sello de calidad del Comisionado de Transparencia">` : '<div class="ph">Sello pendiente de incorporar</div>';
 if (SELLO.texto) $("#selloTxt").textContent = SELLO.texto;
 $("#pie").textContent = `${ENTIDAD.razon} · NIF ${ENTIDAD.nif} · Última revisión ${REVISION}`;
