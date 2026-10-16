@@ -1,6 +1,6 @@
 <title>Heineken 5mentarios</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Heineken 5mentarios, bar de copas en Arucas (Gran Canaria) desde 2002: tardeo, conciertos y DJs los fines de semana, partidos grandes y comida de Volcán y Cuor di Pizza a la mesa.">
+<meta name="description" content="Heineken 5mentarios, bar de copas en Arucas (Gran Canaria) desde 2002: tardeo, conciertos y DJs los fines de semana, partidos grandes y las burgers de Volcán a la mesa.">
 <meta property="og:title" content="Heineken 5mentarios · Arucas, desde 2002">
 <meta property="og:description" content="Tardeo, conciertos y DJs, partidos grandes y comida a la mesa. En Arucas desde 2002.">
 <meta property="og:image" content="img/og.png">
@@ -156,19 +156,40 @@ section{padding-block:clamp(90px,12vw,160px);position:relative}
 .laser.l2{animation:las 4.1s -1s ease-in-out infinite alternate-reverse}
 .laser.l3{animation:las 2.7s -.5s ease-in-out infinite alternate}
 @keyframes las{from{transform:rotate(-38deg)}to{transform:rotate(38deg)}}
-/* fútbol: el campo */
-.pitch{position:absolute;inset:-10% -10%;z-index:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 8%,transparent 8% 16%);transform:perspective(900px) rotateX(58deg) translateY(var(--pt,0px));transform-origin:50% 80%}
-.pitch::before{content:"";position:absolute;left:50%;top:50%;width:34vmin;height:34vmin;translate:-50% -50%;border:3px solid rgba(255,255,255,.35);border-radius:50%}
-.pitch::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:rgba(255,255,255,.35)}
-.ball{position:absolute;right:16%;top:50%;width:min(22vw,200px);aspect-ratio:1;z-index:1;animation:bounce 1.3s cubic-bezier(.5,0,.5,1) infinite alternate}
-.ball svg{width:100%;height:100%;animation:roll 3s linear infinite}
-@keyframes bounce{from{transform:translateY(-55%)}to{transform:translateY(20%)}}
-@keyframes roll{to{transform:rotate(360deg)}}
+/* fútbol: noche de partido · focos, marcador y grada */
+.flood{position:absolute;top:-8%;width:62vw;height:120%;z-index:0;opacity:.55;pointer-events:none;background:conic-gradient(from 160deg at 50% 0%,transparent 0deg,rgba(233,255,241,.22) 14deg,rgba(233,255,241,.05) 26deg,transparent 40deg);animation:flood 6s ease-in-out infinite alternate}
+.flood.f1{left:-14%;transform-origin:50% 0}
+.flood.f2{right:-14%;transform-origin:50% 0;animation-delay:-3s;scale:-1 1}
+@keyframes flood{from{rotate:-6deg}to{rotate:6deg}}
+.flood::before{content:"";position:absolute;left:50%;top:6%;width:90px;height:18px;translate:-50% 0;border-radius:4px;background:repeating-linear-gradient(90deg,#F4FFF7 0 14px,#9AA59C 14px 18px);box-shadow:0 0 40px 18px rgba(233,255,241,.55)}
+.board{position:absolute;right:7%;top:50%;translate:0 -58%;z-index:1;width:min(40vw,470px);background:#020403;border:2px solid #1d2a22;border-radius:14px;padding:18px 20px 16px;box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 6px #0a110d;font-family:var(--display);text-transform:uppercase}
+.board .top{display:flex;justify-content:space-between;align-items:center;font:700 12px/1 var(--body);letter-spacing:.16em;color:var(--mute)}
+.board .live{display:flex;align-items:center;gap:8px;color:#FF5A4E}
+.board .live i{width:9px;height:9px;border-radius:50%;background:#FF5A4E;box-shadow:0 0 12px #FF5A4E;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+.board .score{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:14px 0 6px;text-align:center}
+.board .tm{font-size:clamp(16px,1.8vw,22px);letter-spacing:.06em;color:#E7E4DC}
+.board .tm small{display:block;font:700 10px/1.4 var(--body);letter-spacing:.18em;color:var(--mute)}
+.board .gl{font-size:clamp(64px,9vw,120px);line-height:.9;color:var(--verde);text-shadow:0 0 22px rgba(52,194,107,.55);font-variant-numeric:tabular-nums;display:flex;gap:.18em;justify-content:center}
+.board .gl em{font-style:normal;color:#3a4a40}
+.board .gl b{font-weight:400;display:inline-block}
+.board .gl b.pop{animation:pop .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(1.8);color:#E9FFF1}}
+.board .min{font:400 clamp(22px,2.4vw,30px)/1 var(--display);color:var(--ambar);text-align:center;letter-spacing:.04em}
+.board .gol{position:absolute;inset:0;display:grid;place-items:center;border-radius:12px;background:var(--verde);color:#04120A;font-size:clamp(70px,9vw,120px);letter-spacing:.02em;opacity:0;transform:scale(.6);transition:opacity .25s,transform .4s cubic-bezier(.2,1.5,.4,1);pointer-events:none}
+.board.gooo .gol{opacity:1;transform:none}
+.grada{position:absolute;left:0;right:0;bottom:-2px;height:24vh;z-index:1;display:flex;align-items:flex-end;pointer-events:none}
+#sceneFut h3{font-size:clamp(72px,10.5vw,170px)}
+.grada{gap:0}.grada i{flex:1;margin:0 -6px;height:var(--h,60%);background:radial-gradient(closest-side,#020403 96%,transparent) 50% 0/52% 34% no-repeat,radial-gradient(ellipse 50% 100% at 50% 100%,#020403 98%,transparent) 50% 100%/100% 64% no-repeat;transform-origin:bottom;animation:salta 1.2s ease-in-out infinite;animation-delay:var(--d,0s)}
+.board.gooo ~ .grada i,.scene.gol .grada i{animation-duration:.45s}
+@keyframes salta{50%{transform:translateY(-14%)}}
 @media (max-width:860px){
   .scene .wrap{grid-template-columns:1fr;align-self:end;padding-bottom:12vh}
   .sun{right:-10%;top:28%;width:70vw}
   .eq{right:auto;left:50%;translate:-50% 0;bottom:auto;top:12%;height:30vh}
-  .ball{right:10%;top:22%;width:32vw}
+  .board{right:auto;left:50%;translate:-50% 0;top:9%;width:min(84vw,380px);padding:14px 16px 12px}
+  .flood{width:90vw}
+  .grada{height:14vh}
   .dots{top:auto;bottom:calc(24px + env(safe-area-inset-bottom,0px));translate:0;flex-direction:row}
 }
 
@@ -236,7 +257,7 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
 
 @media (prefers-reduced-motion:reduce){
   .intro{display:none}
-  .grain,.beam,.orbit,.scroll-hint i,.eq i,.laser,.ball,.ball svg,.photo .sticker,.badge img,.badge .shine{animation:none!important}
+  .grain,.beam,.orbit,.scroll-hint i,.eq i,.laser,.flood,.grada i,.live i,.photo .sticker,.badge img,.badge .shine{animation:none!important}
   .rv{opacity:1;transform:none;transition:none}
   .hero h1 .w>span,.hero-sub,.hero .ctas,.badge img{transform:none!important;opacity:1!important;scale:1!important;rotate:0deg!important;transition:none!important}
   .photo{clip-path:none;transition:none}
@@ -278,7 +299,7 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
         <span class="w"><span class="g" style="transition-delay:.2s">y&nbsp;los</span></span>
         <span class="w"><span class="g" style="transition-delay:.3s">tuyos.</span></span>
       </h1>
-      <p class="hero-sub">El punto de encuentro de Arucas desde 2002: conciertos y DJs los fines de semana, tardeos con ambiente, los partidos grandes y la cena de Volcán y Cuor di Pizza, que te la llevamos a la mesa.</p>
+      <p class="hero-sub">El punto de encuentro de Arucas desde 2002: conciertos y DJs los fines de semana, tardeos con ambiente, los partidos grandes y las smash burgers de Volcán, que te las llevamos a la mesa.</p>
       <div class="ctas">
         <a class="btn fill" href="https://www.instagram.com/heineken5mentarios/" target="_blank" rel="noopener">Programación de la semana</a>
         <a class="btn" data-link="whatsapp" href="#" target="_blank" rel="noopener" hidden>Canal de WhatsApp</a>
@@ -336,13 +357,19 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
         <span class="when">Fines de semana</span>
       </div></div>
     </div>
-    <div class="scene" data-bg="#0B3D22" style="--acc:#F2EFE8">
-      <div class="pitch" aria-hidden="true"></div>
-      <div class="ball" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#F2EFE8"/><path fill="#060807" d="M50 30l14 10-5 17H41l-5-17z"/><path fill="none" stroke="#060807" stroke-width="2.5" d="M50 30V4M64 40l22-8M59 57l14 20M41 57L27 77M36 40l-22-8"/><circle cx="50" cy="50" r="48" fill="none" stroke="#060807" stroke-width="2"/></svg></div>
+    <div class="scene" data-bg="#04140B" style="--acc:var(--verde)" id="sceneFut">
+      <i class="flood f1" aria-hidden="true"></i><i class="flood f2" aria-hidden="true"></i>
+      <div class="board" id="board" aria-hidden="true">
+        <div class="top"><span class="live"><i></i>En directo</span><span>Pantalla grande</span></div>
+        <div class="score"><span class="tm">Los tuyos<small>Local</small></span><span class="gl"><b id="gLoc">1</b><em>:</em><b>1</b></span><span class="tm">Ellos<small>Visitante</small></span></div>
+        <div class="min" id="minuto">80'</div>
+        <div class="gol">¡Gol!</div>
+      </div>
+      <div class="grada" id="grada" aria-hidden="true"></div>
       <div class="wrap"><div>
-        <span class="n">03 / 03 — Fútbol</span>
-        <h3><span>Fútbol</span></h3>
-        <p>Los partidos grandes se ven mejor en grupo: Clásicos, Champions y noches de las que se habla al día siguiente.</p>
+        <span class="n">03 / 03 — Partidazo</span>
+        <h3><span>Partidazo</span></h3>
+        <p>Los partidos grandes se viven en grupo: pantalla grande, la grada llena y los goles cantados a la vez. Clásicos, Champions y finales en 5mentarios.</p>
         <span class="when">Partidos grandes</span>
       </div></div>
     </div>
@@ -356,10 +383,9 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
     <div class="rv">
       <p class="kick" style="color:#CFEBD9">Comida a la mesa</p>
       <h2 style="margin-top:14px">No te muevas,<br><span class="it">te la llevamos</span></h2>
-      <p>En 5mentarios puedes pedir de Volcán Smash Burger y de Cuor di Pizza, y te lo llevamos a la mesa. Sin perderte ni un minuto del concierto o del partido.</p>
+      <p>En 5mentarios puedes pedir las smash burgers de Volcán y te las llevamos a la mesa. Sin perderte ni un minuto del concierto o del partido.</p>
       <div class="who">
         <a href="https://www.instagram.com/volcansmashburger/" target="_blank" rel="noopener"><strong>Volcán</strong><span>smash burgers</span></a>
-        <a data-link="cuor" href="#" target="_blank" rel="noopener"><strong>Cuor di Pizza</strong><span>pizza para compartir</span></a>
       </div>
     </div>
     <div style="position:relative">
@@ -384,7 +410,7 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
       <div><dt>Tardeo</dt><dd><b>El plan del finde</b> con buena música</dd></div>
       <div><dt>Directo</dt><dd><b>Conciertos y DJs</b> los fines de semana</dd></div>
       <div><dt>Fútbol</dt><dd><b>Partidos grandes</b> en pantalla</dd></div>
-      <div><dt>Cena</dt><dd><b>Volcán y Cuor</b> a la mesa</dd></div>
+      <div><dt>Cena</dt><dd><b>Smash burgers de Volcán</b> a la mesa</dd></div>
     </dl>
   </div>
 </section>
@@ -418,7 +444,6 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
 // ── Rellena aquí los enlaces cuando los tengas (si se dejan vacíos, el botón no aparece)
 const ENLACES = {
   whatsapp: "",   // enlace del canal de WhatsApp del bar
-  cuor: "",       // Instagram de Cuor di Pizza, p. ej. https://www.instagram.com/usuario/
   maps: "",       // enlace exacto de Google Maps del bar (si no, busca "Heineken 5mentarios Arucas")
   email: ""       // correo de contacto, p. ej. info@dominio.com
 };
@@ -426,7 +451,7 @@ const FUNDADO = 2002;
 
 document.querySelectorAll('[data-link]').forEach(el => {
   const k = el.dataset.link, v = ENLACES[k];
-  if (!v) { if (k === 'cuor') el.removeAttribute('href'); return; }
+  if (!v) return;
   el.href = k === 'email' ? 'mailto:' + v : v;
   if (k === 'email') { el.removeAttribute('target'); el.querySelector('[data-text]').textContent = v; document.querySelector('[data-noemail]').hidden = true; }
   el.hidden = false;
@@ -520,6 +545,20 @@ new IntersectionObserver(([e], o) => {
     if (p < 1) requestAnimationFrame(f); })(t0);
 }, { threshold: .4 }).observe(yearsEl);
 
+// ── fútbol: grada + marcador que avanza con el scroll
+const grada = $('#grada'), board = $('#board'), minEl = $('#minuto'), gLoc = $('#gLoc');
+for (let i = 0; i < 34; i++) { const g = document.createElement('i'); g.style.setProperty('--h', (48 + Math.random() * 46).toFixed(0) + '%'); g.style.setProperty('--d', (-Math.random() * 1.2).toFixed(2) + 's'); grada.appendChild(g); }
+let golado = false;
+function partido(t) {
+  const m = Math.round(80 + t * 13);
+  minEl.textContent = m > 90 ? `90+${m - 90}'` : `${m}'`;
+  const gol = t > .55;
+  if (gol !== golado) {
+    golado = gol; gLoc.textContent = gol ? '2' : '1';
+    if (gol && !reduce) { gLoc.classList.remove('pop'); void gLoc.offsetWidth; gLoc.classList.add('pop'); board.classList.add('gooo'); setTimeout(() => board.classList.remove('gooo'), 1300); }
+  }
+}
+
 // ── todo lo que depende del scroll
 const nav = $('#nav'), stage = $('#stage'), scenesSec = $('#planes'), scenes = [...stage.querySelectorAll('.scene')], dots = [...stage.querySelectorAll('.dots b')];
 const tracks = [...document.querySelectorAll('.marq .track')].map(t => ({ el: t, x: 0, dir: +t.dataset.dir }));
@@ -555,7 +594,7 @@ function frame() {
   }
   const local = sp * 3 - idx;
   stage.style.setProperty('--sun', local.toFixed(3));
-  stage.style.setProperty('--pt', (local * -60).toFixed(1) + 'px');
+  if (idx === 2) partido(local);
   // frase
   const qr = qp.getBoundingClientRect();
   const qprog = Math.min(Math.max((innerHeight * .85 - qr.top) / (qr.height + innerHeight * .35), 0), 1);
