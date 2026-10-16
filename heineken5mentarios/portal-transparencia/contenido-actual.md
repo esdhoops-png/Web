@@ -110,3 +110,27 @@ El protocolo tiene **carácter obligatorio para todo el personal** y estará vig
 [Doc. de protocolo: PDF · EPUB · DOCX · ODT]
 
 En este punto de servicios y procedimientos resaltar que no se dispone de canal interno de información puesto que según la ley 2/2023 y principios esenciales del procedimiento de gestión no estamos obligados, debido a que nuestra empresa este año 2024 no ha llegado a los 50 empleados.
+
+## INFORMACIÓN ECONÓMICO-FINANCIERA
+Fecha de creación 17 de Octubre 2025 · Última actualización: 28 de octubre de 2025.
+
+En virtud de lo dispuesto en el artículo 6 de la Ley 12/2014, la empresa publicará la información económico-financiera correspondiente, estructurada por anualidades.
+
+La entidad EVENTOS JOSUE ARUCAS LP5 SL, no realiza auditoría de cuentas y de fiscalización por los órganos de control externo ya que según se especifica en el artículo 263 del Real Decreto Legislativo 1/2010, de 2 de julio, por el que se aprueba el texto refundido de la Ley de Sociedades de Capital,
+
+### Artículo 263. Auditor de cuentas
+1. Las cuentas anuales y, en su caso, el informe de gestión deberá ser revisados por auditor de cuentas.
+2. Se exceptúa de esta obligación a las sociedades que durante dos ejercicios consecutivos reúnan, a la fecha de cierre de cada uno de ellos, al menos dos de las circunstancias siguientes:
+   - Que el total de las partidas del activo no supere los dos millones ochocientos cincuenta mil euros.
+   - Que el importe neto de su cifra anual de negocios no supere los cinco millones setecientos mil euros.
+   - Que el número medio de trabajadores empleados durante el ejercicio no sea superior a cincuenta.
+
+Nuestra entidad no reúne ninguna de las circunstancias reflejadas en los apartados anteriores.
+(OJO: tal como está redactado dice lo contrario de lo que se quiere decir; para estar exenta de auditoría la sociedad SÍ debe reunir al menos dos de esas circunstancias.)
+
+No obstante, EVENTOS JOSUE ARUCAS LP5 SL cumple con su obligación legal de depositar sus cuentas anuales en el Registro Mercantil de Las Palmas, pudiendo ser solicitadas en dicho registro. A continuación señalamos las cuentas anuales de nuestra empresa del formato pdf y en abierto.
+
+### Cuentas anuales 2022, 2023, 2024
+- Cuentas anuales 2022 [PDF · EPUB · DOCX · ODT]
+- (2023 y 2024: mismas descargas)
+Archivos recibidos: CUENTAS-ANUALES-2023 en ODT, EPUB y DOCX (falta el PDF de 2023 y los de 2022 y 2024).
