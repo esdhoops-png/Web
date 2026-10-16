@@ -1,29 +1,28 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Feed 10 · Juego de calle</title>
+<html lang="es"><head><meta charset="utf-8"><title>Feed 10 · Teaser nuevo partner</title>
 <link rel="stylesheet" href="social.css">
 <style>
   .canvas { --w: 1080px; --h: 1350px; }
-  .canvas { display: grid; grid-template-rows: 280px 64px 662px 64px 280px; }
-  .info { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; color: var(--papel); text-align: center; padding: 0 60px; }
-  .badges { display: flex; gap: 14px; }
-  .ttl { font-size: 112px; text-shadow: 0 10px 40px rgba(14,28,46,.45); }
-  .b1 img { object-position: 50% 30%; transform: scale(2); transform-origin: 40% 30%; }
-  .b3 img { object-position: 50% 60%; transform: scale(1.8); transform-origin: 50% 70%; }
-  .b2 img { object-position: 50% 35%; }
+  .cap { left: 50%; top: 50%; translate: -50% -50%; width: 560px; height: 1010px; }
+  .cap > .in { padding: 34px 34px 50px; }
+  .orb { width: 492px; }
+  .orb .ball { width: 66%; }
+  .lbl { margin-top: 44px; }
+  .ttl { margin-top: 16px; font-size: 118px; }
+  .cap .pill { margin-top: auto; }
+  .foot { position: absolute; left: 0; right: 0; bottom: 44px; text-align: center; }
+  .ttl { font-size: 84px; }
 </style></head>
 <body>
-<div class="canvas dark">
-  <div class="tint b1"><img src="../../assets/img/fotos/accion-street-flavour.jpg" alt=""></div>
-  <div class="ticker"><span>ESD Street Series</span><span>3x3</span><span>Winter Classic</span><span>26 DIC</span><span>ESD Street Series</span></div>
-  <div class="tint b2"><img src="../../assets/img/fotos/accion-dribbling.jpg" alt="">
-    <div class="info">
-      <div class="badges"><span class="badge"><img src="../logo/esd-logo-azul.svg" alt=""></span><span class="badge badge-t">II</span></div>
-      <h1 class="big ttl">Juego de calle,<br>nivel de pista</h1>
-      <span class="pill pill-light mono">26 DIC · 3x3</span>
-    </div>
-  </div>
-  <div class="ticker"><span>Prepara a tu equipo</span><span>@esdhoops</span><span>Prepara a tu equipo</span></div>
-  <div class="tint b3"><img src="../../assets/img/fotos/accion-salto.jpg" alt=""></div>
+<div class="canvas stone">
+  <svg class="arches"></svg>
+  <div class="cap glass"><div class="in">
+    <div class="orb"><svg class="ring" viewBox="0 0 200 200"><defs><path id="f10" d="M100 100m-86 0a86 86 0 1 1 172 0a86 86 0 1 1-172 0"/></defs><text><textPath href="#f10" textLength="535" lengthAdjust="spacing">NUEVO PARTNER + MUY PRONTO + NUEVO PARTNER +</textPath></text></svg><div class="ball" data-angle="1.1"></div></div>
+    <p class="label lbl">ESD Hoops × ???</p>
+    <h1 class="big ttl">Algo grande<br>se acerca</h1>
+    <span class="pill pill-dark">Jueves 29 · Atentos</span>
+  </div></div>
+  <p class="mono foot">Nuevo partner oficial · @esdhoops</p>
 </div>
 <script src="social.js"></script>
 </body></html>
