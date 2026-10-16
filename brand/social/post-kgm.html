@@ -1,30 +1,31 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Post — Presentación partner KGM</title>
+<html lang="es"><head><meta charset="utf-8"><title>Post — Partner KGM</title>
 <link rel="stylesheet" href="social.css">
 <style>
-  /* Foto del coche: guarda el archivo como assets/img/fotos/kgm-coche.jpg
-     Logo de KGM: sustituye el texto .partner-name por el logo oficial que os facilite la marca (en blanco) */
   .canvas { --w: 1080px; --h: 1350px; }
-  .photo { position: absolute; left: 0; right: 0; top: 380px; height: 640px; background: radial-gradient(80% 90% at 50% 60%, var(--cancha), var(--noche)); }
-  .photo img { width: 100%; height: 100%; object-fit: cover; }
-  .photo .court { width: 900px; left: 90px; top: 40px; opacity: .14; }
-  .lockup { position: absolute; top: 110px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 48px; }
-  .lockup img { height: 150px; }
-  .lockup .x { font-family: var(--display); font-size: 70px; color: var(--naranja); }
-  .partner-name { font-family: var(--display); font-size: 150px; letter-spacing: .06em; color: var(--crema); line-height: 1; }
-  .eyebrow { position: absolute; top: 300px; left: 0; right: 0; text-align: center; }
-  .title { position: absolute; left: 80px; right: 80px; top: 1050px; font-size: 104px; text-align: center; }
-  .body-text { position: absolute; left: 120px; right: 120px; top: 1180px; text-align: center; font-size: 30px; }
-  .handle { left: 0; right: 0; text-align: center; bottom: 40px; font-size: 24px; opacity: .7; }
+
+  /* Foto del coche: guárdala como assets/img/fotos/kgm-coche.jpg. Sustituye el texto KGM por su logo oficial en blanco */
+  .canvas { display: grid; grid-template-rows: 260px 64px 702px 64px 260px; }
+  .b1 img, .b3 img { transform: scale(1.8); }
+  .tint.empty { background: linear-gradient(160deg, #2a4f7d, #1a3556); }
+  .info { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; color: var(--papel); text-align: center; }
+  .lock { display: flex; align-items: center; gap: 18px; }
+  .kgm { width: 210px; height: 120px; border-radius: 999px; display: grid; place-items: center; background: var(--papel); color: var(--azul); font-family: var(--display); font-size: 64px; letter-spacing: .06em; }
+  .ttl { font-size: 120px; }
 </style></head>
 <body>
-<div class="canvas">
-  <div class="photo"><svg class="court"></svg><img src="../../assets/img/fotos/kgm-coche.jpg" alt="" onerror="this.remove()"></div>
-  <div class="lockup"><img src="../logo/esd-logo-arena.svg" alt=""><span class="x">×</span><span class="partner-name">KGM</span></div>
-  <div class="eyebrow">Nuevo partner oficial</div>
-  <h1 class="display title">Rodamos <span class="n">juntos</span></h1>
-  <p class="body-text">KGM se une a ESD Hoops para impulsar el baloncesto de base y nuestros eventos.</p>
-  <div class="handle">@esdhoops</div>
+<div class="canvas dark">
+  <div class="tint b1 empty"><img src="../../assets/img/fotos/kgm-coche.jpg" alt="" onerror="this.remove()"></div>
+  <div class="ticker"><span>Partner oficial</span><span>ESD Hoops</span><span>KGM</span><span>Partner oficial</span><span>ESD Hoops</span><span>KGM</span></div>
+  <div class="tint b2 empty"><img src="../../assets/img/fotos/kgm-coche.jpg" alt="" onerror="this.remove()">
+    <div class="info">
+      <div class="lock"><span class="badge"><img src="../logo/esd-logo-azul.svg" alt=""></span><span class="badge badge-t" style="font-family:var(--body);font-weight:300">×</span><span class="kgm">KGM</span></div>
+      <h1 class="big ttl">Rodamos<br>juntos</h1>
+      <span class="pill pill-light mono">Nuevo partner oficial</span>
+    </div>
+  </div>
+  <div class="ticker"><span>Baloncesto de base</span><span>Eventos ESD</span><span>@esdhoops</span><span>Baloncesto de base</span></div>
+  <div class="tint b3 empty"><img src="../../assets/img/fotos/kgm-coche.jpg" alt="" onerror="this.remove()"></div>
 </div>
 <script src="social.js"></script>
 </body></html>

@@ -1,30 +1,26 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Story — Próximo evento</title>
+<html lang="es"><head><meta charset="utf-8"><title>Story — Muy pronto</title>
 <link rel="stylesheet" href="social.css">
 <style>
   .canvas { --w: 1080px; --h: 1920px; }
-  .court { width: 1080px; left: 0; top: 0; transform: rotate(180deg); opacity: .14; }
-  .cut { height: 820px; clip-path: polygon(0 18%, 100% 0, 100% 100%, 0 100%); }
-  .logo { top: 160px; left: 90px; width: 120px; }
-  .eyebrow { position: absolute; top: 560px; left: 90px; font-size: 36px; }
-  .title { position: absolute; top: 620px; left: 84px; font-size: 230px; }
-  .rows { position: absolute; left: 90px; right: 90px; bottom: 210px; color: var(--noche); }
-  .rows b { color: var(--naranja); }
-  .handle { left: 90px; bottom: 110px; color: var(--azul); font-size: 30px; }
+
+  .cap { left: 50%; top: 50%; translate: -50% -50%; width: 640px; height: 1160px; }
+  .cap > .in { padding: 38px 38px 60px; }
+  .orb { width: 564px; }
+  .orb .ball { width: 66%; }
+  .lbl { margin-top: 56px; }
+  .ttl { margin-top: 20px; font-size: 150px; }
+  .pill { margin-top: auto; }
 </style></head>
 <body>
-<div class="canvas">
-  <svg class="court"></svg>
-  <img class="logo" src="../logo/esd-logo-arena.svg" alt="">
-  <div class="eyebrow">Muy pronto</div>
-  <h1 class="display title">Algo<br>grande<br><span class="o">viene</span></h1>
-  <div class="cut"></div>
-  <div class="rows">
-    <div><b>01</b><span>Torneos 3x3</span></div>
-    <div><b>02</b><span>Liga 5x5 estilo AAU</span></div>
-    <div><b>03</b><span>Camps · Combines · Showcases</span></div>
-  </div>
-  <div class="handle">@esdhoops</div>
+<div class="canvas ">
+  <svg class="arches"></svg>
+  <div class="cap glass"><div class="in">
+    <div class="orb"><svg class="ring" viewBox="0 0 200 200"><defs><path id="r3" d="M100 100m-86 0a86 86 0 1 1 172 0a86 86 0 1 1-172 0"/></defs><text><textPath href="#r3" textLength="535" lengthAdjust="spacing">MUY PRONTO + ESD HOOPS + MUY PRONTO + ESD HOOPS +</textPath></text></svg><div class="ball" data-angle="2.1"></div></div>
+    <p class="label lbl">Atentos</p>
+    <h1 class="big ttl">Algo<br>grande</h1>
+    <span class="pill pill-dark">Activa las notificaciones</span>
+  </div></div>
 </div>
 <script src="social.js"></script>
 </body></html>

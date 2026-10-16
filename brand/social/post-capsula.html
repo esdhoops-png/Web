@@ -2,33 +2,27 @@
 <html lang="es"><head><meta charset="utf-8"><title>Post — Cápsula de evento</title>
 <link rel="stylesheet" href="social.css">
 <style>
-  /* Estilo cápsula: foto en blanco y negro cálido de fondo + cápsula de cristal. Cambia foto, etiqueta y título */
-  .canvas { --w: 1080px; --h: 1350px; background: #ebe6e1; }
-  .bg { position: absolute; inset: 0; }
-  .bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) sepia(.18) contrast(.92) brightness(1.06); }
-  .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(235,230,225,.25), rgba(235,230,225,.1) 50%, rgba(235,230,225,.55)); }
-  .cap { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 520px; height: 900px; border-radius: 270px; padding: 14px;
-         background: rgba(255,255,255,.28); border: 1.5px solid rgba(255,255,255,.65); backdrop-filter: blur(24px); box-shadow: 0 60px 120px -40px rgba(14,28,46,.5); }
-  .in { height: 100%; border-radius: 256px; background: #f6f3f0; display: flex; flex-direction: column; align-items: center; padding: 30px 30px 44px; text-align: center; color: #172d47; }
-  .circle { width: 432px; height: 432px; border-radius: 50%; overflow: hidden; position: relative; }
-  .circle img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(.85) sepia(.15); }
-  .chip { position: absolute; left: 50%; bottom: 34px; translate: -50% 0; display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(23,45,71,.85); color: #f6f3f0; font: 500 20px "Inter"; white-space: nowrap; }
-  .chip span { padding: 8px 16px; border-radius: 999px; }
-  .chip span + span { background: #f6f3f0; color: #172d47; }
-  .lbl { margin-top: 44px; font: 600 18px 'Inter'; letter-spacing: .34em; text-transform: uppercase; opacity: .7; }
-  .ttl { margin-top: 18px; font-family: 'Anton', sans-serif; font-size: 112px; line-height: .9; text-transform: uppercase; }
-  .mark { width: 46px; margin-top: auto; }
-  .mono { position: absolute; left: 0; right: 0; bottom: 46px; text-align: center; font: 500 22px 'Plex Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: #172d47; }
+  .canvas { --w: 1080px; --h: 1350px; }
+
+  .cap { left: 50%; top: 50%; translate: -50% -50%; width: 540px; height: 940px; }
+  .cap > .in { padding: 30px 30px 46px; }
+  .cap .circle { width: 452px; height: 452px; }
+  .cap .circle .seg { position: absolute; left: 50%; bottom: 34px; translate: -50% 0; }
+  .lbl { margin-top: 46px; }
+  .ttl { margin-top: 18px; font-size: 118px; }
+  .logo { margin-top: auto; width: 46px; }
+  .foot { position: absolute; left: 0; right: 0; bottom: 48px; text-align: center; }
 </style></head>
 <body>
-<div class="canvas">
-  <div class="bg"><img src="../../assets/img/fotos/street-series-campeones-2.jpg" alt=""></div>
-  <div class="cap"><div class="in">
-    <div class="circle"><img src="../../assets/img/fotos/street-series-jugador.jpg" alt=""><div class="chip"><span>Street Series</span><span>3x3</span></div></div>
-    <div class="lbl">Basketball events</div>
-    <div class="ttl">ESD<br>Hoops</div>
-    <img class="mark" src="../logo/esd-logo-azul.svg" alt="">
+<div class="canvas ">
+  <div class="bgphoto"><img src="../../assets/img/fotos/street-series-campeones-2.jpg" alt=""></div>
+  <div class="cap glass"><div class="in">
+    <div class="circle"><img src="../../assets/img/fotos/street-series-jugador.jpg" alt=""><span class="seg"><span>Street Series</span><span class="on">3x3</span></span></div>
+    <p class="label lbl">Basketball events</p>
+    <h1 class="big ttl">ESD<br>Hoops</h1>
+    <img class="logo" src="../logo/esd-logo-azul.svg" alt="">
   </div></div>
-  <div class="mono">@esdhoops · Elevamos el juego</div>
+  <p class="mono foot">@esdhoops</p>
 </div>
+<script src="social.js"></script>
 </body></html>

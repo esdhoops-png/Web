@@ -1,52 +1,57 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Carrusel — Nuestros programas</title>
+<html lang="es"><head><meta charset="utf-8"><title>Carrusel — Programas</title>
 <link rel="stylesheet" href="social.css">
 <style>
-  /* Uso: carrusel.html#0 (portada) … #5 */
   .canvas { --w: 1080px; --h: 1350px; }
-  .court { width: 1300px; left: -110px; top: 820px; opacity: .1; }
-  .logo { top: 70px; left: 80px; width: 96px; }
-  .count { position: absolute; top: 92px; right: 80px; font-family: var(--display); font-size: 40px; color: var(--arena); letter-spacing: .1em; }
-  .num { position: absolute; right: 50px; top: 170px; font-family: var(--display); font-size: 560px; line-height: .8; color: transparent; -webkit-text-stroke: 4px rgba(212,192,179,.5); }
-  .eyebrow { position: absolute; left: 80px; top: 560px; }
-  .title { position: absolute; left: 76px; top: 620px; font-size: 160px; right: 80px; }
-  .body-text { position: absolute; left: 80px; right: 120px; top: 960px; }
-  .swipe { position: absolute; right: 80px; bottom: 70px; font-family: var(--display); letter-spacing: .14em; font-size: 30px; color: var(--naranja); text-transform: uppercase; }
-  .handle { left: 80px; bottom: 70px; font-size: 26px; opacity: .8; }
-  .cover .title { top: 430px; font-size: 180px; }
-  .cover .eyebrow { top: 380px; }
-  .cover .body-text { top: 1010px; }
+
+  /* Uso: carrusel.html#0 (portada) … #5 */
+  .panel { left: 60px; right: 60px; top: 90px; bottom: 90px; }
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .ttl { font-size: 140px; margin: 70px 0 20px; }
+  .icon { width: 360px; height: 360px; border-radius: 50%; background: var(--hueso); box-shadow: inset 0 0 0 1.5px var(--linea); display: grid; place-items: center; margin: 30px auto 40px; }
+  .icon svg { width: 44%; fill: none; stroke: var(--azul); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .row-label { margin-top: auto; }
+  .txt { margin-top: 18px; }
+  .covergrid { display: flex; gap: 22px; justify-content: center; margin: 40px 0; }
+  .covergrid span { width: 150px; height: 150px; border-radius: 50%; background: var(--hueso); box-shadow: inset 0 0 0 1.5px var(--linea); display: grid; place-items: center; }
+  .covergrid svg { width: 46%; fill: none; stroke: var(--azul); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 </style></head>
 <body>
-<div class="canvas" id="c">
-  <svg class="court"></svg>
-  <img class="logo" src="../logo/esd-logo-arena.svg" alt="">
-  <div class="count" id="count"></div>
-  <div class="num" id="num"></div>
-  <div class="eyebrow" id="eb"></div>
-  <h1 class="display title" id="title"></h1>
-  <p class="body-text" id="txt"></p>
-  <div class="handle">@esdhoops</div>
-  <div class="swipe" id="swipe">Desliza →</div>
+<div class="canvas stone">
+  <svg class="arches"></svg>
+  <div class="panel glass"><div class="in">
+    <div class="top"><img class="logo" src="../logo/esd-logo-azul.svg" alt=""><span class="seg"><span class="on">Programas</span><span id="count"></span></span><span class="pill pill-line">Desliza →</span></div>
+    <h1 class="big ttl" id="ttl"></h1>
+    <div id="mid"></div>
+    <div class="row-label"><span id="lbl"></span><span>ESD Hoops</span></div>
+    <p class="body-text txt" id="txt"></p>
+  </div></div>
 </div>
 <script src="social.js"></script>
 <script>
-  const SLIDES = [
-    ['Lo que hacemos', 'Nuestros<br><span class="n">progra-</span><br>mas', 'Cinco formatos para competir, desarrollarte y darte a conocer.'],
-    ['Programa 01', 'Torneos<br><span class="o">3x3</span>', 'Competencias rápidas e intensas con la energía del baloncesto de calle a nivel competitivo.'],
-    ['Programa 02', 'Liga 5x5<br><span class="a">estilo AAU</span>', 'Temporada regular, calendario de partidos y desarrollo continuo por equipos.'],
-    ['Programa 03', 'Basketball<br><span class="n">camps</span>', 'Técnica, fundamentos y mentalidad competitiva junto a jugadores profesionales.'],
-    ['Programa 04', 'Com-<br><span class="o">bines</span>', 'Evaluaciones de rendimiento físico y habilidades con métricas claras de progreso.'],
-    ['Programa 05', 'Showcase<br><span class="a">camps</span>', 'Muéstrate ante equipos, programas y entrenadores en busca de nuevas oportunidades.'],
+  const I = {
+    a: '<circle cx="24" cy="24" r="17"/><path d="M24 7v34M8.5 16c6 4 25 4 31 0M8.5 32c6-4 25-4 31 0"/>',
+    b: '<rect x="8" y="10" width="32" height="28" rx="3"/><path d="M8 18h32M16 6v8M32 6v8"/>',
+    c: '<circle cx="24" cy="16" r="7"/><path d="M10 41c1-9 6.5-14 14-14s13 5 14 14"/>',
+    d: '<path d="M6 38l10-20 8 11 6-9 12 18"/><circle cx="16" cy="14" r="2.5"/>',
+    e: '<path d="M4 24s7-12 20-12 20 12 20 12-7 12-20 12S4 24 4 24z"/><circle cx="24" cy="24" r="5"/>',
+  };
+  const S = [
+    [null, 'Nuestros<br>programas', 'Lo que hacemos', 'Cinco formatos para competir, desarrollarte y darte a conocer.'],
+    ['a', 'Torneos 3x3', 'Formato 01', 'Ritmo de calle a nivel competitivo, con reglamento FIBA 3x3.'],
+    ['b', 'Liga 5x5 AAU', 'Formato 02', 'Temporada regular, calendario de partidos y desarrollo por equipos.'],
+    ['c', 'Camps', 'Formato 03', 'Técnica, fundamentos y mentalidad junto a jugadores profesionales.'],
+    ['d', 'Combines', 'Formato 04', 'Evaluaciones físicas y técnicas con métricas claras de progreso.'],
+    ['e', 'Showcases', 'Formato 05', 'Escaparate ante equipos, programas y entrenadores.'],
   ];
-  const i = Math.min(SLIDES.length - 1, parseInt(location.hash.slice(1) || '0', 10));
-  const [eb, title, txt] = SLIDES[i];
-  document.getElementById('eb').textContent = eb;
-  document.getElementById('title').innerHTML = title;
-  document.getElementById('txt').textContent = txt;
-  document.getElementById('count').textContent = `${String(i + 1).padStart(2, '0')} / ${String(SLIDES.length).padStart(2, '0')}`;
-  document.getElementById('num').textContent = i ? String(i).padStart(2, '0') : '';
-  if (!i) document.getElementById('c').classList.add('cover');
-  if (i === SLIDES.length - 1) document.getElementById('swipe').textContent = 'esdhoops.com';
+  const i = Math.min(S.length - 1, parseInt(location.hash.slice(1) || '0', 10));
+  const [ic, t, l, x] = S[i];
+  document.getElementById('ttl').innerHTML = t;
+  document.getElementById('lbl').textContent = l;
+  document.getElementById('txt').textContent = x;
+  document.getElementById('count').textContent = `${i + 1} / ${S.length}`;
+  document.getElementById('mid').innerHTML = ic
+    ? `<div class="icon"><svg viewBox="0 0 48 48">${I[ic]}</svg></div>`
+    : `<div class="covergrid">${Object.values(I).map((p) => `<span><svg viewBox="0 0 48 48">${p}</svg></span>`).join('')}</div>`;
 </script>
 </body></html>

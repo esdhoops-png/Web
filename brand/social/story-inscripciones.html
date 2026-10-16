@@ -3,30 +3,27 @@
 <link rel="stylesheet" href="social.css">
 <style>
   .canvas { --w: 1080px; --h: 1920px; }
-  .court { width: 1400px; left: -160px; top: 1100px; opacity: .12; }
-  .logo { top: 180px; left: 50%; transform: translateX(-50%); width: 150px; }
-  .eyebrow { position: absolute; top: 470px; left: 0; right: 0; text-align: center; font-size: 36px; }
-  .title { position: absolute; top: 540px; left: 0; right: 0; text-align: center; font-size: 200px; }
-  .band { top: 1200px; height: 104px; font-size: 56px; padding-left: 40px; }
-  .band.b2 { top: 1320px; transform: rotate(3deg); background: transparent; color: var(--arena); box-shadow: inset 0 0 0 3px var(--arena); }
-  /* Zona segura para el sticker de enlace */
-  .sticker { position: absolute; left: 50%; bottom: 360px; transform: translateX(-50%); border: 4px dashed rgba(212,192,179,.5); width: 640px; height: 150px;
-             display: grid; place-items: center; font-family: var(--display); letter-spacing: .14em; font-size: 32px; color: var(--arena); text-transform: uppercase; }
-  .arrow { position: absolute; left: 50%; bottom: 520px; transform: translateX(-50%); width: 50px; height: 100px; }
-  .arrow path { fill: none; stroke: var(--naranja); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
-  .handle { left: 0; right: 0; text-align: center; bottom: 230px; font-size: 30px; opacity: .8; }
+
+  .cap { left: 50%; top: 170px; translate: -50% 0; width: 620px; height: 1180px; }
+  .cap > .in { padding: 36px 36px 56px; }
+  .circle { width: 548px; height: 548px; }
+  .lbl { margin-top: 50px; }
+  .ttl { margin-top: 20px; font-size: 130px; }
+  .pill { margin-top: auto; }
+  .sticker { position: absolute; left: 50%; bottom: 250px; translate: -50% 0; width: 640px; height: 150px; border-radius: 999px; border: 3px dashed rgba(23,45,71,.35); display: grid; place-items: center; }
+  .foot { position: absolute; left: 0; right: 0; bottom: 150px; text-align: center; }
 </style></head>
 <body>
-<div class="canvas">
-  <svg class="court"></svg>
-  <img class="logo" src="../logo/esd-logo-arena.svg" alt="">
-  <div class="eyebrow">Próximo torneo</div>
-  <h1 class="display title">Inscri-<br>pciones<br><span class="n">abiertas</span></h1>
-  <div class="band"><span>Torneo 3x3</span><span class="dot">●</span><span>Open</span><span class="dot">●</span><span>Senior</span><span class="dot">●</span><span>Torneo 3x3</span><span class="dot">●</span><span>Open</span><span class="dot">●</span><span>Senior</span></div>
-  <div class="band b2"><span>Cupos limitados</span><span class="dot">●</span><span>Cupos limitados</span><span class="dot">●</span><span>Cupos limitados</span><span class="dot">●</span><span>Cupos limitados</span></div>
-  <svg class="arrow" viewBox="0 0 60 120"><path d="M30 6V110M8 88l22 22 22-22"/></svg>
-  <div class="sticker">Sticker de enlace aquí</div>
-  <div class="handle">@esdhoops</div>
+<div class="canvas ">
+  <div class="bgphoto"><img src="../../assets/img/fotos/street-series-campeones-2.jpg" alt=""></div>
+  <div class="cap glass"><div class="in">
+    <div class="circle"><img src="../../assets/img/fotos/street-series-jugador.jpg" alt=""></div>
+    <p class="label lbl">Próximo torneo</p>
+    <h1 class="big ttl">Inscripciones<br>abiertas</h1>
+    <span class="pill pill-dark">Torneo 3x3 · cupos limitados</span>
+  </div></div>
+  <div class="sticker mono">Sticker de enlace aquí</div>
+  <p class="mono foot">@esdhoops</p>
 </div>
 <script src="social.js"></script>
 </body></html>

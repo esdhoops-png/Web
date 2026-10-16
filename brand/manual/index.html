@@ -123,7 +123,10 @@ section { margin-top: 18px; }
 .bands-demo .b::after { content: ''; position: absolute; inset: 0; background: #1f3f66; mix-blend-mode: color; }
 .bands-demo .tk { background: #1d3d63; color: rgba(246, 243, 240, 0.75); font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; display: flex; align-items: center; white-space: nowrap; overflow: hidden; padding-left: 8px; }
 .tinted { position: absolute; inset: 0; }
-.court-demo svg { width: 70%; fill: none; stroke: var(--azul); stroke-width: 3; opacity: 0.55; }
+.orb-demo { position: relative; width: 52%; aspect-ratio: 1; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px var(--linea); display: grid; place-items: center; }
+.orb-demo svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.orb-demo text { font-family: var(--body); font-size: 11.5px; font-weight: 600; letter-spacing: 0.24em; fill: var(--azul); opacity: 0.75; }
+.orb-demo i { width: 66%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 34% 28%, #fbf8f4 0%, #e9e0d6 38%, #cbbdaf 72%, #a8998b 100%); box-shadow: 0 16px 22px -12px rgba(14, 28, 46, 0.45); }
 .arches-demo svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; }
 
 /* Fotografía */
@@ -257,7 +260,7 @@ section { margin-top: 18px; }
   <section id="tipo" class="glass"><div class="card">
     <div class="sec-head"><h2>Tipografía</h2><span class="mono">Gratis en Google Fonts</span></div>
     <div class="types">
-      <div class="ty"><div class="spec t1">Elevamos el juego</div><dl><dt>Fuente</dt><dd>Anton</dd><dt>Uso</dt><dd>Titulares, siempre en mayúsculas</dd><dt>Interlínea</dt><dd>0,9</dd></dl></div>
+      <div class="ty"><div class="spec t1">Street Series I</div><dl><dt>Fuente</dt><dd>Anton</dd><dt>Uso</dt><dd>Titulares, siempre en mayúsculas</dd><dt>Interlínea</dt><dd>0,9</dd></dl></div>
       <div class="ty"><div class="spec t2">Torneos, ligas, camps y entrenamientos donde los jugadores compiten y se dan a conocer.</div><dl><dt>Fuente</dt><dd>Inter</dd><dt>Uso</dt><dd>Textos, botones, captions</dd><dt>Pesos</dt><dd>400 · 500 · 600</dd></dl></div>
       <div class="ty"><div class="spec t3">5–6 Sept · 3x3 · @esdhoops</div><dl><dt>Fuente</dt><dd>IBM Plex Mono</dd><dt>Uso</dt><dd>Datos, fechas, tickers</dd><dt>Estilo</dt><dd>Mayúsculas, espaciado amplio</dd></dl></div>
     </div>
@@ -271,8 +274,8 @@ section { margin-top: 18px; }
       <div class="el"><div class="stage"><div class="circles-demo"><span style="background-image:url('img/foto-street-series-jugador.jpg')"></span><span style="background-image:url('img/foto-street-series-campeones-1.jpg')"></span><span style="background-image:url('img/foto-street-series-campeones.jpg')"></span></div></div><div class="txt"><b>Círculos de foto</b><span>Jugadores, equipos y momentos recortados en círculo, en blanco y negro cálido.</span></div></div>
       <div class="el"><div class="stage"><div class="pills-demo"><span class="p1"><span>Programas</span><span>Temporada</span></span><span class="p2">Inscríbete</span><span class="p3">★ Plazas limitadas</span></div></div><div class="txt"><b>Píldoras</b><span>Botones y etiquetas siempre redondeados. Selector azul con opción activa en arena.</span></div></div>
       <div class="el"><div class="stage"><div class="bands-demo"><div class="b" style="background-image:url('img/foto-street-series-campeones.jpg');background-position:50% 25%;background-size:240%"></div><div class="tk">STREET SERIES I · 3X3 · FIBA · CAMPEONES</div><div class="b" style="background-image:url('img/foto-street-series-campeones-1.jpg');background-position:50% 40%"></div><div class="tk">GRACIAS FAMILIA · @ESDHOOPS</div><div class="b" style="background-image:url('img/foto-street-series-jugador.jpg');background-position:50% 35%;background-size:200%"></div></div></div><div class="txt"><b>Bandas con tinte azul</b><span>Para crónicas y resultados: una foto partida en bandas con ticker en mono.</span></div></div>
-      <div class="el court-demo"><div class="stage"><svg viewBox="0 0 500 470" aria-hidden="true"><rect x="2" y="2" width="496" height="466"/><rect x="170" y="2" width="160" height="192"/><circle cx="250" cy="194" r="60"/><path d="M30 2V100A225 225 0 0 0 470 100V2"/><path d="M220 40H280"/><circle cx="250" cy="52" r="8"/></svg></div><div class="txt"><b>Líneas de cancha</b><span>Media cancha FIBA como textura de fondo, siempre muy suave.</span></div></div>
-      <div class="el arches-demo"><div class="stage" style="background:var(--hueso)"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g stroke-width="12"><path d="M90 0V80A110 110 0 0 0 310 80V0" stroke="#d7cfc7"/><path d="M60 0V80A140 140 0 0 0 340 80V0" stroke="#e3ddd7"/><path d="M30 0V80A170 170 0 0 0 370 80V0" stroke="#cfc6bd"/><path d="M90 300V220A110 110 0 0 1 310 220V300" stroke="#d7cfc7"/><path d="M60 300V220A140 140 0 0 1 340 220V300" stroke="#e3ddd7"/></g></svg></div><div class="txt"><b>Pistas concéntricas</b><span>Curvas en tonos piedra detrás de tarjetas verticales (entrenos, stories).</span></div></div>
+      <div class="el"><div class="stage"><div class="orb-demo"><svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="mr" d="M100 100m-86 0a86 86 0 1 1 172 0a86 86 0 1 1-172 0"/></defs><text><textPath href="#mr" textLength="535" lengthAdjust="spacing">ESD HOOPS + STREET SERIES + ESD HOOPS + BASKETBALL +</textPath></text></svg><i></i></div></div><div class="txt"><b>Balón con anillo</b><span>Balón en relieve dentro de un círculo con texto girando. En la web rota al hacer scroll.</span></div></div>
+      <div class="el arches-demo"><div class="stage" style="background:var(--hueso)"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g stroke-width="12"><path d="M90 0V80A110 110 0 0 0 310 80V0" stroke="#d7cfc7"/><path d="M60 0V80A140 140 0 0 0 340 80V0" stroke="#e3ddd7"/><path d="M30 0V80A170 170 0 0 0 370 80V0" stroke="#cfc6bd"/><path d="M90 300V220A110 110 0 0 1 310 220V300" stroke="#d7cfc7"/><path d="M60 300V220A140 140 0 0 1 340 220V300" stroke="#e3ddd7"/></g></svg></div><div class="txt"><b>Pistas concéntricas</b><span>Curvas en tonos piedra detrás de cápsulas y tarjetas verticales.</span></div></div>
     </div>
   </div></section>
 
@@ -290,24 +293,23 @@ section { margin-top: 18px; }
   <!-- REDES -->
   <section id="redes" class="glass"><div class="card">
     <div class="sec-head"><h2>Redes</h2><span class="mono">brand/social · exportadas a PNG</span></div>
-    <p class="intro">Plantillas listas para Instagram. Se editan en los archivos HTML de la carpeta brand/social y se exportan a PNG con un comando. Foto de perfil: el escudo arena sobre azul.</p>
+    <p class="intro">Plantillas listas para Instagram. Se editan en los archivos HTML de la carpeta brand/social y se exportan a PNG con un comando. Foto de perfil: el logo original, azul sobre arena.</p>
     <div class="social">
-      <div class="so"><img src="img/post-capsula.jpg" alt="Plantilla post cápsula" loading="lazy"><b>Cápsula de evento</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-street-series-recap.jpg" alt="Plantilla recap del torneo" loading="lazy"><b>Recap del torneo</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-campeones.jpg" alt="Plantilla campeones" loading="lazy"><b>Campeones</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-jugador-destacado.jpg" alt="Plantilla MVP" loading="lazy"><b>MVP / jugador</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-torneo-3x3.jpg" alt="Plantilla anuncio de torneo" loading="lazy"><b>Anuncio de torneo</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-resultado.jpg" alt="Plantilla resultado" loading="lazy"><b>Resultado final</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-entrenamiento.jpg" alt="Plantilla entrenamientos" loading="lazy"><b>Entrenamientos</b><span>Post · falta foto</span></div>
-      <div class="so"><img src="img/post-partner-kgm.jpg" alt="Plantilla partner KGM" loading="lazy"><b>Partner KGM</b><span>Post · falta foto del coche</span></div>
-      <div class="so"><img src="img/post-camp-maite-cazorla.jpg" alt="Plantilla camp Maite Cazorla" loading="lazy"><b>Camp Maite Cazorla</b><span>Post 1080×1350</span></div>
-      <div class="so"><img src="img/post-frase.jpg" alt="Plantilla frase" loading="lazy"><b>Frase de marca</b><span>Post 1080×1080</span></div>
-      <div class="so"><img src="img/story-inscripciones.jpg" alt="Plantilla story inscripciones" loading="lazy"><b>Story inscripciones</b><span>Story 1080×1920</span></div>
-      <div class="so"><img src="img/story-proximamente.jpg" alt="Plantilla story próximamente" loading="lazy"><b>Story próximamente</b><span>Story 1080×1920</span></div>
-      <div class="so"><img src="img/carrusel-programas-1.jpg" alt="Portada del carrusel de programas" loading="lazy"><b>Carrusel programas</b><span>6 slides 1080×1350</span></div>
-      <div class="so"><img src="img/destacada-3x3.jpg" alt="Portada de historia destacada" loading="lazy"><b>Destacadas</b><span>6 portadas 1080×1080</span></div>
-      <div class="so"><img src="img/perfil-1080.jpg" alt="Foto de perfil" loading="lazy"><b>Foto de perfil</b><span>1080×1080</span></div>
-      <div class="so"><img src="img/banner-x.jpg" alt="Banner para X" loading="lazy"><b>Banners</b><span>X · LinkedIn · YouTube · Facebook</span></div>
+      <div class="so"><img src="img/post-capsula.jpg" alt="Plantilla Cápsula de evento" loading="lazy"><b>Cápsula de evento</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/post-torneo-3x3.jpg" alt="Plantilla Anuncio de torneo" loading="lazy"><b>Anuncio de torneo</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/post-street-series-recap.jpg" alt="Plantilla Recap del torneo" loading="lazy"><b>Recap del torneo</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/post-campeones.jpg" alt="Plantilla Campeones" loading="lazy"><b>Campeones</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/post-jugador-destacado.jpg" alt="Plantilla MVP / jugador" loading="lazy"><b>MVP / jugador</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/post-resultado.jpg" alt="Plantilla Resultado final" loading="lazy"><b>Resultado final</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/post-partner-kgm.jpg" alt="Plantilla Partner KGM" loading="lazy"><b>Partner KGM</b><span>Post · falta foto del coche</span></div>
+      <div class="so"><img src="img/post-entrenamiento.jpg" alt="Plantilla Entrenamientos" loading="lazy"><b>Entrenamientos</b><span>Post · falta foto</span></div>
+      <div class="so"><img src="img/post-camp-maite-cazorla.jpg" alt="Plantilla Camp Maite Cazorla" loading="lazy"><b>Camp Maite Cazorla</b><span>Post 1080×1350</span></div>
+      <div class="so"><img src="img/story-inscripciones.jpg" alt="Plantilla Story inscripciones" loading="lazy"><b>Story inscripciones</b><span>Story 1080×1920</span></div>
+      <div class="so"><img src="img/story-proximamente.jpg" alt="Plantilla Story muy pronto" loading="lazy"><b>Story muy pronto</b><span>Story 1080×1920</span></div>
+      <div class="so"><img src="img/carrusel-programas-1.jpg" alt="Plantilla Carrusel programas" loading="lazy"><b>Carrusel programas</b><span>6 slides 1080×1350</span></div>
+      <div class="so"><img src="img/destacada-3x3.jpg" alt="Plantilla Destacadas" loading="lazy"><b>Destacadas</b><span>6 portadas 1080×1080</span></div>
+      <div class="so"><img src="img/perfil-1080.jpg" alt="Plantilla Foto de perfil" loading="lazy"><b>Foto de perfil</b><span>1080×1080</span></div>
+      <div class="so wide"><img src="img/banner-x.jpg" alt="Plantilla Banners" loading="lazy"><b>Banners</b><span>X · LinkedIn · YouTube · Facebook</span></div>
     </div>
   </div></section>
 
@@ -343,14 +345,14 @@ section { margin-top: 18px; }
     <div class="sec-head"><h2>Archivos</h2><span class="mono">Repositorio web</span></div>
     <div class="files">
       brand/logo/ — esd-logo-azul.svg · esd-logo-arena.svg · esd-logo-blanco.svg · fondos 1080<br>
-      brand/social/ — plantillas HTML editables · png/ con las 29 piezas exportadas<br>
+      brand/social/ — plantillas HTML editables · png/ con las 28 piezas exportadas<br>
       brand/export.cjs — regenera los PNG: npm i -D playwright &amp;&amp; node brand/export.cjs<br>
       assets/fonts/ — Anton · Inter · IBM Plex Mono<br>
       assets/img/fotos/ — fotos optimizadas del Street Series I
     </div>
   </div></section>
 
-  <footer class="foot"><span class="mono">ESD Hoops · Elevamos el juego</span><span class="mono">info@esdhoops.com</span></footer>
+  <footer class="foot"><span class="mono">ESD Hoops · Basketball events</span><span class="mono">info@esdhoops.com</span></footer>
 </div>
 <div class="toast" id="toast" role="status"></div>
 

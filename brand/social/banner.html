@@ -1,44 +1,37 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Banners — X, LinkedIn, YouTube, Facebook</title>
+<html lang="es"><head><meta charset="utf-8"><title>Banners</title>
 <link rel="stylesheet" href="social.css">
 <style>
-  /* Uso: banner.html#x (1500×500) · #linkedin (1584×396) · #youtube (2560×1440) · #facebook (1640×624) */
   .canvas { --w: 1500px; --h: 500px; }
-  .safe { position: absolute; display: flex; align-items: center; gap: 4%; }
-  .safe img { height: 100%; }
-  .words { font-family: var(--display); text-transform: uppercase; line-height: .92; color: var(--crema); }
-  .words .n { color: var(--naranja); }
-  .words small { display: block; color: var(--arena); letter-spacing: .14em; }
-  .court { opacity: .12; }
-  .band { height: 18%; transform: rotate(-3deg); font-size: 100px; padding-left: 30px; }
+
+  /* Uso: banner.html#x (1500×500) · #linkedin (1584×396) · #youtube (2560×1440) · #facebook (1640×624) */
+  .bar { position: absolute; left: 50%; top: 50%; translate: -50% -50%; border-radius: 999px; }
+  .bar > .in { height: 100%; border-radius: 999px; background: var(--papel); display: flex; align-items: center; gap: 4%; padding: 0 5%; }
+  .bar .ball { height: 72%; width: auto; }
+  .words { display: flex; flex-direction: column; gap: 6px; }
+  .words .big { line-height: .9; }
 </style></head>
 <body>
-<div class="canvas" id="c">
-  <svg class="court" id="court"></svg>
-  <div class="band" id="band"><span>Torneos 3x3</span><span class="dot">●</span><span>Liga 5x5 AAU</span><span class="dot">●</span><span>Camps</span><span class="dot">●</span><span>Combines</span><span class="dot">●</span><span>Showcases</span><span class="dot">●</span><span>Torneos 3x3</span><span class="dot">●</span><span>Liga 5x5 AAU</span></div>
-  <div class="safe" id="safe">
-    <img src="../logo/esd-logo-arena.svg" alt="">
-    <div class="words" id="words"><small>Basketball events</small>Elevamos el juego,<br><span class="n">evento por evento</span></div>
-  </div>
+<div class="canvas ">
+  <div class="bgphoto"><img src="../../assets/img/fotos/street-series-campeones.jpg" alt=""></div>
+  <div class="bar glass" id="bar"><div class="in">
+    <div class="ball" data-angle="0.8"></div>
+    <div class="words"><p class="label" id="l">Basketball events</p><p class="big" id="t">ESD Hoops</p></div>
+    <img src="../logo/esd-logo-azul.svg" alt="" id="lg" style="margin-left:auto">
+  </div></div>
 </div>
 <script src="social.js"></script>
 <script>
-  /* [ancho, alto, zona segura {l,t,w,h}, tamaño texto, bandaTop, cancha] */
-  const SIZES = {
-    x:        [1500, 500, { l: 330, t: 100, h: 250 }, 64, 410, { w: 900, r: -120, t: -180 }],
-    linkedin: [1584, 396, { l: 440, t: 90, h: 200 }, 60, 320, { w: 900, r: -100, t: -220 }],
-    youtube:  [2560, 1440, { l: 560, t: 560, h: 330 }, 104, 1010, { w: 1700, r: -200, t: -380 }],
-    facebook: [1640, 624, { l: 260, t: 150, h: 300 }, 82, 520, { w: 1000, r: -120, t: -200 }],
-  };
-  const k = location.hash.slice(1) in SIZES ? location.hash.slice(1) : 'x';
-  const [w, h, safe, fs, bandTop, court] = SIZES[k];
-  const c = document.getElementById('c');
+  const S = { x: [1500, 500, 860, 240], linkedin: [1584, 396, 900, 200], youtube: [2560, 1440, 1400, 330], facebook: [1640, 624, 1000, 260] };
+  const k = location.hash.slice(1) in S ? location.hash.slice(1) : 'x';
+  const [w, h, bw, bh] = S[k];
+  const c = document.querySelector('.canvas');
   c.style.setProperty('--w', w + 'px'); c.style.setProperty('--h', h + 'px');
-  Object.assign(document.getElementById('safe').style, { left: safe.l + 'px', top: safe.t + 'px', height: safe.h + 'px' });
-  document.getElementById('words').style.fontSize = fs + 'px';
-  document.querySelector('#words small').style.fontSize = fs * 0.36 + 'px';
-  const band = document.getElementById('band');
-  Object.assign(band.style, { top: bandTop + 'px', height: h * 0.16 + 'px', fontSize: h * 0.085 + 'px' });
-  Object.assign(document.getElementById('court').style, { width: court.w + 'px', right: court.r + 'px', top: court.t + 'px', transform: 'rotate(180deg)' });
+  const bar = document.getElementById('bar');
+  bar.style.width = bw + 'px'; bar.style.height = bh + 'px';
+  document.getElementById('t').style.fontSize = bh * 0.34 + 'px';
+  document.getElementById('l').style.fontSize = Math.max(12, bh * 0.07) + 'px';
+  document.getElementById('lg').style.height = bh * 0.42 + 'px';
+  document.querySelector('.ball').style.width = bh * 0.72 + 'px';
 </script>
 </body></html>

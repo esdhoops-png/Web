@@ -3,36 +3,34 @@
 <link rel="stylesheet" href="social.css">
 <style>
   .canvas { --w: 1080px; --h: 1350px; }
-  .court { width: 1100px; left: -10px; bottom: -120px; opacity: .1; }
-  .logo { top: 70px; left: 80px; width: 100px; }
-  .head { position: absolute; top: 92px; right: 80px; text-align: right; }
-  .head .eyebrow { display: block; margin-bottom: 10px; }
-  .head .t { font-family: var(--display); font-size: 40px; text-transform: uppercase; color: var(--arena); }
-  .final { position: absolute; top: 300px; left: 0; right: 0; text-align: center; font-size: 180px; letter-spacing: .04em; }
-  .board { position: absolute; left: 80px; right: 80px; top: 560px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px;
-           background: rgba(14,28,46,.6); border: 3px solid rgba(212,192,179,.35); padding: 56px 40px; }
-  .team { text-align: center; }
-  .team .score { font-family: var(--display); font-size: 220px; line-height: .9; color: var(--crema); }
-  .team.win .score { color: var(--naranja); }
-  .team .name { font-family: var(--display); font-size: 40px; text-transform: uppercase; letter-spacing: .06em; color: var(--arena); margin-top: 18px; }
-  .vs { font-family: var(--display); font-size: 60px; color: var(--arena); opacity: .6; }
-  .meta { position: absolute; left: 80px; right: 80px; top: 1060px; display: flex; justify-content: space-between; font-family: var(--display); text-transform: uppercase; font-size: 32px; letter-spacing: .1em; color: var(--arena); }
-  .meta b { color: var(--crema); font-weight: 400; }
-  .handle { left: 80px; bottom: 60px; font-size: 26px; opacity: .8; }
+
+  .panel { left: 60px; right: 60px; top: 130px; bottom: 130px; }
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .ttl { font-size: 120px; text-align: center; margin: 60px 0 10px; }
+  .sub { text-align: center; margin-bottom: 60px; }
+  .score { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; }
+  .team { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .team .circle { width: 190px; height: 190px; display: grid; place-items: center; background: var(--hueso); box-shadow: inset 0 0 0 1.5px var(--linea); font-family: var(--display); font-size: 60px; }
+  .team b { font-size: 24px; font-weight: 600; }
+  .pts { font-family: var(--display); font-size: 170px; line-height: 1; }
+  .pts.win { color: var(--azul); } .pts.lose { color: rgba(23,45,71,.35); }
+  .vs { font-family: var(--mono); font-size: 26px; color: var(--suave); }
+  .foot { margin-top: auto; display: flex; justify-content: center; }
 </style></head>
 <body>
-<div class="canvas">
-  <svg class="court"></svg>
-  <img class="logo" src="../logo/esd-logo-arena.svg" alt="">
-  <div class="head"><span class="eyebrow">Resultado</span><span class="t">ESD Street Series I · 3x3</span></div>
-  <h1 class="display final"><span class="o">Final</span></h1>
-  <div class="board">
-    <div class="team win"><div class="score">21</div><div class="name">Equipo local</div></div>
-    <div class="vs">–</div>
-    <div class="team"><div class="score">18</div><div class="name">Equipo visita</div></div>
-  </div>
-  <div class="meta"><span>MVP <b>Nombre Apellido</b></span><span>Categoría <b>Open</b></span></div>
-  <div class="handle">@esdhoops</div>
+<div class="canvas ">
+  <svg class="arches"></svg>
+  <div class="panel glass"><div class="in">
+    <div class="top"><img class="logo" src="../logo/esd-logo-azul.svg" alt=""><span class="seg"><span class="on">Final</span><span>3x3</span></span><span class="pill pill-line">Categoría</span></div>
+    <h1 class="big ttl">Resultado</h1>
+    <p class="label sub">ESD Street Series</p>
+    <div class="score">
+      <div class="team"><span class="circle">EL</span><span class="pts win">21</span><b>Equipo local</b></div>
+      <span class="vs">VS</span>
+      <div class="team"><span class="circle">EV</span><span class="pts lose">18</span><b>Equipo visita</b></div>
+    </div>
+    <div class="foot"><span class="pill pill-soft">★ MVP · Nombre Apellido</span></div>
+  </div></div>
 </div>
 <script src="social.js"></script>
 </body></html>

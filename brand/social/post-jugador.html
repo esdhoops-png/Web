@@ -1,38 +1,31 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Post — Jugador destacado</title>
+<html lang="es"><head><meta charset="utf-8"><title>Post — MVP / jugador destacado</title>
 <link rel="stylesheet" href="social.css">
 <style>
   .canvas { --w: 1080px; --h: 1350px; }
-  /* Para cambiar la foto, sustituye la ruta del <img> dentro de .photo */
-  .photo { position: absolute; inset: 0 0 330px 300px; background: linear-gradient(160deg, var(--cancha), var(--noche));
-           clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%); overflow: hidden; }
-  .photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.2) contrast(1.05); }
-  .photo .num { position: absolute; right: 40px; top: 60px; font-family: var(--display); font-size: 620px; line-height: .8; color: transparent; -webkit-text-stroke: 4px rgba(212,192,179,.35); }
-  .court { width: 900px; right: -120px; top: 120px; opacity: .1; }
-  .logo { top: 70px; left: 80px; width: 100px; }
-  .mvp { position: absolute; left: 70px; top: 300px; font-size: 300px; writing-mode: vertical-rl; transform: rotate(180deg); }
-  .cut { height: 520px; }
-  .name { position: absolute; left: 80px; bottom: 210px; font-size: 128px; color: var(--noche); }
-  .name span { display: block; font-size: 58px; color: var(--azul); opacity: .75; letter-spacing: .04em; }
-  .stats { position: absolute; left: 80px; right: 80px; bottom: 70px; display: flex; gap: 60px; color: var(--noche); }
-  .stats div { font-family: var(--display); font-size: 70px; line-height: 1; }
-  .stats small { display: block; font-size: 24px; letter-spacing: .16em; color: var(--azul); opacity: .7; margin-top: 8px; }
-  .handle { right: 80px; bottom: 80px; color: var(--azul); font-size: 26px; }
+
+  .phone { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 620px; border-radius: 64px; }
+  .phone > .in { border-radius: 52px; background: var(--hueso); padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .card { background: var(--papel); border-radius: 44px; padding: 40px 36px 34px; }
+  .ttl { font-size: 104px; margin: 12px 0 26px; }
+  .circle { width: 100%; aspect-ratio: 1; border-radius: 36px; }
+  .circle img { object-position: 50% 30%; }
+  .stats { display: flex; gap: 10px; background: var(--papel); border-radius: 999px; padding: 12px; }
+  .stats .chip { flex: 1; flex-direction: column; height: auto; padding: 14px 0; gap: 2px; border-radius: 40px; }
+  .stats b { font-family: var(--display); font-weight: 400; font-size: 46px; line-height: 1; }
+  .stats small { font-size: 16px; color: var(--suave); letter-spacing: .08em; text-transform: uppercase; }
 </style></head>
 <body>
-<div class="canvas">
-  <div class="photo"><div class="num">23</div><img src="../../assets/img/fotos/street-series-jugador.jpg" alt="" onerror="this.remove()"></div>
-  <svg class="court"></svg>
-  <img class="logo" src="../logo/esd-logo-arena.svg" alt="">
-  <h1 class="display mvp"><span class="n">MVP</span></h1>
-  <div class="cut"></div>
-  <h2 class="display name"><span>ESD Street Series I</span>Nombre Apellido</h2>
-  <div class="stats">
-    <div>12<small>Puntos</small></div>
-    <div>06<small>Rebotes</small></div>
-    <div>04<small>Asistencias</small></div>
-  </div>
-  <div class="handle">@esdhoops</div>
+<div class="canvas stone">
+  <svg class="arches"></svg>
+  <div class="phone glass"><div class="in">
+    <div class="card">
+      <p class="label">MVP · ESD Street Series I</p>
+      <h1 class="big ttl">Nombre<br>Apellido</h1>
+      <div class="circle color"><img src="../../assets/img/fotos/street-series-jugador.jpg" alt=""></div>
+    </div>
+    <div class="stats"><span class="chip"><b>12</b><small>Puntos</small></span><span class="chip"><b>06</b><small>Rebotes</small></span><span class="chip"><b>04</b><small>Asist.</small></span></div>
+  </div></div>
 </div>
 <script src="social.js"></script>
 </body></html>

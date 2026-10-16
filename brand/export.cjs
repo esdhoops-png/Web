@@ -13,20 +13,19 @@ const OUT = path.join(__dirname, 'social', 'png');
 
 const JOBS = [
   ['perfil.html', 'perfil-1080.png'],
+  ['post-capsula.html', 'post-capsula.png'],
   ['post-torneo.html', 'post-torneo-3x3.png'],
-  ['post-resultado.html', 'post-resultado.png'],
-  ['post-jugador.html', 'post-jugador-destacado.png'],
   ['post-recap.html', 'post-street-series-recap.png'],
   ['post-campeones.html', 'post-campeones.png'],
+  ['post-jugador.html', 'post-jugador-destacado.png'],
+  ['post-resultado.html', 'post-resultado.png'],
   ['post-kgm.html', 'post-partner-kgm.png'],
   ['post-entrenamiento.html', 'post-entrenamiento.png'],
-  ['post-capsula.html', 'post-capsula.png'],
   ['post-camp.html', 'post-camp-maite-cazorla.png'],
-  ['post-frase.html', 'post-frase.png'],
   ['story-inscripciones.html', 'story-inscripciones.png'],
   ['story-proximamente.html', 'story-proximamente.png'],
   ...[0, 1, 2, 3, 4, 5].map((i) => [`carrusel.html#${i}`, `carrusel-programas-${i + 1}.png`]),
-  ...['3x3', 'liga', 'camps', 'combine', 'showcase', 'info'].map((n, i) => [`destacada.html#${i}`, `destacada-${n}.png`]),
+  ...['3x3', 'liga', 'camps', 'entrenos', 'showcase', 'info'].map((n, i) => [`destacada.html#${i}`, `destacada-${n}.png`]),
   ...['x', 'linkedin', 'youtube', 'facebook'].map((n) => [`banner.html#${n}`, `banner-${n}.png`]),
 ];
 

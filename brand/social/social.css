@@ -1,134 +1,95 @@
-/* ESD Hoops — sistema gráfico para redes sociales
-   Cada plantilla es un lienzo de tamaño exacto (.canvas). Se exporta a PNG con brand/export.mjs */
+/* ESD Hoops — sistema gráfico para redes (mismo estilo que la web)
+   Cápsulas de cristal, fotos en círculo, píldoras, bandas de foto con tinte azul y pistas concéntricas.
+   Cada plantilla es un lienzo de tamaño exacto (.canvas). Se exporta a PNG con brand/export.cjs */
 
 @font-face { font-family: 'Anton'; src: url('../../assets/fonts/anton-latin.woff2') format('woff2'); font-display: block; }
-@font-face { font-family: 'Plex Mono'; src: url('../../assets/fonts/plexmono-500-latin.woff2') format('woff2'); font-weight: 500; font-display: block; }
 @font-face { font-family: 'Inter'; src: url('../../assets/fonts/inter-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+@font-face { font-family: 'Plex Mono'; src: url('../../assets/fonts/plexmono-500-latin.woff2') format('woff2'); font-weight: 500; font-display: block; }
 
 :root {
-  --noche: #0e1c2e;
-  --azul: #172d47;
-  --cancha: #22416a;
+  --hueso: #ebe6e1;
+  --papel: #f6f3f0;
+  --piedra: #ddd6cf;
   --arena: #d4c0b3;
-  --arena-claro: #efe6df;
-  --crema: #f8f4f0;
-  --naranja: #d4c0b3; /* acento: arena (antes naranja) */
-  --arcilla: #b97a4e;
+  --azul: #172d47;
+  --noche: #0e1c2e;
+  --tinte: #1f3f66;
+  --suave: rgba(23, 45, 71, 0.6);
+  --linea: rgba(23, 45, 71, 0.16);
   --display: 'Anton', Impact, sans-serif;
   --body: 'Inter', system-ui, sans-serif;
+  --mono: 'Plex Mono', ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: #555; }
-body { display: grid; place-items: start; }
 
-.canvas {
-  position: relative;
-  overflow: hidden;
-  width: var(--w, 1080px);
-  height: var(--h, 1350px);
-  background: radial-gradient(120% 90% at 85% 0%, var(--cancha) 0%, var(--azul) 45%, var(--noche) 100%);
-  color: var(--arena-claro);
-  font-family: var(--body);
-}
-.canvas.light { background: var(--crema); color: var(--azul); }
-.canvas.arena { background: var(--arena); color: var(--noche); }
+.canvas { position: relative; overflow: hidden; width: var(--w, 1080px); height: var(--h, 1350px); background: var(--hueso); color: var(--azul); font-family: var(--body); }
+.canvas.stone { background: var(--piedra); }
+.canvas.dark { background: var(--noche); color: var(--papel); }
 
-/* Grano sutil para dar textura de impresión */
-.canvas::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.09;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+/* Foto de fondo en blanco y negro cálido */
+.bgphoto { position: absolute; inset: 0; }
+.bgphoto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) sepia(0.18) contrast(0.92) brightness(1.06); }
+.bgphoto::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(235, 230, 225, 0.3), rgba(235, 230, 225, 0.1) 50%, rgba(235, 230, 225, 0.6)); }
 
-/* Líneas de cancha (elemento gráfico principal) */
-.court { position: absolute; pointer-events: none; fill: none; stroke: var(--arena); stroke-width: 4; opacity: 0.14; }
-.light .court, .arena .court { stroke: var(--azul); opacity: 0.1; }
+/* Tinte azul ESD (estilo póster) */
+.tint { position: relative; overflow: hidden; background: #24466e; }
+.tint img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.12) brightness(0.98); }
+.tint::before { content: ''; position: absolute; inset: 0; z-index: 1; background: rgba(23, 45, 71, 0.42); mix-blend-mode: multiply; }
+.tint::after { content: ''; position: absolute; inset: 0; background: var(--tinte); mix-blend-mode: color; }
+.ticker { background: #1d3d63; color: rgba(246, 243, 240, 0.75); display: flex; align-items: center; gap: 56px; white-space: nowrap; overflow: hidden; padding-left: 30px; font-family: var(--mono); font-size: 22px; letter-spacing: 0.1em; text-transform: uppercase; }
 
-.logo { position: absolute; width: 120px; }
+/* Marco de cristal */
+.glass { padding: 14px; background: rgba(255, 255, 255, 0.3); border: 1.5px solid rgba(255, 255, 255, 0.7); box-shadow: 0 60px 120px -40px rgba(14, 28, 46, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); }
 
-.handle {
-  position: absolute;
-  font-family: var(--display);
-  letter-spacing: 0.08em;
-  font-size: 30px;
-  text-transform: uppercase;
-  color: var(--arena);
-}
-.light .handle, .arena .handle { color: var(--azul); }
+/* Cápsula vertical */
+.cap { position: absolute; border-radius: 999px; }
+.cap > .in { height: 100%; border-radius: 999px; background: var(--papel); display: flex; flex-direction: column; align-items: center; text-align: center; }
 
-.tag {
-  display: inline-block;
-  font-family: var(--display);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 30px;
-  padding: 10px 22px 8px;
-  background: var(--arena);
-  color: var(--noche);
-}
-.tag.naranja { background: var(--naranja); color: var(--noche); }
-.tag.outline { background: transparent; color: var(--arena); box-shadow: inset 0 0 0 3px var(--arena); }
+/* Círculo con texto en anillo y balón */
+.orb { position: relative; aspect-ratio: 1; display: grid; place-items: center; flex: none; }
+.orb::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1.5px var(--linea); }
+.orb .ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+.orb .ring text { font-family: var(--body); font-size: 11.5px; font-weight: 600; letter-spacing: 0.24em; fill: var(--azul); opacity: 0.75; }
+.ball { position: relative; width: 70%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; flex: none; background: radial-gradient(circle at 34% 28%, #fbf8f4 0%, #e9e0d6 38%, #cbbdaf 72%, #a8998b 100%); box-shadow: 0 40px 50px -24px rgba(14, 28, 46, 0.45); }
+.ball::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 70% 78%, rgba(14, 28, 46, 0.28), transparent 55%); }
+.ball canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
-.display {
-  font-family: var(--display);
-  text-transform: uppercase;
-  line-height: 0.9;
-  font-weight: 400;
-  color: var(--crema);
-}
-.light .display { color: var(--azul); }
-.display .o { color: transparent; -webkit-text-stroke: 3px var(--arena); }
-.light .display .o { -webkit-text-stroke-color: var(--azul); }
-.display .n { color: var(--naranja); }
-.display .a { color: var(--arena); }
+.circle { border-radius: 50%; overflow: hidden; position: relative; flex: none; background: var(--piedra); }
+.circle img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.85) sepia(0.15); }
+.circle.color img { filter: none; }
 
-.eyebrow {
-  font-family: var(--display);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 30px;
-  color: var(--naranja);
-}
+/* Texto */
+.label { font-size: 20px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--suave); }
+.dark .label { color: rgba(246, 243, 240, 0.7); }
+.mono { font-family: var(--mono); font-size: 22px; letter-spacing: 0.1em; text-transform: uppercase; }
+.big { font-family: var(--display); font-weight: 400; text-transform: uppercase; line-height: 0.9; }
+.body-text { font-size: 30px; line-height: 1.35; font-weight: 500; color: var(--suave); }
 
-.body-text { font-size: 34px; line-height: 1.4; font-weight: 500; color: var(--arena-claro); }
-.light .body-text { color: #3a4652; }
+/* Píldoras */
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 70px; padding: 0 34px; border-radius: 999px; font-size: 26px; font-weight: 500; white-space: nowrap; }
+.pill-dark { background: var(--azul); color: var(--papel); }
+.pill-line { box-shadow: inset 0 0 0 2px rgba(23, 45, 71, 0.45); background: rgba(246, 243, 240, 0.7); }
+.pill-light { box-shadow: inset 0 0 0 2px rgba(246, 243, 240, 0.85); color: var(--papel); }
+.pill-soft { background: #d9dcc0; color: var(--azul); height: 52px; font-size: 21px; padding: 0 24px; }
+.seg { display: inline-flex; gap: 4px; padding: 6px; border-radius: 999px; background: var(--azul); }
+.seg span { white-space: nowrap; height: 52px; padding: 0 24px; border-radius: 999px; display: inline-flex; align-items: center; font-size: 21px; font-weight: 500; color: var(--papel); }
+.seg span.on { background: var(--arena); color: var(--azul); }
+.chip { display: inline-flex; align-items: center; justify-content: center; height: 54px; padding: 0 24px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--linea); font-size: 21px; font-weight: 500; }
 
-/* Banda inclinada tipo ticker */
-.band {
-  position: absolute;
-  left: -60px;
-  right: -60px;
-  background: var(--arena);
-  color: var(--noche);
-  font-family: var(--display);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  overflow: hidden;
-  transform: rotate(-4deg);
-  display: flex;
-  gap: 28px;
-  align-items: center;
-}
-.band.naranja { background: var(--crema); color: var(--noche); }
-.band span.dot { opacity: 0.5; }
+/* Insignias circulares */
+.badge { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; background: var(--papel); flex: none; }
+.badge img { width: 46px; }
+.badge-t { background: transparent; box-shadow: inset 0 0 0 2.5px rgba(246, 243, 240, 0.85); color: var(--papel); font-family: var(--display); font-size: 46px; }
 
-/* Corte diagonal inferior */
-.cut {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--arena);
-  clip-path: polygon(0 28%, 100% 0, 100% 100%, 0 100%);
-}
+/* Panel tipo app */
+.panel { position: absolute; border-radius: 52px; }
+.panel > .in { height: 100%; border-radius: 40px; background: var(--papel); padding: 44px; display: flex; flex-direction: column; }
+.row-label { display: flex; justify-content: space-between; font-size: 18px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 2px solid var(--azul); padding-bottom: 10px; }
+.row-label span + span { font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--suave); }
 
-.rows { border-top: 3px solid currentColor; }
-.rows > div { display: flex; align-items: baseline; gap: 28px; padding: 22px 0; border-bottom: 3px solid currentColor; }
-.rows b { font-family: var(--display); font-weight: 400; color: var(--naranja); font-size: 52px; min-width: 70px; }
-.rows span { font-size: 36px; font-weight: 700; }
+/* Pistas concéntricas */
+.arches { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; }
+
+.logo { width: 40px; }
