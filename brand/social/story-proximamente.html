@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Story — Próximo evento</title>
+<link rel="stylesheet" href="social.css">
+<style>
+  .canvas { --w: 1080px; --h: 1920px; }
+  .court { width: 1080px; left: 0; top: 0; transform: rotate(180deg); opacity: .14; }
+  .cut { height: 820px; clip-path: polygon(0 18%, 100% 0, 100% 100%, 0 100%); }
+  .logo { top: 160px; left: 90px; width: 120px; }
+  .eyebrow { position: absolute; top: 560px; left: 90px; font-size: 36px; }
+  .title { position: absolute; top: 620px; left: 84px; font-size: 230px; }
+  .rows { position: absolute; left: 90px; right: 90px; bottom: 210px; color: var(--noche); }
+  .rows b { color: var(--naranja); }
+  .handle { left: 90px; bottom: 110px; color: var(--azul); font-size: 30px; }
+</style></head>
+<body>
+<div class="canvas">
+  <svg class="court"></svg>
+  <img class="logo" src="../logo/esd-escudo-arena.svg" alt="">
+  <div class="eyebrow">Muy pronto</div>
+  <h1 class="display title">Algo<br>grande<br><span class="o">viene</span></h1>
+  <div class="cut"></div>
+  <div class="rows">
+    <div><b>01</b><span>Torneos 3x3</span></div>
+    <div><b>02</b><span>Liga 5x5 estilo AAU</span></div>
+    <div><b>03</b><span>Camps · Combines · Showcases</span></div>
+  </div>
+  <div class="handle">@esdhoops</div>
+</div>
+<script src="social.js"></script>
+</body></html>

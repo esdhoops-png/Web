@@ -1,0 +1,133 @@
+/* ESD Hoops — sistema gráfico para redes sociales
+   Cada plantilla es un lienzo de tamaño exacto (.canvas). Se exporta a PNG con brand/export.mjs */
+
+@font-face { font-family: 'Anton'; src: url('../../assets/fonts/anton-latin.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Inter'; src: url('../../assets/fonts/inter-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+
+:root {
+  --noche: #0d1e2c;
+  --azul: #142a3d;
+  --cancha: #1c3a54;
+  --arena: #d9c4b0;
+  --arena-claro: #f2e9df;
+  --crema: #faf6f1;
+  --naranja: #e2672b;
+  --arcilla: #b97a4e;
+  --display: 'Anton', Impact, sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #555; }
+body { display: grid; place-items: start; }
+
+.canvas {
+  position: relative;
+  overflow: hidden;
+  width: var(--w, 1080px);
+  height: var(--h, 1350px);
+  background: radial-gradient(120% 90% at 85% 0%, var(--cancha) 0%, var(--azul) 45%, var(--noche) 100%);
+  color: var(--arena-claro);
+  font-family: var(--body);
+}
+.canvas.light { background: var(--crema); color: var(--azul); }
+.canvas.arena { background: var(--arena); color: var(--noche); }
+
+/* Grano sutil para dar textura de impresión */
+.canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Líneas de cancha (elemento gráfico principal) */
+.court { position: absolute; pointer-events: none; fill: none; stroke: var(--arena); stroke-width: 4; opacity: 0.14; }
+.light .court, .arena .court { stroke: var(--azul); opacity: 0.1; }
+
+.logo { position: absolute; width: 120px; }
+
+.handle {
+  position: absolute;
+  font-family: var(--display);
+  letter-spacing: 0.08em;
+  font-size: 30px;
+  text-transform: uppercase;
+  color: var(--arena);
+}
+.light .handle, .arena .handle { color: var(--azul); }
+
+.tag {
+  display: inline-block;
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 30px;
+  padding: 10px 22px 8px;
+  background: var(--arena);
+  color: var(--noche);
+}
+.tag.naranja { background: var(--naranja); color: var(--crema); }
+.tag.outline { background: transparent; color: var(--arena); box-shadow: inset 0 0 0 3px var(--arena); }
+
+.display {
+  font-family: var(--display);
+  text-transform: uppercase;
+  line-height: 0.9;
+  font-weight: 400;
+  color: var(--crema);
+}
+.light .display { color: var(--azul); }
+.display .o { color: transparent; -webkit-text-stroke: 3px var(--arena); }
+.light .display .o { -webkit-text-stroke-color: var(--azul); }
+.display .n { color: var(--naranja); }
+.display .a { color: var(--arena); }
+
+.eyebrow {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 30px;
+  color: var(--naranja);
+}
+
+.body-text { font-size: 34px; line-height: 1.4; font-weight: 500; color: var(--arena-claro); }
+.light .body-text { color: #3a4652; }
+
+/* Banda inclinada tipo ticker */
+.band {
+  position: absolute;
+  left: -60px;
+  right: -60px;
+  background: var(--arena);
+  color: var(--noche);
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  transform: rotate(-4deg);
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+.band.naranja { background: var(--naranja); color: var(--crema); }
+.band span.dot { opacity: 0.5; }
+
+/* Corte diagonal inferior */
+.cut {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--arena);
+  clip-path: polygon(0 28%, 100% 0, 100% 100%, 0 100%);
+}
+
+.rows { border-top: 3px solid currentColor; }
+.rows > div { display: flex; align-items: baseline; gap: 28px; padding: 22px 0; border-bottom: 3px solid currentColor; }
+.rows b { font-family: var(--display); font-weight: 400; color: var(--naranja); font-size: 52px; min-width: 70px; }
+.rows span { font-size: 36px; font-weight: 700; }

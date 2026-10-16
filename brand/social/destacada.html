@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Portadas de historias destacadas</title>
+<link rel="stylesheet" href="social.css">
+<style>
+  /* Uso: destacada.html#0 … #5 — cada número genera una portada */
+  .canvas { --w: 1080px; --h: 1080px; display: grid; place-items: center; }
+  .disc { width: 760px; height: 760px; border-radius: 50%; border: 8px solid var(--arena); display: grid; place-items: center; align-content: center; gap: 36px; position: relative; }
+  .disc svg { width: 300px; height: 300px; color: var(--arena); }
+  .disc .lbl { font-family: var(--display); font-size: 92px; letter-spacing: .06em; text-transform: uppercase; color: var(--crema); line-height: 1; }
+  .court { width: 1400px; left: -160px; top: 600px; opacity: .08; }
+</style></head>
+<body>
+<div class="canvas">
+  <svg class="court"></svg>
+  <div class="disc"><svg id="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"></svg><div class="lbl" id="lbl"></div></div>
+</div>
+<script src="social.js"></script>
+<script>
+  const ICONS = [
+    ['3x3', '<circle cx="24" cy="24" r="19"/><path d="M24 5v38M6.5 15.5c6 4 29.5 4 35 0M6.5 32.5c6-4 29.5-4 35 0"/>'],
+    ['Liga', '<path d="M24 4l6 12 13 2-9.5 9 2.3 13L24 33l-11.8 7 2.3-13-9.5-9 13-2z"/>'],
+    ['Camps', '<path d="M24 6c-6 0-9 5-9 10s3 8 9 8 9-3 9-8-3-10-9-10z"/><path d="M9 42c1-9 7-14 15-14s14 5 15 14"/>'],
+    ['Combine', '<path d="M6 40l10-22 8 12 6-10 12 20"/><circle cx="16" cy="18" r="3" fill="currentColor"/>'],
+    ['Showcase', '<path d="M4 24s7-13 20-13 20 13 20 13-7 13-20 13S4 24 4 24z"/><circle cx="24" cy="24" r="5"/>'],
+    ['Info', '<circle cx="24" cy="24" r="19"/><path d="M24 22v12"/><circle cx="24" cy="15" r="1.6" fill="currentColor"/>'],
+  ];
+  const i = Math.min(ICONS.length - 1, parseInt(location.hash.slice(1) || '0', 10));
+  document.getElementById('lbl').textContent = ICONS[i][0];
+  document.getElementById('icon').innerHTML = ICONS[i][1];
+</script>
+</body></html>
