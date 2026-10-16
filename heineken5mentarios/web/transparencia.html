@@ -346,12 +346,12 @@ const CUENTAS = [
 ];
 
 const LEYES = [
-  ["Ley 19/2013", "de 9 de diciembre, de Transparencia, Acceso a la Información Pública y Buen Gobierno.", "https://www.boe.es/eli/es/l/2013/12/09/19/con"],
-  ["Ley 12/2014", "de 26 de diciembre, de Transparencia y de Acceso a la Información Pública de Canarias.", "https://www.boe.es/eli/es-cn/l/2014/12/26/12/con"],
-  ["Real Decreto Legislativo 1/2010", "de 2 de julio, por el que se aprueba el texto refundido de la Ley de Sociedades de Capital.", "https://www.boe.es/eli/es/rdlg/2010/07/02/1/con"],
+  ["Ley 19/2013", "de 9 de diciembre, de Transparencia, Acceso a la Información Pública y Buen Gobierno.", "https://www.boe.es/eli/es/l/2013/12/09/19/con", "docs/leyes/ley-19-2013.epub"],
+  ["Ley 12/2014", "de 26 de diciembre, de Transparencia y de Acceso a la Información Pública de Canarias.", "https://www.boe.es/eli/es-cn/l/2014/12/26/12/con", "docs/leyes/ley-12-2014-canarias.epub"],
+  ["Real Decreto Legislativo 1/2010", "de 2 de julio, por el que se aprueba el texto refundido de la Ley de Sociedades de Capital.", "https://www.boe.es/eli/es/rdlg/2010/07/02/1/con", "docs/leyes/rdl-1-2010-sociedades-capital.epub"],
   ["Ley Orgánica 3/2018", "de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales.", "https://www.boe.es/eli/es/lo/2018/12/05/3/con"],
-  ["Ley 20/1991", "de 7 de junio, de modificación de los aspectos fiscales del Régimen Económico Fiscal de Canarias.", "https://www.boe.es/eli/es/l/1991/06/07/20/con"],
-  ["Real Decreto 634/2015", "de 10 de julio, por el que se aprueba el Reglamento del Impuesto sobre Sociedades.", "https://www.boe.es/eli/es/rd/2015/07/10/634/con"],
+  ["Ley 20/1991", "de 7 de junio, de modificación de los aspectos fiscales del Régimen Económico Fiscal de Canarias.", "https://www.boe.es/eli/es/l/1991/06/07/20/con", "docs/leyes/ley-20-1991-ref-canarias.epub"],
+  ["Real Decreto 634/2015", "de 10 de julio, por el que se aprueba el Reglamento del Impuesto sobre Sociedades.", "https://www.boe.es/eli/es/rd/2015/07/10/634/con", "docs/leyes/rd-634-2015-impuesto-sociedades.epub"],
   ["Real Decreto Legislativo 1175/1990", "de 28 de septiembre, por el que se aprueban las tarifas y la instrucción del Impuesto sobre Actividades Económicas.", "https://www.boe.es/eli/es/rdlg/1990/09/28/1175/con"]
 ];
 
@@ -411,7 +411,7 @@ document.querySelectorAll("[data-doc]").forEach(e => e.innerHTML = docHTML(DOCS[
 $("#eRazon").textContent = ENTIDAD.razon; $("#eNif").textContent = ENTIDAD.nif;
 $("#iDom").textContent = ENTIDAD.domicilio; $("#dDom").textContent = ENTIDAD.domicilio;
 $("#dTel").innerHTML = `<a href="tel:${ENTIDAD.telefono.replace(/\s/g, "")}">${esc(ENTIDAD.telefono)}</a>`;
-$("#leyes").innerHTML = LEYES.map(([n, d, u]) => `<div class="law"><p><b>${esc(n)}</b>, ${esc(d)}</p><a class="fmt ext" href="${u}" target="_blank" rel="noopener">BOE</a></div>`).join("");
+$("#leyes").innerHTML = LEYES.map(([n, d, u, e]) => `<div class="law"><p><b>${esc(n)}</b>, ${esc(d)}</p><span class="fmts">${e ? `<a class="fmt" href="${esc(e)}" download>EPUB</a>` : ""}<a class="fmt ext" href="${u}" target="_blank" rel="noopener">BOE</a></span></div>`).join("");
 $("#cuentas").innerHTML = CUENTAS.map(c => `<div class="year"><h3>Ejercicio <span>${c.year}</span></h3>${c.docs.map(docHTML).join("")}</div>`).join("");
 $("#ayudasTabla tbody").innerHTML = AYUDAS.map(a => `<tr><td>${esc(a.inst)}</td><td>${esc(a.objeto)}</td><td>${esc(a.proyecto)}</td><td>${esc(a.periodo)}</td><td class="num">${esc(a.importe)}</td></tr>`).join("");
 $("#ayudasList").innerHTML = AYUDAS.map(a => `<div class="box"><h3>${esc(a.titulo)}</h3><dl>
