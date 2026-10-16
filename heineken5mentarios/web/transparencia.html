@@ -78,6 +78,8 @@ dd{font-weight:500;overflow-wrap:anywhere}
 .org .h .n{justify-self:center}
 .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 24px;margin-bottom:12px}
 .box h3{margin-top:0}
+.box .cartel{width:100%;max-width:640px;border-radius:6px;margin:16px 0 14px;background:#fff}
+.box .doc{background:var(--bg2)}
 .sello{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
 .sello img{width:160px;height:auto}
 .sello .ph{width:160px;aspect-ratio:1;border:1px dashed var(--warn);border-radius:8px;display:grid;place-items:center;text-align:center;color:var(--warn);font-size:13px;padding:12px}
@@ -329,9 +331,30 @@ const LEYES = [
   ["Real Decreto Legislativo 1175/1990", "de 28 de septiembre, por el que se aprueban las tarifas y la instrucción del Impuesto sobre Actividades Económicas.", "https://www.boe.es/eli/es/rdlg/1990/09/28/1175/con"]
 ];
 
+// Cada ayuda: filas [etiqueta, valor] (valor "" = pendiente), cartel (imagen) y documento descargable.
 const AYUDAS = [
-  { titulo: "Subvención para la reforma del local", organismo: "Comunidad Autónoma de Canarias", convocatoria: "", resolucion: "", importe: "Superior a 60.000 €",
-    objeto: "Reforma y mejora de las instalaciones del establecimiento Heineken 5mentarios, en Arucas." }
+  { titulo: "Modernización del Pub Terraza Heineken 5mentarios",
+    filas: [
+      ["Línea de ayuda", "Subvenciones para financiar proyectos de la estrategia de Resiliencia Turística en Canarias, dentro del programa de actuaciones con entidades del sector privado en infraestructuras turísticas, en el marco del Plan de Recuperación, Transformación y Resiliencia."],
+      ["Organismo concedente", "Gobierno de Canarias · Consejería de Turismo y Empleo"],
+      ["Financiación", "Unión Europea · NextGenerationEU (Plan de Recuperación, Transformación y Resiliencia)"],
+      ["Establecimiento", "Heineken 5mentarios · Arucas"],
+      ["Importe", "76.574,30 €"],
+      ["Fecha de concesión", ""]
+    ],
+    img: "img/cartel-ayuda-resiliencia-turistica.jpg",
+    doc: { t: "Cartel informativo de la ayuda", epub: "docs/cartel-ayuda-resiliencia-turistica.epub", docx: "docs/cartel-ayuda-resiliencia-turistica.docx", odt: "docs/cartel-ayuda-resiliencia-turistica.odt" } },
+  { titulo: "Mejora de las instalaciones y equipamiento del local",
+    filas: [
+      ["Organismo concedente", "Gobierno de Canarias"],
+      ["Nº de expediente", "PI2024010958"],
+      ["Tipo de proyecto", "Mejorar la productividad y competitividad de una empresa ya existente"],
+      ["Objetivo o finalidad", "Mejora de las instalaciones del local gestionado por Eventos Josué Arucas LP5, S.L.U., mediante la adquisición de equipos como lavavajillas, vitrinas y envasadoras al vacío, para mejorar la gestión del establecimiento y ofrecer un servicio más eficiente a los clientes."],
+      ["Inversión aprobada", "22.717,84 €"],
+      ["Periodo de ejecución", "01/01/2023 – 31/12/2023"]
+    ],
+    img: "img/cartel-ayuda-gobierno-canarias.jpg",
+    doc: { t: "Cartel informativo de la ayuda", epub: "docs/cartel-ayuda-gobierno-canarias.epub", docx: "docs/cartel-ayuda-gobierno-canarias.docx", odt: "" } }
 ];
 
 const SELLO = { img: "", texto: "" };   // p. ej. img: "img/sello-transparencia.png"
@@ -355,11 +378,9 @@ $("#dTel").innerHTML = `<a href="tel:${ENTIDAD.telefono.replace(/\s/g, "")}">${e
 $("#leyes").innerHTML = LEYES.map(([n, d, u]) => `<div class="law"><p><b>${esc(n)}</b>, ${esc(d)}</p><a class="fmt ext" href="${u}" target="_blank" rel="noopener">BOE</a></div>`).join("");
 $("#cuentas").innerHTML = CUENTAS.map(c => `<div class="year"><h3>Ejercicio <span>${c.year}</span></h3>${c.docs.map(docHTML).join("")}</div>`).join("");
 $("#ayudasList").innerHTML = AYUDAS.map(a => `<div class="box"><h3>${esc(a.titulo)}</h3><dl>
-  <dt>Organismo concedente</dt><dd>${pend(a.organismo)}</dd>
-  <dt>Convocatoria</dt><dd>${pend(a.convocatoria)}</dd>
-  <dt>Fecha de concesión</dt><dd>${pend(a.resolucion)}</dd>
-  <dt>Importe</dt><dd>${pend(a.importe)}</dd>
-  <dt>Objetivo o finalidad</dt><dd>${pend(a.objeto)}</dd></dl></div>`).join("");
+  ${a.filas.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${pend(v)}</dd>`).join("")}</dl>
+  ${a.img ? `<img class="cartel" src="${esc(a.img)}" alt="Cartel informativo: ${esc(a.titulo)}" loading="lazy">` : ""}
+  ${a.doc ? docHTML(a.doc) : ""}</div>`).join("");
 $("#selloImg").innerHTML = SELLO.img ? `<img src="${esc(SELLO.img)}" alt="Sello de calidad del Comisionado de Transparencia">` : '<div class="ph">Sello pendiente de incorporar</div>';
 if (SELLO.texto) $("#selloTxt").textContent = SELLO.texto;
 $("#pie").textContent = `${ENTIDAD.razon} · NIF ${ENTIDAD.nif} · Última revisión ${REVISION}`;
