@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Portal de transparencia · Heineken 5mentarios</title>
+<meta name="description" content="Portal de transparencia de Eventos Josué Arucas LP5, S.L.U. (Heineken 5mentarios, Arucas): información institucional, económico-financiera, ayudas y subvenciones, contratos, convenios y compromisos.">
+<link rel="icon" href="img/5mentarios-sello.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+:root{--bg:#060807;--bg2:#0E1310;--card:#101612;--line:#223027;--fg:#F2EFE8;--mute:#9AA59C;--verde:#34C26B;--verde-d:#00843D;--warn:#E9B949;
+  --display:"Anton","Impact","Arial Narrow Bold",sans-serif;--body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16.5px/1.6 var(--body)}
+a{color:inherit}img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+nav.top{position:sticky;top:0;z-index:20;background:rgba(6,8,7,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font:400 19px/1 var(--display);letter-spacing:.03em}
+.brand img{width:40px;height:40px}
+.back{font-size:14px;color:var(--mute);text-decoration:none;white-space:nowrap}.back:hover{color:var(--fg)}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;margin:0;letter-spacing:.005em}
+.kick{font:700 12px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--verde);margin:0}
+header.hd{padding-block:64px 40px;border-bottom:1px solid var(--line)}
+header.hd h1{font-size:clamp(54px,9vw,120px);margin-top:16px}
+header.hd h1 span{color:var(--verde)}
+header.hd p{color:var(--mute);max-width:64ch;margin:20px 0 0}
+.ent{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:14px;color:var(--mute)}
+.ent b{color:var(--fg);font-weight:500}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:48px;padding-block:40px 80px}
+.idx{position:sticky;top:90px;align-self:start;display:flex;flex-direction:column;gap:2px}
+.idx a{text-decoration:none;color:var(--mute);font-size:14.5px;padding:8px 12px;border-left:2px solid var(--line);transition:color .2s,border-color .2s}
+.idx a:hover,.idx a.on{color:var(--fg);border-color:var(--verde)}
+section.sec{scroll-margin-top:90px;padding-bottom:44px;margin-bottom:44px;border-bottom:1px solid var(--line);min-width:0}
+section.sec:last-child{border-bottom:0}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sh h2{font-size:clamp(34px,4.6vw,54px)}
+.rev{font-size:13px;color:var(--mute);border:1px solid var(--line);padding:6px 10px;border-radius:999px;white-space:nowrap}
+.rev b{color:var(--fg);font-weight:500}
+h3{font-size:24px;margin:28px 0 12px;color:var(--fg)}
+p{margin:0 0 12px}
+.lead{color:#D5D2CA;max-width:70ch}
+dl{display:grid;grid-template-columns:230px 1fr;margin:0;border-top:1px solid var(--line)}
+dt,dd{margin:0;padding:12px 0;border-bottom:1px solid var(--line)}
+dt{color:var(--mute);font-size:14px;font-weight:500}
+dd{font-weight:500;overflow-wrap:anywhere}
+.doc{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:8px;margin-bottom:10px}
+.doc .t b{display:block;font-weight:700}
+.doc .t small{color:var(--mute);font-size:13px}
+.fmts{display:flex;gap:8px;flex-wrap:wrap}
+.fmt{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--verde);color:var(--verde);border-radius:6px;font:700 13px/1 var(--body);letter-spacing:.06em;text-decoration:none;transition:background .2s,color .2s}
+.fmt:hover{background:var(--verde);color:#04120A}
+.fmt::before{content:"↓"}
+.pend{color:var(--warn);font-weight:600;font-style:italic;font-size:14px}
+.ayuda{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 24px}
+.ayuda h3{margin-top:0}
+.sello{display:flex;gap:22px;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 24px}
+.sello img{width:160px;height:auto}
+.sello .ph{width:160px;aspect-ratio:1;border:1px dashed var(--warn);border-radius:8px;display:grid;place-items:center;text-align:center;color:var(--warn);font-size:13px;padding:12px}
+footer{border-top:1px solid var(--line);padding-block:32px calc(40px + env(safe-area-inset-bottom,0px));color:var(--mute);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:900px){.layout{grid-template-columns:1fr;gap:20px}.idx{position:static;flex-direction:row;flex-wrap:wrap;gap:6px}.idx a{border:1px solid var(--line);border-radius:999px;padding:6px 12px}}
+@media (max-width:620px){dl{grid-template-columns:1fr}dt{border-bottom:0;padding-bottom:0}dd{padding-top:2px}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="wrap">
+  <a class="brand" href="index.html"><img src="img/5mentarios-sello.svg" alt="Logo de Heineken 5mentarios"><span>HEINEKEN 5MENTARIOS</span></a>
+  <a class="back" href="index.html">← Volver a la web</a>
+</div></nav>
+
+<header class="hd"><div class="wrap">
+  <p class="kick">Transparencia</p>
+  <h1>Portal de <span>transparencia</span></h1>
+  <p>Información pública de la sociedad titular de Heineken 5mentarios, en cumplimiento de la normativa de transparencia aplicable a las entidades privadas que perciben ayudas públicas.</p>
+  <div class="ent"><span>Entidad: <b id="eRazon"></b></span><span>NIF: <b id="eNif"></b></span><span>Domicilio: <b id="eDom"></b></span></div>
+</div></header>
+
+<div class="wrap layout">
+  <aside class="idx" id="idx">
+    <a href="#institucional">Información institucional</a>
+    <a href="#economica">Información económico-financiera</a>
+    <a href="#ayudas">Ayudas y subvenciones</a>
+    <a href="#contratos">Contratos públicos</a>
+    <a href="#convenios">Convenios</a>
+    <a href="#compromisos">Compromisos</a>
+    <a href="#acceso">Derecho de acceso</a>
+  </aside>
+
+  <main>
+    <section class="sec" id="institucional">
+      <div class="sh"><h2>Información institucional</h2><span class="rev" data-rev></span></div>
+      <h3>Datos de la entidad</h3>
+      <dl>
+        <dt>Razón social</dt><dd id="dRazon"></dd>
+        <dt>NIF</dt><dd id="dNif"></dd>
+        <dt>Nombre comercial</dt><dd>Heineken 5mentarios</dd>
+        <dt>Domicilio fiscal</dt><dd id="dDom"></dd>
+        <dt>Actividad económica</dt><dd>Epígrafe IAE 672.2 · Cafeterías (alta: 01/12/2022)</dd>
+        <dt>Administración / representación</dt><dd id="dRep"></dd>
+      </dl>
+      <h3>Objeto social y funciones de la empresa</h3>
+      <p class="lead">La sociedad desarrolla la actividad de hostelería en el establecimiento Heineken 5mentarios, situado en Arucas (Gran Canaria), clasificada en el epígrafe 672.2 (cafeterías) del Impuesto sobre Actividades Económicas.</p>
+      <h3>Documentación</h3>
+      <div id="docsInst"></div>
+    </section>
+
+    <section class="sec" id="economica">
+      <div class="sh"><h2>Información económico-financiera</h2><span class="rev" data-rev></span></div>
+      <p class="lead">Cuentas anuales del ejercicio 2025, disponibles para su descarga en distintos formatos.</p>
+      <div id="docsEco"></div>
+    </section>
+
+    <section class="sec" id="ayudas">
+      <div class="sh"><h2>Ayudas y subvenciones</h2><span class="rev" data-rev></span></div>
+      <p class="lead">Ayudas y subvenciones públicas concedidas a la sociedad, con indicación de su importe, objetivo o finalidad.</p>
+      <div id="ayudasList"></div>
+    </section>
+
+    <section class="sec" id="contratos">
+      <div class="sh"><h2>Contratos públicos</h2><span class="rev" data-rev></span></div>
+      <p class="lead">Durante los ejercicios 2022, 2023, 2024 y 2025, la sociedad no ha celebrado contratos mayores ni menores con Administraciones Públicas, por lo que no existen datos estadísticos sobre adjudicaciones, procedimientos, modificaciones, desistimientos o renuncias.</p>
+    </section>
+
+    <section class="sec" id="convenios">
+      <div class="sh"><h2>Convenios y encomiendas de gestión</h2><span class="rev" data-rev></span></div>
+      <p class="lead">Durante los ejercicios 2022, 2023, 2024 y 2025, Eventos Josué Arucas LP5, S.L. no ha suscrito convenios ni encomiendas de gestión con ninguna entidad pública. No existen, por tanto, modificaciones, prórrogas ni liquidaciones derivadas de tales instrumentos jurídicos.</p>
+    </section>
+
+    <section class="sec" id="compromisos">
+      <div class="sh"><h2>Compromisos</h2><span class="rev" data-rev></span></div>
+      <div class="sello">
+        <div id="selloImg"></div>
+        <div style="min-width:0;flex:1">
+          <h3 style="margin-top:0">Sello de calidad</h3>
+          <p class="lead" id="selloTxt" style="margin:0">Sello de calidad otorgado a la sociedad por el Comisionado de Transparencia y Acceso a la Información Pública de Canarias.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="acceso">
+      <div class="sh"><h2>Derecho de acceso</h2><span class="rev" data-rev></span></div>
+      <p class="lead">Cualquier persona puede solicitar información relativa a esta entidad sujeta a la normativa de transparencia.</p>
+      <dl><dt>Correo de contacto</dt><dd id="dMail"></dd><dt>Dirección</dt><dd id="dDom2"></dd></dl>
+    </section>
+  </main>
+</div>
+
+<footer><div class="wrap"><span id="pie"></span><a href="index.html" style="color:inherit">Heineken 5mentarios</a></div></footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+//  DATOS DEL PORTAL · edita aquí
+// ─────────────────────────────────────────────────────────────
+const REVISION = "16/10/2026";   // fecha de última revisión de cada apartado
+
+const ENTIDAD = {
+  razon: "Eventos Josué Arucas LP5, S.L.U.",
+  nif: "B72469661",
+  domicilio: "Calle León y Castillo, 15 · 35400 Arucas (Las Palmas)",
+  representante: "Cayetano Josué González Pérez",
+  correo: ""                       // correo para solicitudes de información
+};
+
+// Documentos descargables. Si un formato está vacío (""), aparece como pendiente.
+const DOCS_INST = [
+  { t: "Certificado de situación censal", s: "Agencia Tributaria · expedido el 07/10/2026",
+    pdf: "docs/certificado-situacion-censal.pdf", docx: "docs/certificado-situacion-censal.docx", odt: "docs/certificado-situacion-censal.odt" }
+];
+const DOCS_ECO = [
+  { t: "Cuentas anuales y memoria 2025", s: "Ejercicio 2025", pdf: "", docx: "", odt: "" },
+  { t: "Cuenta de pérdidas y ganancias 2025", s: "Ejercicio 2025", pdf: "", docx: "", odt: "" },
+  { t: "Balance de situación 2025", s: "Ejercicio 2025", pdf: "", docx: "", odt: "" }
+];
+
+const AYUDAS = [
+  { titulo: "Reforma del local", organismo: "", convocatoria: "", resolucion: "", importe: "",
+    objeto: "Reforma y mejora de las instalaciones del establecimiento Heineken 5mentarios, en Arucas." }
+];
+
+const SELLO = { img: "", texto: "" };   // p. ej. img: "img/sello-transparencia.png"
+
+// ─────────────────────────────────────────────────────────────
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pend = (v, t = "Pendiente") => v ? esc(v) : `<span class="pend">${t}</span>`;
+document.querySelectorAll("[data-rev]").forEach(e => e.innerHTML = `Última revisión: <b>${esc(REVISION)}</b>`);
+$("#eRazon").textContent = ENTIDAD.razon; $("#eNif").textContent = ENTIDAD.nif; $("#eDom").textContent = ENTIDAD.domicilio;
+$("#dRazon").textContent = ENTIDAD.razon; $("#dNif").textContent = ENTIDAD.nif; $("#dDom").textContent = ENTIDAD.domicilio; $("#dDom2").textContent = ENTIDAD.domicilio;
+$("#dRep").textContent = ENTIDAD.representante + " (administrador)";
+$("#dMail").innerHTML = ENTIDAD.correo ? `<a href="mailto:${esc(ENTIDAD.correo)}">${esc(ENTIDAD.correo)}</a>` : pend("");
+const docHTML = d => {
+  const f = [["pdf", "PDF"], ["docx", "WORD"], ["odt", "ODT"]].filter(([k]) => d[k]);
+  return `<div class="doc"><div class="t"><b>${esc(d.t)}</b><small>${esc(d.s || "")}</small></div><div class="fmts">${f.length ? f.map(([k, l]) => `<a class="fmt" href="${esc(d[k])}" download>${l}</a>`).join("") : '<span class="pend">Documento pendiente de incorporar</span>'}</div></div>`;
+};
+$("#docsInst").innerHTML = DOCS_INST.map(docHTML).join("");
+$("#docsEco").innerHTML = DOCS_ECO.map(docHTML).join("");
+$("#ayudasList").innerHTML = AYUDAS.map(a => `<div class="ayuda"><h3>${esc(a.titulo)}</h3><dl>
+  <dt>Organismo concedente</dt><dd>${pend(a.organismo)}</dd>
+  <dt>Convocatoria</dt><dd>${pend(a.convocatoria)}</dd>
+  <dt>Fecha de concesión</dt><dd>${pend(a.resolucion)}</dd>
+  <dt>Importe</dt><dd>${pend(a.importe)}</dd>
+  <dt>Objetivo o finalidad</dt><dd>${pend(a.objeto)}</dd></dl></div>`).join("");
+$("#selloImg").innerHTML = SELLO.img ? `<img src="${esc(SELLO.img)}" alt="Sello de calidad del Comisionado de Transparencia">` : '<div class="ph">Sello pendiente de incorporar</div>';
+if (SELLO.texto) $("#selloTxt").textContent = SELLO.texto;
+$("#pie").textContent = `${ENTIDAD.razon} · NIF ${ENTIDAD.nif} · Última revisión ${REVISION}`;
+// índice activo
+const links = [...document.querySelectorAll("#idx a")], secs = links.map(a => $(a.getAttribute("href")));
+addEventListener("scroll", () => { let k = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) k = i }); links.forEach((a, i) => a.classList.toggle("on", i === k)) }, { passive: true });
+</script>
+</body>
+</html>
