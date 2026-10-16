@@ -143,6 +143,17 @@ const io = new IntersectionObserver((entries) => entries.forEach((e) => {
 }), { threshold: 0.2 });
 document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
+/* Galería horizontal: la altura de la sección equivale al recorrido lateral */
+const gallery = document.getElementById('galeria');
+const gTrack = document.getElementById('galleryTrack');
+const gCaps = [...gTrack.children];
+let gTravel = 0;
+function sizeGallery() {
+  if (reduceMotion) return;
+  gTravel = Math.max(0, gTrack.scrollWidth - window.innerWidth);
+  gallery.style.height = `${window.innerHeight * 1.2 + gTravel}px`;
+}
+
 /* Progreso de scroll (--p) de cada sección anclada */
 const tracked = [...document.querySelectorAll('[data-track]')];
 const heroSticky = document.querySelector('.hero-sticky');
@@ -173,6 +184,13 @@ function update() {
     if (r.bottom < -vh || r.top > vh * 2) return;
     const p = clamp(-r.top / Math.max(1, r.height - vh));
     el.style.setProperty('--p', p.toFixed(4));
+    if (el === gallery) {
+      gTrack.style.transform = `translate3d(${(-p * gTravel).toFixed(1)}px,0,0)`;
+      const mid = window.innerWidth / 2;
+      let best = null, bestD = Infinity;
+      gCaps.forEach((g) => { const b = g.getBoundingClientRect(); const d = Math.abs(b.left + b.width / 2 - mid); if (d < bestD) { bestD = d; best = g; } });
+      gCaps.forEach((g) => g.classList.toggle('is-center', g === best));
+    }
     if (el.id === 'inicio') {
       const m = clamp((p - 0.12) * 2.6);
       heroSticky.toggleAttribute('data-open', m > 0.9);
@@ -190,6 +208,7 @@ function onScroll() {
 }
 
 function resize() {
+  sizeGallery();
   balls.forEach(sizeBall);
   update();
   if (reduceMotion) spin(0);

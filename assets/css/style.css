@@ -181,6 +181,19 @@ a { color: inherit; }
 .mid-meta { margin: 0; line-height: 1.7; }
 .mid-meta strong { font-family: var(--display); font-weight: 400; font-size: 1.5rem; letter-spacing: 0.04em; }
 
+/* 3 · Galería: cápsulas en horizontal */
+.gallery { background: var(--hueso); }
+.gallery-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: clamp(22px, 4vh, 44px); }
+.gallery-head { padding: 0 var(--gutter); display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.gallery-head .label { color: var(--tinta-suave); margin-bottom: 10px; }
+.gallery-track { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); padding: 0 var(--gutter); width: max-content; will-change: transform; }
+.gcap { flex: none; height: min(58vh, 560px); aspect-ratio: 9 / 16; border-radius: 999px; padding: 8px; margin: 0; transition: transform 0.8s var(--ease); }
+.gcap:nth-child(even) { transform: translateY(34px); }
+.gin { position: relative; height: 100%; border-radius: 999px; overflow: hidden; background: var(--piedra); }
+.gin img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; filter: grayscale(1) sepia(0.18) contrast(0.95); transform: scale(1.08); transition: filter 0.8s var(--ease), transform 1.2s var(--ease); }
+.gcap.is-center .gin img, .gcap:hover .gin img { filter: none; transform: scale(1); }
+.gin figcaption { position: absolute; left: 50%; bottom: 9%; translate: -50% 0; margin: 0; }
+
 /* 3 · Programas: panel que se endereza */
 .programs { height: 240vh; background: var(--piedra); }
 .programs-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; place-items: center; grid-template-columns: minmax(0, 1100px); justify-content: center; padding: 70px var(--gutter) 20px; perspective: 1400px; overflow: hidden;
@@ -291,6 +304,8 @@ a { color: inherit; }
   .cap-front { display: none; }
   .js .capsule, .capsule { opacity: 1; translate: none; scale: none; transform: none; }
   .js .cap-logo path { fill-opacity: 1; stroke-width: 0; animation: none !important; }
+  .gallery { height: auto; }
+  .gallery-sticky { position: relative; height: auto; padding: 80px 0; overflow-x: auto; }
   .orb-ring, .orb-ring.spin, .tk-a, .tk-b, .band img, .panel, .phone, .ph-dark-img img, .ball-sm { animation: none; transform: none; }
   .mid-info, .c { opacity: 1; transform: none; }
   .arches path { stroke-dashoffset: 0; }
