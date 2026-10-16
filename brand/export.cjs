@@ -20,6 +20,7 @@ const JOBS = [
   ['post-campeones.html', 'post-campeones.png'],
   ['post-kgm.html', 'post-partner-kgm.png'],
   ['post-entrenamiento.html', 'post-entrenamiento.png'],
+  ['post-capsula.html', 'post-capsula.png'],
   ['post-camp.html', 'post-camp-maite-cazorla.png'],
   ['post-frase.html', 'post-frase.png'],
   ['story-inscripciones.html', 'story-inscripciones.png'],
