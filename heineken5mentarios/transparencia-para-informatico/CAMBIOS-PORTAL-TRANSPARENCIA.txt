@@ -1,0 +1,45 @@
+CAMBIOS PARA EL PORTAL DE TRANSPARENCIA
+https://eventosjosuearucaslp5.es/
+Eventos Josué Arucas LP5, S.L.U. · NIF B72469661
+
+1. INFORMACIÓN INSTITUCIONAL
+   - Actualizar el Certificado de Situación Censal con el nuevo (adjunto),
+     descargable en los tres formatos: PDF, Word (.docx) y ODT.
+
+2. INFORMACIÓN ECONÓMICO-FINANCIERA
+   Incorporar, descargables en PDF, Word y ODT:
+   - Cuentas Anuales y Memoria 2025
+   - Cuenta de Pérdidas y Ganancias 2025
+   - Balance de Situación 2025
+   (Estos documentos los enviará la gestoría.)
+
+3. AYUDAS Y SUBVENCIONES
+   - El título de la página aparece como "Objeto Social y funciones de la
+     empresa". Cambiarlo a: "Ayudas y Subvenciones".
+
+4. CONTRATOS PÚBLICOS
+   - Sustituir el primer párrafo por este texto:
+     "Durante los ejercicios 2022, 2023, 2024 y 2025, la sociedad no ha
+     celebrado contratos mayores ni menores con Administraciones Públicas,
+     por lo que no existen datos estadísticos sobre adjudicaciones,
+     procedimientos, modificaciones, desistimientos o renuncias."
+
+5. CONVENIOS
+   - El título tampoco es correcto (aparece "Objeto Social y funciones de la
+     empresa"). Cambiarlo a: "Convenios".
+   - Sustituir el párrafo por este texto:
+     "Durante los ejercicios 2022, 2023, 2024 y 2025, Eventos Josué Arucas
+     LP5, S.L. no ha suscrito convenios ni encomiendas de gestión con ninguna
+     entidad pública. No existen, por tanto, modificaciones, prórrogas ni
+     liquidaciones derivadas de tales instrumentos jurídicos."
+
+6. COMPROMISOS
+   - Añadir el sello de calidad otorgado por el Comisionado de Transparencia
+     de Canarias (se envía aparte).
+
+7. EN GENERAL
+   - Actualizar la fecha de revisión / actualización de cada apartado con una
+     fecha reciente.
+
+Nota: el certificado censal incluye el DNI del administrador. Valorar
+publicar una versión con ese dato tapado (protección de datos).
