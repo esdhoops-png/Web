@@ -21,7 +21,7 @@ const JOBS = [
   ['post-resultado.html', 'post-resultado.png'],
   ['post-kgm.html', 'post-partner-kgm.png'],
   ['post-entrenamiento.html', 'post-entrenamiento.png'],
-  ['post-camp.html', 'post-camp-maite-cazorla.png'],
+  ['post-camp.html', 'post-camp-vincenzo-esposito.png'],
   ['story-inscripciones.html', 'story-inscripciones.png'],
   ['story-proximamente.html', 'story-proximamente.png'],
   ...[0, 1, 2, 3, 4, 5].map((i) => [`carrusel.html#${i}`, `carrusel-programas-${i + 1}.png`]),
