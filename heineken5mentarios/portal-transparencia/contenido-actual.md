@@ -69,3 +69,44 @@ El órgano responsable de velar por el cumplimiento de estas obligaciones es la 
 Más información: Comisionado de Transparencia del Gobierno de Canarias. [logo Comisionado de Transparencia · Canarias en claro]
 
 *Nota sobre accesibilidad:* la información publicada en este portal de transparencia se ha realizado conforme al principio de accesibilidad universal y diseño para todos establecido en las pautas WCAG 2.1. publicadas por el World Wide Web Consortium (W3C). Puede leer nuestra declaración de accesibilidad web para más información.
+
+## INFORMACIÓN ORGANIZATIVA
+Fecha de creación 17 de Octubre 2025 · Última actualización: 01 de enero de 2026.
+
+### Objeto social y funciones de la empresa
+La empresa mantiene una estructura organizativa reducida pero eficiente, compuesta por un equipo de 18 **profesionales** que desempeñan funciones en cocina, atención al cliente, gestión, mantenimiento y administración. Este número puede variar en función de la temporada y de la demanda del mercado.
+La política de recursos humanos se fundamenta en valores esenciales como **la estabilidad en el empleo**, la **igualdad de oportunidades entre mujeres y hombres**, la **igualdad retributiva por trabajos de igual valor**, la **conciliación de la vida personal y laboral**, y la **participación interna en los procesos de mejora**.
+- **Estabilidad:** empleo estable y de calidad.
+- **Igualdad de oportunidades entre mujeres y hombres y diversidad:** En todas las áreas se garantiza la igualdad de oportunidades y no discriminación por razón de sexo, edad, religión, raza o situación personal.
+- **Igualdad retributiva:** misma remuneración en puestos de igual valor.
+- **Conciliación de la vida personal, familiar y laboral:** sistema de gestión de la conciliación EFR.
+- **Transparencia y participación: EVENTOS JOSUE ARUCAS LP5 SL** comparte internamente sus objetivos y los resultados obtenidos en cada ejercicio, así como información importante de la entidad y fomenta la creación de comités permanentes y equipos de mejora.
+[Objeto social: PDF · EPUB · DOCX · ODT]
+
+### Órgano de administración
+#### Administradores y directivos
+La persona que conforma el órgano administrativo de la sociedad es Cayetano Josué González Pérez, administrador único. El mismo, se encarga de la gestión y representación de la sociedad, de acuerdo con las disposiciones y directivas de sus Estatutos.
+[Organigrama empresarial: PDF · EPUB · DOCX · ODT]
+
+Organigrama (imagen): CAYETANO JOSUÉ GONZÁLEZ PÉREZ → RAQUEL GONZÁLEZ PÉREZ (Superior de todos los departamentos) → JAMONERÍA D BUEN GUSTO (Encargado/a) · BAR DE COPAS 5MENTARIOS (Encargado/a).
+Pie: "Organigrama de EVENTOS JOSUE ARUCAS LP5 SL".
+
+### Dirección general de la empresa
+Cayetano Josué González Pérez es un profesional de la hostelería con más de 15 años de experiencia en la gestión de locales, atención al cliente y organización de eventos gastronómicos. Reconocido por su liderazgo, compromiso y capacidad para crear experiencias únicas a través de la gastronomía y el buen servicio.
+[Curriculum: PDF · EPUB · DOCX · ODT]
+
+La administración y dirección general de la entidad Eventos Josué Arucas LP5 recae en su administrador único, quien ejerce las funciones de gestión, representación y supervisión general de las actividades empresariales desarrolladas por la sociedad, comprendiendo la dirección de los establecimientos Local 5mentarios (Arucas), Jamonería D'Buen Gusto (Calle Triana, Las Palmas) y D'Buen Gusto (Centro Comercial El Muelle, Las Palmas).
+
+El cargo de administrador se ejerce con dedicación total, correspondiendo una jornada completa de trabajo que incluye la gestión operativa, económica, comercial y de personal de los distintos locales.
+El cargo tiene carácter retribuido, percibiendo el administrador una retribución anual bruta de 30.000 euros, en concepto de salario base y demás complementos inherentes a las funciones de dirección, sin perjuicio de las cotizaciones y retenciones que correspondan conforme a la legislación laboral y fiscal aplicable.
+
+No existen otros miembros del órgano de administración ni directivos que perciban retribución económica por el desempeño de sus funciones.
+[Dirección general: PDF · DOCX · ODT]
+
+### Servicios y procedimientos
+En cumplimiento de la legislación vigente (artículos 46.2 y 48 de la **Ley Orgánica 3/2007**, y **Real Decreto 901/2020**), la empresa ha aprobado y difundido un **Protocolo para la prevención y actuación frente al acoso sexual y por razón de sexo**, documento que establece medidas preventivas, procedimiento de denuncia y medidas disciplinarias.
+Se designa como persona instructora a **Rafael Guillén Reyes**, con **Priscila Cendreros Vera** como suplente. Las quejas o denuncias pueden remitirse al correo electrónico **eventosjosuearucaslp5@gmail.com**, garantizando en todo momento la confidencialidad, la imparcialidad y el respeto a los derechos de las personas implicadas.
+El protocolo tiene **carácter obligatorio para todo el personal** y estará vigente hasta **noviembre de 2027**, previendo su revisión en caso de modificaciones sustanciales de plantilla, fusión o cambios normativos.
+[Doc. de protocolo: PDF · EPUB · DOCX · ODT]
+
+En este punto de servicios y procedimientos resaltar que no se dispone de canal interno de información puesto que según la ley 2/2023 y principios esenciales del procedimiento de gestión no estamos obligados, debido a que nuestra empresa este año 2024 no ha llegado a los 50 empleados.
