@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Portal de transparencia · Heineken 5mentarios</title>
-<meta name="description" content="Portal de transparencia de Eventos Josué Arucas LP5, S.L.U. (Heineken 5mentarios, Arucas): información institucional, económico-financiera, ayudas y subvenciones, contratos, convenios y compromisos.">
+<meta name="description" content="Portal de transparencia de Eventos Josué Arucas LP5, S.L.U. (Heineken 5mentarios, Arucas): información institucional, organizativa, económico-financiera, ayudas y subvenciones, contratos, convenios y compromisos.">
 <link rel="icon" href="img/5mentarios-sello.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
   --display:"Anton","Impact","Arial Narrow Bold",sans-serif;--body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--fg);font:400 16.5px/1.6 var(--body)}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16.5px/1.65 var(--body)}
 a{color:inherit}img{max-width:100%;display:block}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 nav.top{position:sticky;top:0;z-index:20;background:rgba(6,8,7,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
@@ -22,48 +22,70 @@ nav.top .wrap{display:flex;align-items:center;justify-content:space-between;heig
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font:400 19px/1 var(--display);letter-spacing:.03em}
 .brand img{width:40px;height:40px}
 .back{font-size:14px;color:var(--mute);text-decoration:none;white-space:nowrap}.back:hover{color:var(--fg)}
-h1,h2,h3{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;margin:0;letter-spacing:.005em}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;margin:0;letter-spacing:.005em;text-wrap:balance}
 .kick{font:700 12px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--verde);margin:0}
 header.hd{padding-block:64px 40px;border-bottom:1px solid var(--line)}
 header.hd h1{font-size:clamp(54px,9vw,120px);margin-top:16px}
 header.hd h1 span{color:var(--verde)}
-header.hd p{color:var(--mute);max-width:64ch;margin:20px 0 0}
-.ent{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:14px;color:var(--mute)}
+header.hd .intro{color:#D5D2CA;max-width:72ch;margin:22px 0 0;display:grid;gap:12px}
+header.hd .intro p{margin:0}
+.ent{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:24px;font-size:14px;color:var(--mute)}
 .ent b{color:var(--fg);font-weight:500}
 .layout{display:grid;grid-template-columns:240px 1fr;gap:48px;padding-block:40px 80px}
 .idx{position:sticky;top:90px;align-self:start;display:flex;flex-direction:column;gap:2px}
 .idx a{text-decoration:none;color:var(--mute);font-size:14.5px;padding:8px 12px;border-left:2px solid var(--line);transition:color .2s,border-color .2s}
 .idx a:hover,.idx a.on{color:var(--fg);border-color:var(--verde)}
+main{min-width:0}
 section.sec{scroll-margin-top:90px;padding-bottom:44px;margin-bottom:44px;border-bottom:1px solid var(--line);min-width:0}
 section.sec:last-child{border-bottom:0}
 .sh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
 .sh h2{font-size:clamp(34px,4.6vw,54px)}
 .rev{font-size:13px;color:var(--mute);border:1px solid var(--line);padding:6px 10px;border-radius:999px;white-space:nowrap}
 .rev b{color:var(--fg);font-weight:500}
-h3{font-size:24px;margin:28px 0 12px;color:var(--fg)}
+h3{font-size:24px;margin:30px 0 12px;color:var(--fg)}
+h4{font:700 13px/1.2 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--verde);margin:22px 0 10px}
 p{margin:0 0 12px}
-.lead{color:#D5D2CA;max-width:70ch}
-dl{display:grid;grid-template-columns:230px 1fr;margin:0;border-top:1px solid var(--line)}
+.lead,main p,main li{color:#D5D2CA;max-width:72ch}
+main b{color:var(--fg);font-weight:700}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}li::marker{color:var(--verde)}
+dl{display:grid;grid-template-columns:230px 1fr;margin:0 0 12px;border-top:1px solid var(--line)}
 dt,dd{margin:0;padding:12px 0;border-bottom:1px solid var(--line)}
 dt{color:var(--mute);font-size:14px;font-weight:500}
 dd{font-weight:500;overflow-wrap:anywhere}
-.doc{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:8px;margin-bottom:10px}
+.doc{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:8px;margin:0 0 10px}
+.doc .t{min-width:0}
 .doc .t b{display:block;font-weight:700}
 .doc .t small{color:var(--mute);font-size:13px}
 .fmts{display:flex;gap:8px;flex-wrap:wrap}
 .fmt{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--verde);color:var(--verde);border-radius:6px;font:700 13px/1 var(--body);letter-spacing:.06em;text-decoration:none;transition:background .2s,color .2s}
 .fmt:hover{background:var(--verde);color:#04120A}
 .fmt::before{content:"↓"}
+.fmt.ext::before{content:"↗"}
 .pend{color:var(--warn);font-weight:600;font-style:italic;font-size:14px}
-.ayuda{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 24px}
-.ayuda h3{margin-top:0}
-.sello{display:flex;gap:22px;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 24px}
+.year{margin-top:26px}
+.year h3{display:flex;align-items:baseline;gap:12px;margin-top:0}
+.year h3 span{color:var(--verde)}
+.law{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;align-items:center}
+.law p{margin:0;min-width:0;flex:1 1 320px}
+.org{display:grid;justify-items:center;gap:0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:26px 16px;margin:16px 0 8px;text-align:center}
+.org .n{border:1px solid var(--verde);border-radius:6px;padding:10px 16px;font-size:14px;line-height:1.3;background:var(--bg2);min-width:0;max-width:280px}
+.org .n b{display:block;font-size:15px}
+.org .n small{color:var(--mute)}
+.org .v{width:1px;height:22px;background:var(--verde)}
+.org .h{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:min(560px,100%);position:relative;padding-top:22px}
+.org .h::before{content:"";position:absolute;top:0;left:25%;right:25%;height:22px;border:1px solid var(--verde);border-bottom:0;border-radius:8px 8px 0 0}
+.org .h .n{justify-self:center}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 24px;margin-bottom:12px}
+.box h3{margin-top:0}
+.sello{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
 .sello img{width:160px;height:auto}
 .sello .ph{width:160px;aspect-ratio:1;border:1px dashed var(--warn);border-radius:8px;display:grid;place-items:center;text-align:center;color:var(--warn);font-size:13px;padding:12px}
+.nota{font-size:14.5px;color:var(--mute)!important;border-left:2px solid var(--verde);padding-left:14px;margin-top:22px}
 footer{border-top:1px solid var(--line);padding-block:32px calc(40px + env(safe-area-inset-bottom,0px));color:var(--mute);font-size:14px}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 @media (max-width:900px){.layout{grid-template-columns:1fr;gap:20px}.idx{position:static;flex-direction:row;flex-wrap:wrap;gap:6px}.idx a{border:1px solid var(--line);border-radius:999px;padding:6px 12px}}
-@media (max-width:620px){dl{grid-template-columns:1fr}dt{border-bottom:0;padding-bottom:0}dd{padding-top:2px}}
+@media (max-width:620px){dl{grid-template-columns:1fr}dt{border-bottom:0;padding-bottom:0}dd{padding-top:2px}.org .h{grid-template-columns:1fr}.org .h::before{display:none}}
 </style>
 </head>
 <body>
@@ -73,78 +95,182 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </div></nav>
 
 <header class="hd"><div class="wrap">
-  <p class="kick">Transparencia</p>
+  <p class="kick">Informe de transparencia</p>
   <h1>Portal de <span>transparencia</span></h1>
-  <p>Información pública de la sociedad titular de Heineken 5mentarios, en cumplimiento de la normativa de transparencia aplicable a las entidades privadas que perciben ayudas públicas.</p>
-  <div class="ent"><span>Entidad: <b id="eRazon"></b></span><span>NIF: <b id="eNif"></b></span><span>Domicilio: <b id="eDom"></b></span></div>
+  <div class="intro">
+    <p>El objetivo de este portal es facilitar a la ciudadanía el acceso a la información institucional, organizativa, económica y de gestión de la empresa, reforzando así la confianza pública y garantizando el principio de transparencia en el uso de los fondos públicos recibidos. La empresa, al haber sido beneficiaria de una subvención pública superior a los sesenta mil euros (60.000 €) con cargo a los presupuestos de la Comunidad Autónoma de Canarias, está sujeta a las obligaciones establecidas en la Ley 19/2013, de 9 de diciembre, de Transparencia, Acceso a la Información Pública y Buen Gobierno, y la Ley 12/2014, de 26 de diciembre, de Transparencia y Acceso a la Información Pública de Canarias.</p>
+    <p>La transparencia empresarial se enmarca dentro de la estrategia de Responsabilidad Social Empresarial (RSE) de Eventos Josué Arucas LP5, S.L., entendida como un compromiso activo con una sociedad informada y participativa. A través de la publicación de la información contenida en este portal, la empresa pretende fomentar una cultura de rendición de cuentas y demostrar su adhesión a los principios de legalidad, ética, sostenibilidad y buen gobierno corporativo. Las obligaciones están organizadas por ámbitos para facilitar la localización de la información.</p>
+  </div>
+  <div class="ent"><span>Entidad: <b id="eRazon"></b></span><span>NIF: <b id="eNif"></b></span><span>Fecha de creación: <b>17/10/2025</b></span><span>Última actualización: <b data-revtxt></b></span></div>
 </div></header>
 
 <div class="wrap layout">
   <aside class="idx" id="idx">
     <a href="#institucional">Información institucional</a>
+    <a href="#organizativa">Información organizativa</a>
     <a href="#economica">Información económico-financiera</a>
     <a href="#ayudas">Ayudas y subvenciones</a>
     <a href="#contratos">Contratos públicos</a>
     <a href="#convenios">Convenios</a>
     <a href="#compromisos">Compromisos</a>
-    <a href="#acceso">Derecho de acceso</a>
+    <a href="#contacto">Contacto</a>
   </aside>
 
   <main>
+    <!-- ═════════ INSTITUCIONAL ═════════ -->
     <section class="sec" id="institucional">
       <div class="sh"><h2>Información institucional</h2><span class="rev" data-rev></span></div>
-      <h3>Datos de la entidad</h3>
-      <dl>
-        <dt>Razón social</dt><dd id="dRazon"></dd>
-        <dt>NIF</dt><dd id="dNif"></dd>
-        <dt>Nombre comercial</dt><dd>Heineken 5mentarios</dd>
-        <dt>Domicilio fiscal</dt><dd id="dDom"></dd>
-        <dt>Actividad económica</dt><dd>Epígrafe IAE 672.2 · Cafeterías (alta: 01/12/2022)</dd>
-        <dt>Administración / representación</dt><dd id="dRep"></dd>
-      </dl>
-      <h3>Objeto social y funciones de la empresa</h3>
-      <p class="lead">La sociedad desarrolla la actividad de hostelería en el establecimiento Heineken 5mentarios, situado en Arucas (Gran Canaria), clasificada en el epígrafe 672.2 (cafeterías) del Impuesto sobre Actividades Económicas.</p>
-      <h3>Documentación</h3>
-      <div id="docsInst"></div>
+      <h3>Quiénes somos</h3>
+      <p><b>Eventos Josué Arucas LP5, S.L.U.</b> es una sociedad mercantil inscrita en el Registro Mercantil de Las Palmas con NIF <b>B72469661</b> y fecha de constitución <b>5 de septiembre de 2022</b>. Su domicilio fiscal se ubica en <b id="iDom"></b>, y su actividad económica principal se clasifica en el <b>CNAE 5611 – Restaurantes y puestos de comidas</b> (epígrafe IAE 672.2 · Cafeterías).</p>
+      <div data-doc="censal"></div>
+      <p>La empresa nació con la vocación de ofrecer experiencias gastronómicas y de ocio únicas, combinando la tradición de la buena mesa con un ambiente moderno, cercano y acogedor. Su trayectoria comenzó con la apertura de una jamonería en el centro de Las Palmas, especializada en productos ibéricos de alta calidad, y continuó con la inauguración de un local en Arucas, reconocido por su ambiente cálido, buena música y excelente atención al cliente.</p>
+      <p>Con el paso del tiempo, Eventos Josué Arucas LP5 se ha consolidado como un referente en el sector hostelero de Gran Canaria, integrando gastronomía, ocio y hospitalidad bajo una misma filosofía de servicio, donde prima la calidad, la cercanía y la atención personalizada.</p>
+
+      <h3>A quién nos dirigimos</h3>
+      <p>La actividad de la empresa está orientada a un público diverso que valora la calidad gastronómica, el producto local y las experiencias de ocio con identidad canaria. Eventos Josué Arucas LP5 busca consolidar una clientela fiel basada en la confianza, la calidad del servicio y el entorno acogedor de sus establecimientos. Su compromiso con el público se traduce en una atención cuidada y en la mejora continua de sus instalaciones y servicios, siempre con un enfoque de responsabilidad social y sostenibilidad.</p>
+
+      <h3>Visión</h3>
+      <p>Convertirse en una empresa reconocida en el ámbito hostelero de Gran Canaria por la calidad de sus productos, la atención personalizada y la capacidad para crear momentos únicos. La empresa aspira a ser un modelo de negocio responsable, capaz de equilibrar rentabilidad, sostenibilidad y bienestar social.</p>
+
+      <h3>Misión</h3>
+      <p>Brindar un servicio de hostelería de excelencia, ofreciendo productos y experiencias de alta calidad tanto en la jamonería de Las Palmas como en el local de Arucas. Se pretende que cada cliente encuentre un espacio en el que la gastronomía y el trato humano se conviertan en una experiencia memorable, en un ambiente que promueva la cercanía, la autenticidad y la satisfacción plena.</p>
+
+      <h3>Valores</h3>
+      <ul>
+        <li><b>Calidad</b>, mediante la selección rigurosa de proveedores y productos.</li>
+        <li><b>Hospitalidad</b>, garantizando un trato humano, profesional y amable.</li>
+        <li><b>Pasión por la gastronomía</b>, celebrando la cultura del jamón, los vinos y la cocina española.</li>
+        <li><b>Compromiso local</b>, colaborando con productores y proveedores de la región.</li>
+        <li><b>Innovación</b>, incorporando nuevas propuestas y eventos que dinamicen la oferta gastronómica.</li>
+      </ul>
+
+      <h3>Marco regulatorio</h3>
+      <p>Como sociedad, su funcionamiento se rige por sus <b>Estatutos</b>, que pueden consultarse a continuación:</p>
+      <div data-doc="estatutos"></div>
+      <p style="margin-top:18px">Además, la empresa está sujeta a la siguiente normativa básica:</p>
+      <div id="leyes"></div>
+
+      <h4>Protocolo frente al acoso</h4>
+      <p>La empresa cuenta con un <b>Protocolo para la prevención y actuación frente al acoso sexual y por razón de sexo</b>, aprobado el <b>6 de octubre de 2025</b> y vigente hasta el <b>9 de noviembre de 2027</b>. Refleja la política de tolerancia cero ante cualquier conducta discriminatoria o de acoso y establece los procedimientos internos para la recepción y tramitación de quejas, garantizando la confidencialidad y los derechos de las personas afectadas.</p>
+      <p>El órgano responsable de velar por el cumplimiento de estas obligaciones es la <b>Dirección de la sociedad</b>, que centraliza la gestión de la transparencia, la atención de solicitudes y la actualización del portal.</p>
+      <div data-doc="protocolo"></div>
+
+      <h4>Ley Canaria de Transparencia</h4>
+      <p>Eventos Josué Arucas LP5 mantendrá este portal actualizado para que clientes, proveedores y la ciudadanía en general puedan consultar su actividad, conforme a la Ley 19/2013 y a la Ley 12/2014, de 26 de diciembre, de Transparencia y de Acceso a la Información Pública de Canarias. Más información: <a href="https://transparenciacanarias.org/" target="_blank" rel="noopener">Comisionado de Transparencia de Canarias</a>.</p>
+      <p class="nota"><b>Nota sobre accesibilidad:</b> la información de este portal se ha publicado conforme al principio de accesibilidad universal y diseño para todos establecido en las pautas WCAG 2.1 del World Wide Web Consortium (W3C).</p>
     </section>
 
+    <!-- ═════════ ORGANIZATIVA ═════════ -->
+    <section class="sec" id="organizativa">
+      <div class="sh"><h2>Información organizativa</h2><span class="rev" data-rev></span></div>
+      <h3>Objeto social y funciones de la empresa</h3>
+      <p>La empresa mantiene una estructura organizativa reducida pero eficiente, compuesta por un equipo de <b>18 profesionales</b> que desempeñan funciones en cocina, atención al cliente, gestión, mantenimiento y administración. Este número puede variar en función de la temporada y de la demanda.</p>
+      <p>La política de recursos humanos se fundamenta en los siguientes valores:</p>
+      <ul>
+        <li><b>Estabilidad:</b> empleo estable y de calidad.</li>
+        <li><b>Igualdad de oportunidades entre mujeres y hombres y diversidad:</b> en todas las áreas se garantiza la igualdad de oportunidades y la no discriminación por razón de sexo, edad, religión, raza o situación personal.</li>
+        <li><b>Igualdad retributiva:</b> misma remuneración en puestos de igual valor.</li>
+        <li><b>Conciliación de la vida personal, familiar y laboral:</b> sistema de gestión de la conciliación EFR.</li>
+        <li><b>Transparencia y participación:</b> la empresa comparte internamente sus objetivos y los resultados de cada ejercicio, así como la información importante de la entidad, y fomenta la creación de comités permanentes y equipos de mejora.</li>
+      </ul>
+      <div data-doc="objeto"></div>
+
+      <h3>Órgano de administración</h3>
+      <p>El órgano de administración de la sociedad lo conforma <b>Cayetano Josué González Pérez</b>, administrador único, que se encarga de la gestión y representación de la sociedad de acuerdo con las disposiciones de sus Estatutos.</p>
+      <figure class="org" aria-label="Organigrama de Eventos Josué Arucas LP5">
+        <span class="n"><b>Cayetano Josué González Pérez</b><small>Administrador único</small></span>
+        <span class="v"></span>
+        <span class="n"><b>Raquel González Pérez</b><small>Superior de todos los departamentos</small></span>
+        <div class="h"><span class="n"><b>Jamonería D'Buen Gusto</b><small>Encargado/a</small></span><span class="n"><b>Bar de copas 5mentarios</b><small>Encargado/a</small></span></div>
+      </figure>
+      <div data-doc="organigrama"></div>
+
+      <h3>Dirección general</h3>
+      <p>Cayetano Josué González Pérez es un profesional de la hostelería con más de 15 años de experiencia en la gestión de locales, atención al cliente y organización de eventos gastronómicos, reconocido por su liderazgo, compromiso y capacidad para crear experiencias únicas a través de la gastronomía y el buen servicio.</p>
+      <div data-doc="cv"></div>
+      <p>La administración y dirección general recae en su administrador único, que ejerce las funciones de gestión, representación y supervisión de las actividades de la sociedad, incluida la dirección de los establecimientos <b>5mentarios</b> (Arucas), <b>Jamonería D'Buen Gusto</b> (Calle Triana, Las Palmas) y <b>D'Buen Gusto</b> (Centro Comercial El Muelle, Las Palmas).</p>
+      <dl>
+        <dt>Dedicación</dt><dd>Total · jornada completa (gestión operativa, económica, comercial y de personal)</dd>
+        <dt>Retribución anual bruta</dt><dd>30.000 € (salario base y complementos inherentes a las funciones de dirección)</dd>
+        <dt>Otros directivos retribuidos</dt><dd>No existen</dd>
+      </dl>
+      <div data-doc="direccion"></div>
+
+      <h3>Servicios y procedimientos</h3>
+      <p>En cumplimiento de los artículos 46.2 y 48 de la <b>Ley Orgánica 3/2007</b> y del <b>Real Decreto 901/2020</b>, la empresa ha aprobado y difundido un Protocolo para la prevención y actuación frente al acoso sexual y por razón de sexo, que establece medidas preventivas, procedimiento de denuncia y medidas disciplinarias.</p>
+      <dl>
+        <dt>Persona instructora</dt><dd>Rafael Guillén Reyes</dd>
+        <dt>Suplente</dt><dd>Priscila Cendreros Vera</dd>
+        <dt>Quejas o denuncias</dt><dd data-mail></dd>
+        <dt>Vigencia</dt><dd>Hasta noviembre de 2027 · obligatorio para todo el personal</dd>
+      </dl>
+      <p>Se garantiza en todo momento la confidencialidad, la imparcialidad y el respeto a los derechos de las personas implicadas. El protocolo se revisará en caso de modificaciones sustanciales de plantilla, fusión o cambios normativos.</p>
+      <p>La empresa no dispone de canal interno de información, ya que conforme a la Ley 2/2023 no está obligada a ello al no alcanzar los 50 trabajadores en el ejercicio 2025.</p>
+    </section>
+
+    <!-- ═════════ ECONÓMICA ═════════ -->
     <section class="sec" id="economica">
       <div class="sh"><h2>Información económico-financiera</h2><span class="rev" data-rev></span></div>
-      <p class="lead">Cuentas anuales del ejercicio 2025, disponibles para su descarga en distintos formatos.</p>
-      <div id="docsEco"></div>
+      <p>En virtud del artículo 6 de la Ley 12/2014, la empresa publica su información económico-financiera estructurada por anualidades.</p>
+      <p>Eventos Josué Arucas LP5 no está obligada a someter sus cuentas a auditoría ni a fiscalización por órganos de control externo, conforme al <b>artículo 263 del Real Decreto Legislativo 1/2010</b>, de 2 de julio, por el que se aprueba el texto refundido de la Ley de Sociedades de Capital:</p>
+      <div class="box">
+        <h4 style="margin-top:0">Artículo 263. Auditor de cuentas</h4>
+        <ol>
+          <li>Las cuentas anuales y, en su caso, el informe de gestión deberán ser revisados por auditor de cuentas.</li>
+          <li>Se exceptúa de esta obligación a las sociedades que durante dos ejercicios consecutivos reúnan, a la fecha de cierre de cada uno de ellos, al menos dos de las circunstancias siguientes:
+            <ul>
+              <li>Que el total de las partidas del activo no supere los dos millones ochocientos cincuenta mil euros.</li>
+              <li>Que el importe neto de su cifra anual de negocios no supere los cinco millones setecientos mil euros.</li>
+              <li>Que el número medio de trabajadores empleados durante el ejercicio no sea superior a cincuenta.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+      <p>La entidad reúne las circunstancias señaladas, por lo que no está obligada a auditar sus cuentas. No obstante, cumple con su obligación legal de depositar sus cuentas anuales en el <b>Registro Mercantil de Las Palmas</b>, donde pueden solicitarse. A continuación se publican las cuentas de cada ejercicio en formatos abiertos.</p>
+      <div id="cuentas"></div>
     </section>
 
+    <!-- ═════════ AYUDAS ═════════ -->
     <section class="sec" id="ayudas">
       <div class="sh"><h2>Ayudas y subvenciones</h2><span class="rev" data-rev></span></div>
-      <p class="lead">Ayudas y subvenciones públicas concedidas a la sociedad, con indicación de su importe, objetivo o finalidad.</p>
+      <p>La empresa publica de forma clara y comprensible las subvenciones y ayudas públicas percibidas, con indicación de su importe, objetivo o finalidad.</p>
       <div id="ayudasList"></div>
     </section>
 
+    <!-- ═════════ CONTRATOS ═════════ -->
     <section class="sec" id="contratos">
       <div class="sh"><h2>Contratos públicos</h2><span class="rev" data-rev></span></div>
-      <p class="lead">Durante los ejercicios 2022, 2023, 2024 y 2025, la sociedad no ha celebrado contratos mayores ni menores con Administraciones Públicas, por lo que no existen datos estadísticos sobre adjudicaciones, procedimientos, modificaciones, desistimientos o renuncias.</p>
+      <p>Durante los ejercicios 2022, 2023, 2024 y 2025, la sociedad no ha celebrado contratos mayores ni menores con Administraciones Públicas, por lo que no existen datos estadísticos sobre adjudicaciones, procedimientos, modificaciones, desistimientos o renuncias.</p>
     </section>
 
+    <!-- ═════════ CONVENIOS ═════════ -->
     <section class="sec" id="convenios">
       <div class="sh"><h2>Convenios y encomiendas de gestión</h2><span class="rev" data-rev></span></div>
-      <p class="lead">Durante los ejercicios 2022, 2023, 2024 y 2025, Eventos Josué Arucas LP5, S.L. no ha suscrito convenios ni encomiendas de gestión con ninguna entidad pública. No existen, por tanto, modificaciones, prórrogas ni liquidaciones derivadas de tales instrumentos jurídicos.</p>
+      <p>Durante los ejercicios 2022, 2023, 2024 y 2025, Eventos Josué Arucas LP5, S.L. no ha suscrito convenios ni encomiendas de gestión con ninguna entidad pública. No existen, por tanto, modificaciones, prórrogas ni liquidaciones derivadas de tales instrumentos jurídicos.</p>
     </section>
 
+    <!-- ═════════ COMPROMISOS ═════════ -->
     <section class="sec" id="compromisos">
       <div class="sh"><h2>Compromisos</h2><span class="rev" data-rev></span></div>
-      <div class="sello">
+      <p>La empresa asume un firme compromiso con la excelencia, la sostenibilidad y la responsabilidad social.</p>
+      <div class="box sello">
         <div id="selloImg"></div>
         <div style="min-width:0;flex:1">
-          <h3 style="margin-top:0">Sello de calidad</h3>
-          <p class="lead" id="selloTxt" style="margin:0">Sello de calidad otorgado a la sociedad por el Comisionado de Transparencia y Acceso a la Información Pública de Canarias.</p>
+          <h3>Sello de calidad</h3>
+          <p id="selloTxt" style="margin:0">Sello de calidad otorgado a la sociedad por el Comisionado de Transparencia y Acceso a la Información Pública de Canarias.</p>
         </div>
       </div>
     </section>
 
-    <section class="sec" id="acceso">
-      <div class="sh"><h2>Derecho de acceso</h2><span class="rev" data-rev></span></div>
-      <p class="lead">Cualquier persona puede solicitar información relativa a esta entidad sujeta a la normativa de transparencia.</p>
-      <dl><dt>Correo de contacto</dt><dd id="dMail"></dd><dt>Dirección</dt><dd id="dDom2"></dd></dl>
+    <!-- ═════════ CONTACTO ═════════ -->
+    <section class="sec" id="contacto">
+      <div class="sh"><h2>Contacto</h2><span class="rev" data-rev></span></div>
+      <p>Cualquier persona puede solicitar información relativa a esta entidad sujeta a la normativa de transparencia dirigiéndose a la Dirección de la sociedad:</p>
+      <dl>
+        <dt>Teléfono</dt><dd id="dTel"></dd>
+        <dt>Correo electrónico</dt><dd data-mail></dd>
+        <dt>Dirección</dt><dd id="dDom"></dd>
+      </dl>
     </section>
   </main>
 </div>
@@ -161,23 +287,50 @@ const ENTIDAD = {
   razon: "Eventos Josué Arucas LP5, S.L.U.",
   nif: "B72469661",
   domicilio: "Calle León y Castillo, 15 · 35400 Arucas (Las Palmas)",
-  representante: "Cayetano Josué González Pérez",
-  correo: ""                       // correo para solicitudes de información
+  telefono: "+34 651 74 86 95",
+  correo: "eventosjosuearucaslp5@gmail.com"
 };
 
-// Documentos descargables. Si un formato está vacío (""), aparece como pendiente.
-const DOCS_INST = [
-  { t: "Certificado de situación censal", s: "Agencia Tributaria · expedido el 07/10/2026",
-    pdf: "docs/certificado-situacion-censal.pdf", docx: "docs/certificado-situacion-censal.docx", odt: "docs/certificado-situacion-censal.odt" }
+// Documentos descargables. Formatos vacíos ("") no se muestran; si no hay ninguno, sale "pendiente".
+const DOCS = {
+  censal:      { t: "Certificado de situación censal", s: "Agencia Tributaria · expedido el 07/10/2026", pdf: "docs/certificado-situacion-censal.pdf", docx: "docs/certificado-situacion-censal.docx", odt: "docs/certificado-situacion-censal.odt" },
+  estatutos:   { t: "Estatutos registrados", s: "" },
+  protocolo:   { t: "Protocolo frente al acoso sexual y por razón de sexo", s: "Aprobado el 06/10/2025" },
+  objeto:      { t: "Objeto social", s: "" },
+  organigrama: { t: "Organigrama empresarial", s: "" },
+  cv:          { t: "Currículum del administrador", s: "" },
+  direccion:   { t: "Dirección general", s: "" }
+};
+
+const CUENTAS = [
+  { year: 2022, docs: [
+    { t: "Balance de situación 2022", epub: "docs/balance-de-situacion-2022.epub", docx: "docs/balance-de-situacion-2022.docx", odt: "docs/balance-de-situacion-2022.odt" },
+    { t: "Cuenta de pérdidas y ganancias 2022", epub: "docs/perdidas-y-ganancias-2022.epub", docx: "docs/perdidas-y-ganancias-2022.docx", odt: "docs/perdidas-y-ganancias-2022.odt" } ] },
+  { year: 2023, docs: [
+    { t: "Cuentas anuales 2023", epub: "docs/cuentas-anuales-2023.epub", docx: "docs/cuentas-anuales-2023.docx", odt: "docs/cuentas-anuales-2023.odt" },
+    { t: "Balance de situación 2023", epub: "docs/balance-de-situacion-2023.epub", docx: "docs/balance-de-situacion-2023.docx", odt: "docs/balance-de-situacion-2023.odt" },
+    { t: "Cuenta de pérdidas y ganancias 2023", epub: "docs/perdidas-y-ganancias-2023.epub", docx: "docs/perdidas-y-ganancias-2023.docx", odt: "docs/perdidas-y-ganancias-2023.odt" } ] },
+  { year: 2024, docs: [
+    { t: "Balance de situación 2024", epub: "docs/balance-de-situacion-2024.epub", docx: "docs/balance-de-situacion-2024.docx", odt: "docs/balance-de-situacion-2024.odt" },
+    { t: "Cuenta de pérdidas y ganancias 2024", epub: "docs/perdidas-y-ganancias-2024.epub", docx: "docs/perdidas-y-ganancias-2024.docx", odt: "docs/perdidas-y-ganancias-2024.odt" } ] },
+  { year: 2025, docs: [
+    { t: "Cuentas anuales y memoria 2025" },
+    { t: "Balance de situación 2025" },
+    { t: "Cuenta de pérdidas y ganancias 2025" } ] }
 ];
-const DOCS_ECO = [
-  { t: "Cuentas anuales y memoria 2025", s: "Ejercicio 2025", pdf: "", docx: "", odt: "" },
-  { t: "Cuenta de pérdidas y ganancias 2025", s: "Ejercicio 2025", pdf: "", docx: "", odt: "" },
-  { t: "Balance de situación 2025", s: "Ejercicio 2025", pdf: "", docx: "", odt: "" }
+
+const LEYES = [
+  ["Ley 19/2013", "de 9 de diciembre, de Transparencia, Acceso a la Información Pública y Buen Gobierno.", "https://www.boe.es/eli/es/l/2013/12/09/19/con"],
+  ["Ley 12/2014", "de 26 de diciembre, de Transparencia y de Acceso a la Información Pública de Canarias.", "https://www.boe.es/eli/es-cn/l/2014/12/26/12/con"],
+  ["Real Decreto Legislativo 1/2010", "de 2 de julio, por el que se aprueba el texto refundido de la Ley de Sociedades de Capital.", "https://www.boe.es/eli/es/rdlg/2010/07/02/1/con"],
+  ["Ley Orgánica 3/2018", "de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales.", "https://www.boe.es/eli/es/lo/2018/12/05/3/con"],
+  ["Ley 20/1991", "de 7 de junio, de modificación de los aspectos fiscales del Régimen Económico Fiscal de Canarias.", "https://www.boe.es/eli/es/l/1991/06/07/20/con"],
+  ["Real Decreto 634/2015", "de 10 de julio, por el que se aprueba el Reglamento del Impuesto sobre Sociedades.", "https://www.boe.es/eli/es/rd/2015/07/10/634/con"],
+  ["Real Decreto Legislativo 1175/1990", "de 28 de septiembre, por el que se aprueban las tarifas y la instrucción del Impuesto sobre Actividades Económicas.", "https://www.boe.es/eli/es/rdlg/1990/09/28/1175/con"]
 ];
 
 const AYUDAS = [
-  { titulo: "Reforma del local", organismo: "", convocatoria: "", resolucion: "", importe: "",
+  { titulo: "Subvención para la reforma del local", organismo: "Comunidad Autónoma de Canarias", convocatoria: "", resolucion: "", importe: "Superior a 60.000 €",
     objeto: "Reforma y mejora de las instalaciones del establecimiento Heineken 5mentarios, en Arucas." }
 ];
 
@@ -187,18 +340,21 @@ const SELLO = { img: "", texto: "" };   // p. ej. img: "img/sello-transparencia.
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const pend = (v, t = "Pendiente") => v ? esc(v) : `<span class="pend">${t}</span>`;
-document.querySelectorAll("[data-rev]").forEach(e => e.innerHTML = `Última revisión: <b>${esc(REVISION)}</b>`);
-$("#eRazon").textContent = ENTIDAD.razon; $("#eNif").textContent = ENTIDAD.nif; $("#eDom").textContent = ENTIDAD.domicilio;
-$("#dRazon").textContent = ENTIDAD.razon; $("#dNif").textContent = ENTIDAD.nif; $("#dDom").textContent = ENTIDAD.domicilio; $("#dDom2").textContent = ENTIDAD.domicilio;
-$("#dRep").textContent = ENTIDAD.representante + " (administrador)";
-$("#dMail").innerHTML = ENTIDAD.correo ? `<a href="mailto:${esc(ENTIDAD.correo)}">${esc(ENTIDAD.correo)}</a>` : pend("");
+const FMT = [["pdf", "PDF"], ["epub", "EPUB"], ["docx", "WORD"], ["odt", "ODT"]];
 const docHTML = d => {
-  const f = [["pdf", "PDF"], ["docx", "WORD"], ["odt", "ODT"]].filter(([k]) => d[k]);
-  return `<div class="doc"><div class="t"><b>${esc(d.t)}</b><small>${esc(d.s || "")}</small></div><div class="fmts">${f.length ? f.map(([k, l]) => `<a class="fmt" href="${esc(d[k])}" download>${l}</a>`).join("") : '<span class="pend">Documento pendiente de incorporar</span>'}</div></div>`;
+  const f = FMT.filter(([k]) => d[k]);
+  return `<div class="doc"><div class="t"><b>${esc(d.t)}</b>${d.s ? `<small>${esc(d.s)}</small>` : ""}</div><div class="fmts">${f.length ? f.map(([k, l]) => `<a class="fmt" href="${esc(d[k])}" download>${l}</a>`).join("") : '<span class="pend">Documento pendiente de incorporar</span>'}</div></div>`;
 };
-$("#docsInst").innerHTML = DOCS_INST.map(docHTML).join("");
-$("#docsEco").innerHTML = DOCS_ECO.map(docHTML).join("");
-$("#ayudasList").innerHTML = AYUDAS.map(a => `<div class="ayuda"><h3>${esc(a.titulo)}</h3><dl>
+document.querySelectorAll("[data-rev]").forEach(e => e.innerHTML = `Última revisión: <b>${esc(REVISION)}</b>`);
+document.querySelectorAll("[data-revtxt]").forEach(e => e.textContent = REVISION);
+document.querySelectorAll("[data-mail]").forEach(e => e.innerHTML = `<a href="mailto:${esc(ENTIDAD.correo)}">${esc(ENTIDAD.correo)}</a>`);
+document.querySelectorAll("[data-doc]").forEach(e => e.innerHTML = docHTML(DOCS[e.dataset.doc]));
+$("#eRazon").textContent = ENTIDAD.razon; $("#eNif").textContent = ENTIDAD.nif;
+$("#iDom").textContent = ENTIDAD.domicilio; $("#dDom").textContent = ENTIDAD.domicilio;
+$("#dTel").innerHTML = `<a href="tel:${ENTIDAD.telefono.replace(/\s/g, "")}">${esc(ENTIDAD.telefono)}</a>`;
+$("#leyes").innerHTML = LEYES.map(([n, d, u]) => `<div class="law"><p><b>${esc(n)}</b>, ${esc(d)}</p><a class="fmt ext" href="${u}" target="_blank" rel="noopener">BOE</a></div>`).join("");
+$("#cuentas").innerHTML = CUENTAS.map(c => `<div class="year"><h3>Ejercicio <span>${c.year}</span></h3>${c.docs.map(docHTML).join("")}</div>`).join("");
+$("#ayudasList").innerHTML = AYUDAS.map(a => `<div class="box"><h3>${esc(a.titulo)}</h3><dl>
   <dt>Organismo concedente</dt><dd>${pend(a.organismo)}</dd>
   <dt>Convocatoria</dt><dd>${pend(a.convocatoria)}</dd>
   <dt>Fecha de concesión</dt><dd>${pend(a.resolucion)}</dd>
