@@ -229,6 +229,31 @@ section{padding-block:clamp(90px,12vw,160px);position:relative}
 @keyframes latido{50%{scale:1.07}}
 @media (max-width:860px){.mesa .grid{grid-template-columns:1fr}.ticket{left:-6px;width:min(230px,64%);font-size:12px}.ticket h4{font-size:17px}.sello-v{right:-4px;width:96px;font-size:17px}}
 
+/* hoy en el bar (evento destacado) */
+.hoy-ev{position:relative;overflow:hidden;isolation:isolate;padding-block:clamp(70px,10vw,120px)}
+.hoy-ev::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 80% at 80% 30%,rgba(52,194,107,.22),transparent 60%),#060807}
+.hoy-ev .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,70px);align-items:center}
+.hoy-ev .tag{display:inline-flex;align-items:center;gap:12px;font:700 13px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--verde)}
+.hoy-ev .tag i{width:11px;height:11px;border-radius:50%;background:#FF4E45;box-shadow:0 0 14px #FF4E45;animation:blinkh 1s steps(2) infinite}
+@keyframes blinkh{50%{opacity:.2}}
+.hoy-ev .stamp{display:inline-block;font:400 clamp(28px,3vw,40px)/1 var(--display);background:var(--verde);color:#04120A;padding:10px 16px 6px;rotate:-4deg;margin-bottom:18px;box-shadow:0 10px 30px rgba(52,194,107,.4);animation:latidoh 1.4s ease-in-out infinite}
+@keyframes latidoh{50%{scale:1.06}}
+.hoy-ev h2{font-size:clamp(70px,12vw,190px);line-height:.84;margin-top:16px}
+.hoy-ev h2 .o{color:transparent;-webkit-text-stroke:2px var(--verde);display:block;animation:fillh 2.8s ease-in-out infinite}
+@keyframes fillh{45%,55%{color:var(--verde);text-shadow:0 0 30px rgba(52,194,107,.6)}}
+.hoy-ev .when{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.hoy-ev .when b{display:block;font:400 clamp(28px,3vw,40px)/1 var(--display);text-transform:uppercase}
+.hoy-ev .when span{color:var(--mute);font-size:15px}
+.hoy-ev figure{margin:0;position:relative;aspect-ratio:1;max-width:560px;width:100%;justify-self:center;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px var(--verde),0 0 0 14px rgba(52,194,107,.12),0 30px 90px rgba(52,194,107,.25)}
+.hoy-ev figure img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;animation:kbh 14s ease-in-out infinite alternate}
+@keyframes kbh{to{transform:scale(1.08)}}
+.hoy-ev .eqh{display:flex;gap:6px;align-items:flex-end;height:36px;margin-left:auto}
+.hoy-ev .eqh b{width:7px;height:30%;background:var(--verde);animation:eq .8s ease-in-out infinite alternate}
+@media (max-width:860px){.hoy-ev .grid{grid-template-columns:1fr}.hoy-ev figure{max-width:380px;order:-1}}
+nav .hoy-pill{display:inline-flex;align-items:center;gap:8px;background:var(--verde);color:#04120A!important;padding:7px 12px;border-radius:999px;font-weight:700!important;font-size:13px!important}
+nav .hoy-pill::after{display:none}
+nav .hoy-pill i{width:8px;height:8px;border-radius:50%;background:#C21E15;animation:blinkh 1s steps(2) infinite}
+
 /* agenda */
 .agenda{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
 .agenda h2{font-size:clamp(52px,8vw,116px)}
@@ -295,6 +320,7 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
 <nav id="nav"><div class="wrap">
   <a class="brand" href="#top"><img src="img/5mentarios-sello.svg" alt="Logo de Heineken 5mentarios"><span>HEINEKEN 5MENTARIOS</span></a>
   <ul>
+    <li data-ev-nav hidden><a class="hoy-pill" href="#hoy"><i></i>Hoy: Kilian Viera</a></li>
     <li><a href="#planes">El bar</a></li>
     <li><a href="#mesa">Comida</a></li>
     <li><a href="#agenda">Agenda</a></li>
@@ -340,6 +366,23 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
   <span>Arucas<i>✦</i>Desde 2002<i>✦</i>5mentarios<i>✦</i>Arucas<i>✦</i>Desde 2002<i>✦</i>5mentarios<i>✦</i></span>
   <span>Arucas<i>✦</i>Desde 2002<i>✦</i>5mentarios<i>✦</i>Arucas<i>✦</i>Desde 2002<i>✦</i>5mentarios<i>✦</i></span>
 </div></div>
+
+<section class="hoy-ev" id="hoy" hidden>
+  <div class="wrap grid">
+    <div class="rv">
+      <span class="stamp" data-ev="cuando">¡Hoy!</span><br>
+      <span class="tag"><i></i>En directo en 5mentarios</span>
+      <h2><span data-ev="nombre1">Kilian</span><span class="o" data-ev="nombre2">Viera</span></h2>
+      <div class="when">
+        <div><b data-ev="fecha">Viernes 16 oct</b><span>Heineken 5mentarios · Arucas</span></div>
+        <div data-ev-hora hidden><b data-ev="hora"></b><span>Hora de inicio</span></div>
+        <div class="eqh" aria-hidden="true"><b style="--h:80%"></b><b style="--h:50%;animation-delay:-.3s"></b><b style="--h:95%;animation-delay:-.6s"></b><b style="--h:60%;animation-delay:-.2s"></b><b style="--h:85%;animation-delay:-.5s"></b></div>
+      </div>
+      <div class="ctas" style="margin-top:26px"><a class="btn fill" href="https://www.instagram.com/heineken5mentarios/" target="_blank" rel="noopener">Más info en Instagram</a></div>
+    </div>
+    <figure class="rv d1"><img data-ev-img src="img/kilian-viera.jpg" alt="Kilian Viera cantando en directo" loading="lazy"></figure>
+  </div>
+</section>
 
 <section id="desde">
   <div class="wrap since">
@@ -474,6 +517,29 @@ const ENLACES = {
   email: ""       // correo de contacto, p. ej. info@dominio.com
 };
 const FUNDADO = 2002;
+
+// ── Evento destacado (sale arriba en la web y en el menú hasta que pasa la fecha)
+const EVENTO = {
+  nombre: "Kilian Viera",
+  fecha: "2026-10-16",          // AAAA-MM-DD · se oculta solo al día siguiente
+  fechaTexto: "Viernes 16 oct",
+  hora: "",                     // p. ej. "22:00"
+  img: "img/kilian-viera.jpg"
+};
+(() => {
+  const hoyStr = new Date().toLocaleDateString('sv-SE');
+  if (!EVENTO.nombre || hoyStr > EVENTO.fecha) return;
+  const [n1, ...resto] = EVENTO.nombre.split(' ');
+  const set = (k, v) => document.querySelectorAll(`[data-ev="${k}"]`).forEach(e => e.textContent = v);
+  set('nombre1', n1); set('nombre2', resto.join(' ')); set('fecha', EVENTO.fechaTexto);
+  set('cuando', hoyStr === EVENTO.fecha ? '¡Hoy!' : 'Próximamente');
+  if (EVENTO.hora) { set('hora', EVENTO.hora); document.querySelector('[data-ev-hora]').hidden = false; }
+  document.querySelector('[data-ev-img]').src = EVENTO.img;
+  document.querySelector('[data-ev-img]').alt = EVENTO.nombre + ' en directo';
+  document.getElementById('hoy').hidden = false;
+  const nv = document.querySelector('[data-ev-nav]'); nv.hidden = false;
+  nv.querySelector('a').lastChild.textContent = (hoyStr === EVENTO.fecha ? 'Hoy: ' : '') + EVENTO.nombre;
+})();
 
 document.querySelectorAll('[data-link]').forEach(el => {
   const k = el.dataset.link, v = ENLACES[k];
