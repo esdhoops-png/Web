@@ -5,12 +5,12 @@
 @font-face { font-family: 'Inter'; src: url('../../assets/fonts/inter-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
 
 :root {
-  --noche: #0d1e2c;
-  --azul: #142a3d;
-  --cancha: #1c3a54;
-  --arena: #d9c4b0;
-  --arena-claro: #f2e9df;
-  --crema: #faf6f1;
+  --noche: #0e1c2e;
+  --azul: #172d47;
+  --cancha: #22416a;
+  --arena: #d4c0b3;
+  --arena-claro: #efe6df;
+  --crema: #f8f4f0;
   --naranja: #e2672b;
   --arcilla: #b97a4e;
   --display: 'Anton', Impact, sans-serif;
