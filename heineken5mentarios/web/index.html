@@ -193,27 +193,41 @@ section{padding-block:clamp(90px,12vw,160px);position:relative}
   .dots{top:auto;bottom:calc(24px + env(safe-area-inset-bottom,0px));translate:0;flex-direction:row}
 }
 
-/* comida a la mesa */
-.mesa{background:var(--verde-d);color:#F4FBF6;overflow:hidden}
-.mesa .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center}
-.mesa h2{font-size:clamp(52px,8vw,116px)}
-.mesa p{color:#DDF2E5;max-width:44ch}
-.who{display:flex;flex-direction:column;margin-top:28px;border-top:1px solid rgba(255,255,255,.3)}
-.who a{text-decoration:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.3);position:relative;overflow:hidden}
-.who a::before{content:"";position:absolute;inset:0;background:#04120A;transform:scaleY(0);transform-origin:bottom;transition:transform .4s cubic-bezier(.7,0,.3,1);z-index:0}
-.who a:hover::before{transform:none}
-.who strong,.who span{position:relative;z-index:1;transition:padding .4s}
-.who a:hover strong{padding-left:14px}
-.who strong{font:400 clamp(30px,3.6vw,46px)/1 var(--display);text-transform:uppercase}
-.who span{font-family:var(--serif);font-style:italic;font-size:18px;color:#DDF2E5;text-align:right}
-.who a:hover span{padding-right:14px}
-.photo{position:relative;aspect-ratio:4/5;overflow:hidden;max-width:100%;margin:0;clip-path:inset(100% 0 0 0);transition:clip-path 1.3s cubic-bezier(.77,0,.18,1)}
-.photo.in{clip-path:inset(0 0 0 0)}
+/* comida a la mesa · Volcán */
+.mesa{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(120% 70% at 75% 110%,#5A1206 0,#250805 38%,#0A0605 70%);color:#FBEFE6}
+.mesa #brasas{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.mesa .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,80px);align-items:center}
+.mesa .kick{color:#FF9A3C}
+.mesa h2{font-size:clamp(56px,8.6vw,124px)}
+.mesa h2 .it{color:#FF6A2B}
+.mesa p{color:#E9D6CB;max-width:44ch}
+.pasos{list-style:none;margin:30px 0 30px;padding:0;display:grid;gap:0;position:relative;counter-reset:p}
+.pasos::before{content:"";position:absolute;left:21px;top:22px;bottom:22px;width:2px;background:rgba(255,154,60,.22)}
+.pasos::after{content:"";position:absolute;left:21px;top:22px;width:2px;height:calc((100% - 44px)*var(--fill,0));background:linear-gradient(#FF9A3C,#FF4D1F);box-shadow:0 0 12px #FF4D1F;transition:height 1.6s cubic-bezier(.6,0,.2,1) .3s}
+.pasos.in{--fill:1}
+.pasos li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:center;padding:12px 0;counter-increment:p}
+.pasos li::before{content:counter(p,decimal-leading-zero);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#1a0a06;border:2px solid #FF6A2B;font:400 16px/1 var(--display);color:#FF9A3C;position:relative;z-index:1}
+.pasos b{display:block;font:400 clamp(24px,2.6vw,32px)/1 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.pasos span{color:#C9B3A6;font-size:15px}
+.btn.lava{background:#FF4D1F;border-color:#FF4D1F;color:#1A0703}
+.btn.lava::before{background:#FBEFE6}
+.plato{position:relative;max-width:520px;justify-self:center;width:100%}
+.photo{position:relative;aspect-ratio:4/5;overflow:hidden;max-width:100%;margin:0;border-radius:18px;clip-path:inset(100% 0 0 0 round 18px);transition:clip-path 1.3s cubic-bezier(.77,0,.18,1);box-shadow:0 40px 90px rgba(255,77,31,.25)}
+.photo.in,.plato.in .photo{clip-path:inset(0 0 0 0 round 18px)}
 .photo img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover;transform:translateY(calc(var(--y,0)*1px)) scale(1.05)}
-.photo figcaption{position:absolute;left:0;bottom:0;background:#04120A;color:var(--fg);font:700 13px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;padding:12px 14px}
-.photo .sticker{position:absolute;right:-18px;top:-18px;width:150px;z-index:2;animation:spin 18s linear infinite}
-.photo .sticker text{font:400 13px var(--display);letter-spacing:.3em;fill:#F4FBF6}
-@media (max-width:860px){.mesa .grid{grid-template-columns:1fr}}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(26,7,3,.75))}
+.photo figcaption{position:absolute;left:18px;bottom:16px;z-index:1;font:400 clamp(26px,3vw,38px)/1 var(--display);text-transform:uppercase;color:#FBEFE6}
+.photo figcaption small{display:block;font:700 11px/1.6 var(--body);letter-spacing:.18em;color:#FF9A3C}
+.ticket{position:absolute;left:-34px;top:9%;width:min(240px,62%);background:#FBF6EE;color:#1b1410;font:500 13px/1.45 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;padding:16px 16px 22px;box-shadow:0 22px 50px rgba(0,0,0,.45);rotate:-5deg;clip-path:inset(0 0 100% 0);transition:clip-path 1.4s steps(14) .9s;z-index:2;
+  -webkit-mask:radial-gradient(7px at 50% 100%,#0000 98%,#000) 50% 100%/14px 100% repeat-x;mask:radial-gradient(7px at 50% 100%,#0000 98%,#000) 50% 100%/14px 100% repeat-x}
+.plato.in .ticket{clip-path:inset(0 0 0 0)}
+.ticket h4{margin:0 0 8px;font:400 22px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;border-bottom:1px dashed #8d7f74;padding-bottom:8px;display:flex;justify-content:space-between}
+.ticket p{margin:0;color:#1b1410}
+.ticket .ok{margin-top:8px;padding-top:8px;border-top:1px dashed #8d7f74;font-weight:700;color:#C2340F}
+.ticket .ok i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#C2340F;margin-right:6px;animation:blink 1s steps(2) infinite}
+.sello-v{position:absolute;right:-22px;bottom:16%;width:118px;aspect-ratio:1;border-radius:50%;background:#FF4D1F;color:#1A0703;display:grid;place-items:center;text-align:center;font:400 20px/.95 var(--display);text-transform:uppercase;rotate:10deg;z-index:2;box-shadow:0 0 0 6px rgba(255,77,31,.25),0 0 40px rgba(255,77,31,.6);animation:latido 1.8s ease-in-out infinite}
+@keyframes latido{50%{scale:1.07}}
+@media (max-width:860px){.mesa .grid{grid-template-columns:1fr}.ticket{left:-6px;width:min(230px,64%);font-size:12px}.ticket h4{font-size:17px}.sello-v{right:-4px;width:96px;font-size:17px}}
 
 /* agenda */
 .agenda{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
@@ -257,10 +271,12 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
 
 @media (prefers-reduced-motion:reduce){
   .intro{display:none}
-  .grain,.beam,.orbit,.scroll-hint i,.eq i,.laser,.flood,.grada i,.live i,.photo .sticker,.badge img,.badge .shine{animation:none!important}
+  .grain,.beam,.orbit,.scroll-hint i,.eq i,.laser,.flood,.grada i,.live i,.sello-v,.ticket .ok i,.badge img,.badge .shine{animation:none!important}
   .rv{opacity:1;transform:none;transition:none}
   .hero h1 .w>span,.hero-sub,.hero .ctas,.badge img{transform:none!important;opacity:1!important;scale:1!important;rotate:0deg!important;transition:none!important}
   .photo{clip-path:none;transition:none}
+  .ticket{clip-path:none;transition:none}
+  .pasos::after{transition:none}
   .quote p .wd{opacity:1}
   html{scroll-behavior:auto}
 }
@@ -379,18 +395,28 @@ footer{border-top:1px solid var(--line);padding-block:60px 48px;color:var(--mute
 </section>
 
 <section class="mesa" id="mesa">
+  <canvas id="brasas" aria-hidden="true"></canvas>
   <div class="wrap grid">
     <div class="rv">
-      <p class="kick" style="color:#CFEBD9">Comida a la mesa</p>
-      <h2 style="margin-top:14px">No te muevas,<br><span class="it">te la llevamos</span></h2>
-      <p>En 5mentarios puedes pedir las smash burgers de Volcán y te las llevamos a la mesa. Sin perderte ni un minuto del concierto o del partido.</p>
-      <div class="who">
-        <a href="https://www.instagram.com/volcansmashburger/" target="_blank" rel="noopener"><strong>Volcán</strong><span>smash burgers</span></a>
-      </div>
+      <p class="kick">Comida a la mesa · Volcán Smash Burger</p>
+      <h2 style="margin-top:14px">Del volcán<br><span class="it">a tu mesa</span></h2>
+      <p>Las smash burgers de Volcán, recién hechas y servidas donde estés. Tú sigues con el concierto, el partido o la ronda; la cena llega sola.</p>
+      <ol class="pasos rv d1">
+        <li><div><b>Pides en la barra</b><span>Sin levantarte más de la cuenta</span></div></li>
+        <li><div><b>Volcán la hace al momento</b><span>Smash en la plancha, queso fundido</span></div></li>
+        <li><div><b>Te la llevamos</b><span>Directa a tu mesa, aún humeando</span></div></li>
+      </ol>
+      <div class="ctas"><a class="btn lava" href="https://www.instagram.com/volcansmashburger/" target="_blank" rel="noopener">Ver Volcán en Instagram</a></div>
     </div>
-    <div style="position:relative">
-      <figure class="photo" id="photo"><img src="img/volcan.jpg" alt="Smash burger de Volcán con el queso fundido" loading="lazy"><figcaption>Volcán · a tu mesa</figcaption></figure>
-      <svg class="sticker" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="98" fill="#04120A"/><defs><path id="c2" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs><text><textPath href="#c2">A tu mesa · a tu mesa · a tu mesa ·</textPath></text><text x="100" y="114" text-anchor="middle" style="font-size:44px;letter-spacing:0;fill:#34C26B">★</text></svg>
+    <div class="plato rv d1" id="plato">
+      <figure class="photo" id="photo"><img src="img/volcan.jpg" alt="Smash burger de Volcán con el queso fundido" loading="lazy"><figcaption><small>Volcán Smash Burger</small>Recién salida</figcaption></figure>
+      <div class="ticket" aria-hidden="true">
+        <h4><span>Comanda</span><span>Mesa 05</span></h4>
+        <p>1 × Smash burger Volcán</p>
+        <p>1 × Ronda para la mesa</p>
+        <p class="ok"><i></i>En camino a tu mesa</p>
+      </div>
+      <div class="sello-v" aria-hidden="true">A tu<br>mesa</div>
     </div>
   </div>
 </section>
@@ -530,6 +556,28 @@ const qp = $('#quote p');
   });
 })(qp);
 const palabras = [...qp.querySelectorAll('.wd')];
+
+// ── brasas subiendo en la sección de comida
+(() => {
+  const cv = $('#brasas'), ctx = cv.getContext('2d'); let W, H, on = false, parts = [];
+  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = cv.width = r.width * d; H = cv.height = r.height * d; };
+  size(); addEventListener('resize', size);
+  const nueva = () => ({ x: Math.random() * W, y: H + Math.random() * H * .3, r: (1 + Math.random() * 2.6) * (W / 1400 + .6), v: .5 + Math.random() * 1.6, w: Math.random() * 6.28, a: .5 + Math.random() * .5 });
+  for (let i = 0; i < 90; i++) { const p = nueva(); p.y = Math.random() * H; parts.push(p); }
+  new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on && !reduce) requestAnimationFrame(tick); }).observe(cv);
+  function tick() {
+    if (!on) return;
+    ctx.clearRect(0, 0, W, H); ctx.globalCompositeOperation = 'lighter';
+    for (const p of parts) {
+      p.y -= p.v; p.w += .03; p.x += Math.sin(p.w) * .6;
+      const vida = p.y / H; if (p.y < -10) Object.assign(p, nueva());
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      g.addColorStop(0, `rgba(255,${150 + 80 * vida | 0},60,${p.a * Math.min(1, vida * 1.4)})`); g.addColorStop(1, 'rgba(255,60,20,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4, 0, 6.28); ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+})();
 
 // ── aparición al bajar
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15, rootMargin: '0px 0px -40px 0px' });
