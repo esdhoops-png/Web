@@ -2,6 +2,7 @@
  * Exporta las plantillas de brand/social/*.html a PNG (brand/social/png/).
  * Uso:  npm i -D playwright  &&  node brand/export.cjs        (plantillas)
  *                               node brand/export.cjs feed   (posts del feed → brand/social/feed/png)
+ *                               node brand/export.cjs feed2  (feed estilo NBA/NCAA → brand/social/feed2/png)
  * Edita los textos en cada .html y vuelve a ejecutar para regenerar las imágenes.
  */
 const http = require('http');
@@ -11,7 +12,8 @@ const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
 const FEED = process.argv[2] === 'feed';
-const OUT = path.join(__dirname, 'social', FEED ? 'feed/png' : 'png');
+const FEED2 = process.argv[2] === 'feed2';
+const OUT = path.join(__dirname, 'social', FEED2 ? 'feed2/png' : FEED ? 'feed/png' : 'png');
 
 const JOBS = [
   ['perfil.html', 'perfil-1080.png'],
@@ -35,6 +37,11 @@ if (FEED) {
   JOBS.length = 0;
   fs.readFileSync(path.join(__dirname, 'social', 'feed', 'list.txt'), 'utf8').split('\n').filter(Boolean)
     .forEach((n) => JOBS.push([`${n}.html`, `${n}.png`]));
+}
+if (FEED2) {
+  JOBS.length = 0;
+  fs.readdirSync(path.join(__dirname, 'social', 'feed2')).filter((f) => f.endsWith('.html')).sort()
+    .forEach((f) => JOBS.push([`feed2/${f}`, f.replace('.html', '.png')]));
 }
 
 const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.png': 'image/png', '.jpg': 'image/jpeg' };

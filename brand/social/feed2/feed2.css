@@ -1,0 +1,37 @@
+/* ESD Hoops · feed estilo NBA / NCAA con la paleta de la marca
+   Mismos tonos (azul, noche, hueso, arena), lenguaje de retransmisión: marcadores, banderines, entradas, alineaciones.
+   Cada archivo es un lienzo .canvas de 1080×1350; se exporta con: node brand/export.cjs feed2 */
+@font-face { font-family: 'Anton'; src: url('../../../assets/fonts/anton-latin.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Inter'; src: url('../../../assets/fonts/inter-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+@font-face { font-family: 'Plex Mono'; src: url('../../../assets/fonts/plexmono-500-latin.woff2') format('woff2'); font-weight: 500; font-display: block; }
+@font-face { font-family: 'Graduate'; src: url('../../../assets/fonts/graduate-latin.woff2') format('woff2'); font-display: block; }
+:root {
+  --hueso: #ebe6e1; --papel: #f6f3f0; --piedra: #ddd6cf; --arena: #d4c0b3; --arena2: #b89c89;
+  --azul: #172d47; --noche: #0e1c2e; --tinte: #1f3f66; --raya: rgba(235, 230, 225, 0.09);
+  --display: 'Anton', Impact, sans-serif; --varsity: 'Graduate', 'Rockwell', serif; --body: 'Inter', system-ui, sans-serif; --mono: 'Plex Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #444; }
+.canvas { position: relative; overflow: hidden; width: 1080px; height: 1350px; background: var(--noche); color: var(--hueso); font-family: var(--body); }
+.canvas.light { background: var(--hueso); color: var(--azul); }
+.canvas.navy { background: var(--azul); }
+/* pista de fondo (media pista en línea fina) */
+.court { position: absolute; inset: 0; width: 100%; height: 100%; }
+.court * { fill: none; stroke: var(--raya); stroke-width: 3; }
+.light .court * { stroke: rgba(23, 45, 71, 0.08); }
+/* barra superior y pie, como en una retransmisión */
+.bar { position: absolute; left: 64px; right: 64px; display: flex; align-items: center; justify-content: space-between; font: 500 22px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; }
+.bar.top { top: 60px; } .bar.bot { bottom: 56px; opacity: 0.7; }
+.bar .lg { display: flex; align-items: center; gap: 16px; }
+.bar .lg img { height: 64px; }
+.tag { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px 11px; border: 2px solid currentColor; border-radius: 999px; }
+.tag.fill { background: var(--arena); color: var(--noche); border-color: var(--arena); }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--arena); }
+/* rayas universitarias */
+.stripes { display: flex; flex-direction: column; gap: 8px; }
+.stripes i { display: block; height: 10px; background: var(--arena); }
+.stripes i:nth-child(2) { background: var(--hueso); height: 6px; }
+.varsity { font-family: var(--varsity); text-transform: uppercase; letter-spacing: 0.04em; }
+.big { font-family: var(--display); text-transform: uppercase; line-height: 0.86; letter-spacing: 0.005em; }
+.mono { font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.14em; }
+.outline { color: transparent; -webkit-text-stroke: 3px var(--arena); }
