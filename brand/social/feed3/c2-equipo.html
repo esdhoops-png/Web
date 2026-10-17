@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Opción C · Arma tu equipo</title>
+<link rel="stylesheet" href="feed3.css">
+<style>
+
+.canvas { background: var(--hueso); }
+.half { position: absolute; top: 0; bottom: 0; left: 540px; right: 0; background: var(--noche); }
+.t { left: 0; right: 0; text-align: center; font: 900 330px/.82 'Big Shoulders'; text-transform: uppercase; color: #fff; mix-blend-mode: difference; }
+.cut { left: 50%; translate: -30% 0; bottom: 120px; height: 760px; }
+.n { left: 64px; top: 70px; font: 500 22px/1 'Plex Mono'; letter-spacing: .16em; text-transform: uppercase; color: var(--azul); }
+.lg { right: 64px; top: 56px; width: 70px; }
+.bar { left: 0; right: 0; bottom: 0; height: 120px; background: var(--azul); display: flex; align-items: center; justify-content: space-around; font: 900 54px/1 'Big Shoulders'; text-transform: uppercase; letter-spacing: .02em; color: var(--hueso); }
+.bar span:nth-child(4) { color: var(--arena); }
+.big3 { left: 64px; bottom: 170px; font: 900 200px/.8 'Big Shoulders'; color: var(--azul); }
+.big3 small { display: block; font: 500 20px/1.4 'Plex Mono'; letter-spacing: .14em; text-transform: uppercase; margin-top: 10px; }
+
+</style></head>
+<body><div class="canvas grain ">
+<div class="half"></div>
+<div class="abs n">Winter Classic · 26 dic</div><img class="abs lg" src="../../logo/esd-logo-blanco.svg" alt="">
+<div class="abs t" style="top:120px"><span class="fit" data-fit="980">Arma tu</span></div>
+<div class="abs t" style="top:400px"><span class="fit" data-fit="980">equipo</span></div>
+<img class="cut" src="recortes/c-sf.png" alt="">
+<div class="abs big3">3+1<small>En pista<br>+ 1 cambio</small></div>
+<div class="abs bar"><span>Tú</span><span>@ ___</span><span>@ ___</span><span>+1</span></div>
+</div><script>document.fonts.ready.then(()=>document.querySelectorAll('[data-fit]').forEach(el=>{let f=parseFloat(getComputedStyle(el).fontSize);const W=+el.dataset.fit;while(el.offsetWidth>W&&f>20){f-=4;el.style.fontSize=f+'px'}}))</script></body></html>

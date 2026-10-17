@@ -1,0 +1,20 @@
+/* ESD Hoops · opciones de estilo para el feed (referencias: USC, Kentucky, Spurs, Celtics) con la paleta de la marca.
+   Jugadores recortados (feed3/recortes), tipografía gigante detrás y poco texto. Exportar: node brand/export.cjs feed3 */
+@font-face { font-family: 'Big Shoulders'; src: url('../../../assets/fonts/bigshoulders-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+@font-face { font-family: 'Archivo'; src: url('../../../assets/fonts/archivo-latin.woff2') format('woff2'); font-weight: 100 900; font-stretch: 62% 125%; font-display: block; }
+@font-face { font-family: 'Script'; src: url('../../../assets/fonts/mrssaint-latin.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Instrument Serif'; src: url('../../../assets/fonts/instrumentserif-latin.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Graduate'; src: url('../../../assets/fonts/graduate-latin.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Anton'; src: url('../../../assets/fonts/anton-latin.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Inter'; src: url('../../../assets/fonts/inter-latin.woff2') format('woff2'); font-weight: 100 900; font-display: block; }
+@font-face { font-family: 'Plex Mono'; src: url('../../../assets/fonts/plexmono-500-latin.woff2') format('woff2'); font-weight: 500; font-display: block; }
+:root { --hueso: #ebe6e1; --papel: #f6f3f0; --piedra: #ddd6cf; --arena: #d4c0b3; --azul: #172d47; --noche: #0e1c2e; --tinte: #1f3f66; --cielo: #2b5a8f; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #444; }
+.canvas { position: relative; overflow: hidden; width: 1080px; height: 1350px; background: var(--noche); color: var(--hueso); font-family: 'Inter', sans-serif; }
+.abs { position: absolute; }
+.cut { position: absolute; filter: drop-shadow(0 30px 40px rgba(0,0,0,.35)); }
+.track { font: 600 26px/1 'Inter'; letter-spacing: .62em; text-transform: uppercase; }
+.mono { font: 500 22px/1 'Plex Mono', monospace; letter-spacing: .16em; text-transform: uppercase; }
+.grain::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .13; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.fit { display: inline-block; white-space: nowrap; }

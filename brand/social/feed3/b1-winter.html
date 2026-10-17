@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Opción B · Winter Classic</title>
+<link rel="stylesheet" href="feed3.css">
+<style>
+
+.ghost { right: -120px; top: 120px; width: 760px; opacity: .06; }
+.kick { left: 0; right: 0; top: 150px; text-align: center; font: 600 22px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; }
+.giant { left: 0; right: 0; text-align: center; font: 800 280px/.84 'Archivo'; font-stretch: 62%; letter-spacing: -.03em; text-transform: uppercase; }
+.script { left: 0; right: 0; text-align: center; font: 400 210px/1 'Script'; transform: rotate(-6deg); }
+.lg { left: 50%; translate: -50% 0; top: 56px; width: 72px; }
+.foot { left: 0; right: 0; bottom: 48px; text-align: center; font: 600 18px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; opacity: .7; }
+
+.canvas { background: var(--papel); color: var(--azul); }
+.giant { top: 250px; color: #5f6f83; }
+.script { top: 300px; color: var(--azul); }
+.cut { left: 50%; translate: -50% 0; bottom: 80px; width: 880px; }
+.chip { left: 50%; translate: -50% 0; top: 205px; display: flex; gap: 18px; font: 600 20px/1 'Inter'; letter-spacing: .2em; text-transform: uppercase; color: var(--azul); }
+.chip span { padding: 10px 14px; border: 1.5px solid rgba(23,45,71,.35); }
+
+</style></head>
+<body><div class="canvas grain ">
+<img class="abs ghost" src="../../logo/esd-logo-azul.svg" alt="">
+<img class="abs lg" src="../../logo/esd-logo-azul.svg" alt="">
+<div class="abs chip"><span>26 dic</span><span>Torneo 3x3</span><span>Street Series II</span></div>
+<div class="abs giant"><span class="fit" data-fit="960">Winter</span><br><span class="fit" data-fit="960">Classic</span></div>
+<img class="cut" src="recortes/c-dribbling.png" alt="">
+<div class="abs script">Save the date</div>
+<div class="abs foot">ESD Hoops · Inscripciones muy pronto</div>
+</div><script>document.fonts.ready.then(()=>document.querySelectorAll('[data-fit]').forEach(el=>{let f=parseFloat(getComputedStyle(el).fontSize);const W=+el.dataset.fit;while(el.offsetWidth>W&&f>20){f-=4;el.style.fontSize=f+'px'}}))</script></body></html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Opción B · Training</title>
+<link rel="stylesheet" href="feed3.css">
+<style>
+
+.ghost { right: -120px; top: 120px; width: 760px; opacity: .06; }
+.kick { left: 0; right: 0; top: 150px; text-align: center; font: 600 22px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; }
+.giant { left: 0; right: 0; text-align: center; font: 800 280px/.84 'Archivo'; font-stretch: 62%; letter-spacing: -.03em; text-transform: uppercase; }
+.script { left: 0; right: 0; text-align: center; font: 400 210px/1 'Script'; transform: rotate(-6deg); }
+.lg { left: 50%; translate: -50% 0; top: 56px; width: 72px; }
+.foot { left: 0; right: 0; bottom: 48px; text-align: center; font: 600 18px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; opacity: .7; }
+
+.canvas { background: linear-gradient(180deg, var(--cielo), var(--azul)); color: var(--hueso); }
+.side-big { left: -140px; top: 120px; height: 1300px; opacity: .28; filter: blur(1px); }
+.giant { top: 340px; color: var(--hueso); font-size: 300px; }
+.script { top: 1010px; color: var(--arena); font-size: 150px; z-index: 3; }
+.cut { right: 40px; bottom: 0; height: 1000px; }
+.kick { top: 300px; }
+
+</style></head>
+<body><div class="canvas grain ">
+<img class="abs side-big" src="recortes/c-carrera.png" alt="">
+<img class="abs lg" src="../../logo/esd-logo-blanco.svg" alt="">
+<div class="abs kick">ESD Training · 2026</div>
+<div class="abs giant"><span class="fit" data-fit="980">Training</span></div>
+<img class="cut" src="recortes/c-carrera.png" alt="">
+<div class="abs script">Entrena con nosotros</div>
+<div class="abs foot">Escríbenos ENTRENO por DM</div>
+</div><script>document.fonts.ready.then(()=>document.querySelectorAll('[data-fit]').forEach(el=>{let f=parseFloat(getComputedStyle(el).fontSize);const W=+el.dataset.fit;while(el.offsetWidth>W&&f>20){f-=4;el.style.fontSize=f+'px'}}))</script></body></html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Opción C · Cuenta atrás</title>
+<link rel="stylesheet" href="feed3.css">
+<style>
+
+.canvas { background: var(--noche); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(235,230,225,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(235,230,225,.06) 1px, transparent 1px); background-size: 90px 90px; }
+.num { left: -20px; right: 0; top: 40px; text-align: center; font: 900 1040px/.8 'Big Shoulders'; letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 4px rgba(235,230,225,.85); }
+.cut { left: 50%; translate: -42% 0; bottom: 0; height: 1180px; filter: grayscale(1) contrast(1.1) drop-shadow(0 30px 40px rgba(0,0,0,.45)); }
+.shade { position: absolute; left: 0; right: 0; bottom: 0; height: 520px; background: linear-gradient(0deg, rgba(14,28,46,.95), transparent); }
+.info { left: 64px; bottom: 70px; }
+.info b { display: block; font: 900 118px/.86 'Big Shoulders'; text-transform: uppercase; color: var(--hueso); }
+.info span { display: block; margin-top: 16px; font: 500 22px/1 'Plex Mono'; letter-spacing: .16em; text-transform: uppercase; color: var(--arena); }
+.lg { right: 64px; top: 60px; width: 70px; }
+.tl { left: 64px; top: 72px; }
+.tag { right: 64px; bottom: 82px; font: 500 20px/1.5 'Plex Mono'; letter-spacing: .14em; text-transform: uppercase; text-align: right; color: rgba(235,230,225,.7); }
+
+</style></head>
+<body><div class="canvas grain ">
+<div class="grid"></div>
+<div class="abs num">62</div>
+<img class="cut" src="recortes/c-salto.png" alt="">
+<div class="shade"></div><div class="abs mono tl">Cuenta atrás</div><img class="abs lg" src="../../logo/esd-logo-blanco.svg" alt="">
+<div class="abs info"><b>Días para el<br>Winter Classic</b><span>26 dic · Torneo 3x3</span></div>
+</div><script>document.fonts.ready.then(()=>document.querySelectorAll('[data-fit]').forEach(el=>{let f=parseFloat(getComputedStyle(el).fontSize);const W=+el.dataset.fit;while(el.offsetWidth>W&&f>20){f-=4;el.style.fontSize=f+'px'}}))</script></body></html>
