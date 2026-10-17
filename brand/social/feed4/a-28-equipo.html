@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>ESD Hoops · Equipo</title>
+<link rel="stylesheet" href="../feed3/feed3.css">
+<style>
+.canvas { background: radial-gradient(70% 55% at 50% 45%, #183154 0%, var(--noche) 70%); }
+.top { left: 0; right: 0; top: 64px; text-align: center; padding-left: .62em; }
+.giant { left: 0; right: 0; top: 100px; text-align: center; transform: scaleY(1.55); transform-origin: 50% 0; font: 900 520px/.8 'Big Shoulders'; letter-spacing: -.01em; text-transform: uppercase; color: var(--hueso); }
+.side { top: 760px; z-index: 3; max-width: 300px; font: 400 42px/1.1 'Graduate'; letter-spacing: .05em; text-transform: uppercase; color: var(--hueso); text-shadow: 0 2px 14px rgba(14,28,46,.8); }
+.side.l { left: 64px; } .side.r { right: 64px; text-align: right; }
+.sw { position: absolute; left: 0; bottom: 190px; width: 1080px; height: 420px; z-index: 2; }
+.sw path { fill: none; stroke: var(--arena); stroke-width: 30; stroke-linecap: round; }
+.foot { left: 0; right: 0; bottom: 168px; z-index: 3; text-align: center; color: rgba(235,230,225,.75); font-size: 20px; padding-left: .62em; text-shadow: 0 2px 10px rgba(14,28,46,.9); }
+.badge { left: 50%; translate: -50% 0; bottom: 44px; width: 96px; height: 96px; border: 2px solid var(--arena); display: grid; place-items: center; background: var(--noche); z-index: 3; }
+.badge img { width: 60px; }
+.cut { left: 50%; translate: -50% 0; }
+
+.cut { bottom: 175px; height: 640px; }
+.side { top: 1080px; }
+</style></head>
+<body><div class="canvas grain">
+<div class="abs top track">Winter Classic · 26 dic</div>
+<div class="abs giant"><span class="fit" data-fit="980" data-h="440">Equipo</span></div>
+<img class="cut" src="../feed3/recortes/c-grupo.png" alt="">
+<div class="abs side l">Arma<br>tu</div><div class="abs side r">3 + 1</div>
+<svg class="sw" viewBox="0 0 1080 420" aria-hidden="true"><path d="M-40 330 C 120 250, 260 180, 330 230 C 380 270, 300 380, 230 360 C 170 340, 260 250, 420 250 C 640 250, 820 180, 1120 20"/></svg><div class="abs foot track">Etiqueta a tus 3</div><div class="abs badge"><img src="../../logo/esd-logo-blanco.svg" alt="ESD Hoops"></div>
+</div><script>document.fonts.ready.then(()=>document.querySelectorAll('[data-fit]').forEach(el=>{let f=parseFloat(getComputedStyle(el).fontSize);const W=+el.dataset.fit;const H=+(el.dataset.h||9999);while((el.offsetWidth>W||el.offsetHeight*1.55>H)&&f>20){f-=4;el.style.fontSize=f+'px'}}))</script></body></html>

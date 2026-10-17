@@ -4,6 +4,7 @@
  *                               node brand/export.cjs feed   (posts del feed → brand/social/feed/png)
  *                               node brand/export.cjs feed2  (feed estilo NBA/NCAA → brand/social/feed2/png)
  *                               node brand/export.cjs feed3  (opciones de estilo con jugadores recortados → brand/social/feed3/png)
+ *                               node brand/export.cjs feed4  (feed 19–31 oct, estilo "Welcome" → brand/social/feed4/png)
  * Edita los textos en cada .html y vuelve a ejecutar para regenerar las imágenes.
  */
 const http = require('http');
@@ -13,8 +14,8 @@ const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
 const FEED = process.argv[2] === 'feed';
-const FEED2 = process.argv[2] === 'feed2' || process.argv[2] === 'feed3';
-const DIR2 = process.argv[2] === 'feed3' ? 'feed3' : 'feed2';
+const FEED2 = ['feed2', 'feed3', 'feed4'].includes(process.argv[2]);
+const DIR2 = FEED2 ? process.argv[2] : 'feed2';
 const OUT = path.join(__dirname, 'social', FEED2 ? DIR2 + '/png' : FEED ? 'feed/png' : 'png');
 
 const JOBS = [
