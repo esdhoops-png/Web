@@ -37,8 +37,16 @@
 .st { left: 50%; translate: -50% 0; bottom: 62px; display: flex; gap: 0; border: 1.5px solid rgba(212,192,179,.6); }
 .st span { font: 600 18px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; color: var(--arena); padding: 16px 22px 15px 28px; white-space: nowrap; }
 .st span + span { border-left: 1.5px solid rgba(212,192,179,.6); }
+
+.glow { inset: 0; pointer-events: none; }
+.glow i { position: absolute; border-radius: 50%; filter: blur(70px); background: radial-gradient(circle, rgba(220,230,242,.85) 0%, rgba(220,230,242,.3) 45%, transparent 70%); }
+.glow .g1 { width: 620px; height: 460px; right: -170px; top: -80px; }
+.glow .g2 { width: 420px; height: 560px; left: -230px; top: 480px; opacity: .85; }
+.glow .g3 { width: 380px; height: 380px; right: -200px; top: 760px; opacity: .55; }
+.glow .g4 { width: 460px; height: 320px; left: -140px; bottom: -150px; opacity: .6; }
+.glow .g5 { width: 300px; height: 260px; left: 240px; top: -170px; opacity: .45; }
 </style></head><body><div class="canvas grain">
-<div class="abs beam"></div>
+<div class="abs beam"></div><div class="abs glow"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="g4"></i><i class="g5"></i></div>
 <img class="abs lg" src="../../logo/esd-logo-arena.svg" alt="ESD Hoops">
 <div class="abs top">Sorteo <b>·</b> ESD Hoops</div>
 <div class="abs w o w1">Sorteo</div><div class="abs w w2">Sorteo</div><div class="abs w o w3">Sorteo</div>
