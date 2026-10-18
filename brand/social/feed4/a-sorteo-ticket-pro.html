@@ -5,12 +5,12 @@
 .beam { left: 0; top: 0; width: 1080px; height: 1100px; background: conic-gradient(from 168deg at 50% -4%, transparent 0deg, rgba(210,228,255,.09) 6deg, transparent 12deg, transparent 15deg, rgba(210,228,255,.06) 19deg, transparent 24deg); filter: blur(4px); }
 .vig { inset: 0; background: radial-gradient(120% 80% at 50% 50%, transparent 55%, rgba(0,0,0,.45)); }
 .lg { left: 50%; translate: -50% 0; top: 58px; width: 64px; }
-.top { left: 0; right: 0; top: 190px; text-align: center; font: 700 30px/1 'Inter'; letter-spacing: .55em; padding-left: .55em; text-transform: uppercase; color: rgba(235,230,225,.92); }
-.top b { color: var(--arena); font-weight: 600; }
+.top { left: 0; right: 0; top: 190px; text-align: center; font: 700 30px/1 'Inter'; letter-spacing: .55em; padding-left: .55em; text-transform: uppercase; color: var(--arena); }
+.top b { color: rgba(212,192,179,.55); font-weight: 600; }
 .w { left: 0; right: 0; text-align: center; font: 900 340px/.8 'Big Shoulders'; text-transform: uppercase; transform: scaleY(1.28); transform-origin: 50% 0; }
-.w.o { color: transparent; -webkit-text-stroke: 1.6px rgba(235,230,225,.2); }
+.w.o { color: transparent; -webkit-text-stroke: 1.6px rgba(212,192,179,.24); }
 .w1 { top: 172px; -webkit-mask: linear-gradient(180deg, transparent 15%, #000 95%); }
-.w2 { top: 492px; color: var(--hueso); text-shadow: 0 20px 60px rgba(0,0,0,.35); }
+.w2 { top: 492px; color: var(--arena); text-shadow: 0 20px 60px rgba(0,0,0,.35); }
 .w3 { top: 812px; -webkit-mask: linear-gradient(0deg, transparent 15%, #000 95%); }
 .tk { position: absolute; width: 820px; height: 316px; display: flex; border-radius: 12px; color: var(--noche); background: linear-gradient(120deg, #fdfcfa 0%, #f1ede8 45%, #e2dcd5 100%);
   -webkit-mask: radial-gradient(circle 20px at 588px 0, transparent 19.5px, #000 20px) top / 100% 51% no-repeat, radial-gradient(circle 20px at 588px 100%, transparent 19.5px, #000 20px) bottom / 100% 51% no-repeat; }
@@ -20,40 +20,40 @@
 .tk .ph::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23,45,71,.25), rgba(23,45,71,0) 55%, rgba(253,252,250,.95) 100%); }
 .tk .bd { width: 352px; flex: none; padding: 30px 26px 26px 18px; display: flex; flex-direction: column; justify-content: space-between; }
 .tk .hd { display: flex; justify-content: space-between; align-items: center; font: 700 14px/1 'Inter'; letter-spacing: .34em; text-transform: uppercase; color: var(--azul); }
-.tk .hd i { font-style: normal; background: var(--cielo); color: #fff; padding: 7px 10px 6px 13px; border-radius: 3px; letter-spacing: .3em; font-size: 12px; }
+.tk .hd i { font-style: normal; background: var(--noche); color: var(--arena); padding: 7px 10px 6px 13px; border-radius: 3px; letter-spacing: .3em; font-size: 12px; }
 .tk .t { font: 900 76px/.84 'Big Shoulders'; text-transform: uppercase; letter-spacing: .005em; white-space: nowrap; }
 .tk .t b { color: var(--cielo); font-weight: 900; }
 .tk .fl { display: flex; gap: 22px; border-top: 1.5px solid rgba(14,28,46,.18); padding-top: 14px; font: 500 17px/1 'Plex Mono'; letter-spacing: .06em; text-transform: uppercase; }
 .tk .fl small { display: block; font: 600 10px/1 'Inter'; letter-spacing: .26em; color: #7b8796; margin-bottom: 7px; }
-.tk .stub { flex: 1; position: relative; border-left: 2.5px dashed rgba(14,28,46,.22); background: linear-gradient(165deg, #1d3b62 0%, var(--azul) 45%, var(--noche) 100%); color: var(--hueso); border-radius: 0 12px 12px 0; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; padding: 28px 22px 24px 26px; }
+.tk .stub { flex: 1; position: relative; border-left: 2.5px dashed rgba(14,28,46,.22); background: linear-gradient(165deg, #1d3b62 0%, var(--azul) 45%, var(--noche) 100%); color: var(--arena); border-radius: 0 12px 12px 0; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; padding: 28px 22px 24px 26px; }
 .tk .stub img { width: 66px; grid-column: 1; }
-.tk .vt { grid-column: 2; grid-row: 1 / 3; writing-mode: vertical-rl; font: 600 12px/1 'Inter'; letter-spacing: .4em; text-transform: uppercase; color: var(--arena); }
-.tk .bar { grid-column: 1 / 3; grid-row: 2; align-self: end; height: 48px; margin-bottom: 12px; background: repeating-linear-gradient(90deg, var(--hueso) 0 2px, transparent 2px 4px, var(--hueso) 4px 7px, transparent 7px 8px, var(--hueso) 8px 9px, transparent 9px 12px, var(--hueso) 12px 15px, transparent 15px 17px); opacity: .92; }
+.tk .vt { grid-column: 2; grid-row: 1 / 3; writing-mode: vertical-rl; font: 600 12px/1 'Inter'; letter-spacing: .4em; text-transform: uppercase; color: rgba(212,192,179,.75); }
+.tk .bar { grid-column: 1 / 3; grid-row: 2; align-self: end; height: 48px; margin-bottom: 12px; background: repeating-linear-gradient(90deg, var(--arena) 0 2px, transparent 2px 4px, var(--arena) 4px 7px, transparent 7px 8px, var(--arena) 8px 9px, transparent 9px 12px, var(--arena) 12px 15px, transparent 15px 17px); opacity: .92; }
 .tk .no { grid-column: 1 / 3; font: 500 15px/1 'Plex Mono'; letter-spacing: .16em; color: var(--arena); }
 .p1 { left: 205px; top: 445px; transform: rotate(-21deg); }
 .p2 { left: 105px; top: 575px; transform: rotate(-27deg); }
 .p1.tk { filter: brightness(.62) saturate(.8); }
-.hash { left: 0; right: 0; bottom: 152px; text-align: center; font: 800 28px/1 'Inter'; letter-spacing: .26em; padding-left: .26em; text-transform: uppercase; color: var(--hueso); }
+.hash { left: 0; right: 0; bottom: 152px; text-align: center; font: 800 28px/1 'Inter'; letter-spacing: .26em; padding-left: .26em; text-transform: uppercase; color: var(--arena); }
 .st { left: 50%; translate: -50% 0; bottom: 62px; display: flex; gap: 0; border: 1.5px solid rgba(212,192,179,.6); }
-.st span { font: 600 18px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; color: var(--hueso); padding: 16px 22px 15px 28px; white-space: nowrap; }
+.st span { font: 600 18px/1 'Inter'; letter-spacing: .3em; text-transform: uppercase; color: var(--arena); padding: 16px 22px 15px 28px; white-space: nowrap; }
 .st span + span { border-left: 1.5px solid rgba(212,192,179,.6); }
 </style></head><body><div class="canvas grain">
 <div class="abs beam"></div>
-<img class="abs lg" src="../../logo/esd-logo-blanco.svg" alt="ESD Hoops">
+<img class="abs lg" src="../../logo/esd-logo-arena.svg" alt="ESD Hoops">
 <div class="abs top">Sorteo <b>·</b> ESD Hoops</div>
 <div class="abs w o w1">Sorteo</div><div class="abs w w2">Sorteo</div><div class="abs w o w3">Sorteo</div>
 <div class="sh p1" style="translate: 20px 40px"></div>
-<div class="tk p1"><div class="ph" style="background-image:url(../../../assets/img/fotos/raw-oct/DSC07508.jpg);background-position:50% 35%"></div>
+<div class="tk p1"><div class="ph" style="background-image:url(../../../assets/img/fotos/raw-oct/DSC07189.jpg);background-size:170%;background-position:45% 52%"></div>
 <div class="bd"><div class="hd"><span>ESD Hoops</span><i>Sorteo</i></div>
 <div class="t">Bono<br><b>5 sesiones</b></div>
 <div class="fl"><div><small>Bono</small>02/05</div><div><small>Sesiones</small>05</div><div><small>Modalidad</small>Training</div></div></div>
-<div class="stub"><img src="../../logo/esd-logo-blanco.svg" alt=""><div class="vt">Entrenamiento</div><div class="bar"></div><div class="no">Nº 02</div></div></div>
+<div class="stub"><img src="../../logo/esd-logo-arena.svg" alt=""><div class="vt">Entrenamiento</div><div class="bar"></div><div class="no">Nº 02</div></div></div>
 <div class="sh p2" style="translate: 24px 46px"></div>
-<div class="tk p2"><div class="ph" style="background-image:url(../../../assets/img/fotos/raw-oct/DSC06701.jpg);background-position:45% 40%"></div>
+<div class="tk p2"><div class="ph" style="background-image:url(../../../assets/img/fotos/raw-oct/DSC07139.jpg);background-size:210%;background-position:44% 55%"></div>
 <div class="bd"><div class="hd"><span>ESD Hoops</span><i>Sorteo</i></div>
 <div class="t">Bono<br><b>5 sesiones</b></div>
 <div class="fl"><div><small>Bono</small>01/05</div><div><small>Sesiones</small>05</div><div><small>Modalidad</small>Training</div></div></div>
-<div class="stub"><img src="../../logo/esd-logo-blanco.svg" alt=""><div class="vt">Entrenamiento</div><div class="bar"></div><div class="no">Nº 01</div></div></div>
+<div class="stub"><img src="../../logo/esd-logo-arena.svg" alt=""><div class="vt">Entrenamiento</div><div class="bar"></div><div class="no">Nº 01</div></div></div>
 <div class="abs vig"></div>
 <div class="abs hash">5 bonos · 5 sesiones · 5 ganadores</div>
 <div class="abs st"><span>Sigue</span><span>Like</span><span>Etiqueta a 2</span></div>
