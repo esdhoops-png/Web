@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>ESD Hoops · Sorteo bonos (tarjetas)</title>
+<link rel="stylesheet" href="../feed3/feed3.css">
+<style>
+.canvas { background: var(--hueso); color: var(--noche); }
+.top { left: 0; right: 0; top: 64px; text-align: center; padding-left: .62em; color: var(--azul); }
+.k { left: 0; right: 0; top: 112px; text-align: center; font: 400 60px/1 'Instrument Serif'; font-style: italic; color: var(--cielo); }
+.giant { left: 0; right: 0; top: 205px; text-align: center; font: 900 330px/.8 'Big Shoulders'; transform: scaleY(1.3); transform-origin: 50% 0; letter-spacing: -.01em; color: var(--noche); }
+.giant i { font-style: normal; color: var(--arena); font-weight: 700; margin: 0 .04em; }
+.sub { left: 0; right: 0; top: 640px; text-align: center; font: 400 40px/1 'Graduate'; letter-spacing: .06em; text-transform: uppercase; color: var(--azul); }
+.deck { left: 50%; top: 770px; width: 0; height: 0; }
+.card { position: absolute; left: -330px; top: 0; width: 660px; height: 290px; background: var(--noche); color: var(--hueso); border-radius: 22px; padding: 30px 40px; box-shadow: 0 24px 40px rgba(14,28,46,.28); transform-origin: 50% 160%; }
+.card::before, .card::after { content: ''; position: absolute; top: 50%; width: 44px; height: 44px; margin-top: -22px; border-radius: 50%; background: var(--hueso); }
+.card::before { left: -22px; } .card::after { right: -22px; }
+.card .row { display: flex; justify-content: space-between; align-items: center; }
+.card .t { font: 900 54px/1 'Big Shoulders'; letter-spacing: .02em; text-transform: uppercase; }
+.card .n { font: 500 22px/1 'Plex Mono'; letter-spacing: .14em; color: var(--arena); }
+.card img { width: 64px; }
+.dots { display: flex; gap: 22px; margin-top: 34px; }
+.dots span { width: 62px; height: 62px; border-radius: 50%; border: 3px solid var(--arena); display: grid; place-items: center; font: 900 30px/1 'Big Shoulders'; color: var(--arena); }
+.dots + .lbl { margin-top: 16px; font: 600 18px/1 'Inter'; letter-spacing: .4em; text-transform: uppercase; color: rgba(235,230,225,.6); }
+.c0 { transform: rotate(-13deg) translate(-60px, 24px); background: var(--piedra); }
+.c1 { transform: rotate(-8deg) translate(-36px, 10px); background: var(--tinte); }
+.c2 { transform: rotate(-4deg) translate(-16px, 0); background: var(--cielo); }
+.c3 { transform: rotate(6deg) translate(36px, 8px); background: var(--azul); }
+.c4 { transform: rotate(0deg); }
+.steps { left: 0; right: 0; bottom: 64px; display: flex; justify-content: center; gap: 14px; }
+.steps span { font: 600 22px/1 'Inter'; letter-spacing: .2em; text-transform: uppercase; border: 2px solid var(--noche); border-radius: 999px; padding: 16px 24px 15px 28px; color: var(--noche); }
+.steps span:last-child { background: var(--noche); color: var(--hueso); }
+</style></head>
+<body><div class="canvas grain">
+<div class="abs top track">ESD Training · Sorteo</div>
+<div class="abs k">gana uno de los</div>
+<div class="abs giant">5<i>×</i>5</div>
+<div class="abs sub">5 bonos · 5 sesiones cada uno</div>
+<div class="abs deck">
+  <div class="card c0"></div><div class="card c1"></div><div class="card c2"></div><div class="card c3"></div>
+  <div class="card c4">
+    <div class="row"><div class="t">Bono ESD Training</div><img src="../../logo/esd-logo-blanco.svg" alt=""></div>
+    <div class="dots"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+    <div class="lbl">5 sesiones de entrenamiento</div>
+  </div>
+</div>
+<div class="abs steps"><span>Sigue</span><span>Like</span><span>Etiqueta a 2</span></div>
+</div></body></html>
