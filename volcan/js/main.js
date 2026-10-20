@@ -10,6 +10,9 @@
   const lerp = (a, b, t) => a + (b - a) * t;
   const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Vídeo de portada: con «reducir movimiento» se queda quieto en el póster
+  const heroVideo = document.querySelector('.hero-photo video');
+  if (heroVideo && reduced) { heroVideo.removeAttribute('autoplay'); heroVideo.pause(); }
   const euro = (n) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 
   /* ---------------------------------------------------------
