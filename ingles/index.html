@@ -338,13 +338,13 @@ button:focus-visible, input:focus-visible { outline: 4px solid var(--gold); outl
     "Mum is in the bedroom.", "The plant is in the living room.", "The rug is in the hall.", "Where is the cat?", "Dad is in the bathroom.", "The ball is under the table."];
 
   const LEGS = [
-    { key: "rooms", from: "MAD", to: "NYC", fromCity: "Madrid", toCity: "Nueva York", name: "Rooms", es: "Las habitaciones de la casa", color: "var(--c-rooms)", gate: "A1", seat: "1A" },
+    { key: "rooms", from: "LPA", to: "NYC", fromCity: "Gran Canaria", toCity: "Nueva York", name: "Rooms", es: "Las habitaciones de la casa", color: "var(--c-rooms)", gate: "A1", seat: "1A" },
     { key: "things", from: "NYC", to: "CHI", fromCity: "Nueva York", toCity: "Chicago", name: "Things at home", es: "Cosas de la casa", color: "var(--c-things)", gate: "B2", seat: "2B" },
     { key: "preps", from: "CHI", to: "DEN", fromCity: "Chicago", toCity: "Denver", name: "In, on, under, behind", es: "¿Dónde está?", color: "var(--c-preps)", gate: "C3", seat: "3C" },
     { key: "grammar", from: "DEN", to: "LAX", fromCity: "Denver", toCity: "Los Ángeles", name: "Where is…?", es: "Frases en inglés", color: "var(--c-gram)", gate: "D4", seat: "4D" }
   ];
   const LEG = Object.fromEntries(LEGS.map(l => [l.key, l]));
-  const EXAM = { key: "examen", from: "MAD", to: "LAX", fromCity: "Madrid", toCity: "California", name: "Unit 1 test", es: "Simulacro de la prueba", color: "var(--gold)" };
+  const EXAM = { key: "examen", from: "LPA", to: "LAX", fromCity: "Gran Canaria", toCity: "California", name: "Unit 1 test", es: "Simulacro de la prueba", color: "var(--gold)" };
   const STAMPS = ["🗽", "🍎", "🌭", "🏙️", "🦅", "⛰️", "🤠", "🌉", "🎢", "🏄", "🌴", "🎬"];
 
   // ---------- generadores ----------
@@ -426,11 +426,11 @@ button:focus-visible, input:focus-visible { outline: 4px solid var(--gold); outl
   const starRow = n => "★".repeat(n) + "☆".repeat(3 - n);
 
   function mapSVG() {
-    const P = { MAD: [262, 104], NYC: [176, 78], CHI: [134, 66], DEN: [88, 88], LAX: [38, 118] };
-    const order = ["MAD", "NYC", "CHI", "DEN", "LAX"];
+    const P = { LPA: [256, 146], NYC: [176, 78], CHI: [134, 66], DEN: [88, 88], LAX: [38, 118] };
+    const order = ["LPA", "NYC", "CHI", "DEN", "LAX"];
     const done = LEGS.map(l => !!save.best[l.key]);
     const nextIdx = done.indexOf(false) === -1 ? 4 : done.indexOf(false);
-    let path = "M" + P.MAD.join(" ");
+    let path = "M" + P.LPA.join(" ");
     for (let i = 1; i < order.length; i++) { const [a, b] = P[order[i - 1]], [c, d] = P[order[i]]; path += " Q" + ((a + c) / 2 + (i % 2 ? 26 : -26)) + " " + ((b + d) / 2 - 18) + " " + c + " " + d; }
     const plane = P[order[nextIdx]];
     let pins = "";
@@ -439,8 +439,8 @@ button:focus-visible, input:focus-visible { outline: 4px solid var(--gold); outl
       pins += '<circle cx="' + x + '" cy="' + y + '" r="' + (k === "LAX" ? 11 : 8) + '" fill="' + (reached ? (k === "LAX" ? "#f5b82e" : "#2a9d63") : "#fff") + '" stroke="#1d2b53" stroke-width="3"/>' +
         '<text x="' + x + '" y="' + (y + (k === "CHI" || k === "NYC" ? -14 : 24)) + '" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="14" fill="#1d2b53">' + k + "</text>";
     });
-    return '<svg viewBox="0 0 300 200" role="img" aria-label="Mapa del viaje de Madrid a California"><rect width="300" height="200" rx="14" fill="#e9f5ff"/>' +
-      '<path d="M14 60c20-20 70-26 120-22 30 2 50 10 62 28 6 14-6 30-24 40-20 12-28 30-50 34-30 6-50-4-70-12-20-8-40-20-40-42 0-10 0-20 2-26z" fill="#d6ecd2"/><path d="M244 82c14-6 34-4 40 6 4 12-2 26-16 30-14 4-28-2-30-14-2-8 0-18 6-22z" fill="#d6ecd2"/>' +
+    return '<svg viewBox="0 0 300 200" role="img" aria-label="Mapa del viaje de Gran Canaria a California"><rect width="300" height="200" rx="14" fill="#e9f5ff"/>' +
+      '<path d="M14 60c20-20 70-26 120-22 30 2 50 10 62 28 6 14-6 30-24 40-20 12-28 30-50 34-30 6-50-4-70-12-20-8-40-20-40-42 0-10 0-20 2-26z" fill="#d6ecd2"/><path d="M244 82c14-6 34-4 40 6 4 12-2 26-16 30-14 4-28-2-30-14-2-8 0-18 6-22z" fill="#d6ecd2"/><ellipse cx="256" cy="146" rx="10" ry="8" fill="#d6ecd2"/>' +
       '<text x="150" y="176" text-anchor="middle" font-family="Andika, sans-serif" font-size="12" fill="#7a8db0">Océano Atlántico</text>' +
       '<path d="' + path + '" fill="none" stroke="#2a64d6" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>' + pins +
       '<text class="fly" x="' + (plane[0] + 14) + '" y="' + (plane[1] - 8) + '" font-size="24">✈️</text></svg>';
