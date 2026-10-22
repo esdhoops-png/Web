@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Test Taxi Telde</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -955,6 +955,80 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .cp-list .ok { background: var(--verde-soft); color: var(--verde); }
 .cp-list .ko { background: var(--rojo-soft); color: var(--rojo); }
 
+/* Juego */
+#juego { position: fixed; inset: 0; z-index: 5000; background: var(--snow); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.g-wrap { max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 10px) max(14px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 24px) max(14px, env(safe-area-inset-left, 0px)); display: grid; gap: 12px; }
+.g-top { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; font-size: 17px; text-transform: uppercase; letter-spacing: .04em; }
+.g-top span:nth-child(2) { flex: 1; }
+.g-top .num { font-family: var(--mono); font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--indigo-ink); }
+.g-x { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; width: 36px; height: 36px; }
+.g-cab { background: linear-gradient(180deg, #2a2f45, #171a28); border-radius: 14px; padding: 12px; display: grid; gap: 10px; color: #fff; }
+.g-cab.noche { background: linear-gradient(180deg, #11131d, #07080d); }
+.g-mod { display: flex; align-items: center; gap: 10px; background: #f4f5fb; color: #1b2157; border-radius: 8px 8px 4px 4px; padding: 6px 10px; justify-self: center; box-shadow: 0 2px 0 #c8cbe0; }
+.g-luz { width: 16px; height: 16px; border-radius: 50%; background: #2a3a2f; }
+.g-luz.on { background: #34d27b; box-shadow: 0 0 14px #34d27b; }
+.g-dig { font-family: var(--mono); font-size: 22px; color: #3b1418; min-width: 18px; text-align: center; }
+.g-dig.on { color: #ff2d3d; text-shadow: 0 0 8px rgba(255,45,61,.7); }
+.g-modt { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .12em; }
+.g-meter { background: #0b0c12; border: 2px solid #343a55; border-radius: 10px; padding: 10px; display: grid; gap: 10px; }
+.g-lcd { background: #0f1f14; border-radius: 6px; padding: 8px 12px; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; color: #6dff9a; text-shadow: 0 0 6px rgba(109,255,154,.5); font-family: var(--mono); }
+.g-lcd .lt { font-size: 13px; letter-spacing: .08em; }
+.g-lcd .li { grid-row: span 2; font-size: clamp(30px, 9vw, 40px); align-self: center; }
+.g-lcd .ls { font-size: 12px; opacity: .8; }
+.g-keys { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+@media (max-width: 420px) { .g-keys { grid-template-columns: repeat(3, 1fr); } }
+.g-key { background: #2a2f45; color: #fff; border: 1px solid #4a5175; border-bottom-width: 3px; border-radius: 6px; padding: 10px 2px; font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: .04em; }
+.g-key:active:not(:disabled) { transform: translateY(2px); border-bottom-width: 1px; }
+.g-key.k-LIBRE { color: #6dff9a; }
+.g-key.k-PM { color: #ffd166; }
+.g-key:disabled { opacity: .5; }
+.g-ticket { background: #fff; color: #111; font-size: 13px; line-height: 1.4; padding: 8px 12px; border-radius: 2px; justify-self: center; box-shadow: 0 4px 10px rgba(0,0,0,.4); }
+.g-road { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
+.g-via { display: flex; justify-content: space-between; gap: 6px; font-size: 12px; color: var(--muted); }
+.g-lane { position: relative; height: 34px; background: #3a3f52; border-radius: 6px; background-image: linear-gradient(90deg, #fff 50%, transparent 50%); background-size: 28px 3px; background-repeat: repeat-x; background-position: 0 center; }
+.g-car { position: absolute; top: 2px; font-size: 26px; transform: scaleX(-1); }
+.g-scene { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; }
+.g-who { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--indigo-ink); font-weight: 600; }
+.g-txt { font-size: 18px; line-height: 1.4; }
+.g-act { display: grid; gap: 10px; }
+.g-opts { display: grid; gap: 8px; }
+.g-opt { text-align: left; background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 16px; line-height: 1.35; }
+.g-opt:hover { border-color: var(--indigo-ink); }
+.g-multi { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+@media (max-width: 460px) { .g-multi { grid-template-columns: 1fr; } }
+.g-chk { display: flex; gap: 8px; align-items: center; text-align: left; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font-size: 14px; }
+.g-chk i { flex: none; width: 18px; height: 18px; border: 2px solid var(--line); border-radius: 4px; }
+.g-chk.on { border-color: var(--indigo-ink); background: var(--soft); }
+.g-chk.on i { background: var(--indigo-ink); border-color: var(--indigo-ink); }
+.g-hint { text-align: center; color: var(--muted); font-size: 14px; padding: 6px; }
+.g-next { justify-self: end; }
+.g-fb { border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; border-left: 5px solid var(--verde); background: var(--verde-soft); }
+.g-fb.ko { border-color: var(--rojo); background: var(--rojo-soft); }
+.g-fb.neutral { border-color: var(--ambar); background: var(--soft); }
+.g-fb b { font-family: var(--display); font-size: 19px; text-transform: uppercase; }
+.g-fb.ok b { color: var(--verde); } .g-fb.ko b { color: var(--rojo); }
+.g-fb em { font-style: normal; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.g-sheet { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; }
+.g-sheet-h { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); border-bottom: 1px dashed var(--line); padding-bottom: 8px; }
+.g-big { font-family: var(--display); font-weight: 700; font-size: 56px; line-height: 1; }
+.g-ver { font-family: var(--display); font-weight: 700; font-size: 24px; text-transform: uppercase; color: var(--indigo-ink); }
+.g-sheet p { margin: 0; }
+.g-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+@media (max-width: 460px) { .g-stats { grid-template-columns: repeat(2, 1fr); } }
+.g-stats span { background: var(--soft); border-radius: 8px; padding: 8px; font-size: 12px; color: var(--muted); display: grid; }
+.g-stats b { font-size: 18px; color: var(--ink); }
+.g-sheet h3 { font-family: var(--display); font-size: 20px; text-transform: uppercase; }
+.g-inf { display: grid; gap: 8px; }
+.g-inf div { border-left: 4px solid var(--rojo); background: var(--rojo-soft); border-radius: 6px; padding: 8px 10px; font-size: 13px; display: grid; gap: 2px; }
+.g-inf b { color: var(--rojo); }
+.g-inf span { font-size: 14px; color: var(--ink); }
+.g-small { font-size: 12px; color: var(--muted); }
+.play-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: #171a28; color: #fff; border-radius: 12px; padding: 14px 16px; }
+.play-card .pc-ico { font-size: 34px; }
+.play-card b { font-family: var(--display); font-size: 22px; text-transform: uppercase; display: block; }
+.play-card span { font-size: 14px; color: #c9cde3; }
+@media (max-width: 460px) { .play-card { grid-template-columns: auto 1fr; } .play-card .btn { grid-column: 1 / -1; } }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -1457,6 +1531,7 @@ function renderInicio() {
     </div>
     ${last ? `<p class="note">Último test: ${fmtDate(last.d)} · ${MODOS[last.m]} · <strong>${last.ok}/${last.n}</strong> (${pct(last.ok, last.n)}%)</p>` : `<p class="note">Banco de ${Q.length} preguntas: la Ordenanza Municipal Reguladora del Servicio de Auto Taxis de Telde y un bloque de lugares, barrios y callejero de Telde. Cada test elige preguntas distintas y da prioridad a las que fallas y a las que aún no has visto.</p>`}
 
+    <div class="play-card"><span class="pc-ico">🚕</span><div><b>Juego: un turno de taxi</b><span>Haz servicios reales en Telde usando el taxímetro y aplicando la Ordenanza.</span></div><button class="btn red" data-g="jugar">Jugar</button></div>
     <div class="section-h"><h2>Elige un test</h2>${storeLine()}</div>
     <div class="modes">
       <button class="mode" data-start="rapido"><h3>Rápido</h3><p>10 preguntas variadas.</p><span class="count">10 preguntas</span></button>
@@ -2197,6 +2272,345 @@ document.addEventListener("change", e => {
   const b = CAL.places[+e.target.value]; mapa.flyTo([b.lat, b.lon], 16);
 });
 
+
+// ---------- Juego: un turno de taxi en Telde ----------
+// Precios de ejemplo para el juego (no son las tarifas oficiales vigentes).
+const TAR = { T1: { b: 3.20, km: 0.95 }, T2: { b: 3.20, km: 0.80 }, T3: { b: 3.20, km: 1.15 }, espH: 20 };
+const eur = n => n.toFixed(2).replace(".", ",") + " €";
+const r2 = n => Math.round(n * 100) / 100;
+let G = null;
+
+function nuevoTurno() {
+  const pool = shuffle(["urbano", "lejos", "parada100", "prioridad", "radiotaxi", "idavuelta", "averia", "objeto", "billete50", "gasolina"]);
+  const serv = ["inicio", ...pool.slice(0, 5), "fin"];
+  G = { serv, si: 0, st: 0, steps: [], m: { tar: null, run: false, imp: 0, km: 0, sec: 0, luz: "off", pm: false, ticket: false }, pts: 0, caja: 0, infr: [], aciertos: 0, total: 0, fb: null, sel: new Set(), driving: false, dest: false, noche: Math.random() < .5 };
+  cargarServicio();
+}
+function cargarServicio() {
+  const id = G.serv[G.si];
+  G.steps = SERVICIOS[id](G); G.st = 0; G.fb = null; G.dest = false; G.sel = new Set();
+  if (G.steps[0].onEnter) G.steps[0].onEnter(G);
+  renderJuego();
+}
+function paso() { return G.steps[G.st]; }
+function avanzar() {
+  G.fb = null; G.sel = new Set();
+  if (G.st < G.steps.length - 1) { G.st++; const s = paso(); if (s.onEnter) s.onEnter(G); renderJuego(); return; }
+  if (G.si < G.serv.length - 1) { G.si++; cargarServicio(); return; }
+}
+function nota(ok, exp, art, inf, pts) {
+  G.total++;
+  if (ok) { G.aciertos++; G.pts += pts || 10; }
+  else { G.pts -= inf === "muy grave" ? 30 : inf === "grave" ? 20 : 10; if (inf) G.infr.push({ txt: exp, art, inf }); }
+  G.fb = { ok, exp, art, inf };
+}
+const MULTA = { "leve": "hasta 400 €", "grave": "401 – 2.000 €", "muy grave": "2.001 – 6.000 €" };
+
+// --- taxímetro ---
+function meterKey(k) {
+  if (!G || G.fb || G.driving) return;
+  const s = paso();
+  if (s.k === "meter") {
+    if (k === s.want) { aplicarMeter(k); nota(true, s.okExp || "Correcto.", s.art); if (s.after) s.after(G); }
+    else { const w = (s.wrong && s.wrong[k]) || s.wrongExp; nota(false, w, s.art, s.inf || "leve"); aplicarMeter(s.want); if (s.after) s.after(G); }
+    renderJuego(); return;
+  }
+  // pulsar teclas cuando no toca
+  if (/^T/.test(k) && !G.dest && !G.m.tar && s.k !== "drive") { nota(false, "Has bajado la bandera antes de que el cliente diga el destino. Primero se pregunta el destino y luego se elige la tarifa.", "Art. 79.1.a", "leve"); G.fb.stray = true; renderJuego(); return; }
+  if (k === "TICKET" && G.m.pm) { G.m.ticket = true; renderJuego(); return; }
+  G.fb = { ok: null, exp: "Ahora no toca tocar el taxímetro. Sigue con la situación." }; renderJuego();
+}
+function aplicarMeter(k) {
+  const m = G.m;
+  if (k === "LIBRE") { m.tar = null; m.run = false; m.imp = 0; m.km = 0; m.sec = 0; m.luz = "libre"; m.pm = false; m.ticket = false; }
+  else if (/^T/.test(k)) { if (!m.tar) { m.imp = TAR[k].b; m.km = 0; m.sec = 0; } m.tar = k; m.run = true; m.luz = "ocupado"; m.pm = false; }
+  else if (k === "PM") { m.run = false; m.pm = true; }
+  else if (k === "TICKET") { m.ticket = true; }
+}
+function conducir(km, segs, onEnd) {
+  G.driving = true; renderJuego();
+  const t0 = performance.now(); const imp0 = G.m.imp, km0 = G.m.km;
+  const rate = G.m.tar ? TAR[G.m.tar].km : 0;
+  const dur = Math.min(6000, 2200 + km * 260);
+  const tick = now => {
+    if (!G || !G.driving) return;
+    const f = Math.min(1, (now - t0) / dur);
+    G.m.km = km0 + km * f; G.m.sec = Math.round(segs * f);
+    if (G.m.run) G.m.imp = r2(imp0 + rate * km * f);
+    pintarMeter(); const car = document.getElementById("car"); if (car) car.style.left = (f * 86) + "%";
+    if (f < 1) requestAnimationFrame(tick); else { G.driving = false; if (onEnd) onEnd(); renderJuego(); }
+  };
+  requestAnimationFrame(tick);
+}
+function pintarMeter() {
+  const m = G.m; const el = document.getElementById("lcd"); if (!el) return;
+  el.innerHTML = `<span class="lt">${m.tar ? "TARIFA " + m.tar.slice(1) : m.luz === "libre" ? "LIBRE" : "– – –"}${m.pm ? " · A PAGAR" : ""}</span><span class="li num">${eur(m.imp)}</span><span class="ls num">${m.km.toFixed(1).replace(".", ",")} km · ${String(Math.floor(m.sec / 60)).padStart(2, "0")}:${String(m.sec % 60).padStart(2, "0")}</span>`;
+}
+
+// --- utilidades de diálogo ---
+function C(txt, opts, who) { return { k: "choice", who: who || "Cliente", txt, opts }; }
+function O(t, ok, exp, art, inf) { return { t, ok, exp, art, inf }; }
+function M(txt, want, okExp, wrongExp, art, inf, after) { return { k: "meter", txt, want, okExp, wrongExp, art, inf, after }; }
+function D(txt, km, min, via, after) { return { k: "drive", txt, km, min, via, after }; }
+function cambioOpts(g, billete) {
+  const imp = g.m.imp; const ok = r2(billete - imp);
+  return [O(`Le das ${eur(ok)} de cambio`, true, `Correcto: ${eur(billete)} − ${eur(imp)} = ${eur(ok)}. Es obligatorio llevar cambio hasta 20 €.`, "Art. 46.1"),
+          O(`Le das ${eur(r2(ok - 1))} de cambio`, false, `Te has equivocado: el cambio era ${eur(ok)}. Cobrar de más es muy grave.`, "Art. 79.3.b", "muy grave"),
+          O("Le dices que no tienes cambio y que pague con tarjeta", false, "Con un billete de 20 € o menos tienes que darle cambio. No llevar cambio para 20 € es leve.", "Art. 79.1.b", "leve")];
+}
+function cobrar(g) { g.caja = r2(g.caja + g.m.imp); }
+
+const SERVICIOS = {
+  inicio: g => [
+    { k: "multi", who: "Inicio del turno · 07:45", txt: "Antes de salir, revisa la guantera. Marca todo lo que tiene que ir en el taxi y pulsa «Listo».",
+      items: [["Copia de la licencia municipal", 1], ["Tarjeta de Transporte del Cabildo", 1], ["Permiso de circulación", 1], ["Tarjeta de la I.T.V.", 1], ["Verificación del taxímetro", 1], ["Póliza del seguro en vigor", 1], ["Hojas de reclamaciones", 1], ["Copia de la Ordenanza y del Decreto 74/2012", 1], ["Plano y callejero de Telde", 1], ["Rollo de papel de repuesto", 1], ["Permiso Municipal de Conducir", 1], ["Escritura de tu vivienda", 0], ["Libro de familia", 0], ["Recibo de la luz", 0]],
+      art: "Art. 51" },
+    C("¿Qué te pones hoy para trabajar?", [
+      O("Polo azul celeste, pantalón azul marino y zapatos negros cerrados", true, "Ese es el uniforme reglamentario.", "Art. 73"),
+      O("Polo azul celeste, pantalón corto azul marino y deportivas blancas", false, "El pantalón corto y la ropa deportiva están prohibidos. Uniforme incompleto: leve.", "Arts. 73.4 y 79.1.j", "leve"),
+      O("Camisa blanca, vaqueros y zapatillas", false, "La camisa debe ser azul celeste y el pantalón azul marino o negro. Uniforme incorrecto: leve.", "Arts. 73 y 79.1.j", "leve")], "Vestuario"),
+    M("Llegas a la parada de la Plaza de San Juan. Ponte disponible para los clientes.", "LIBRE", "Luz verde encendida: el taxi está libre y disponible.", "Para estar disponible se pone el taxímetro en LIBRE, con la luz verde encendida.", "Art. 58.1", "leve"),
+  ],
+  urbano: g => [
+    C("Una señora sube al taxi en la parada de San Juan: «Buenos días».", [
+      O("«Buenos días. ¿A dónde la llevo?»", true, "Primero se pregunta el destino; la bandera se baja después.", "Art. 79.1.a"),
+      O("Bajas la bandera mientras saludas, para no perder tiempo", false, "Bajar la bandera antes de que el usuario indique el destino es infracción leve.", "Art. 79.1.a", "leve")]),
+    { k: "info", who: "Cliente", txt: "«A la avenida de la Constitución, en San Gregorio, por favor.»", onEnter: g => { g.dest = true; } },
+    M("Es un trayecto dentro de la zona urbana de Telde. Pon la tarifa que corresponde.", "T1", "Tarifa 1: urbana, todo el recorrido dentro de la zona urbana.", "El recorrido es íntegramente urbano: tarifa 1.", "Art. 43.A.6", "muy grave", null),
+    C("¿Por dónde vas?", [
+      O("Por el camino más corto, por el casco", true, "Hay que seguir el itinerario más corto.", "Art. 79.2.l"),
+      O("Por la circunvalación, que da más vuelta pero se conduce mejor", false, "Seguir itinerarios que no sean los más cortos es infracción grave.", "Art. 79.2.l", "grave")], "Ruta"),
+    D("Plaza de San Juan → Calle León y Castillo → San Gregorio", 2.2, 420, ["Pl. de San Juan", "León y Castillo", "San Gregorio"]),
+    M("Habéis llegado a la avenida de la Constitución. ¿Qué haces con el taxímetro?", "PM", "Punto muerto («A pagar»): se para el contador y le dices el importe.", "Al llegar se pone el taxímetro en punto muerto y se indica el importe.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `«¿Cuánto es?» Le dices ${eur(g.m.imp)} y te da un billete de 20 €.`, opts: g => cambioOpts(g, 20), onDone: cobrar },
+    C("«¿Me da un recibo, por favor?»", [
+      O("Imprimes el ticket del taxímetro y se lo das", true, "Si el usuario lo pide, hay que darle recibo con el ticket de la impresora.", "Art. 46.5"),
+      O("«No hace falta, ya le he cobrado lo que marca»", false, "No entregar recibo cuando lo piden es infracción grave.", "Art. 79.2.e", "grave")]),
+    { k: "info", who: "Al bajar", txt: "Antes de que se vaya, le recuerdas que compruebe si olvida algo. Vuelves a ponerte en LIBRE.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  lejos: g => [
+    { k: "info", who: "Cliente", txt: "Un hombre con maleta sube en San Gregorio: «Al puerto de Las Palmas, que pierdo el barco.»", onEnter: g => { g.dest = true; } },
+    M("El destino está en otro municipio. ¿Qué tarifa pones?", "T3", "Tarifa 3: origen en Telde y destino fuera de la zona urbana o en otro municipio.", "Si el destino está en otro municipio, es tarifa 3 desde el principio.", "Art. 43.A.6.c", "muy grave"),
+    C("«Oiga, ¿me cobra un suplemento por la maleta grande y otro por ir con prisa?»", [
+      O("«No, solo cobro lo que marca el taxímetro con los suplementos autorizados»", true, "Está prohibido cobrar suplementos que no estén autorizados.", "Art. 43.A.2"),
+      O("«Sí, 5 € más por la prisa»", false, "Cobrar suplementos no establecidos es muy grave.", "Art. 79.3.b", "muy grave")]),
+    D("San Gregorio → GC-1 Norte → Las Palmas de Gran Canaria", 16, 1080, ["San Gregorio", "GC-1", "Las Palmas G.C."]),
+    M("Llegáis al puerto. Para el contador.", "PM", "Punto muerto e importe al cliente.", "Al llegar, punto muerto.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `«Son ${eur(g.m.imp)}. Le pago con tarjeta.»`, opts: g => [
+      O("Le cobras con el datáfono", true, "El datáfono es obligatorio y debe funcionar. Solo es opcional en servicios de menos de 6 €.", "Arts. 25.n y 46.4"),
+      O("«Solo efectivo, el datáfono está apagado»", false, "Prestar servicio sin datáfono o sin que funcione es infracción (leve para el conductor, grave para el titular).", "Arts. 79.1.p y 78.2.h", "leve")], onDone: cobrar },
+    { k: "info", who: "Vuelta", txt: "Vuelves vacío a Telde y te pones en LIBRE en la parada.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  parada100: g => [
+    C("Vas por la calle Inés Chemida, libre, a unos 60 metros de la parada de San Juan, donde esperan tres taxis. Un chico te hace señas.", [
+      O("Le indicas amablemente que coja el primer taxi de la parada", true, "Está prohibido recoger viajeros a menos de 100 m de una parada con taxis esperando.", "Art. 50.6"),
+      O("Paras y lo recoges, que te ha llamado a ti", false, "Recoger a menos de 100 m de una parada con taxis disponibles está prohibido.", "Arts. 50.6 y 79.1.e", "leve")], "En la calle"),
+    C("Ya en la parada, eres el segundo de la fila. Una clienta se acerca directamente a tu taxi.", [
+      O("Le dices que el primero de la fila es el que tiene que llevarla, salvo que ella prefiera otro por un motivo", true, "En la parada se atiende por orden de llegada, salvo que el usuario, por causa justificada, quiera otro.", "Art. 50.1"),
+      O("La subes rápido antes de que se dé cuenta el compañero", false, "Saltarse el orden de la parada incumple las normas de paradas.", "Arts. 50.1 y 79.1.e", "leve")], "En la parada"),
+    C("Te toca. Mientras esperas, aparcas un momento detrás de la parada en doble fila para ir al cajero.", [
+      O("Mejor no: no aparco en doble fila ni me alejo más de 20 m sin ver el taxi", true, "Prohibida la doble fila; alejarse más de 20 m sin ver el vehículo es abandono y pierdes el turno.", "Art. 50.3–4"),
+      O("Voy, son dos minutos", false, "Doble fila prohibida, y alejarte más de 20 m sin ver el taxi te hace perder el turno.", "Art. 50.3–4", "leve")], "En la parada"),
+  ],
+  prioridad: g => [
+    C("Circulas libre por la avenida. A la vez te paran tres personas en tu misma acera: una mujer embarazada, un señor mayor con bastón y un chico con una mochila. ¿A quién recoges?", [
+      O("Al señor mayor", true, "Orden de preferencia: 1º enfermos, personas con movilidad reducida y ancianos; 2º personas con niños y embarazadas; 3º las de más edad.", "Art. 59"),
+      O("A la mujer embarazada", false, "Las embarazadas van en segundo lugar. Primero, enfermos, personas con movilidad reducida y ancianos.", "Art. 59", "leve"),
+      O("Al chico, que estaba un poco antes", false, "Si te requieren a la vez, se sigue el orden de preferencia: primero el señor mayor.", "Art. 59", "leve")], "En la calle"),
+    C("El señor tiene problemas para subir.", [
+      O("Te bajas y le ayudas a subir y colocas el bastón", true, "Los conductores deben ayudar a subir y bajar a personas mayores o con movilidad reducida.", "Art. 63.1.b"),
+      O("Esperas dentro con el motor en marcha", false, "Hay que ayudar a subir y bajar a personas mayores y con movilidad reducida.", "Arts. 63.1.b y 79.1.f", "leve")]),
+    { k: "info", who: "Cliente", txt: "«A Melenara, a la playa, hijo.»", onEnter: g => { g.dest = true; } },
+    M("Melenara está dentro del término. Pon la tarifa urbana.", "T1", "Tarifa 1.", "Trayecto urbano: tarifa 1.", "Art. 43.A.6", "muy grave"),
+    C(g.noche ? "Es de noche y en el camino el señor te pide que abras la ventanilla trasera. Además, quiere que le dejes fumar «un cigarrito»." : "En el camino el señor te pide que abras la ventanilla trasera. Además, quiere que le dejes fumar «un cigarrito».", [
+      O("Abres su ventanilla, pero le explicas que no se puede fumar en el taxi", true, "Las ventanillas se abren a petición del cliente; fumar está prohibido para todos dentro del taxi.", "Art. 63.1.a y 63.7"),
+      O("Abres y le dejas fumar con la ventanilla bajada", false, "Está terminantemente prohibido fumar en el taxi; incumplirlo es grave.", "Arts. 63.7 y 79.2.d", "grave")]),
+    D("San Juan → Carretera de Melenara → Melenara", 4.5, 600, ["San Juan", "Ctra. Melenara", "Melenara"]),
+    M("Llegáis. Para el contador.", "PM", "Punto muerto.", "Al llegar, punto muerto.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `Son ${eur(g.m.imp)}. Te da un billete de 10 €.`, opts: g => cambioOpts(g, 10), onDone: cobrar },
+    C(g.noche ? "Es de noche. ¿Algo más al bajar?" : "¿Algo más al bajar?", [
+      O(g.noche ? "Enciendes la luz interior y le ayudas a bajar" : "Le ayudas a bajar y le recuerdas que revise si olvida algo", true, g.noche ? "De noche se enciende la luz interior para subir, bajar y pagar." : "Ayudar a bajar y recordar los objetos olvidados es obligatorio.", g.noche ? "Art. 63.1.d" : "Arts. 62.1 y 63.1.b"),
+      O("Nada, arrancas en cuanto cierra la puerta", false, "Hay que ayudar a bajar y recordarle que compruebe si olvida algo.", "Arts. 62.1 y 63.1", "leve")]),
+    { k: "info", who: "Fin del servicio", txt: "Te pones en LIBRE y vuelves a la ciudad.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  radiotaxi: g => [
+    { k: "info", who: "Emisora", txt: "Te llaman por radio-taxi: «Servicio en la playa de La Garita, una persona con perro guía». Aceptas el servicio.", onEnter: g => { g.dest = true; } },
+    M("Sales ya hacia La Garita a recoger al cliente. ¿Qué haces con el taxímetro?", "T1", "Con servicios por teléfono o radio-taxi, el taxímetro se pone en marcha cuando sales a recoger al cliente. El taxi va «ocupado».", "En un servicio por radio-taxi el taxímetro empieza cuando inicias la marcha para recoger al cliente.", "Arts. 45.3 y 58.3", "leve"),
+    D("San Juan → La Garita", 4, 480, ["San Juan", "GC-1", "La Garita"]),
+    C("Recoges a una mujer ciega con su perro guía. «¿Me cobra algo por el perro?»", [
+      O("«No, el perro guía no paga suplemento y viaja con usted»", true, "Los perros guía y de asistencia se aceptan siempre, viajan junto a su dueño y no pagan suplemento.", "Arts. 43.A.3 y 53.1.g"),
+      O("«Sí, un euro por animal»", false, "Cobrar un suplemento por el perro guía es cobrar un suplemento no autorizado: muy grave.", "Arts. 43.A.3 y 79.3.b", "muy grave"),
+      O("«Lo siento, no llevo animales»", false, "Los perros guía deben ser aceptados siempre. Negarse sin causa es grave.", "Arts. 53.1.g y 79.2.h", "grave")]),
+    { k: "info", who: "Cliente", txt: "«Lléveme al barrio de San Francisco, por favor.»" },
+    D("La Garita → San Francisco", 4.8, 600, ["La Garita", "Telde", "San Francisco"]),
+    M("Llegáis a San Francisco.", "PM", "Punto muerto.", "Al llegar, punto muerto.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `El importe es ${eur(g.m.imp)} (incluye el trayecto hasta recogerla). Te paga con 20 €.`, opts: g => cambioOpts(g, 20), onDone: cobrar },
+    { k: "info", who: "Fin del servicio", txt: "Te pones en LIBRE.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  idavuelta: g => [
+    { k: "info", who: "Cliente", txt: "En San Juan sube una mujer: «Lléveme a Lomo Magullo, a casa de mi madre, espere allí 20 minutos y me trae de vuelta aquí.»", onEnter: g => { g.dest = true; } },
+    M("Es un servicio interurbano con salida y regreso al mismo punto de Telde. ¿Qué tarifa?", "T2", "Tarifa 2: interurbana con origen y destino en el punto de partida, con o sin espera.", "Ida y vuelta al punto de partida en Telde: tarifa 2.", "Art. 43.A.6.b", "muy grave"),
+    D("San Juan → Lomo Magullo", 5.5, 720, ["San Juan", "GC-130", "Lomo Magullo"]),
+    C("En Lomo Magullo la clienta se baja: «Espéreme aquí». Es una zona descampada.", [
+      O("Le pides como garantía el recorrido hecho más una hora de espera, con recibo", true, "Si el viajero se baja y debes esperar, puedes pedir el recorrido más media hora en zona urbana o una hora en descampado, con recibo.", "Art. 45.5"),
+      O("Le pides el doble de lo que marca, por si acaso", false, "Solo se puede pedir el recorrido más la espera (½ h urbana, 1 h descampado). Pedir más es cobrar de más.", "Arts. 45.5 y 79.3.b", "muy grave"),
+      O("Te vas a hacer otro servicio mientras tanto", false, "Abandonar el servicio antes de terminar el plazo de espera es grave.", "Art. 79.2.j", "grave")]),
+    { k: "info", who: "Espera", txt: "La clienta vuelve a los 20 minutos. El taxímetro ha contado la espera.", onEnter: g => { g.m.imp = r2(g.m.imp + TAR.espH / 3); g.m.sec += 1200; } },
+    D("Lomo Magullo → San Juan", 5.5, 720, ["Lomo Magullo", "GC-130", "San Juan"]),
+    M("Volvéis a San Juan.", "PM", "Punto muerto.", "Al llegar, punto muerto.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `Le dices ${eur(g.m.imp)}. Te paga con un billete de 20 € y algo de suelto, así que solo tienes que darle la vuelta de 20 €.`, opts: g => [
+      O("Le cobras lo que marca y le das el recibo de la garantía ya descontada", true, "Correcto: la garantía se liquida al final del servicio.", "Art. 45.5"),
+      O("Le cobras lo que marca y además la garantía que te dio", false, "La garantía es a cuenta del total: no se cobra dos veces. Eso es cobrar de más.", "Arts. 45.5 y 79.3.b", "muy grave")], onDone: cobrar },
+    { k: "info", who: "Fin del servicio", txt: "Te pones en LIBRE.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  averia: g => [
+    { k: "info", who: "Cliente", txt: "En la parada de San Gregorio sube un joven: «A Jinámar, por favor.»", onEnter: g => { g.dest = true; } },
+    M("Jinámar (parte de Telde), recorrido urbano.", "T1", "Tarifa 1.", "Recorrido urbano: tarifa 1.", "Art. 43.A.6", "muy grave"),
+    D("San Gregorio → hacia Jinámar", 3, 360, ["San Gregorio", "Las Remudas", "…"]),
+    C("A mitad de camino el coche se para: avería. No puedes seguir. ¿Qué haces?", [
+      O("Paras el contador, cobras lo marcado sin la bajada de bandera y le consigues otro taxi", true, "En una avería el viajero paga lo marcado menos la bajada de bandera, y el conductor debe facilitarle otro taxi.", "Art. 47"),
+      O("Le cobras lo que marca y que se busque la vida", false, "Hay que descontar la bajada de bandera y facilitarle otro taxi. Abandonar al viajero sin causa es muy grave.", "Arts. 47 y 79.3.j", "muy grave"),
+      O("No le cobras nada pero le dejas ahí", false, "Debes facilitarle otro vehículo por cualquier medio a tu alcance.", "Art. 47.2", "grave")]),
+    { k: "info", who: "Resultado", txt: g => `Paras el contador, descuentas la bajada de bandera y cobras ${eur(g.m.imp)}. Llamas a la emisora y en 5 minutos llega otro taxi para el cliente.`, onEnter: g => { aplicarMeter("PM"); g.m.imp = r2(Math.max(0, g.m.imp - TAR.T1.b)); cobrar(g); } },
+    C("El taller dice que tardará 3 semanas en reparar el coche. ¿Qué haces?", [
+      O("Lo comunico al Ayuntamiento y puedo usar un vehículo similar hasta 2 meses, con informe de la Policía Local", true, "Con avería de más de 15 días, comunicándolo, se puede usar un vehículo similar un máximo de 2 meses. Inutilizado más de 10 días: hay que comunicarlo.", "Arts. 24.3 y 54"),
+      O("Uso el coche de mi cuñado pintándole un cartel de TAXI", false, "Prestar servicio con un vehículo distinto al adscrito sin autorización es muy grave.", "Art. 78.3.d", "muy grave")], "Taller"),
+    { k: "info", who: "Fin del servicio", txt: "Al día siguiente vuelves con el vehículo autorizado y te pones en LIBRE.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  objeto: g => [
+    { k: "info", who: "Cliente", txt: "Llevas a una turista desde el Torreón de Gando hasta San Juan. Al llegar, cobras y se baja.", onEnter: g => { g.dest = true; g.m.tar = "T1"; g.m.imp = 11.40; g.m.km = 9.6; g.m.luz = "ocupado"; g.m.pm = true; cobrar(g); } },
+    C("Al rato, ves un móvil en el asiento de atrás. No sabes quién es la dueña ni cómo localizarla.", [
+      O("Lo entregas en la Policía Local o en transportes del Ayuntamiento en menos de 24 horas", true, "Los objetos olvidados que no se puedan devolver se depositan en el área de transportes o en la Policía Local en 24 horas.", "Art. 62.2"),
+      O("Te lo quedas en la guantera por si vuelve a llamar", false, "Retener objetos olvidados sin entregarlos en 24 horas es grave.", "Art. 79.2.n", "grave"),
+      O("Lo dejas en la parada para que alguien lo vea", false, "Hay que entregarlo en transportes del Ayuntamiento o en la Policía Local.", "Art. 62.2", "grave")], "Objeto olvidado"),
+    C("Un compañero te dice: «Para que no te pase, al terminar cada servicio…»", [
+      O("«…le digo al pasajero que compruebe si se deja algo»", true, "Es una obligación al finalizar cada servicio.", "Art. 62.1"),
+      O("«…reviso yo el asiento cuando ya se ha ido»", false, "La obligación es avisar al pasajero al terminar el servicio.", "Art. 62.1", "leve")]),
+    { k: "info", who: "Siguiente", txt: "Te pones en LIBRE.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  billete50: g => [
+    { k: "info", who: "Cliente", txt: "Por la noche, un señor sube en la parada de San Juan: «A Salinetas.»", onEnter: g => { g.dest = true; g.noche = true; } },
+    M("Salinetas, dentro del término. Pon la tarifa.", "T1", "Tarifa 1.", "Trayecto urbano: tarifa 1.", "Art. 43.A.6", "muy grave"),
+    D("San Juan → Salinetas", 5, 540, ["San Juan", "Ctra. de Salinetas", "Salinetas"]),
+    M("Llegáis a Salinetas.", "PM", "Punto muerto.", "Al llegar, punto muerto.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `Son ${eur(g.m.imp)}. Te da un billete de 50 € y tú no tienes tanto cambio.`, opts: g => [
+      O("Le explicas que solo tienes obligación de cambio hasta 20 € y le acompañas a cambiar al sitio más cercano; el taxímetro puede seguir contando", true, "Con billetes de más de 20 €, el conductor puede mantener el taxímetro en marcha hasta que le paguen, y debe ayudarle a conseguir cambio cerca.", "Art. 46.2"),
+      O("Le pides que se baje y te pague otro día", false, "Debes ayudarle a conseguir el cambio en el punto más cercano.", "Art. 46.2", "leve"),
+      O("Te quedas los 50 € como pago", false, "Cobrar de más es muy grave.", "Art. 79.3.b", "muy grave")], onDone: g => { g.m.imp = r2(g.m.imp + .4); cobrar(g); } },
+    C("El señor quiere comerse un bocadillo dentro mientras esperáis.", [
+      O("Le explicas que no se puede comer ni beber en el taxi", true, "Está prohibido comer y beber dentro del vehículo.", "Art. 63.8"),
+      O("Le dejas, si no mancha", false, "Comer dentro del taxi está prohibido; incumplirlo es grave.", "Arts. 63.8 y 79.2.d", "grave")]),
+    { k: "info", who: "Fin del servicio", txt: "Te pones en LIBRE.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  gasolina: g => [
+    { k: "info", who: "Cliente", txt: "Sube una pareja en San Gregorio: «Al centro comercial Las Terrazas.» Ves que vas justo de gasolina.", onEnter: g => { g.dest = true; } },
+    M("Trayecto urbano. Pon la tarifa.", "T1", "Tarifa 1.", "Trayecto urbano: tarifa 1.", "Art. 43.A.6", "muy grave"),
+    C("Pasáis por una gasolinera. ¿Qué haces?", [
+      O("No repostas con clientes; si no hay más remedio, les pides permiso y paras el taxímetro mientras tanto", true, "No se reposta durante el servicio. En un caso límite, con autorización del usuario y con el taxímetro parado (incluido el desvío).", "Art. 56"),
+      O("Repostas con el taxímetro en marcha, son dos minutos", false, "Repostar con el taxi ocupado sin autorización y sin descontar ese tiempo es leve.", "Art. 79.1.c", "leve")]),
+    D("San Gregorio → Las Terrazas", 3.4, 480, ["San Gregorio", "…", "Las Terrazas"]),
+    M("Llegáis.", "PM", "Punto muerto.", "Al llegar, punto muerto.", "Art. 45.4", "leve"),
+    { k: "choiceF", who: "Cliente", txt: g => `Son ${eur(g.m.imp)}. «¿Puedo pagar con tarjeta?»`, opts: g => g.m.imp < 6 ? [
+      O("Puedes aceptar la tarjeta, aunque por menos de 6 € no estás obligada", true, "El pago con datáfono no es obligatorio en servicios de menos de 6 €.", "Art. 46.4"),
+      O("«Con tarjeta le cobro 1 € más»", false, "Es un suplemento no autorizado: muy grave.", "Art. 79.3.b", "muy grave")] : [
+      O("«Claro», y cobras con el datáfono", true, "Por encima de 6 € el pago con tarjeta es obligatorio aceptarlo.", "Art. 46.4"),
+      O("«Mejor en efectivo, que la tarjeta me cobra comisión»", false, "El datáfono es obligatorio; prestar servicio sin él en funcionamiento es infracción.", "Arts. 25.n y 79.1.p", "leve")], onDone: cobrar },
+    { k: "info", who: "Fin del servicio", txt: "Te pones en LIBRE. Antes de seguir, vas a repostar sin clientes.", onEnter: g => aplicarMeter("LIBRE") },
+  ],
+  fin: g => [{ k: "fin" }],
+};
+
+// --- render ---
+function renderJuego() {
+  let ov = document.getElementById("juego");
+  if (!ov) { ov = document.createElement("div"); ov.id = "juego"; document.body.appendChild(ov); document.body.style.overflow = "hidden"; }
+  const s = paso();
+  if (s.k === "fin") { ov.innerHTML = finHTML(); return; }
+  const n = G.serv.length - 2; const si = G.si;
+  const titulo = si === 0 ? "Inicio del turno" : `Servicio ${si} de ${n}`;
+  const txt = typeof s.txt === "function" ? s.txt(G) : s.txt;
+  let acciones = "";
+  if (G.fb) {
+    acciones = `<div class="g-fb ${G.fb.ok === true ? "ok" : G.fb.ok === false ? "ko" : "neutral"}"><b>${G.fb.ok === true ? "Bien hecho" : G.fb.ok === false ? (G.fb.inf ? "Infracción " + G.fb.inf : "Error") : "Aviso"}</b><span>${esc(G.fb.exp)}</span>${G.fb.art ? `<em>${esc(G.fb.art)}${G.fb.ok === false && G.fb.inf ? " · multa " + MULTA[G.fb.inf] : ""}</em>` : ""}</div>
+      <button class="btn g-next" data-g="${G.fb.ok === null || G.fb.stray ? "cerrar" : "seguir"}">${G.fb.ok === null || G.fb.stray ? "Entendido" : "Continuar"}</button>`;
+  } else if (s.k === "choice" || s.k === "choiceF") {
+    const opts = s._opts || (s._opts = shuffle(typeof s.opts === "function" ? s.opts(G) : s.opts));
+    acciones = `<div class="g-opts">${opts.map((o, i) => `<button class="g-opt" data-g="opt" data-i="${i}">${esc(o.t)}</button>`).join("")}</div>`;
+  } else if (s.k === "multi") {
+    acciones = `<div class="g-multi">${s.items.map((it, i) => `<button class="g-chk ${G.sel.has(i) ? "on" : ""}" data-g="chk" data-i="${i}"><i></i>${esc(it[0])}</button>`).join("")}</div><button class="btn g-next" data-g="multi">Listo</button>`;
+  } else if (s.k === "meter") {
+    acciones = `<div class="g-hint">Usa los botones del taxímetro ↑</div>`;
+  } else if (s.k === "drive") {
+    acciones = G.driving ? `<div class="g-hint">Conduciendo…</div>` : `<button class="btn g-next" data-g="drive">Conducir</button>`;
+  } else if (s.k === "info") {
+    acciones = `<button class="btn g-next" data-g="seguir">Continuar</button>`;
+  }
+  const road = s.k === "drive" ? `<div class="g-road"><div class="g-via">${s.via.map(v => `<span>${esc(v)}</span>`).join("")}</div><div class="g-lane"><div id="car" class="g-car" style="left:${G.driving ? 0 : 0}%">🚕</div></div></div>` : "";
+  const m = G.m;
+  ov.innerHTML = `<div class="g-wrap">
+    <div class="g-top"><button class="g-x" data-g="salir" aria-label="Salir">✕</button><span>${titulo}</span><span class="num">${G.pts} pts · Caja ${eur(G.caja)}</span></div>
+    <div class="g-cab ${G.noche ? "noche" : ""}">
+      <div class="g-mod"><span class="g-luz ${m.luz === "libre" ? "on" : ""}"></span><span class="g-dig ${m.tar ? "on" : ""}">${m.tar ? m.tar.slice(1) : ""}</span><span class="g-modt">TAXI LM · TELDE</span></div>
+      <div class="g-meter">
+        <div class="g-lcd" id="lcd"></div>
+        <div class="g-keys">
+          ${["LIBRE", "T1", "T2", "T3", "PM", "TICKET"].map(k => `<button class="g-key k-${k}" data-g="key" data-k="${k}" ${G.driving ? "disabled" : ""}>${k === "PM" ? "A PAGAR" : k === "T1" ? "TAR 1" : k === "T2" ? "TAR 2" : k === "T3" ? "TAR 3" : k}</button>`).join("")}
+        </div>
+        ${m.ticket ? `<div class="g-ticket num">TAXI L.M. TELDE<br>Tarifa ${m.tar ? m.tar.slice(1) : "-"} · ${m.km.toFixed(1).replace(".", ",")} km<br><b>TOTAL ${eur(m.imp)}</b></div>` : ""}
+      </div>
+    </div>
+    ${road}
+    <div class="g-scene">
+      <div class="g-who">${esc(s.who || (s.k === "meter" ? "Taxímetro" : s.k === "drive" ? "Ruta" : ""))}</div>
+      <div class="g-txt">${esc(txt || "")}</div>
+    </div>
+    <div class="g-act">${acciones}</div>
+  </div>`;
+  pintarMeter();
+}
+function finHTML() {
+  const p = G.total ? Math.round(G.aciertos * 100 / G.total) : 0;
+  const nota = G.infr.length === 0 ? ["Turno impecable", "Ni una infracción. Así se aprueba."] : G.infr.some(i => i.inf === "muy grave") ? ["Turno con infracciones muy graves", "En la vida real esto supondría una sanción importante. Repasa los fallos."] : ["Buen turno, con fallos", "Repasa las infracciones de abajo y vuelve a jugar."];
+  const mejor = (() => { try { return +localStorage.getItem("taxi-telde-juego-best") || 0; } catch (e) { return 0; } })();
+  if (G.pts > mejor) { try { localStorage.setItem("taxi-telde-juego-best", G.pts); } catch (e) {} }
+  return `<div class="g-wrap">
+    <div class="g-top"><button class="g-x" data-g="salir" aria-label="Salir">✕</button><span>Fin del turno</span><span></span></div>
+    <div class="g-sheet">
+      <div class="g-sheet-h">HOJA DE SERVICIO · TAXI L.M. TELDE</div>
+      <div class="g-big num">${G.pts} pts</div>
+      <div class="g-ver">${nota[0]}</div><p>${nota[1]}</p>
+      <div class="g-stats"><span><b class="num">${G.serv.length - 2}</b>servicios</span><span><b class="num">${eur(G.caja)}</b>recaudado</span><span><b class="num">${p}%</b>decisiones correctas</span><span><b class="num">${Math.max(mejor, G.pts)}</b>tu récord</span></div>
+      ${G.infr.length ? `<h3>Infracciones cometidas (${G.infr.length})</h3><div class="g-inf">${G.infr.map(i => `<div><b>${esc(i.inf.toUpperCase())}</b> · ${esc(i.art)} · multa ${MULTA[i.inf]}<span>${esc(i.txt)}</span></div>`).join("")}</div>` : ""}
+      <p class="g-small">Los precios del taxímetro del juego son de ejemplo. Las reglas y los artículos son los de la Ordenanza de Telde.</p>
+      <div class="row"><button class="btn red" data-g="otra">Jugar otro turno</button><button class="btn ghost" data-g="salir">Salir</button></div>
+    </div>
+  </div>`;
+}
+function cerrarJuego() { G = null; const ov = document.getElementById("juego"); if (ov) ov.remove(); document.body.style.overflow = ""; }
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-g]"); if (!b) return;
+  const a = b.dataset.g;
+  if (a === "jugar") { nuevoTurno(); return; }
+  if (!G) return;
+  const s = paso();
+  if (a === "salir") cerrarJuego();
+  else if (a === "otra") nuevoTurno();
+  else if (a === "key") meterKey(b.dataset.k);
+  else if (a === "cerrar") { G.fb = null; renderJuego(); }
+  else if (a === "seguir") avanzar();
+  else if (a === "opt") { const o = s._opts[+b.dataset.i]; nota(o.ok, o.exp, o.art, o.inf); if (s.onDone) s.onDone(G); if (s.k === "choiceF" && s.onDone) s.onDone = null; renderJuego(); }
+  else if (a === "chk") { const i = +b.dataset.i; G.sel.has(i) ? G.sel.delete(i) : G.sel.add(i); renderJuego(); }
+  else if (a === "multi") {
+    const falt = s.items.filter((it, i) => it[1] && !G.sel.has(i)).map(it => it[0]);
+    const sobra = s.items.filter((it, i) => !it[1] && G.sel.has(i)).map(it => it[0]);
+    if (!falt.length) nota(true, "Llevas toda la documentación obligatoria." + (sobra.length ? " (" + sobra.join(", ") + " no hace falta llevarlo.)" : ""), s.art);
+    else nota(false, "Te falta: " + falt.join(", ") + ". Prestar servicio sin cualquiera de los documentos del art. 51 es grave para el conductor.", "Arts. 51 y 79.2.a", "grave");
+    renderJuego();
+  }
+  else if (a === "drive") { conducir(s.km, s.min, () => { if (s.after) s.after(G); G.fb = null; setTimeout(() => { if (G && paso() === s) avanzar(); }, 500); }); }
+});
+
 function renderPlan() {
   const hoy = midnight(new Date());
   const quedan = diasHasta(hoy, EXAMEN);
@@ -2229,6 +2643,7 @@ function renderPlan() {
       ${fase ? `<span class="fase">Fase: ${fase.n}. ${fase.c}</span>` : i < 0 ? `<span class="fase">El plan empieza el 23 de octubre.</span>` : ""}</div>
     </div>
 
+    <div class="play-card"><span class="pc-ico">🚕</span><div><b>Juego: un turno de taxi</b><span>Haz servicios reales en Telde usando el taxímetro y aplicando la Ordenanza.</span></div><button class="btn red" data-g="jugar">Jugar</button></div>
     ${tareas.length ? `<div class="section-h"><h2>Hoy toca</h2><span class="note num">${hechasHoy}/${tareas.length} hecho</span></div>
     <div class="tasks">${tareas.map(t => { const ok = hecha(t, key); let btn = "";
       if (!ok) {
