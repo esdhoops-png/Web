@@ -56,7 +56,7 @@ h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-
 .door h1 { font-size: clamp(30px, 7vw, 44px); line-height: 1; font-weight: 700; text-transform: uppercase; padding-bottom: 14px; }
 .door h1 em { font-style: normal; color: #ff8a93; }
 .tabs { display: flex; gap: 4px; max-width: 720px; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
-@media (max-width: 460px) { .tab { padding: 10px 7px; font-size: 14px; letter-spacing: .02em; } }
+@media (max-width: 460px) { .tab { padding: 10px 6px; font-size: 13.5px; letter-spacing: .01em; } .tab .badge { margin-left: 2px; min-width: 18px; padding: 0 4px; } }
 .tab { background: transparent; border: 0; color: var(--on-indigo); opacity: .75; padding: 10px 14px; font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: .04em; text-transform: uppercase; border-radius: 8px 8px 0 0; }
 .tab[aria-selected="true"] { background: var(--snow); color: var(--ink); opacity: 1; }
 .tab .badge { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 4px; border-radius: 10px; background: var(--rojo); color: #fff; font-family: var(--mono); font-size: 12px; line-height: 20px; text-align: center; }
@@ -213,6 +213,51 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 @keyframes vzBig { from { opacity: 0; transform: translateY(18px) scale(.96); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .vz-big, .vz-t, .vz-tag { animation: none; } }
 
+/* Plan */
+.countdown { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; background: #0d0f18; color: #fff; border-radius: 12px; padding: 16px 20px; }
+.cd-num { font-family: var(--mono); font-size: clamp(48px, 13vw, 72px); line-height: 1; color: #ff3b4a; text-shadow: 0 0 14px rgba(255,59,74,.45); }
+.cd-txt { display: grid; gap: 2px; min-width: 0; }
+.cd-txt b { font-family: var(--display); font-size: 24px; text-transform: uppercase; line-height: 1.1; }
+.cd-txt span { color: #c9cde3; font-size: 14px; }
+.cd-txt .fase { color: #9be7bd; margin-top: 4px; }
+.tasks { display: grid; gap: 8px; }
+.task { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.task .tick { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-weight: 700; color: #fff; }
+.task.done .tick { background: var(--verde); border-color: var(--verde); }
+.task.done .tt { color: var(--muted); text-decoration: line-through; }
+.task .btn { padding: 8px 14px; font-size: 14px; }
+@media (max-width: 460px) { .task { grid-template-columns: 28px 1fr; } .task .btn { grid-column: 2; justify-self: start; } }
+.ready { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 14px; }
+.gauge { position: relative; height: 26px; background: var(--line); border-radius: 13px; overflow: hidden; }
+.gauge .gfill { height: 100%; background: linear-gradient(90deg, var(--rojo), var(--ambar) 55%, var(--verde)); border-radius: 13px; }
+.gauge span { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--ink); }
+.crit { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.crit li { display: grid; grid-template-columns: 22px 1fr; column-gap: 10px; font-size: 15px; }
+.crit li::before { content: ""; grid-row: span 2; width: 18px; height: 18px; margin-top: 2px; border-radius: 50%; border: 2px solid var(--line); }
+.crit li.ok::before { background: var(--verde); border-color: var(--verde); }
+.crit li span { color: var(--muted); font-size: 13px; font-family: var(--mono); }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal .cw { text-align: center; font-size: 12px; color: var(--muted); font-weight: 600; }
+.cal .cd { aspect-ratio: 1; max-width: 100%; border-radius: 8px; background: var(--paper); border: 1px solid var(--line); display: grid; place-items: center; align-content: center; position: relative; }
+.cal .cd b { font-size: 15px; }
+.cal .cd i { font-style: normal; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; }
+.cal .full { background: var(--verde); border-color: var(--verde); color: #fff; }
+.cal .half { background: color-mix(in srgb, var(--ambar) 30%, var(--paper)); border-color: var(--ambar); }
+.cal .miss { background: var(--soft); color: var(--muted); }
+.cal .today { outline: 3px solid var(--indigo-ink); outline-offset: 1px; }
+.cal .exam { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }
+.legend i.full { background: var(--verde); } .legend i.half { background: color-mix(in srgb, var(--ambar) 30%, var(--paper)); border-color: var(--ambar); } .legend i.miss { background: var(--soft); } .legend i.today { outline: 2px solid var(--indigo-ink); }
+.phases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media (max-width: 520px) { .phases { grid-template-columns: 1fr; } }
+.ph { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 2px; }
+.ph.on { border-color: var(--indigo-ink); box-shadow: inset 0 0 0 1px var(--indigo-ink); }
+.ph b { font-family: var(--display); font-size: 19px; text-transform: uppercase; }
+.ph span { font-family: var(--mono); font-size: 12px; color: var(--indigo-ink); }
+.ph p { margin: 0; font-size: 14px; color: var(--muted); }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -226,7 +271,8 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
     </div>
   </div>
   <nav class="tabs" role="tablist">
-    <button class="tab" role="tab" id="tab-inicio" data-tab="inicio" aria-selected="true">Tests</button>
+    <button class="tab" role="tab" id="tab-plan" data-tab="plan" aria-selected="true">Plan</button>
+    <button class="tab" role="tab" id="tab-inicio" data-tab="inicio" aria-selected="false">Tests</button>
     <button class="tab" role="tab" id="tab-progreso" data-tab="progreso" aria-selected="false">Progreso</button>
     <button class="tab" role="tab" id="tab-videos" data-tab="videos" aria-selected="false">Vídeos</button>
     <button class="tab" role="tab" id="tab-falladas" data-tab="falladas" aria-selected="false">Falladas<span class="badge num" id="badge" hidden>0</span></button>
@@ -527,7 +573,7 @@ const QMAP = Object.fromEntries(Q.map(q => [q[0], q]));
 const LS_KEY = "taxi-telde-progreso-v1";
 let state = { hist: [], st: {} };   // st[qid] = {v: vistas, f: fallos, p: pendiente, r: aciertos seguidos desde el último fallo}
 let store = { db: null, ref: null, ok: false };
-let tab = "inicio";
+let tab = "plan";
 let test = null;
 let opt = { inmediata: true, bloques: new Set(Object.keys(BLOQUES)) };
 let confirmReset = false;
@@ -669,6 +715,7 @@ function render() {
   if (tab === "progreso") return renderProgreso();
   if (tab === "falladas") return renderFalladas();
   if (tab === "videos") return renderVideos();
+  if (tab === "plan") return renderPlan();
   return renderInicio();
 }
 function storeLine() {
@@ -877,7 +924,8 @@ document.addEventListener("click", e => {
   if (a === "next") next();
   else if (a === "prev") prev();
   else if (a === "finish") finish();
-  else if (a === "salir" || a === "home") { test = null; tab = "inicio"; render(); }
+  else if (a === "salir") { test = null; tab = "inicio"; render(); }
+  else if (a === "home") { test = null; tab = "plan"; render(); }
   else if (a === "again") startTest(test.modo);
   else if (a === "retryfails") startTest("repaso", test.items.filter(it => it.pick !== 0).map(it => it.id));
   else if (a === "reset") { confirmReset = true; renderProgreso(); }
@@ -1127,6 +1175,140 @@ document.addEventListener("click", e => {
   else if (a === "vpractice") { const b = vid.id; stopSpeech(); vid = null; opt.bloques = new Set([b]); tab = "inicio"; startTest("bloque"); }
 }, true);
 document.addEventListener("visibilitychange", () => { if (document.hidden && vid && vid.playing) pause(); });
+
+// ---------- Plan de estudio hasta el examen ----------
+const EXAMEN = new Date(2026, 10, 19);          // 19 de noviembre de 2026
+const INICIO = new Date(2026, 9, 23);           // 23 de octubre de 2026
+const DIA = 86400000;
+function dkey(d) { d = new Date(d); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function midnight(d) { d = new Date(d); d.setHours(0, 0, 0, 0); return d; }
+function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function diasHasta(a, b) { return Math.round((midnight(b) - midnight(a)) / DIA); }
+const FASES = [
+  { n: "Aprender el temario", desde: 0, hasta: 7, c: "Una lección al día y un test de ese bloque." },
+  { n: "Verlo todo varias veces", desde: 8, hasta: 13, c: "Test completo y repaso de falladas cada día." },
+  { n: "Ritmo de examen", desde: 14, hasta: 20, c: "Un simulacro de 50 y repaso de falladas cada día." },
+  { n: "Afinar", desde: 21, hasta: 26, c: "Simulacro un día sí y otro no; dejar las falladas a cero. El último día, repaso suave." },
+];
+function faseDe(i) { return FASES.find(f => i >= f.desde && i <= f.hasta) || null; }
+function tareasDe(i) {
+  if (i < 0 || i > 26) return [];
+  if (i <= 7) { const L = LECCIONES[i]; return [
+    { k: "lec", id: L.id, txt: `Ver la lección «${L.t}»` },
+    { k: "bloque", id: L.id, txt: `Test del bloque «${BLOQUES[L.id]}»` }]; }
+  if (i <= 13) return [{ k: "completo", txt: "Test completo (25 preguntas)" }, { k: "repaso", txt: "Repaso de falladas" }];
+  if (i <= 20) return [{ k: "simulacro", txt: "Simulacro (50 preguntas)" }, { k: "repaso", txt: "Repaso de falladas" }];
+  if (i === 26) return [{ k: "repaso", txt: "Repaso suave de falladas y descansar" }];
+  return (i - 21) % 2 === 0 ? [{ k: "simulacro", txt: "Simulacro (50 preguntas)" }, { k: "repaso", txt: "Repaso de falladas" }]
+                            : [{ k: "repaso", txt: "Repaso de falladas" }, { k: "lecdebil", txt: "Ver la lección de tu bloque más flojo" }];
+}
+function histDia(key) { return state.hist.filter(h => dkey(h.d) === key); }
+function hecha(t, key) {
+  const hs = histDia(key);
+  if (t.k === "lec") return !!vistas[t.id];
+  if (t.k === "lecdebil") { const v = Object.values(vistas).some(ts => dkey(ts) === key); return v; }
+  if (t.k === "bloque") return hs.some(h => h.m === "bloque" && h.b && h.b[t.id]);
+  if (t.k === "repaso") return hs.some(h => h.m === "repaso") || (key === dkey(Date.now()) && pendientes().length === 0 && state.hist.length > 0);
+  return hs.some(h => h.m === t.k);
+}
+function bloqueDebil() {
+  const agg = {};
+  state.hist.forEach(r => Object.entries(r.b || {}).forEach(([k, [ok, n]]) => { agg[k] = agg[k] || [0, 0]; agg[k][0] += ok; agg[k][1] += n; }));
+  const arr = Object.keys(BLOQUES).filter(k => agg[k] && agg[k][1]).map(k => ({ k, p: agg[k][0] / agg[k][1] })).sort((a, b) => a.p - b.p);
+  return arr[0] ? arr[0].k : null;
+}
+function preparacion() {
+  const vistasQ = Object.keys(state.st).length;
+  const cobertura = Math.min(1, vistasQ / Q.length);
+  const ult = state.hist.slice(-5);
+  const media = ult.length ? ult.reduce((a, h) => a + h.ok / h.n, 0) / ult.length : 0;
+  const sims = state.hist.filter(h => h.m === "simulacro").slice(-3);
+  const simOk = sims.filter(h => h.ok / h.n >= .9).length;
+  const pend = pendientes().length;
+  const agg = {};
+  state.hist.forEach(r => Object.entries(r.b || {}).forEach(([k, [ok, n]]) => { agg[k] = agg[k] || [0, 0]; agg[k][0] += ok; agg[k][1] += n; }));
+  const verdes = Object.keys(BLOQUES).filter(k => agg[k] && agg[k][1] >= 5 && agg[k][0] / agg[k][1] >= .8).length;
+  const nb = Object.keys(BLOQUES).length;
+  const score = Math.round(100 * (cobertura * .2 + media * .3 + (simOk / 3) * .25 + (verdes / nb) * .15 + Math.max(0, 1 - pend / 40) * .1 * (state.hist.length ? 1 : 0)));
+  return { score, cobertura, vistasQ, media, sims, simOk, pend, verdes, nb };
+}
+
+function renderPlan() {
+  const hoy = midnight(new Date());
+  const quedan = diasHasta(hoy, EXAMEN);
+  const i = diasHasta(INICIO, hoy);
+  const key = dkey(hoy);
+  const fase = faseDe(i);
+  let tareas = tareasDe(i);
+  const debil = bloqueDebil();
+  const pr = preparacion();
+  const estado = pr.score >= 85 ? ["Lista para el examen", "g"] : pr.score >= 60 ? ["Bien encaminada", "m"] : ["Empezando", "b"];
+  // calendario
+  const dias = [];
+  for (let d = 0; d <= 27; d++) {
+    const f = addDays(INICIO, d); const k = dkey(f);
+    const ts = tareasDe(d); const n = ts.filter(t => hecha(t, k)).length;
+    let cls = "fut";
+    if (d === 27) cls = "exam";
+    else if (f < hoy) cls = n === ts.length && ts.length ? "full" : n || histDia(k).length ? "half" : "miss";
+    else if (k === key) cls = n === ts.length && ts.length ? "full today" : "today";
+    dias.push({ f, cls, d });
+  }
+  const estudiados = dias.filter(x => x.cls.includes("full") || x.cls.includes("half")).length;
+  const hechasHoy = tareas.filter(t => hecha(t, key)).length;
+  const lunes = (INICIO.getDay() + 6) % 7;
+  $("#app").innerHTML = `<section class="view">
+    <div class="countdown">
+      <div class="cd-num num">${quedan > 0 ? quedan : quedan === 0 ? "HOY" : "✓"}</div>
+      <div class="cd-txt"><b>${quedan > 1 ? "días para el examen" : quedan === 1 ? "día para el examen: mañana" : quedan === 0 ? "es el examen. ¡Mucha suerte!" : "El examen ya pasó"}</b>
+      <span>Jueves 19 de noviembre de 2026</span>
+      ${fase ? `<span class="fase">Fase: ${fase.n}. ${fase.c}</span>` : i < 0 ? `<span class="fase">El plan empieza el 23 de octubre.</span>` : ""}</div>
+    </div>
+
+    ${tareas.length ? `<div class="section-h"><h2>Hoy toca</h2><span class="note num">${hechasHoy}/${tareas.length} hecho</span></div>
+    <div class="tasks">${tareas.map(t => { const ok = hecha(t, key); let btn = "";
+      if (!ok) {
+        if (t.k === "lec") btn = `<button class="btn" data-plan="lec" data-id="${t.id}">Ver lección</button>`;
+        else if (t.k === "lecdebil") btn = debil ? `<button class="btn" data-plan="lec" data-id="${debil}">Ver «${esc(LMAP[debil].t)}»</button>` : `<button class="btn" data-plan="tab" data-id="videos">Elegir lección</button>`;
+        else if (t.k === "bloque") btn = `<button class="btn" data-plan="bloque" data-id="${t.id}">Empezar test</button>`;
+        else if (t.k === "repaso") btn = pendientes().length ? `<button class="btn red" data-start="repaso">Repasar ${pendientes().length}</button>` : "";
+        else btn = `<button class="btn" data-start="${t.k}">Empezar</button>`;
+      }
+      return `<div class="task ${ok ? "done" : ""}"><span class="tick">${ok ? "✓" : ""}</span><span class="tt">${esc(t.txt)}</span>${btn}</div>`; }).join("")}</div>
+    ${hechasHoy === tareas.length ? `<p class="note">Tarea de hoy completada. Si quieres más, haz un test rápido.</p>` : ""}` : ""}
+
+    <div class="section-h"><h2>¿Estoy lista?</h2><span class="pill ${estado[1]}">${estado[0]}</span></div>
+    <div class="ready">
+      <div class="gauge"><div class="gfill" style="width:${pr.score}%"></div><span class="num">${pr.score}%</span></div>
+      <ul class="crit">
+        <li class="${pr.simOk >= 3 ? "ok" : ""}"><b>3 simulacros seguidos con 90 % o más</b><span>${pr.sims.length ? pr.sims.map(h => Math.round(h.ok * 100 / h.n) + "%").join(" · ") : "Aún sin simulacros"}</span></li>
+        <li class="${pr.pend === 0 && state.hist.length ? "ok" : ""}"><b>Falladas a cero</b><span>${pr.pend} por repasar</span></li>
+        <li class="${pr.verdes === pr.nb ? "ok" : ""}"><b>Todos los bloques con 80 % o más</b><span>${pr.verdes} de ${pr.nb} bloques</span></li>
+        <li class="${pr.cobertura >= 1 ? "ok" : ""}"><b>Haber visto todas las preguntas</b><span>${pr.vistasQ} de ${Q.length}</span></li>
+        <li class="${Object.keys(vistas).length >= LECCIONES.length ? "ok" : ""}"><b>Ver las 8 lecciones</b><span>${Object.keys(vistas).length} de ${LECCIONES.length}</span></li>
+      </ul>
+    </div>
+
+    <div class="section-h"><h2>Calendario</h2><span class="note num">${estudiados} día${estudiados === 1 ? "" : "s"} estudiado${estudiados === 1 ? "" : "s"}</span></div>
+    <div class="cal">
+      ${["L", "M", "X", "J", "V", "S", "D"].map(x => `<span class="cw">${x}</span>`).join("")}
+      ${"<span></span>".repeat(lunes)}
+      ${dias.map(x => `<span class="cd ${x.cls}" title="${x.f.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" })}"><b class="num">${x.f.getDate()}</b>${x.cls === "exam" ? "<i>Examen</i>" : ""}</span>`).join("")}
+    </div>
+    <div class="legend"><span><i class="full"></i>Todo hecho</span><span><i class="half"></i>A medias</span><span><i class="miss"></i>Sin estudiar</span><span><i class="today"></i>Hoy</span></div>
+
+    <div class="section-h"><h2>El plan completo</h2></div>
+    <div class="phases">${FASES.map(f => `<div class="ph ${fase === f ? "on" : ""}"><b>${esc(f.n)}</b><span class="num">${addDays(INICIO, f.desde).toLocaleDateString("es-ES", { day: "numeric", month: "short" })} – ${addDays(INICIO, f.hasta).toLocaleDateString("es-ES", { day: "numeric", month: "short" })}</span><p>${esc(f.c)}</p></div>`).join("")}</div>
+    <p class="note">El examen también pregunta calles y rutas de Telde: dedica unos 15 minutos al día a repasar el callejero con un mapa.</p>
+  </section>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-plan]"); if (!b) return;
+  const k = b.dataset.plan, id = b.dataset.id;
+  if (k === "lec") { tab = "videos"; openLesson(id); }
+  else if (k === "tab") setTab(id);
+  else if (k === "bloque") { opt.bloques = new Set([id]); startTest("bloque"); }
+});
 
 const local = loadLocal(); if (local) state = local;
 render();
