@@ -7,24 +7,29 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Sniglet:wght@400;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@600;700&display=swap">
 <style>
-/* Layout: hoja de pauta de caligrafía de 1.º de Primaria; una columna estrecha, botones grandes para dedos pequeños */
+/* Layout: el huerto de Fresi; un camino de parcelas que baja hasta la cesta del examen, tarjetas blandas sin bordes de tinta */
 :root {
-  --paper: #fffdf6;
-  --pauta: #d9e2f5;
-  --ink: #2c2552;
-  --ink-soft: #6a6491;
-  --red: #e2443b;
-  --green: #2f9a55;
-  --hl: #ffe45c;
+  --bg: #eef6e2;       /* lechuga clara */
+  --sun: #fff3c4;
+  --soil: #a7714c;     /* tierra del camino */
+  --soil-soft: #e9d6c3;
+  --ink: #23412b;      /* verde oscuro */
+  --ink-soft: #5d7a63;
   --card: #ffffff;
-  --c-voc: #46ad62;
-  --c-cam: #ff9a3d;
-  --c-sil: #8a63e8;
-  --c-may: #2f9fe0;
-  --c-exa: #ff7a8a;
-  --display: "Sniglet", "Comic Sans MS", system-ui, sans-serif;
+  --red: #e4553f;      /* tomate */
+  --red-soft: #fde3dd;
+  --green: #3c9d4f;
+  --green-soft: #def2d8;
+  --hl: #ffd84d;
+  --c-voc: #4fae5b;
+  --c-cam: #f28f2c;
+  --c-sil: #a565d6;
+  --c-may: #2f95d1;
+  --c-exa: #e4553f;
+  --shadow: 0 6px 0 rgba(35, 65, 43, .14), 0 10px 24px rgba(35, 65, 43, .08);
+  --display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
   --body: "Andika", "Trebuchet MS", system-ui, sans-serif;
   color-scheme: light;
 }
@@ -32,9 +37,7 @@
 html, body { min-height: 100%; }
 body {
   margin: 0;
-  background-color: var(--paper);
-  background-image: linear-gradient(transparent 0 22px, var(--pauta) 22px 23px, transparent 23px 32px, var(--pauta) 32px 33px, transparent 33px);
-  background-size: 100% 40px;
+  background: radial-gradient(circle at 92% -40px, var(--sun) 0 170px, transparent 171px), var(--bg);
   color: var(--ink);
   font-family: var(--body);
   font-size: 18px;
@@ -42,7 +45,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .wrap {
-  max-width: 560px;
+  max-width: 540px;
   margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -51,142 +54,156 @@ body {
   flex-direction: column;
   gap: 18px;
 }
-h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.05; text-wrap: balance; font-weight: 800; }
-button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, input:focus-visible { outline: 4px solid var(--hl); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.05; text-wrap: balance; font-weight: 700; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; }
+button:focus-visible, input:focus-visible { outline: 4px solid var(--hl); outline-offset: 3px; }
 
 .top { display: flex; align-items: center; gap: 10px; }
 .top .spacer { flex: 1; }
 .pill {
   display: inline-flex; align-items: center; gap: 6px;
-  background: var(--card); border: 2px solid var(--ink); border-radius: 999px;
-  padding: 4px 12px; font-family: var(--display); font-weight: 800; font-size: 18px;
+  background: var(--card); border-radius: 999px; box-shadow: var(--shadow);
+  padding: 6px 14px; font-family: var(--display); font-weight: 700; font-size: 18px;
   font-variant-numeric: tabular-nums;
 }
 .iconbtn {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--card); border: 2px solid var(--ink);
+  width: 46px; height: 46px; border-radius: 16px;
+  background: var(--card); box-shadow: var(--shadow);
   display: grid; place-items: center; font-size: 20px; line-height: 1;
 }
 
-.mascot { display: flex; align-items: flex-end; gap: 10px; }
-.mascot svg { width: 72px; height: 72px; flex: none; }
+/* Fresi */
+.mascot { display: flex; align-items: center; gap: 12px; }
+.mascot svg { width: 64px; height: 64px; flex: none; }
 .bubble {
   position: relative; flex: 1; min-width: 0;
-  background: var(--card); border: 2px solid var(--ink); border-radius: 18px;
-  padding: 10px 14px; font-size: 18px;
+  background: var(--card); border-radius: 22px 22px 22px 6px; box-shadow: var(--shadow);
+  padding: 10px 16px; font-size: 18px;
 }
-.bubble::before { content: ""; position: absolute; left: -10px; bottom: 16px; border: 8px solid transparent; border-right-color: var(--ink); border-left: 0; }
-.bubble::after { content: ""; position: absolute; left: -7px; bottom: 17px; border: 7px solid transparent; border-right-color: var(--card); border-left: 0; }
 .bubble b { color: var(--red); }
 @media (prefers-reduced-motion: no-preference) {
-  .mascot .lid { animation: blink 4s infinite; transform-origin: center 40px; }
+  .mascot .lid, .hero .lid { animation: blink 4s infinite; transform-origin: center 40px; }
   @keyframes blink { 0%, 94%, 100% { transform: scaleY(0); } 97% { transform: scaleY(1); } }
   .hop { animation: hop .5s ease; }
   @keyframes hop { 30% { transform: translateY(-12px) rotate(-6deg); } 60% { transform: translateY(0) rotate(4deg); } }
+  .hero svg { animation: sway 3s ease-in-out infinite; transform-origin: 50% 90%; }
+  @keyframes sway { 50% { transform: rotate(-5deg); } }
 }
 
-.hello { display: flex; flex-direction: column; gap: 4px; }
-.hello h1 { font-size: clamp(34px, 9vw, 46px); }
-.hello h1 mark { background: linear-gradient(transparent 55%, var(--hl) 55%); color: inherit; padding: 0 4px; }
-.hello p { margin: 0; color: var(--ink-soft); }
-.namebox { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.namebox label { font-size: 16px; color: var(--ink-soft); }
+/* portada */
+.hero { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 8px; }
+.hero svg { width: 118px; height: 118px; }
+.hero .eyebrow { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--green); }
+.hero h1 { font-size: clamp(36px, 10vw, 50px); margin-top: 4px; }
+.hero h1 mark { background: none; color: var(--red); }
+.hero p { margin: 6px 0 0; color: var(--ink-soft); }
+.hero .say { grid-column: 1 / -1; }
+.namebox { display: flex; gap: 10px; align-items: center; background: var(--card); border-radius: 18px; padding: 8px 8px 8px 16px; box-shadow: var(--shadow); }
+.namebox label { font-size: 16px; color: var(--ink-soft); white-space: nowrap; }
 .namebox input {
-  flex: 1; min-width: 140px; font: inherit; color: var(--ink);
-  border: 2px dashed var(--ink-soft); border-radius: 12px; padding: 6px 10px; background: var(--card);
+  flex: 1; min-width: 0; font: inherit; color: var(--ink); border: 0;
+  border-radius: 12px; padding: 8px 12px; background: var(--bg);
 }
-.exam-card {
-  border: 3px solid var(--ink); border-radius: 22px; background: var(--c-exa); color: var(--ink);
-  padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left;
-  box-shadow: 0 5px 0 var(--ink);
-}
-.exam-card:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
-.exam-card .eyebrow { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
-.exam-card h2 { font-size: 28px; }
-.exam-card .when { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: 700; }
-.section-label { font-family: var(--display); font-weight: 800; font-size: 22px; margin-top: 4px; }
-.topics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.topic {
-  text-align: left; border: 3px solid var(--ink); border-radius: 20px; background: var(--card);
-  padding: 12px; display: flex; flex-direction: column; gap: 6px; min-height: 150px;
-  box-shadow: 0 5px 0 var(--ink);
-}
-.topic:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
-.topic .art {
-  height: 58px; border-radius: 12px; background: var(--tc);
-  display: grid; place-items: center; color: #fff;
-  font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1;
-}
-.topic h3 { font-size: 19px; }
-.topic .best { font-size: 15px; color: var(--ink-soft); margin-top: auto; }
-.album { background: var(--card); border: 2px solid var(--ink); border-radius: 18px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
-.album p { margin: 0; font-size: 15px; color: var(--ink-soft); }
-.stickers { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-.stickers span { aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; font-size: 26px; border-radius: 12px; background: var(--paper); border: 2px dashed var(--pauta); }
-.stickers span.on { border: 2px solid var(--ink); background: #fff2c2; }
-.stickers span.off { color: var(--pauta); font-family: var(--display); font-weight: 800; font-size: 20px; }
+.section-label { font-family: var(--display); font-weight: 700; font-size: 22px; }
+.section-label small { display: block; font-family: var(--body); font-weight: 400; font-size: 15px; color: var(--ink-soft); }
 
-.dots { display: flex; gap: 5px; flex-wrap: wrap; }
-.dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink); background: var(--card); }
-.dots i.ok { background: var(--green); border-color: var(--green); }
-.dots i.ko { background: var(--red); border-color: var(--red); }
-.dots i.now { background: var(--hl); }
-.tag { font-family: var(--display); font-weight: 800; font-size: 15px; color: #fff; background: var(--tc); border-radius: 999px; padding: 2px 12px; align-self: flex-start; }
+/* el camino */
+.path { position: relative; display: flex; flex-direction: column; gap: 14px; padding-block: 6px; }
+.path::before {
+  content: ""; position: absolute; left: 50%; top: 40px; bottom: 70px; width: 0;
+  border-left: 8px dotted var(--soil); transform: translateX(-4px); opacity: .55;
+}
+.stop { position: relative; display: grid; grid-template-columns: 1fr 92px 1fr; align-items: center; gap: 10px; background: none; text-align: left; padding: 0; }
+.stop .plot {
+  grid-column: 2; width: 92px; height: 92px; border-radius: 50%;
+  background: var(--tc); color: #fff; display: grid; place-items: center;
+  font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .18), 0 0 0 6px var(--bg), 0 0 0 9px var(--soil-soft);
+}
+.stop .label { background: var(--card); border-radius: 18px; padding: 10px 12px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stop .label h3 { font-size: 18px; }
+.stop .label span { font-size: 14px; color: var(--ink-soft); }
+.stop.L .label { grid-column: 1; grid-row: 1; }
+.stop.R .label { grid-column: 3; grid-row: 1; }
+.stop.L .plot, .stop.R .plot { grid-row: 1; }
+.stop:active .plot { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0, 0, 0, .18), 0 0 0 6px var(--bg), 0 0 0 9px var(--soil-soft); }
+.exam-card {
+  position: relative; margin-top: 10px; border-radius: 28px; background: var(--c-exa); color: #fff;
+  padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; text-align: left;
+  box-shadow: 0 7px 0 #a83322, 0 12px 24px rgba(0, 0, 0, .12);
+}
+.exam-card:active { transform: translateY(4px); box-shadow: 0 3px 0 #a83322; }
+.exam-card .eyebrow { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; opacity: .9; }
+.exam-card h2 { font-size: 30px; }
+.exam-card .basket { position: absolute; right: 16px; top: -18px; font-size: 52px; line-height: 1; }
+.exam-card .when { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: 700; background: rgba(255, 255, 255, .18); border-radius: 12px; padding: 6px 10px; margin-top: 4px; }
+.album { background: var(--card); border-radius: 24px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow); }
+.stickers { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.stickers span { aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; font-size: 26px; border-radius: 50%; background: var(--bg); }
+.stickers span.on { background: var(--sun); box-shadow: inset 0 0 0 3px var(--hl); }
+.stickers span.off { color: var(--soil-soft); font-family: var(--display); font-weight: 700; font-size: 18px; }
+
+/* oruga de progreso */
+.dots { display: flex; align-items: center; flex-wrap: wrap; row-gap: 6px; padding-left: 4px; }
+.dots i { width: 22px; height: 22px; border-radius: 50%; margin-left: -5px; background: var(--card); box-shadow: inset 0 0 0 3px var(--green-soft); }
+.dots i.ok { background: var(--green); box-shadow: none; }
+.dots i.ko { background: #f39a5a; box-shadow: none; }
+.dots i.now { background: var(--hl); box-shadow: none; transform: scale(1.15); }
+.dots .head { margin-left: -2px; font-size: 26px; line-height: 1; }
+.tag { font-family: var(--display); font-weight: 600; font-size: 15px; color: #fff; background: var(--tc); border-radius: 10px; padding: 3px 12px; align-self: flex-start; }
 .board {
-  background: var(--card); border: 3px solid var(--ink); border-radius: 24px;
-  padding: 18px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+  background: var(--card); border-radius: 30px; box-shadow: var(--shadow);
+  padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
 }
 .q { font-size: 22px; font-weight: 700; margin: 0; text-wrap: balance; }
-.q b { background: linear-gradient(transparent 55%, var(--hl) 55%); }
-.emoji { font-size: 84px; line-height: 1; margin: 0; }
+.q b { color: var(--red); }
+.emoji { font-size: 88px; line-height: 1; margin: 0; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .08)); }
 .bigword { font-family: var(--body); font-weight: 700; font-size: 44px; line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
 .chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-.chips span { border: 3px solid var(--ink); border-radius: 14px; padding: 4px 12px; font-weight: 700; font-size: 26px; background: var(--paper); }
-.chips.syl span:nth-child(3n+1) { background: #ffe0dc; }
-.chips.syl span:nth-child(3n+2) { background: #dff3e4; }
-.chips.syl span:nth-child(3n) { background: #e6dcff; }
-.listen { border: 2px solid var(--ink-soft); background: var(--paper); border-radius: 999px; padding: 4px 14px; font-size: 16px; color: var(--ink-soft); }
+.chips span { border-radius: 999px; padding: 4px 14px; font-weight: 700; font-size: 24px; background: var(--bg); }
+.chips.syl span:nth-child(3n+1) { background: #ffdcd3; }
+.chips.syl span:nth-child(3n+2) { background: #d7f0cf; }
+.chips.syl span:nth-child(3n) { background: #ecdcfb; }
+.listen { background: var(--bg); border-radius: 999px; padding: 6px 16px; font-size: 16px; color: var(--ink-soft); }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 .choices.cols1 { grid-template-columns: 1fr; }
 .choices.cols3 { grid-template-columns: repeat(3, 1fr); }
 .choice {
-  min-height: 72px; border: 3px solid var(--ink); border-radius: 18px; background: var(--paper);
-  font-family: var(--body); font-weight: 700; font-size: 22px; padding: 8px;
-  box-shadow: 0 4px 0 var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-height: 70px; border-radius: 20px; background: var(--green-soft); color: var(--ink);
+  font-family: var(--body); font-weight: 700; font-size: 22px; padding: 8px 10px;
+  box-shadow: 0 5px 0 #b5d9aa; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   overflow-wrap: anywhere;
 }
 .choice.emo { font-size: 46px; line-height: 1; }
 .choice.sent { font-size: 20px; text-align: left; align-items: flex-start; }
 .choice small { font-size: 14px; }
-.choice:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
-.choice.right { background: var(--green); border-color: var(--green); color: #fff; box-shadow: 0 4px 0 #1d6b3a; }
-.choice.wrong { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 4px 0 #94261f; }
+.choice:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 #b5d9aa; }
+.choice.right { background: var(--green); color: #fff; box-shadow: 0 5px 0 #276b35; }
+.choice.wrong { background: var(--red); color: #fff; box-shadow: 0 5px 0 #9c3324; }
 .choice:disabled { cursor: default; }
 @media (prefers-reduced-motion: no-preference) { .shake { animation: shake .4s; } @keyframes shake { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } } }
 
-/* frase para tocar la palabra */
 .sentence { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
 .sentence button {
-  border: 2px solid var(--ink); border-radius: 12px; background: var(--paper); padding: 8px 12px;
-  font-family: var(--body); font-weight: 700; font-size: 24px; box-shadow: 0 3px 0 var(--ink);
+  border-radius: 14px; background: var(--green-soft); padding: 8px 14px;
+  font-family: var(--body); font-weight: 700; font-size: 24px; box-shadow: 0 4px 0 #b5d9aa;
 }
-.sentence button.right { background: var(--green); border-color: var(--green); color: #fff; }
-.sentence button.wrong { background: var(--red); border-color: var(--red); color: #fff; }
+.sentence button.right { background: var(--green); color: #fff; box-shadow: 0 4px 0 #276b35; }
+.sentence button.wrong { background: var(--red); color: #fff; box-shadow: 0 4px 0 #9c3324; }
 
 .go {
-  width: 100%; min-height: 60px; border: 3px solid var(--ink); border-radius: 18px; background: var(--green); color: #fff;
-  font-family: var(--display); font-weight: 800; font-size: 26px; box-shadow: 0 5px 0 var(--ink);
+  width: 100%; min-height: 60px; border-radius: 20px; background: var(--green); color: #fff;
+  font-family: var(--display); font-weight: 700; font-size: 24px; box-shadow: 0 6px 0 #276b35;
 }
-.go.alt { background: var(--card); color: var(--ink); }
-.go:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
-.explain { background: #fff1f0; border: 2px solid var(--red); border-radius: 16px; padding: 10px 14px; text-align: left; width: 100%; font-size: 19px; }
+.go.alt { background: var(--bg); color: var(--ink); box-shadow: 0 6px 0 #c9dfb9; }
+.go:active { transform: translateY(4px); box-shadow: 0 2px 0 #276b35; }
+.explain { background: var(--red-soft); border-radius: 18px; padding: 12px 16px; text-align: left; width: 100%; font-size: 19px; }
 .explain strong { color: var(--red); }
 
 .result { text-align: center; align-items: center; }
-.result .score { font-family: var(--display); font-weight: 800; font-size: 80px; line-height: 1; font-variant-numeric: tabular-nums; }
-.result .stars { font-size: 52px; letter-spacing: 6px; }
-.result .stars .dim { filter: grayscale(1); opacity: .3; }
+.result .score { font-family: var(--display); font-weight: 700; font-size: 80px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--green); }
+.result .stars { font-size: 52px; letter-spacing: 6px; color: #f2b705; }
+.result .stars .dim { color: var(--soil-soft); }
 .result .sticker { font-size: 72px; line-height: 1; }
 .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 
@@ -281,7 +298,7 @@ button:focus-visible, input:focus-visible { outline: 4px solid var(--hl); outlin
   // ---------- temas (lo que dice el profe) ----------
   const TOPICS = {
     vocab:  { name: "Alimentos saludables", color: "var(--c-voc)", art: "🥕🍎" },
-    campo:  { name: "Campo semántico", color: "var(--c-cam)", art: "🐶🐱🐮" },
+    campo:  { name: "Campo semántico", color: "var(--c-cam)", art: "🐶🐱" },
     silabas:{ name: "Sílabas", color: "var(--c-sil)", art: "ca·sa" },
     mayus:  { name: "Las mayúsculas", color: "var(--c-may)", art: "Aa" }
   };
@@ -490,14 +507,14 @@ button:focus-visible, input:focus-visible { outline: 4px solid var(--hl); outlin
     const best = k => save.best[k] ? starRow(save.best[k]) : "Sin jugar todavía";
     app.innerHTML =
       '<div class="top"><span class="pill" title="Estrellas">⭐ ' + save.stars + '</span><span class="spacer"></span><button class="iconbtn" id="snd" aria-label="Sonido">' + (save.sound ? "🔊" : "🔇") + "</button></div>" +
-      '<div class="hello"><h1>¡Hola' + (save.name ? ", <mark>" + esc(save.name) + "</mark>" : "") + "!</h1><p>Vamos a preparar la prueba de Lengua del tema 1.</p></div>" +
-      mascotHTML(save.name ? "Soy <b>Fresi</b>. ¿Qué practicamos hoy" + nm() + "?" : "Soy <b>Fresi</b>, la fresa de las palabras. ¿Cómo te llamas?") +
+      '<div class="hero"><div><span class="eyebrow">El huerto de las palabras</span><h1>¡Hola' + (save.name ? ", <mark>" + esc(save.name) + "</mark>" : "") + "!</h1><p>Vamos a preparar la prueba de Lengua del tema 1.</p></div>" + BERRY +
+        '<div class="bubble say" id="bubble" aria-live="polite">' + (save.name ? "Soy <b>Fresi</b>. Sigue el camino del huerto parcela a parcela" + nm() + "." : "Soy <b>Fresi</b>, la fresa de las palabras. ¿Cómo te llamas?") + "</div></div>" +
       '<div class="namebox"><label for="name">Tu nombre</label><input id="name" maxlength="16" autocomplete="off" placeholder="Escribe tu nombre" value="' + esc(save.name) + '"></div>' +
-      '<button class="exam-card" data-go="examen"><span class="eyebrow">Jueves 29 de octubre</span><h2>Simulacro de la prueba</h2><span>16 preguntas de todos los temas, como en el examen.</span><span class="when"><span>' + when + "</span><span>" + (save.best.examen ? starRow(save.best.examen) : "") + "</span></span></button>" +
-      '<div class="section-label">Practica cada tema</div>' +
-      '<div class="topics">' + Object.keys(TOPICS).map(k =>
-        '<button class="topic" data-go="' + k + '" style="--tc:' + TOPICS[k].color + '"><div class="art">' + TOPICS[k].art + "</div><h3>" + TOPICS[k].name + '</h3><span class="best">' + best(k) + "</span></button>").join("") + "</div>" +
-      '<div class="album"><div class="section-label" style="margin:0">Mi álbum de pegatinas</div><p>Consigue una pegatina cada vez que aciertes casi todo (8 de 10, o 13 de 16 en el simulacro).</p><div class="stickers">' +
+      '<div class="section-label">El camino del huerto<small>Practica cada tema y llega a la cesta del examen.</small></div>' +
+      '<div class="path">' + Object.keys(TOPICS).map((k, i) =>
+        '<button class="stop ' + (i % 2 ? "R" : "L") + '" data-go="' + k + '" style="--tc:' + TOPICS[k].color + '"><span class="plot">' + TOPICS[k].art + '</span><span class="label"><h3>' + TOPICS[k].name + "</h3><span>" + best(k) + "</span></span></button>").join("") +
+      '<button class="exam-card" data-go="examen"><span class="basket" aria-hidden="true">🧺</span><span class="eyebrow">Jueves 29 de octubre</span><h2>Simulacro de la prueba</h2><span>16 preguntas de todos los temas, como en el examen.</span><span class="when"><span>' + when + "</span><span>" + (save.best.examen ? starRow(save.best.examen) : "") + "</span></span></button></div>" +
+      '<div class="album"><div class="section-label">Mi cesta de pegatinas<small>Consigue una cada vez que aciertes casi todo (8 de 10, o 13 de 16 en el simulacro).</small></div><div class="stickers">' +
       STICKERS.map(s => save.stickers.includes(s) ? '<span class="on">' + s + "</span>" : '<span class="off">?</span>').join("") + "</div></div>" +
       '<p class="parents">Para mamá y papá: los temas son los que indicó el profesor (tema 1 del libro). El progreso se guarda solo en este dispositivo.</p>';
     app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => start(b.dataset.go)));
@@ -524,7 +541,7 @@ button:focus-visible, input:focus-visible { outline: 4px solid var(--hl); outlin
     const q = game.qs[game.i], tp = TOPICS[q.topic], total = game.qs.length;
     app.innerHTML =
       '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al inicio">←</button><span class="pill">' + (game.i + 1) + " / " + total + '</span><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
-      '<div class="dots">' + game.qs.map((_, i) => '<i class="' + (game.marks[i] === true ? "ok" : game.marks[i] === false ? "ko" : i === game.i ? "now" : "") + '"></i>').join("") + "</div>" +
+      '<div class="dots">' + game.qs.map((_, i) => '<i class="' + (game.marks[i] === true ? "ok" : game.marks[i] === false ? "ko" : i === game.i ? "now" : "") + '"></i>').join("") + '<span class="head" aria-hidden="true">🐛</span></div>' +
       '<span class="tag" style="--tc:' + tp.color + '">' + tp.name + "</span>" +
       '<div class="board">' + q.html + '<button class="listen" id="listen">🔊 Escuchar</button><div id="area" style="width:100%;display:flex;flex-direction:column;gap:14px;align-items:center"></div></div>' +
       mascotHTML(game.i === 0 ? (game.key === "examen" ? "¡Como en el examen! Lee despacio cada pregunta" + nm() + "." : "¡Vamos allá" + nm() + "! Tú puedes.") : pick(["Piensa con calma.", "Lee bien la pregunta.", "¡Seguimos!", "Tómate tu tiempo."]));
