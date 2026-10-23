@@ -1,5 +1,5 @@
 // Service worker de Taxi Telde: funciona sin conexión y se actualiza solo.
-const V = "taxi-telde-v3";
+const V = "taxi-telde-v4";
 const NUCLEO = ["./", "./index.html", "./callejero/", "./callejero/index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(NUCLEO)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k !== "taxi-telde-mapas").map(k => caches.delete(k)))).then(() => self.clients.claim())); });
