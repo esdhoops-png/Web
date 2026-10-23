@@ -1071,6 +1071,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
 @media (max-width: 560px) { .sync-grid { grid-template-columns: 1fr; } }
 .sync textarea { width: 100%; font-family: var(--mono); font-size: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--snow); color: var(--ink); resize: vertical; min-width: 0; }
 .file-btn { cursor: pointer; }
+.nube-card { display: grid; gap: 8px; background: var(--paper); border: 2px solid var(--verde); border-radius: 12px; padding: 14px; }
+.nube-card b { font-family: var(--display); font-size: 21px; text-transform: uppercase; }
+.nube-card > span { font-size: 14px; color: var(--muted); }
+.nube-card > .btn.ghost { justify-self: start; }
+.nube-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+@media (max-width: 520px) { .nube-form { grid-template-columns: 1fr 1fr; } .nube-form .btn { grid-column: 1 / -1; } }
+.nube-form input { font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--snow); color: var(--ink); min-width: 0; }
+.nube-msg { color: var(--rojo); font-size: 14px; min-height: 0; }
+.nube-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+.nube-bar > span:first-child { font-weight: 700; color: var(--indigo-ink); }
+.nube-estado { color: var(--muted); }
+.nube-estado.ok { color: var(--verde); }
+.nube-estado.err { color: var(--rojo); }
 .play-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: #171a28; color: #fff; border-radius: 12px; padding: 14px 16px; }
 .play-card .pc-ico { font-size: 34px; }
 .play-card b { font-family: var(--display); font-size: 22px; text-transform: uppercase; display: block; }
@@ -1416,7 +1429,7 @@ async function saveRemote() {
   catch (e) { store.ok = false; }
   renderStore();
 }
-function save() { saveLocal(); saveRemote(); }
+function save() { saveLocal(); saveRemote(); if (typeof programarSubida === "function") programarSubida(); }
 function merge(a, b) {
   // une dos estados: historial sin duplicados; estadísticas, la versión más vista
   const seen = new Set(); const hist = [];
@@ -1539,7 +1552,7 @@ function finish() {
 
 // ---------- Render ----------
 function setTab(t) { if (typeof stopSpeech === "function") stopSpeech(); vid = null; tab = t; test = null; confirmReset = false; render(); }
-function render() {
+function render() { setTimeout(() => typeof pintarNube === "function" && pintarNube(), 0);
   document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab && !test || (test && b.dataset.tab === "inicio"))));
   const act = document.querySelector('.tab[aria-selected="true"]'); if (act && act.scrollIntoView) try { act.scrollIntoView({ block: "nearest", inline: "nearest" }); } catch (e) {}
   const np = pendientes().length;
@@ -1886,7 +1899,7 @@ const ADUR={"L_0_0": 1.97, "L_0_1": 6.27, "L_1_0": 2.68, "L_1_1": 6.73, "L_1_2":
 const LMAP = Object.fromEntries(LECCIONES.map(l => [l.id, l]));
 const VKEY = "taxi-telde-vistas-v1";
 let vistas = {}; try { vistas = JSON.parse(localStorage.getItem(VKEY) || "{}"); } catch (e) {}
-function marcarVista(id) { vistas[id] = Date.now(); try { localStorage.setItem(VKEY, JSON.stringify(vistas)); } catch (e) {} }
+function marcarVista(id) { vistas[id] = Date.now(); try { localStorage.setItem(VKEY, JSON.stringify(vistas)); } catch (e) {} if (typeof programarSubida === "function") programarSubida(); }
 let vid = null;            // {id, sc, sent, playing, ended}
 let vopt = { rate: 1, voz: true, subs: true };
 let vtimer = null, vtoken = 0;
@@ -2984,6 +2997,7 @@ function importarProgreso(obj) {
 function syncHTML() {
   const puedeDescargar = /github\.io$|^$/.test(location.hostname) || location.protocol === "file:";
   return `<div class="sync">
+    ${nubeActiva() ? (cuenta ? `<div class="section-h"><h2>Guardado automático</h2></div><div class="nube-bar"><span>☁ Cuenta: ${esc(cuenta.nombre)}</span><span class="nube-estado"></span><button class="btn ghost sm" data-nube="salir">Desconectar este aparato</button></div><p class="note">Tu progreso se guarda solo en la nube. En otro aparato, activa el guardado con el mismo nombre y PIN.</p>` : cardNube().replace("nube-card", "nube-card abierta")) : ""}
     <div class="section-h"><h2>Pasar el progreso a otro dispositivo</h2></div>
     <p class="note">El progreso se guarda en cada móvil u ordenador por separado. Para seguir en otro: en este aparato pulsa <b>«Crear código»</b>, envíate el código (por WhatsApp o correo) y en el otro aparato pégalo en <b>«Recibir progreso»</b>. Se suma a lo que ya haya; no se borra nada.</p>
     <div class="sync-grid">
@@ -3019,6 +3033,96 @@ async function recibir(txt) {
   render();
 }
 
+// ---------- Nube: sincronización automática entre aparatos (Firebase Firestore) ----------
+const FB = { key: "AIzaSyDB30k8JXmiIY09XNEQl-UmCyIXdIeBpvs", proyecto: "taxi-telde" };
+const CUENTA_KEY = "taxi-telde-cuenta";
+const nubeActiva = () => /github\.io$/.test(location.hostname) || location.protocol === "file:" || location.hostname === "localhost";
+let cuenta = null; try { cuenta = JSON.parse(localStorage.getItem(CUENTA_KEY) || "null"); } catch (e) {}
+let nube = { estado: "", ultima: 0, error: "", ocupado: false, pendiente: false, mudo: false, ahoraNo: false };
+try { nube.ahoraNo = localStorage.getItem("taxi-telde-nube-ahora-no") === "1"; } catch (e) {}
+async function idCuenta(nombre, pin) {
+  const txt = "taxi-telde|" + nombre.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, " ") + "|" + pin.trim();
+  const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
+  return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+const urlDoc = id => `https://firestore.googleapis.com/v1/projects/${FB.proyecto}/databases/(default)/documents/progreso/${id}?key=${FB.key}`;
+async function nubeLeer(id) {
+  const r = await fetch(urlDoc(id));
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(await errTexto(r));
+  const j = await r.json(); const d = j.fields && j.fields.datos && j.fields.datos.stringValue;
+  return d ? await decodificar(d) : null;
+}
+async function nubeEscribir(id) {
+  const datos = await codificar(datosProgreso());
+  const r = await fetch(urlDoc(id) + "&updateMask.fieldPaths=datos&updateMask.fieldPaths=fecha", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fields: { datos: { stringValue: datos }, fecha: { integerValue: String(Date.now()) } } }) });
+  if (!r.ok) throw new Error(await errTexto(r));
+}
+async function errTexto(r) { let m = "HTTP " + r.status; try { const j = await r.json(); if (j.error && j.error.message) m = j.error.message; } catch (e) {} return m; }
+// leer lo de la nube, juntarlo con lo de aquí y volver a subir el total
+async function sincronizar() {
+  if (!cuenta || !nubeActiva()) return;
+  if (nube.ocupado) { nube.pendiente = true; return; }
+  if (!navigator.onLine) { nube.estado = "sin conexión"; pintarNube(); return; }
+  nube.ocupado = true; nube.estado = "sincronizando"; pintarNube();
+  try {
+    const remoto = await nubeLeer(cuenta.id);
+    let nuevos = 0;
+    if (remoto) { nube.mudo = true; try { nuevos = importarProgreso(remoto); } finally { nube.mudo = false; } }
+    await nubeEscribir(cuenta.id);
+    nube.estado = "ok"; nube.error = ""; nube.ultima = Date.now();
+    if (nuevos > 0 && !test && !vid && !G) render();
+  } catch (e) { nube.estado = "error"; nube.error = String(e && e.message || e); }
+  nube.ocupado = false; pintarNube();
+  if (nube.pendiente) { nube.pendiente = false; setTimeout(sincronizar, 500); }
+}
+let nubeTimer = null;
+function programarSubida() { if (!cuenta || nube.mudo || !nubeActiva()) return; clearTimeout(nubeTimer); nubeTimer = setTimeout(sincronizar, 1500); }
+window.addEventListener("online", () => sincronizar());
+document.addEventListener("visibilitychange", () => { if (!document.hidden) sincronizar(); });
+function textoNube() {
+  if (!cuenta) return "";
+  if (nube.estado === "sincronizando") return "Guardando en la nube…";
+  if (nube.estado === "error") return "No se ha podido guardar en la nube (" + nube.error + "). Se reintentará solo.";
+  if (nube.estado === "sin conexión") return "Sin conexión: se guardará en la nube cuando vuelva internet.";
+  if (nube.estado === "ok") return "Guardado en la nube · " + new Date(nube.ultima).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+  return "Cuenta: " + cuenta.nombre;
+}
+function pintarNube() { document.querySelectorAll(".nube-estado").forEach(el => { el.textContent = textoNube(); el.className = "nube-estado " + (nube.estado === "error" ? "err" : nube.estado === "ok" ? "ok" : ""); }); }
+function cardNube() {
+  if (!nubeActiva()) return "";
+  if (cuenta) return `<div class="nube-bar"><span>☁ ${esc(cuenta.nombre)}</span><span class="nube-estado"></span></div>`;
+  if (nube.ahoraNo && state.hist.length) return "";
+  return `<div class="nube-card">
+    <b>Guarda tu progreso automáticamente</b>
+    <span>Pon tu nombre y un PIN de 4 números. Usa los mismos en el móvil y en el ordenador y tendrás tu progreso en los dos, sin hacer nada más.</span>
+    <div class="nube-form"><input id="nube-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name" maxlength="40"><input id="nube-pin" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="PIN (4 números)" maxlength="8"><button class="btn red" data-nube="entrar">Activar</button></div>
+    <span class="nube-msg" id="nube-msg"></span>
+    <button class="btn ghost sm" data-nube="ahorano">Ahora no</button>
+  </div>`;
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-nube]"); if (!b) return;
+  const a = b.dataset.nube;
+  if (a === "ahorano") { nube.ahoraNo = true; try { localStorage.setItem("taxi-telde-nube-ahora-no", "1"); } catch (x) {} render(); }
+  else if (a === "salir") { cuenta = null; try { localStorage.removeItem(CUENTA_KEY); } catch (x) {} nube.estado = ""; render(); }
+  else if (a === "entrar") {
+    const nombre = ($("#nube-nombre").value || "").trim(), pin = ($("#nube-pin").value || "").trim(); const msg = $("#nube-msg");
+    if (nombre.length < 2) { msg.textContent = "Escribe tu nombre."; return; }
+    if (!/^\d{4,8}$/.test(pin)) { msg.textContent = "El PIN tiene que ser de 4 números."; return; }
+    msg.textContent = "Conectando…"; b.disabled = true;
+    try {
+      const id = await idCuenta(nombre, pin);
+      const remoto = await nubeLeer(id);
+      cuenta = { nombre, id }; try { localStorage.setItem(CUENTA_KEY, JSON.stringify(cuenta)); } catch (x) {}
+      let n = 0; if (remoto) { nube.mudo = true; try { n = importarProgreso(remoto); } finally { nube.mudo = false; } }
+      await nubeEscribir(id); nube.estado = "ok"; nube.ultima = Date.now();
+      syncMsg = remoto ? `✓ Cuenta encontrada: se han traído ${n} test${n === 1 ? "" : "s"} de tus otros aparatos.` : "✓ Cuenta creada. A partir de ahora tu progreso se guarda solo.";
+      render();
+    } catch (x) { cuenta = null; b.disabled = false; msg.textContent = "No se ha podido conectar: " + (x && x.message || x) + ". Comprueba internet y vuelve a probar."; }
+  }
+});
+
 function renderPlan() {
   const hoy = midnight(new Date());
   const quedan = diasHasta(hoy, EXAMEN);
@@ -3045,7 +3149,8 @@ function renderPlan() {
   const lunes = (INICIO.getDay() + 6) % 7;
   $("#app").innerHTML = `<section class="view">
     ${cardInstalar()}
-    ${!state.hist.length ? `<div class="cal-info"><b>¿Ya estudiabas en otro móvil u ordenador?</b><span>Pasa aquí tu progreso desde la pestaña Progreso → «Pasar el progreso a otro dispositivo».</span><div class="row" style="margin-top:6px"><button class="btn sm" data-plan="tab" data-id="progreso">Pasar mi progreso</button></div></div>` : ""}
+    ${cardNube()}
+    ${!state.hist.length && !nubeActiva() ? `<div class="cal-info"><b>¿Ya estudiabas en otro móvil u ordenador?</b><span>Pasa aquí tu progreso desde la pestaña Progreso → «Pasar el progreso a otro dispositivo».</span><div class="row" style="margin-top:6px"><button class="btn sm" data-plan="tab" data-id="progreso">Pasar mi progreso</button></div></div>` : ""}
     <div class="countdown">
       <div class="cd-num num">${quedan > 0 ? quedan : quedan === 0 ? "HOY" : "✓"}</div>
       <div class="cd-txt"><b>${quedan > 1 ? "días para el examen" : quedan === 1 ? "día para el examen: mañana" : quedan === 0 ? "es el examen. ¡Mucha suerte!" : "El examen ya pasó"}</b>
@@ -3102,6 +3207,7 @@ document.addEventListener("click", e => {
 });
 
 const local = loadLocal(); if (local) state = local;
+setTimeout(() => { if (typeof sincronizar === "function") sincronizar(); }, 800);
 if (!state.calles) state.calles = []; if (!state.cf) state.cf = {};
 render();
 initStore();
