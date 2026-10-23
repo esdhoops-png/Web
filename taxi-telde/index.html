@@ -2155,15 +2155,28 @@ function falladasCalles() { const set = new Set(Object.entries(state.cf).filter(
 
 const LUGTIPO = { townhall: ["Ayuntamiento", "#232a6b", 1], police: ["Policía", "#1d4ed8", 1], hospital: ["Hospital", "#c8202f", 1], clinic: ["Centro de salud", "#c8202f", 1], doctors: ["Médicos", "#c8202f", 0], place_of_worship: ["Iglesia", "#7c4a1e", 1], marketplace: ["Mercado", "#a86300", 1], bus_station: ["Estación de guaguas", "#0f766e", 1], courthouse: ["Juzgados", "#232a6b", 1], library: ["Biblioteca", "#6d28d9", 0], theatre: ["Teatro", "#6d28d9", 1], pharmacy: ["Farmacia", "#12804a", 0], fire_station: ["Bomberos", "#c8202f", 1], post_office: ["Correos", "#a86300", 0], museum: ["Museo", "#6d28d9", 1], attraction: ["Lugar de interés", "#6d28d9", 0], hotel: ["Hotel", "#0f766e", 0], mall: ["Centro comercial", "#a86300", 1], park: ["Parque", "#12804a", 0], stadium: ["Estadio", "#12804a", 1], sports_centre: ["Polideportivo", "#12804a", 0], historic: ["Patrimonio", "#7c4a1e", 0], aeropuerto: ["Aeropuerto", "#0f766e", 1] };
 let capaLug = null, capaBarrios = null, miPos = null;
-const URL_CON = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
-const URL_SIN = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png";
-let ponerFondo = function (conNombres) { if (capaTiles) capaTiles.setUrl(conNombres ? URL_CON : URL_SIN); }
+const FONDOS = {
+  osm: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", o: { maxZoom: 19, attribution: "© OpenStreetMap" } },
+  esriCalles: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", o: { maxZoom: 19, maxNativeZoom: 18, attribution: "© Esri · © OpenStreetMap" } },
+  gris: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", o: { maxZoom: 19, maxNativeZoom: 16, attribution: "© Esri · © OpenStreetMap" } },
+};
+let capaVias = null, fondoConNombres = true, fondoCon = "osm";
+function ponerFondo(conNombres) {
+  if (!mapa) return;
+  fondoConNombres = conNombres;
+  if (capaTiles) capaTiles.remove();
+  const f = FONDOS[conNombres ? fondoCon : "gris"];
+  capaTiles = L.tileLayer(f.url, f.o).addTo(mapa); capaTiles.bringToBack();
+  if (conNombres) { let fallos = 0, ok = 0; capaTiles.on("tileload", () => ok++); capaTiles.on("tileerror", () => { if (++fallos === 6 && !ok && fondoCon === "osm") { fondoCon = "esriCalles"; ponerFondo(true); } }); }
+  if (capaVias) { if (conNombres) capaVias.remove(); else capaVias.addTo(mapa); }
+  pintarReferencias();
+}
 function pintarReferencias() {
   if (!mapa || !CAL || !capaLug) return;
   const z = mapa.getZoom();
   capaLug.clearLayers(); capaBarrios.clearLayers();
   const b = mapa.getBounds().pad(.2);
-  if (z >= 13) (CAL.places || []).forEach(p => { if (!b.contains([p.lat, p.lon])) return; if (z < 15 && !/suburb|village|quarter/.test(p.t || "")) return;
+  if (!fondoConNombres && z >= 14) (CAL.places || []).forEach(p => { if (!b.contains([p.lat, p.lon])) return; if (z < 16 && !/suburb|village|quarter/.test(p.t || "")) return;
     L.marker([p.lat, p.lon], { interactive: false, icon: L.divIcon({ className: "barrio-lbl", html: `<span>${esc(p.n)}</span>`, iconSize: null }) }).addTo(capaBarrios); });
   (CAL.lugares || []).forEach(l => { const ti = LUGTIPO[l.t]; if (!ti || !b.contains([l.lat, l.lon])) return; if (z < 14 || (z < 16 && !ti[2])) return;
     const showName = z >= 16 || (z >= 15 && ti[2]);
@@ -2175,16 +2188,18 @@ function iniciarMapa() {
   if (mapa) { mapa.remove(); mapa = null; }
   mapa = L.map(el, { zoomControl: true, preferCanvas: true, attributionControl: true, minZoom: 12, maxZoom: 19 }).setView([27.9935, -15.4175], 16);
   const enTest = calState.q && !calState.q.done;
-  capaTiles = L.tileLayer(enTest ? URL_SIN : URL_CON, { maxZoom: 19, subdomains: "abcd", attribution: "© OpenStreetMap · © CARTO" }).addTo(mapa);
-  let fallos = 0, cargadas = 0;
-  capaTiles.on("tileload", () => { cargadas++; });
-  capaTiles.on("tileerror", () => { if (++fallos === 6 && cargadas === 0) { capaTiles.remove(); capaTiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(mapa); capaTiles.bringToBack(); ponerFondo = () => {}; } });
+  capaTiles = null;
   const rend = L.canvas({ tolerance: 12 });
   capaCalles = L.layerGroup().addTo(mapa); capaBarrios = L.layerGroup().addTo(mapa); capaLug = L.layerGroup().addTo(mapa); capaFoco = L.layerGroup().addTo(mapa);
   if (CAL) CAL.calles.forEach(c => {
     const pl = L.polyline(c.segs, { renderer: rend, color: "#232a6b", weight: 10, opacity: 0 });
     pl.on("click", ev => clicCalle(c, ev)); pl.addTo(capaCalles); c._pl = pl;
   });
+  mapa.createPane("vias").style.zIndex = 350;
+  const rendV = L.canvas({ padding: .3, pane: "vias" }); capaVias = L.layerGroup();
+  if (CAL) { CAL.calles.forEach(c => L.polyline(c.segs, { renderer: rendV, color: "#a9aec2", weight: 8, opacity: 1, interactive: false, lineCap: "round", lineJoin: "round" }).addTo(capaVias));
+             CAL.calles.forEach(c => L.polyline(c.segs, { renderer: rendV, color: "#ffffff", weight: 5, opacity: 1, interactive: false, lineCap: "round", lineJoin: "round" }).addTo(capaVias)); }
+  ponerFondo(!enTest);
   const boton = (sym, title, fn) => { const C = L.Control.extend({ options: { position: "topright" }, onAdd: () => { const d = L.DomUtil.create("div", "leaflet-bar loc-btn"); d.innerHTML = `<a href="#" title="${title}" role="button" aria-label="${title}">${sym}</a>`; L.DomEvent.on(d, "click", ev => { L.DomEvent.stop(ev); fn(); }); return d; } }); new C().addTo(mapa); };
   boton("◎", "Dónde estoy", () => mapa.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true }));
   boton("⌂", "Volver al casco de Telde", () => mapa.setView([27.9935, -15.4175], 16));
@@ -2460,7 +2475,7 @@ function renderCallejero() {
     </div>
     <div class="mapwrap"><div id="mapa"></div><div id="map-estado" class="map-estado" hidden></div></div>
     <div id="cal-panel" class="cal-panel"></div>
-    <p class="note">Mapa: © OpenStreetMap y CARTO. Los nombres salen de OpenStreetMap y pueden tener alguna errata; compáralos con el callejero oficial si dudas.${location.protocol === "https:" && !/github\.io$/.test(location.hostname) ? " Si el mapa sale en gris, ábrelo desde el link público de la app." : ""}</p>
+    <p class="note">Mapa: © OpenStreetMap y Esri. Los nombres salen de OpenStreetMap y pueden tener alguna errata; compáralos con el callejero oficial si dudas.${location.protocol === "https:" && !/github\.io$/.test(location.hostname) ? " Si el mapa sale en gris, ábrelo desde el link público de la app." : ""}</p>
   </section>`;
   iniciarMapa();
   const q = calState.q;
