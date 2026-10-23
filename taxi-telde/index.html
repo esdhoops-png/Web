@@ -2475,6 +2475,7 @@ function renderCallejero() {
     </div>
     <div class="mapwrap"><div id="mapa"></div><div id="map-estado" class="map-estado" hidden></div></div>
     <div id="cal-panel" class="cal-panel"></div>
+    ${/github\.io$/.test(location.hostname) ? `<p class="note"><a href="callejero/" target="_blank" rel="noopener">Abrir el callejero completo a pantalla completa</a></p>` : ""}
     <p class="note">Mapa: © OpenStreetMap y Esri. Los nombres salen de OpenStreetMap y pueden tener alguna errata; compáralos con el callejero oficial si dudas.${location.protocol === "https:" && !/github\.io$/.test(location.hostname) ? " Si el mapa sale en gris, ábrelo desde el link público de la app." : ""}</p>
   </section>`;
   iniciarMapa();
