@@ -936,7 +936,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 #mapa { height: min(72vh, 640px); min-height: 380px; background: #eef0f4; }
 .barrio-lbl span { display: inline-block; transform: translate(-50%, -50%); white-space: nowrap; font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #232a6b; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; }
 .lug-pin { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-.lug-pin i { flex: none; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.45); }
+.lug-pin i { flex: none; min-width: 22px; height: 22px; padding: 0 3px; border-radius: 11px; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.45); color: #fff; font-style: normal; font-size: 10px; font-weight: 800; display: grid; place-items: center; line-height: 1; }
+.lug-pin.fuerte i { min-width: 26px; height: 26px; border-radius: 13px; font-size: 12px; }
 .lug-pin span { font-size: 12px; font-weight: 600; color: #1a1d2e; background: rgba(255,255,255,.88); padding: 1px 5px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
 .loc-btn a { font-size: 20px; line-height: 30px; font-weight: 700; color: #232a6b !important; }
 .sug small { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
@@ -976,6 +977,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .cp-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .cp-head b { font-family: var(--display); font-size: 22px; }
 .cp-head span { flex: 1; min-width: 0; color: var(--muted); }
+.target small { display: block; font-family: var(--body); font-size: 14px; font-weight: 600; text-transform: none; color: #c9cde3; margin-top: 4px; }
 .target { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 6vw, 36px); text-transform: uppercase; line-height: 1.05; background: #0d0f18; color: #fff; border-radius: 10px; padding: 14px 16px; }
 .cp-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .cp-list span { font-size: 14px; padding: 3px 10px; border-radius: 999px; }
@@ -2052,7 +2054,7 @@ function preparacion() {
 
 
 // ---------- Callejero interactivo (OpenStreetMap, cargado en el dispositivo) ----------
-const CK = "taxi-telde-calles-v3";
+const CK = "taxi-telde-calles-v4";
 const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter"];
 const QUERY = `[out:json][timeout:60];
 area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
@@ -2060,13 +2062,20 @@ area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
 out geom;
 node(area.a)["place"~"^(suburb|neighbourhood|quarter|village|hamlet|locality)$"]["name"];
 out;`;
-const QUERY_LUG = `[out:json][timeout:60];
+const QUERY_LUG = `[out:json][timeout:90];
 area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
-(nwr(area.a)["name"]["amenity"~"^(townhall|police|hospital|clinic|doctors|place_of_worship|marketplace|bus_station|courthouse|library|theatre|pharmacy|fire_station|post_office)$"];
- nwr(area.a)["name"]["tourism"~"^(museum|attraction)$"];
+(nwr(area.a)["name"]["amenity"~"^(townhall|police|hospital|clinic|doctors|pharmacy|fire_station|courthouse|post_office|library|community_centre|social_facility|place_of_worship|marketplace|bus_station|theatre|arts_centre|ferry_terminal|taxi)$"];
+ nwr(area.a)["name"]["office"="government"];
+ nwr(area.a)["emergency"="ambulance_station"];
+ nwr(area.a)["name"~"Protecci[oó]n Civil|Emergencias|Cruz Roja|Urgencias|Guardia Civil",i];
+ nwr(area.a)["name"]["tourism"~"^(museum|attraction|viewpoint|artwork)$"];
+ nwr(area.a)["name"]["historic"];
+ nwr(area.a)["name"]["natural"="beach"];
+ nwr(area.a)["man_made"="lighthouse"];
+ nwr(area.a)["military"="airfield"];
+ nwr(area.a)["name"]["leisure"~"^(park|stadium|sports_centre|marina)$"];
  nwr(area.a)["name"]["shop"="mall"];
- nwr(area.a)["name"]["leisure"~"^(stadium|sports_centre)$"];
- nwr(area.a)["name"]["aeroway"="aerodrome"];);
+ nwr(area.a)["aeroway"="aerodrome"];);
 out center;`;
 let CAL = null;           // {calles:[{n, segs:[[[lat,lon],...]], len, c:[lat,lon], bb:[s,w,n,e]}], places:[{n,lat,lon}], t}
 let calState = { loading: false, error: "", mode: "explorar", q: null, base: null };
@@ -2093,11 +2102,12 @@ function procesar(json) {
       const t = e.tags; const ow = t.highway === "pedestrian" ? 9 : /^(yes|1|true)$/.test(t.oneway || "") ? 1 : t.oneway === "-1" ? -1 : (/roundabout|circular/.test(t.junction || "") && t.oneway !== "no") ? 1 : 0;
       (fl[n] = fl[n] || []).push(ow);
     } else if (e.tags && e.tags.name && e.tags.place && e.type === "node") places.push({ n: e.tags.name, lat: e.lat, lon: e.lon, t: e.tags.place });
-    else if (e.tags && e.tags.name) {
+    else if (e.tags && (e.tags.name || e.tags.man_made === "lighthouse" || e.tags.aeroway)) {
       const lat = e.lat != null ? e.lat : e.center && e.center.lat, lon = e.lon != null ? e.lon : e.center && e.center.lon;
       if (lat == null) return;
-      const t = e.tags.amenity || e.tags.tourism || (e.tags.shop === "mall" ? "mall" : "") || e.tags.leisure || (e.tags.historic ? "historic" : "") || (e.tags.aeroway ? "aeropuerto" : "");
-      lugares.push({ n: e.tags.name, lat: +lat.toFixed(5), lon: +lon.toFixed(5), t });
+      const t = tipoLugar(e.tags); if (!t) return;
+      const g = e.tags; const dir = g["addr:street"] ? g["addr:street"] + (g["addr:housenumber"] ? ", " + g["addr:housenumber"] : "") : "";
+      lugares.push({ n: g.name || (t === "faro" ? "Faro" : t === "aeropuerto" ? "Aeropuerto de Gran Canaria" : "Sin nombre"), lat: +lat.toFixed(5), lon: +lon.toFixed(5), t, u: (g.emergency === "yes" || /urgencia/i.test(g.name || "")) ? 1 : 0, dir, tel: g.phone || g["contact:phone"] || "" });
     }
   });
   const calles = Object.entries(by).map(([n, segs]) => {
@@ -2110,10 +2120,10 @@ function procesar(json) {
   return { calles, places, lugares: lug, t: Date.now() };
 }
 function cargarCache() {
-  for (const k of [CK, "taxi-telde-calles-v2", "taxi-telde-calles-v1"]) { try { const c = JSON.parse(localStorage.getItem(k) || "null"); if (c && c.calles && c.calles.length) { c._viejo = k !== CK; return c; } } catch (e) {} }
+  for (const k of [CK, "taxi-telde-calles-v3", "taxi-telde-calles-v2", "taxi-telde-calles-v1"]) { try { const c = JSON.parse(localStorage.getItem(k) || "null"); if (c && c.calles && c.calles.length) { c._viejo = k !== CK; return c; } } catch (e) {} }
   return null;
 }
-function guardarCache(c) { try { localStorage.removeItem("taxi-telde-calles-v1"); localStorage.removeItem("taxi-telde-calles-v2"); } catch (e) {} try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {} }
+function guardarCache(c) { try { ["v1", "v2", "v3"].forEach(v => localStorage.removeItem("taxi-telde-calles-" + v)); } catch (e) {} try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {} }
 function pedirOverpass(q, ms) {
   return Promise.any(OVERPASS.map(url => {
     const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), ms);
@@ -2130,7 +2140,7 @@ async function cargarCalles() {
     const j = await pedirOverpass(QUERY, 75000);
     const c = procesar(j);
     if (c.calles.length < 50) throw new Error("pocas calles");
-    const lug = CAL && CAL.lugares; CAL = c; if (lug && lug.length) CAL.lugares = lug; GR = null; guardarCache(CAL);
+    CAL = c; GR = null; guardarCache(CAL);
   } catch (e) { calState.error = (e && e.errors ? "servidor ocupado" : String(e && e.message || e)); }
   calState.loading = false;
   if (tab === "calles" && !calState.q && CAL && !CAL._viejo) renderCallejero(); else refrescarEstado();
@@ -2153,7 +2163,35 @@ function enVista() {
 }
 function falladasCalles() { const set = new Set(Object.entries(state.cf).filter(([, v]) => v.p).map(([k]) => k)); return CAL.calles.filter(c => set.has(c.n)); }
 
-const LUGTIPO = { townhall: ["Ayuntamiento", "#232a6b", 1], police: ["Policía", "#1d4ed8", 1], hospital: ["Hospital", "#c8202f", 1], clinic: ["Centro de salud", "#c8202f", 1], doctors: ["Médicos", "#c8202f", 0], place_of_worship: ["Iglesia", "#7c4a1e", 1], marketplace: ["Mercado", "#a86300", 1], bus_station: ["Estación de guaguas", "#0f766e", 1], courthouse: ["Juzgados", "#232a6b", 1], library: ["Biblioteca", "#6d28d9", 0], theatre: ["Teatro", "#6d28d9", 1], pharmacy: ["Farmacia", "#12804a", 0], fire_station: ["Bomberos", "#c8202f", 1], post_office: ["Correos", "#a86300", 0], museum: ["Museo", "#6d28d9", 1], attraction: ["Lugar de interés", "#6d28d9", 0], hotel: ["Hotel", "#0f766e", 0], mall: ["Centro comercial", "#a86300", 1], park: ["Parque", "#12804a", 0], stadium: ["Estadio", "#12804a", 1], sports_centre: ["Polideportivo", "#12804a", 0], historic: ["Patrimonio", "#7c4a1e", 0], aeropuerto: ["Aeropuerto", "#0f766e", 1] };
+// tipo: [nombre, color, importante, categoría, símbolo]
+const LUGTIPO = {
+  police: ["Policía", "#1d4ed8", 1, "emergencia", "P"], fire_station: ["Bomberos", "#dc2626", 1, "emergencia", "B"], proteccion_civil: ["Protección Civil", "#ea580c", 1, "emergencia", "PC"], ambulancias: ["Ambulancias / emergencias", "#dc2626", 1, "emergencia", "A"], guardia_civil: ["Guardia Civil", "#166534", 1, "emergencia", "GC"],
+  hospital: ["Hospital", "#c8202f", 1, "sanitario", "H"], clinic: ["Centro de salud", "#c8202f", 1, "sanitario", "+"], doctors: ["Consulta médica", "#e11d48", 0, "sanitario", "+"], pharmacy: ["Farmacia", "#16a34a", 0, "sanitario", "F"],
+  townhall: ["Ayuntamiento / oficina municipal", "#232a6b", 1, "oficial", "AY"], oficial: ["Oficina pública", "#232a6b", 1, "oficial", "O"], courthouse: ["Juzgados", "#334155", 1, "oficial", "J"], post_office: ["Correos", "#ca8a04", 0, "oficial", "C"], library: ["Biblioteca", "#6d28d9", 0, "oficial", "Bi"], community_centre: ["Centro cívico / social", "#6d28d9", 0, "oficial", "CC"], social_facility: ["Servicios sociales", "#6d28d9", 0, "oficial", "SS"],
+  place_of_worship: ["Iglesia / templo", "#7c4a1e", 1, "emblematico", "✝"], museum: ["Museo", "#7e22ce", 1, "emblematico", "M"], attraction: ["Lugar de interés", "#7e22ce", 1, "emblematico", "★"], viewpoint: ["Mirador", "#7e22ce", 0, "emblematico", "V"], artwork: ["Escultura / arte", "#7e22ce", 0, "emblematico", "★"], historic: ["Patrimonio histórico", "#7c4a1e", 1, "emblematico", "★"], theatre: ["Teatro", "#7e22ce", 1, "emblematico", "T"], arts_centre: ["Centro cultural", "#7e22ce", 1, "emblematico", "CU"], playa: ["Playa", "#0284c7", 1, "emblematico", "~"], faro: ["Faro", "#0284c7", 1, "emblematico", "Fa"], park: ["Parque", "#15803d", 0, "emblematico", "Pq"], marketplace: ["Mercado", "#ca8a04", 1, "emblematico", "Me"],
+  aeropuerto: ["Aeropuerto", "#0f766e", 1, "transporte", "✈"], base_aerea: ["Base Aérea", "#0f766e", 1, "transporte", "BA"], bus_station: ["Estación de guaguas", "#0f766e", 1, "transporte", "G"], taxi: ["Parada de taxis", "#0f766e", 1, "transporte", "TX"], marina: ["Puerto", "#0284c7", 1, "transporte", "⚓"], ferry_terminal: ["Terminal marítima", "#0284c7", 1, "transporte", "⚓"],
+  mall: ["Centro comercial", "#a16207", 1, "ocio", "CC"], stadium: ["Estadio", "#15803d", 1, "ocio", "E"], sports_centre: ["Polideportivo", "#15803d", 0, "ocio", "D"],
+};
+const LUGCAT = { emergencia: "Emergencias y seguridad", sanitario: "Centros sanitarios", oficial: "Centros oficiales", emblematico: "Lugares emblemáticos", transporte: "Transporte", ocio: "Comercio y deporte" };
+function tipoLugar(g) {
+  const n = g.name || "";
+  if (/protecci[oó]n civil/i.test(n)) return "proteccion_civil";
+  if (/guardia civil/i.test(n) || g.police === "guardia_civil") return "guardia_civil";
+  if (g.emergency === "ambulance_station" || /cruz roja|emergencias|112/i.test(n)) return "ambulancias";
+  if (g.amenity === "townhall") return "townhall";
+  if (g.office === "government") return "oficial";
+  if (g.amenity) { if (g.amenity === "ferry_terminal") return "ferry_terminal"; if (LUGTIPO[g.amenity]) return g.amenity; }
+  if (g.aeroway === "aerodrome") return "aeropuerto";
+  if (g.military === "airfield") return "base_aerea";
+  if (g.man_made === "lighthouse") return "faro";
+  if (g.natural === "beach") return "playa";
+  if (g.tourism && LUGTIPO[g.tourism]) return g.tourism;
+  if (g.historic) return "historic";
+  if (g.shop === "mall") return "mall";
+  if (g.leisure && LUGTIPO[g.leisure]) return g.leisure;
+  return "";
+}
+function pinLugar(l, showName) { const ti = LUGTIPO[l.t]; return L.divIcon({ className: "lug-pin" + (ti[3] === "emergencia" || ti[3] === "sanitario" ? " fuerte" : ""), html: `<i style="background:${ti[1]}">${ti[4]}</i>${showName ? `<span>${esc(l.n)}${l.u ? " · URGENCIAS" : ""}</span>` : ""}`, iconSize: null, iconAnchor: [11, 11] }); }
 let capaLug = null, capaBarrios = null, miPos = null;
 const FONDOS = {
   osm: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", o: { maxZoom: 19, attribution: "© OpenStreetMap" } },
@@ -2180,7 +2218,7 @@ function pintarReferencias() {
     L.marker([p.lat, p.lon], { interactive: false, icon: L.divIcon({ className: "barrio-lbl", html: `<span>${esc(p.n)}</span>`, iconSize: null }) }).addTo(capaBarrios); });
   (CAL.lugares || []).forEach(l => { const ti = LUGTIPO[l.t]; if (!ti || !b.contains([l.lat, l.lon])) return; if (z < 14 || (z < 16 && !ti[2])) return;
     const showName = z >= 16 || (z >= 15 && ti[2]);
-    L.marker([l.lat, l.lon], { icon: L.divIcon({ className: "lug-pin", html: `<i style="background:${ti[1]}"></i>${showName ? `<span>${esc(l.n)}</span>` : ""}`, iconSize: null, iconAnchor: [7, 7] }) })
+    L.marker([l.lat, l.lon], { icon: pinLugar(l, showName) })
       .bindTooltip(`<b>${esc(l.n)}</b><br>${ti[0]}`, { direction: "top", offset: [0, -6] }).addTo(capaLug); });
 }
 function iniciarMapa() {
@@ -2216,7 +2254,8 @@ function foco(c, color, fit) {
   if (!c) return;
   L.polyline(c.segs, { color: "#ffffff", weight: 13, opacity: 1, interactive: false }).addTo(capaFoco);
   L.polyline(c.segs, { color: color || "#c8202f", weight: 8, opacity: 1, interactive: false }).addTo(capaFoco);
-  if (fit) mapa.fitBounds([[c.bb[0], c.bb[1]], [c.bb[2], c.bb[3]]], { padding: [40, 40], maxZoom: 17 });
+  if (c.esLugar) L.circleMarker(c.c, { radius: 13, color: color || "#c8202f", weight: 5, fillColor: "#fff", fillOpacity: .6, interactive: false }).addTo(capaFoco);
+  if (fit) { if (c.esLugar) mapa.setView(c.c, Math.max(mapa.getZoom(), 16)); else mapa.fitBounds([[c.bb[0], c.bb[1]], [c.bb[2], c.bb[3]]], { padding: [40, 40], maxZoom: 17 }); }
 }
 function clicCalle(c, ev) {
   if (calState.mode === "explorar") { L.DomEvent.stopPropagation(ev); foco(c, "#232a6b"); mostrarInfo(c); }
@@ -2226,7 +2265,7 @@ function clicMapa(ev) {
   const q = calState.q; if (!q || calState.mode !== "donde" || q.answered) return;
   const p = [ev.latlng.lat, ev.latlng.lng];
   const c = q.items[q.i]; const d = distCalle(p, c);
-  const tol = Math.max(30, 18 * (156543 * Math.cos(rad(p[0])) / Math.pow(2, mapa.getZoom())));
+  const tol = Math.max(c.esLugar ? 90 : 30, 18 * (156543 * Math.cos(rad(p[0])) / Math.pow(2, mapa.getZoom())));
   // también vale si se toca otra calle con el mismo nombre de tramo
   responderCalle(d <= tol, { tap: p, dist: Math.round(d) });
 }
@@ -2237,7 +2276,22 @@ function mostrarInfo(c) {
 }
 function actualizarConteoVista() { const el = document.getElementById("cnt-vista"); if (el && CAL) { const n = enVista().length; el.textContent = n + " calles"; const b = document.getElementById("btn-vista"); if (b) b.disabled = n < 6; } }
 
+function lugaresComoCalles(fuente) {
+  const b = mapa ? mapa.getBounds() : null;
+  return (CAL.lugares || []).filter(l => { const ti = LUGTIPO[l.t]; if (!ti || l.n === "Sin nombre") return false;
+    if (fuente === "lemerg") return ti[3] === "emergencia" || ti[3] === "sanitario" && ti[2];
+    if (fuente === "lvista") return b && b.contains([l.lat, l.lon]) && ti[3] !== "ocio";
+    return ti[2] && ti[3] !== "ocio"; })
+    .map(l => ({ n: l.n, tipo: LUGTIPO[l.t][0], segs: [[[l.lat, l.lon]]], bb: [l.lat, l.lon, l.lat, l.lon], c: [l.lat, l.lon], len: 0, esLugar: true }));
+}
 function empezarCalles(modo, fuente) {
+  if (modo === "lugar") {
+    const pool = lugaresComoCalles(fuente); if (pool.length < 3) { const el = document.getElementById("cal-info"); if (el) el.innerHTML = "<b>Hay pocos lugares aquí</b><span>Aleja el mapa o elige otra opción.</span>"; return; }
+    calState.mode = "donde"; calState.q = { modo: "lugar", fuente, items: shuffle(pool).slice(0, 10), i: 0, ok: 0, answered: false, opts: [], res: [], start: Date.now() };
+    ponerFondo(false);
+    if (fuente !== "lvista" && mapa) { const it = calState.q.items; mapa.fitBounds(it.map(x => x.c), { padding: [30, 30], maxZoom: 15 }); }
+    renderPreguntaCalle(); return;
+  }
   if (modo === "ruta") return empezarRutas(fuente);
   let pool = fuente === "principales" ? principales() : fuente === "falladas" ? falladasCalles() : enVista();
   if (!pool.length) return;
@@ -2249,6 +2303,7 @@ function empezarCalles(modo, fuente) {
   prepararPregunta();
 }
 function prepararPregunta() {
+  if (calState.q.modo === "lugar") { calState.q.answered = false; foco(null); renderPreguntaCalle(); return; }
   if (calState.q.modo === "ruta") return prepararRuta();
   const q = calState.q; const c = q.items[q.i]; q.answered = false;
   ponerFondo(false);
@@ -2291,9 +2346,9 @@ function renderPreguntaCalle() {
   if (!q) { el.innerHTML = panelExplorar(); return; }
   if (q.done) {
     const p = pct(q.ok, q.items.length);
-    el.innerHTML = `<div class="cp-head"><b>${q.ok}/${q.items.length} · ${p}%</b><span>${q.modo === "que" ? "¿Qué calle es?" : q.modo === "ruta" ? "¿Por dónde irías?" : "Encuéntrala en el mapa"}</span></div>
+    el.innerHTML = `<div class="cp-head"><b>${q.ok}/${q.items.length} · ${p}%</b><span>${q.modo === "que" ? "¿Qué calle es?" : q.modo === "ruta" ? "¿Por dónde irías?" : q.modo === "lugar" ? "¿Dónde está este lugar?" : "Encuéntrala en el mapa"}</span></div>
       <div class="cp-list">${q.res.map(r => `<span class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${esc(r.n)}</span>`).join("")}</div>
-      <div class="row"><button class="btn" data-cal="otra">Otra ronda</button>${falladasCalles().length && q.modo !== "ruta" ? `<button class="btn red" data-cal="test" data-m="${q.modo}" data-f="falladas">Repasar ${falladasCalles().length} falladas</button>` : ""}<button class="btn ghost" data-cal="salir">Salir</button></div>`;
+      <div class="row"><button class="btn" data-cal="otra">Otra ronda</button>${falladasCalles().length && q.modo !== "ruta" && q.modo !== "lugar" ? `<button class="btn red" data-cal="test" data-m="${q.modo}" data-f="falladas">Repasar ${falladasCalles().length} falladas</button>` : ""}<button class="btn ghost" data-cal="salir">Salir</button></div>`;
     return;
   }
   if (q.modo === "ruta") { el.innerHTML = htmlRuta(q); return; }
@@ -2303,7 +2358,7 @@ function renderPreguntaCalle() {
     el.innerHTML = head + `<div class="answers">${q.opts.map((o, i) => { let cls = ""; if (q.answered) { if (o === c.n) cls = "ok"; else if (q.res[q.res.length - 1].pick === o) cls = "bad"; } return `<button class="ans ${cls}" data-cal="opt" data-o="${esc(o)}" ${q.answered ? "disabled" : ""}><span class="k">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`; }).join("")}</div>`
       + (q.answered ? `<div class="feedback ${q.res[q.res.length - 1].ok ? "" : "bad"}"><strong>${esc(q.fb)}</strong></div><div class="row"><span class="spacer"></span><button class="btn" data-cal="sig">${q.i === q.items.length - 1 ? "Ver resultado" : "Siguiente"}</button></div>` : "");
   } else {
-    el.innerHTML = head + `<div class="target">${esc(c.n)}</div>`
+    el.innerHTML = head + `<div class="target">${esc(c.n)}${c.tipo ? `<small>${esc(c.tipo)}</small>` : ""}</div>`
       + (q.answered ? `<div class="feedback ${q.res[q.res.length - 1].ok ? "" : "bad"}"><strong>${esc(q.fb)}</strong></div><div class="row"><span class="spacer"></span><button class="btn" data-cal="sig">${q.i === q.items.length - 1 ? "Ver resultado" : "Siguiente"}</button></div>`
         : `<div class="row"><span class="note">Mueve y amplía el mapa si lo necesitas.</span><span class="spacer"></span><button class="btn ghost sm" data-cal="nolase">No lo sé</button></div>`);
   }
@@ -2319,6 +2374,8 @@ function panelExplorar() {
         <div class="row"><button class="btn sm" data-cal="test" data-m="donde" data-f="vista">Calles de esta zona</button><button class="btn ghost sm" data-cal="test" data-m="donde" data-f="principales">Calles principales</button></div></div>
       <div class="cm"><b>¿Por dónde irías?</b><span>Ruta más directa entre dos puntos (A y B), respetando direcciones prohibidas.</span>
         <div class="row"><button class="btn sm" data-cal="test" data-m="ruta" data-f="vista">Rutas en esta zona</button><button class="btn ghost sm" data-cal="test" data-m="ruta" data-f="todo">Todo Telde</button></div></div>
+      <div class="cm wide"><b>¿Dónde está este lugar?</b><span>Comisarías, bomberos, Protección Civil, centros de salud, urgencias, centros oficiales y lugares emblemáticos: te digo el nombre y lo tocas en el mapa.</span>
+        <div class="row"><button class="btn sm" data-cal="test" data-m="lugar" data-f="lemerg">Emergencias y sanitarios</button><button class="btn ghost sm" data-cal="test" data-m="lugar" data-f="ltodos">Todos los importantes</button><button class="btn ghost sm" data-cal="test" data-m="lugar" data-f="lvista">Lugares de esta zona</button></div></div>
       <div class="cm"><b>Calcular una ruta</b><span>Toca origen y destino en el mapa y te digo por qué calles ir.</span>
         <div class="row"><button class="btn sm" data-cal="tool">${calState.mode === "rutaTool" ? "Dejar de calcular" : "Calcular ruta"}</button></div></div>
       <div class="cm wide"><b>Mi progreso en el mapa</b><span>Pinta las calles: <em style="color:#12804a">dominadas</em>, <em style="color:#e0a100">a medias</em> y <em style="color:#c8202f">falladas</em>.</span>
