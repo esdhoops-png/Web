@@ -1066,6 +1066,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .ins-card span { font-size: 14px; color: var(--muted); display: block; }
 .ins-card .ins-pasos { margin-top: 4px; color: var(--ink); }
 @media (max-width: 460px) { .ins-card { grid-template-columns: auto 1fr; } .ins-card > .btn { grid-column: 1 / -1; } }
+.sync { display: grid; gap: 10px; }
+.sync-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 560px) { .sync-grid { grid-template-columns: 1fr; } }
+.sync textarea { width: 100%; font-family: var(--mono); font-size: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--snow); color: var(--ink); resize: vertical; min-width: 0; }
+.file-btn { cursor: pointer; }
 .play-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: #171a28; color: #fff; border-radius: 12px; padding: 14px 16px; }
 .play-card .pc-ico { font-size: 34px; }
 .play-card b { font-family: var(--display); font-size: 22px; text-transform: uppercase; display: block; }
@@ -1696,7 +1701,7 @@ function chartSVG() {
 function renderProgreso() {
   const h = state.hist; const t = totals();
   if (!h.length) {
-    $("#app").innerHTML = `<section class="view"><div class="empty">Todavía no hay resultados. Haz tu primer test y aquí verás la evolución de tu nota, tus bloques fuertes y débiles y el historial completo.<div class="row" style="justify-content:center;margin-top:14px"><button class="btn" data-start="rapido">Hacer test rápido</button></div></div>${storeLine()}</section>`;
+    $("#app").innerHTML = `<section class="view"><div class="empty">Todavía no hay resultados. Haz tu primer test y aquí verás la evolución de tu nota, tus bloques fuertes y débiles y el historial completo.<div class="row" style="justify-content:center;margin-top:14px"><button class="btn" data-start="rapido">Hacer test rápido</button></div></div>${storeLine()}${syncHTML()}</section>`;
     return;
   }
   const first = h.slice(0, 5), lastN = h.slice(-5);
@@ -1723,6 +1728,7 @@ function renderProgreso() {
       <tbody>${h.map((r, i) => ({ r, i })).reverse().map(({ r, i }) => { const p = pct(r.ok, r.n); return `<tr><td class="num">${i + 1}</td><td class="num">${fmtDate(r.d)}</td><td>${MODOS[r.m] || r.m}</td><td class="r">${r.ok}/${r.n}</td><td class="r"><span class="pill ${nivel(p)}">${p}%</span></td><td class="r">${Math.floor(r.s / 60)}:${String(r.s % 60).padStart(2, "0")}</td></tr>`; }).join("")}</tbody>
     </table></div>
     ${confirmReset ? `<div class="confirm"><strong>¿Borrar todo el historial y la lista de falladas?</strong><span class="note">No se puede deshacer.</span><div class="row"><button class="btn red" data-act="doreset">Sí, borrar todo</button><button class="btn ghost" data-act="cancelreset">Cancelar</button></div></div>` : `<div class="row"><button class="btn ghost" data-act="reset">Borrar historial</button></div>`}
+    ${syncHTML()}
   </section>`;
 }
 
@@ -2947,6 +2953,72 @@ function cardInstalar() {
 }
 document.addEventListener("click", async e => { if (e.target.id === "btn-instalar" && pedirInstalar) { pedirInstalar.prompt(); try { await pedirInstalar.userChoice; } catch (x) {} pedirInstalar = null; render(); } });
 
+// ---------- Pasar el progreso a otro dispositivo ----------
+let syncMsg = "", syncCode = "";
+function datosProgreso() { let best = 0; try { best = +localStorage.getItem("taxi-telde-juego-best") || 0; } catch (e) {} return { s: state, v: vistas, j: best, d: Date.now() }; }
+async function codificar(obj) {
+  const txt = JSON.stringify(obj);
+  try { if (window.CompressionStream) { const st = new Blob([txt]).stream().pipeThrough(new CompressionStream("gzip")); const buf = new Uint8Array(await new Response(st).arrayBuffer()); let bin = ""; buf.forEach(b => bin += String.fromCharCode(b)); return "TT1:" + btoa(bin); } } catch (e) {}
+  return "TT0:" + btoa(unescape(encodeURIComponent(txt)));
+}
+async function decodificar(code) {
+  code = code.trim().replace(/\s+/g, "");
+  if (code.startsWith("{")) return JSON.parse(code);
+  const m = code.match(/^TT([01]):(.+)$/); if (!m) throw new Error("formato");
+  const bin = atob(m[2]);
+  if (m[1] === "0") return JSON.parse(decodeURIComponent(escape(bin)));
+  const buf = Uint8Array.from(bin, c => c.charCodeAt(0));
+  const st = new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return JSON.parse(await new Response(st).text());
+}
+function importarProgreso(obj) {
+  if (!obj || !obj.s || !Array.isArray(obj.s.hist)) throw new Error("datos");
+  const antes = state.hist.length;
+  state = merge(state, obj.s);
+  Object.entries(obj.v || {}).forEach(([k, t]) => { if (!vistas[k] || t > vistas[k]) vistas[k] = t; });
+  try { localStorage.setItem(VKEY, JSON.stringify(vistas)); } catch (e) {}
+  try { const b = +localStorage.getItem("taxi-telde-juego-best") || 0; if ((obj.j || 0) > b) localStorage.setItem("taxi-telde-juego-best", obj.j); } catch (e) {}
+  save();
+  return state.hist.length - antes;
+}
+function syncHTML() {
+  const puedeDescargar = /github\.io$|^$/.test(location.hostname) || location.protocol === "file:";
+  return `<div class="sync">
+    <div class="section-h"><h2>Pasar el progreso a otro dispositivo</h2></div>
+    <p class="note">El progreso se guarda en cada móvil u ordenador por separado. Para seguir en otro: en este aparato pulsa <b>«Crear código»</b>, envíate el código (por WhatsApp o correo) y en el otro aparato pégalo en <b>«Recibir progreso»</b>. Se suma a lo que ya haya; no se borra nada.</p>
+    <div class="sync-grid">
+      <div class="cm"><b>1. Enviar desde aquí</b><span>${state.hist.length} tests · ${Object.keys(state.st).length} preguntas vistas · ${(state.calles || []).length} rondas de calles</span>
+        <div class="row"><button class="btn sm" data-sync="crear">Crear código</button>${puedeDescargar ? `<button class="btn ghost sm" data-sync="archivo">Descargar archivo</button>` : ""}</div>
+        ${syncCode ? `<textarea id="sync-out" readonly rows="3">${esc(syncCode)}</textarea><div class="row"><button class="btn sm" data-sync="copiar">Copiar código</button><span class="note">${syncCode.length} caracteres</span></div>` : ""}</div>
+      <div class="cm"><b>2. Recibir en este aparato</b><span>Pega el código o elige el archivo de progreso.</span>
+        <textarea id="sync-in" rows="3" placeholder="Pega aquí el código (empieza por TT)"></textarea>
+        <div class="row"><button class="btn sm red" data-sync="importar">Recibir progreso</button><label class="btn ghost sm file-btn">Elegir archivo<input type="file" id="sync-file" accept=".txt,.json,text/plain,application/json" hidden></label></div></div>
+    </div>
+    ${syncMsg ? `<div class="feedback ${syncMsg.startsWith("✓") ? "" : "bad"}"><strong>${esc(syncMsg)}</strong></div>` : ""}
+  </div>`;
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-sync]"); if (!b) return;
+  const a = b.dataset.sync;
+  if (a === "crear") { syncCode = await codificar(datosProgreso()); syncMsg = ""; renderProgreso(); }
+  else if (a === "copiar") { const t = document.getElementById("sync-out"); try { await navigator.clipboard.writeText(syncCode); syncMsg = "✓ Código copiado. Pégalo en un mensaje para enviártelo."; } catch (x) { t.select(); syncMsg = "✓ Código seleccionado: cópialo con el menú del móvil."; } renderProgreso(); }
+  else if (a === "archivo") {
+    const code = await codificar(datosProgreso()); const blob = new Blob([code], { type: "text/plain" });
+    const f = new File([blob], "progreso-taxi-telde.txt", { type: "text/plain" });
+    if (navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: "Progreso Taxi Telde" }); return; } catch (x) {} }
+    const u = URL.createObjectURL(blob); const lnk = document.createElement("a"); lnk.href = u; lnk.download = "progreso-taxi-telde.txt"; document.body.appendChild(lnk); lnk.click(); lnk.remove(); setTimeout(() => URL.revokeObjectURL(u), 2000);
+    syncMsg = "✓ Archivo creado: «progreso-taxi-telde.txt». Envíatelo y ábrelo con «Elegir archivo» en el otro aparato."; renderProgreso();
+  }
+  else if (a === "importar") { const v = (document.getElementById("sync-in") || {}).value || ""; await recibir(v); }
+});
+document.addEventListener("change", async e => { if (e.target.id === "sync-file" && e.target.files[0]) { await recibir(await e.target.files[0].text()); } });
+async function recibir(txt) {
+  if (!txt.trim()) { syncMsg = "Pega primero el código."; renderProgreso(); return; }
+  try { const n = importarProgreso(await decodificar(txt)); syncMsg = `✓ Progreso recibido: ${n} test${n === 1 ? "" : "s"} nuevo${n === 1 ? "" : "s"} añadido${n === 1 ? "" : "s"}. Ya tienes todo en este aparato.`; syncCode = ""; }
+  catch (x) { syncMsg = "Ese código no es válido. Copia el código completo (empieza por TT) y vuelve a intentarlo."; }
+  render();
+}
+
 function renderPlan() {
   const hoy = midnight(new Date());
   const quedan = diasHasta(hoy, EXAMEN);
@@ -2973,6 +3045,7 @@ function renderPlan() {
   const lunes = (INICIO.getDay() + 6) % 7;
   $("#app").innerHTML = `<section class="view">
     ${cardInstalar()}
+    ${!state.hist.length ? `<div class="cal-info"><b>¿Ya estudiabas en otro móvil u ordenador?</b><span>Pasa aquí tu progreso desde la pestaña Progreso → «Pasar el progreso a otro dispositivo».</span><div class="row" style="margin-top:6px"><button class="btn sm" data-plan="tab" data-id="progreso">Pasar mi progreso</button></div></div>` : ""}
     <div class="countdown">
       <div class="cd-num num">${quedan > 0 ? quedan : quedan === 0 ? "HOY" : "✓"}</div>
       <div class="cd-txt"><b>${quedan > 1 ? "días para el examen" : quedan === 1 ? "día para el examen: mañana" : quedan === 0 ? "es el examen. ¡Mucha suerte!" : "El examen ya pasó"}</b>
