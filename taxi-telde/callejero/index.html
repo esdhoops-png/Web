@@ -693,6 +693,12 @@ html, body { margin: 0; height: 100%; font-family: var(--body); color: var(--ink
 .panel header { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--line); }
 .panel header b { font-family: var(--display); font-size: 22px; text-transform: uppercase; color: var(--indigo); }
 .panel header button { border: 0; background: var(--soft); border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
+.cats { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.cats button { border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 5px 10px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--indigo); }
+.cats button.on { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+.cats label { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); width: 100%; }
+.lista .dir { display: block; color: var(--muted); font-size: 13px; }
+.lista .ic { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 3px; border-radius: 10px; color: #fff; font-size: 10px; font-weight: 800; margin-right: 6px; vertical-align: middle; }
 .letras { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
 .letras button { border: 1px solid var(--line); background: var(--paper); border-radius: 6px; min-width: 30px; padding: 4px 6px; font: inherit; font-weight: 700; cursor: pointer; color: var(--indigo); }
 .letras button.on { background: var(--indigo); color: #fff; border-color: var(--indigo); }
@@ -702,7 +708,8 @@ html, body { margin: 0; height: 100%; font-family: var(--body); color: var(--ink
 @keyframes g { to { transform: rotate(360deg); } }
 .lbl { white-space: nowrap; transform: translate(-50%, -50%); display: inline-block; font-size: 11px; font-weight: 700; color: #1a1d2e; text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 4px #fff, 0 0 4px #fff; pointer-events: none; }
 .lug-pin { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-.lug-pin i { flex: none; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.45); }
+.lug-pin i { flex: none; min-width: 22px; height: 22px; padding: 0 3px; border-radius: 11px; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.45); color: #fff; font-style: normal; font-size: 10px; font-weight: 800; display: grid; place-items: center; line-height: 1; }
+.lug-pin.fuerte i { min-width: 26px; height: 26px; border-radius: 13px; font-size: 12px; }
 .lug-pin span { font-size: 12px; font-weight: 600; color: #1a1d2e; background: rgba(255,255,255,.9); padding: 1px 5px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
 .ctl a { font-size: 19px; line-height: 30px; font-weight: 700; color: var(--indigo) !important; }
 .leaflet-top.leaflet-right { top: calc(env(safe-area-inset-top, 0px) + 70px); }
@@ -712,7 +719,7 @@ html, body { margin: 0; height: 100%; font-family: var(--body); color: var(--ink
 <body>
 <div id="mapa"></div>
 <div class="top">
-  <div class="bar"><b>Telde</b><input id="buscar" type="search" placeholder="Buscar calle o lugar…" autocomplete="off"><button id="btn-indice">Índice</button></div>
+  <div class="bar"><b>Telde</b><input id="buscar" type="search" placeholder="Buscar calle o lugar…" autocomplete="off"><button id="btn-lugares">Lugares</button><button id="btn-indice">Calles</button></div>
   <div id="sug" class="sug" hidden></div>
 </div>
 <div id="info" class="info" hidden></div>
@@ -733,7 +740,7 @@ html, body { margin: 0; height: 100%; font-family: var(--body); color: var(--ink
 <script>
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const $ = s => document.querySelector(s);
-const CK = "taxi-telde-calles-v3";
+const CK = "taxi-telde-calles-v4";
 const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter"];
 const QUERY = `[out:json][timeout:60];
 area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
@@ -741,15 +748,21 @@ area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
 out geom;
 node(area.a)["place"~"^(suburb|neighbourhood|quarter|village|hamlet|locality)$"]["name"];
 out;`;
-const QUERY_LUG = `[out:json][timeout:60];
+const QUERY_LUG = `[out:json][timeout:90];
 area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
-(nwr(area.a)["name"]["amenity"~"^(townhall|police|hospital|clinic|doctors|place_of_worship|marketplace|bus_station|courthouse|library|theatre|pharmacy|fire_station|post_office)$"];
- nwr(area.a)["name"]["tourism"~"^(museum|attraction)$"];
+(nwr(area.a)["name"]["amenity"~"^(townhall|police|hospital|clinic|doctors|pharmacy|fire_station|courthouse|post_office|library|community_centre|social_facility|place_of_worship|marketplace|bus_station|theatre|arts_centre|ferry_terminal|taxi)$"];
+ nwr(area.a)["name"]["office"="government"];
+ nwr(area.a)["emergency"="ambulance_station"];
+ nwr(area.a)["name"~"Protecci[oó]n Civil|Emergencias|Cruz Roja|Urgencias|Guardia Civil",i];
+ nwr(area.a)["name"]["tourism"~"^(museum|attraction|viewpoint|artwork)$"];
+ nwr(area.a)["name"]["historic"];
+ nwr(area.a)["name"]["natural"="beach"];
+ nwr(area.a)["man_made"="lighthouse"];
+ nwr(area.a)["military"="airfield"];
+ nwr(area.a)["name"]["leisure"~"^(park|stadium|sports_centre|marina)$"];
  nwr(area.a)["name"]["shop"="mall"];
- nwr(area.a)["name"]["leisure"~"^(stadium|sports_centre)$"];
- nwr(area.a)["name"]["aeroway"="aerodrome"];);
+ nwr(area.a)["aeroway"="aerodrome"];);
 out center;`;
-
 function rad(x) { return x * Math.PI / 180; }
 function distM(a, b) { const x = rad(b[1] - a[1]) * Math.cos(rad((a[0] + b[0]) / 2)), y = rad(b[0] - a[0]); return Math.sqrt(x * x + y * y) * 6371000; }
 function distSeg(p, a, b) {
@@ -769,11 +782,12 @@ function procesar(json) {
       const t = e.tags; const ow = t.highway === "pedestrian" ? 9 : /^(yes|1|true)$/.test(t.oneway || "") ? 1 : t.oneway === "-1" ? -1 : (/roundabout|circular/.test(t.junction || "") && t.oneway !== "no") ? 1 : 0;
       (fl[n] = fl[n] || []).push(ow);
     } else if (e.tags && e.tags.name && e.tags.place && e.type === "node") places.push({ n: e.tags.name, lat: e.lat, lon: e.lon, t: e.tags.place });
-    else if (e.tags && e.tags.name) {
+    else if (e.tags && (e.tags.name || e.tags.man_made === "lighthouse" || e.tags.aeroway)) {
       const lat = e.lat != null ? e.lat : e.center && e.center.lat, lon = e.lon != null ? e.lon : e.center && e.center.lon;
       if (lat == null) return;
-      const t = e.tags.amenity || e.tags.tourism || (e.tags.shop === "mall" ? "mall" : "") || e.tags.leisure || (e.tags.historic ? "historic" : "") || (e.tags.aeroway ? "aeropuerto" : "");
-      lugares.push({ n: e.tags.name, lat: +lat.toFixed(5), lon: +lon.toFixed(5), t });
+      const t = tipoLugar(e.tags); if (!t) return;
+      const g = e.tags; const dir = g["addr:street"] ? g["addr:street"] + (g["addr:housenumber"] ? ", " + g["addr:housenumber"] : "") : "";
+      lugares.push({ n: g.name || (t === "faro" ? "Faro" : t === "aeropuerto" ? "Aeropuerto de Gran Canaria" : "Sin nombre"), lat: +lat.toFixed(5), lon: +lon.toFixed(5), t, u: (g.emergency === "yes" || /urgencia/i.test(g.name || "")) ? 1 : 0, dir, tel: g.phone || g["contact:phone"] || "" });
     }
   });
   const calles = Object.entries(by).map(([n, segs]) => {
@@ -785,15 +799,42 @@ function procesar(json) {
   const vistos = new Set(); const lug = lugares.filter(l => { const k = l.n + l.t; if (vistos.has(k)) return false; vistos.add(k); return true; }).sort((a, b) => a.n.localeCompare(b.n, "es"));
   return { calles, places, lugares: lug, t: Date.now() };
 }
-
-const LUGTIPO = { townhall: ["Ayuntamiento", "#232a6b", 1], police: ["Policía", "#1d4ed8", 1], hospital: ["Hospital", "#c8202f", 1], clinic: ["Centro de salud", "#c8202f", 1], doctors: ["Médicos", "#c8202f", 0], place_of_worship: ["Iglesia", "#7c4a1e", 1], marketplace: ["Mercado", "#a86300", 1], bus_station: ["Estación de guaguas", "#0f766e", 1], courthouse: ["Juzgados", "#232a6b", 1], library: ["Biblioteca", "#6d28d9", 0], theatre: ["Teatro", "#6d28d9", 1], pharmacy: ["Farmacia", "#12804a", 0], fire_station: ["Bomberos", "#c8202f", 1], post_office: ["Correos", "#a86300", 0], museum: ["Museo", "#6d28d9", 1], attraction: ["Lugar de interés", "#6d28d9", 0], hotel: ["Hotel", "#0f766e", 0], mall: ["Centro comercial", "#a86300", 1], park: ["Parque", "#12804a", 0], stadium: ["Estadio", "#12804a", 1], sports_centre: ["Polideportivo", "#12804a", 0], historic: ["Patrimonio", "#7c4a1e", 0], aeropuerto: ["Aeropuerto", "#0f766e", 1] };
+// tipo: [nombre, color, importante, categoría, símbolo]
+const LUGTIPO = {
+  police: ["Policía", "#1d4ed8", 1, "emergencia", "P"], fire_station: ["Bomberos", "#dc2626", 1, "emergencia", "B"], proteccion_civil: ["Protección Civil", "#ea580c", 1, "emergencia", "PC"], ambulancias: ["Ambulancias / emergencias", "#dc2626", 1, "emergencia", "A"], guardia_civil: ["Guardia Civil", "#166534", 1, "emergencia", "GC"],
+  hospital: ["Hospital", "#c8202f", 1, "sanitario", "H"], clinic: ["Centro de salud", "#c8202f", 1, "sanitario", "+"], doctors: ["Consulta médica", "#e11d48", 0, "sanitario", "+"], pharmacy: ["Farmacia", "#16a34a", 0, "sanitario", "F"],
+  townhall: ["Ayuntamiento / oficina municipal", "#232a6b", 1, "oficial", "AY"], oficial: ["Oficina pública", "#232a6b", 1, "oficial", "O"], courthouse: ["Juzgados", "#334155", 1, "oficial", "J"], post_office: ["Correos", "#ca8a04", 0, "oficial", "C"], library: ["Biblioteca", "#6d28d9", 0, "oficial", "Bi"], community_centre: ["Centro cívico / social", "#6d28d9", 0, "oficial", "CC"], social_facility: ["Servicios sociales", "#6d28d9", 0, "oficial", "SS"],
+  place_of_worship: ["Iglesia / templo", "#7c4a1e", 1, "emblematico", "✝"], museum: ["Museo", "#7e22ce", 1, "emblematico", "M"], attraction: ["Lugar de interés", "#7e22ce", 1, "emblematico", "★"], viewpoint: ["Mirador", "#7e22ce", 0, "emblematico", "V"], artwork: ["Escultura / arte", "#7e22ce", 0, "emblematico", "★"], historic: ["Patrimonio histórico", "#7c4a1e", 1, "emblematico", "★"], theatre: ["Teatro", "#7e22ce", 1, "emblematico", "T"], arts_centre: ["Centro cultural", "#7e22ce", 1, "emblematico", "CU"], playa: ["Playa", "#0284c7", 1, "emblematico", "~"], faro: ["Faro", "#0284c7", 1, "emblematico", "Fa"], park: ["Parque", "#15803d", 0, "emblematico", "Pq"], marketplace: ["Mercado", "#ca8a04", 1, "emblematico", "Me"],
+  aeropuerto: ["Aeropuerto", "#0f766e", 1, "transporte", "✈"], base_aerea: ["Base Aérea", "#0f766e", 1, "transporte", "BA"], bus_station: ["Estación de guaguas", "#0f766e", 1, "transporte", "G"], taxi: ["Parada de taxis", "#0f766e", 1, "transporte", "TX"], marina: ["Puerto", "#0284c7", 1, "transporte", "⚓"], ferry_terminal: ["Terminal marítima", "#0284c7", 1, "transporte", "⚓"],
+  mall: ["Centro comercial", "#a16207", 1, "ocio", "CC"], stadium: ["Estadio", "#15803d", 1, "ocio", "E"], sports_centre: ["Polideportivo", "#15803d", 0, "ocio", "D"],
+};
+const LUGCAT = { emergencia: "Emergencias y seguridad", sanitario: "Centros sanitarios", oficial: "Centros oficiales", emblematico: "Lugares emblemáticos", transporte: "Transporte", ocio: "Comercio y deporte" };
+function tipoLugar(g) {
+  const n = g.name || "";
+  if (/protecci[oó]n civil/i.test(n)) return "proteccion_civil";
+  if (/guardia civil/i.test(n) || g.police === "guardia_civil") return "guardia_civil";
+  if (g.emergency === "ambulance_station" || /cruz roja|emergencias|112/i.test(n)) return "ambulancias";
+  if (g.amenity === "townhall") return "townhall";
+  if (g.office === "government") return "oficial";
+  if (g.amenity) { if (g.amenity === "ferry_terminal") return "ferry_terminal"; if (LUGTIPO[g.amenity]) return g.amenity; }
+  if (g.aeroway === "aerodrome") return "aeropuerto";
+  if (g.military === "airfield") return "base_aerea";
+  if (g.man_made === "lighthouse") return "faro";
+  if (g.natural === "beach") return "playa";
+  if (g.tourism && LUGTIPO[g.tourism]) return g.tourism;
+  if (g.historic) return "historic";
+  if (g.shop === "mall") return "mall";
+  if (g.leisure && LUGTIPO[g.leisure]) return g.leisure;
+  return "";
+}
+function pinLugar(l, showName) { const ti = LUGTIPO[l.t]; return L.divIcon({ className: "lug-pin" + (ti[3] === "emergencia" || ti[3] === "sanitario" ? " fuerte" : ""), html: `<i style="background:${ti[1]}">${ti[4]}</i>${showName ? `<span>${esc(l.n)}${l.u ? " · URGENCIAS" : ""}</span>` : ""}`, iconSize: null, iconAnchor: [11, 11] }); }
 
 function pedirOverpass(q, ms) {
   return Promise.any(OVERPASS.map(url => { const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), ms);
     return fetch(url, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, signal: ctl.signal })
       .then(r => { clearTimeout(tm); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }); }));
 }
-function leerCache() { try { const c = JSON.parse(localStorage.getItem(CK) || "null"); if (c && c.calles && c.calles.length) return c; } catch (e) {} return null; }
+function leerCache() { for (const k of [CK, "taxi-telde-calles-v3"]) { try { const c = JSON.parse(localStorage.getItem(k) || "null"); if (c && c.calles && c.calles.length) { if (k !== CK) c.lugares = []; return c; } } catch (e) {} } return null; }
 function guardar(c) { try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {} }
 const nz = x => x.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 const fmtLen = m => m >= 1000 ? (m / 1000).toFixed(1).replace(".", ",") + " km" : Math.round(m) + " m";
@@ -830,7 +871,8 @@ function pintar() {
   }
   (CAL.lugares || []).forEach(l => { const ti = LUGTIPO[l.t]; if (!ti || !b.contains([l.lat, l.lon])) return; if (z < 14 || (z < 16 && !ti[2])) return;
     const showName = z >= 16 || (z >= 15 && ti[2]);
-    L.marker([l.lat, l.lon], { icon: L.divIcon({ className: "lug-pin", html: `<i style="background:${ti[1]}"></i>${showName ? `<span>${esc(l.n)}</span>` : ""}`, iconSize: null, iconAnchor: [7, 7] }) })
+    if (catOff.has(ti[3])) return;
+    L.marker([l.lat, l.lon], { icon: pinLugar(l, showName) })
       .on("click", () => verLugar(l)).addTo(capaLug); });
 }
 function verCalle(c, zoom) {
@@ -847,7 +889,7 @@ function verLugar(l) {
   capaFoco.clearLayers(); mapa.setView([l.lat, l.lon], Math.max(mapa.getZoom(), 17));
   L.circleMarker([l.lat, l.lon], { radius: 14, color: "#c8202f", weight: 4, fill: false, interactive: false }).addTo(capaFoco);
   const cerca = CAL.calles.map(x => ({ x, d: distCalle([l.lat, l.lon], x) })).sort((a, b) => a.d - b.d).slice(0, 3).map(o => o.x.n);
-  $("#info").innerHTML = `<button class="x" aria-label="Cerrar">✕</button><b>${esc(l.n)}</b><span>${LUGTIPO[l.t] ? LUGTIPO[l.t][0] : ""}</span><span>Calles cercanas: ${cerca.map(esc).join(", ")}</span>`;
+  $("#info").innerHTML = `<button class="x" aria-label="Cerrar">✕</button><b>${esc(l.n)}</b><span>${LUGTIPO[l.t] ? LUGTIPO[l.t][0] : ""}${l.u ? " · con URGENCIAS" : ""}</span>${l.dir ? `<span>Dirección: ${esc(l.dir)}</span>` : ""}<span>Calles cercanas: ${cerca.map(esc).join(", ")}</span>${l.tel ? `<span>Teléfono: ${esc(l.tel)}</span>` : ""}`;
   $("#info").hidden = false;
 }
 document.addEventListener("click", e => { if (e.target.closest("#info .x")) { $("#info").hidden = true; capaFoco.clearLayers(); } });
@@ -873,7 +915,25 @@ document.addEventListener("click", e => {
 // índice alfabético
 const clave = n => { const s = nz(n).replace(/^(calle|avenida|avda\.?|carretera|camino|plaza|paseo|urbanizacion|urb\.?|barrio|travesia|callejon|pasaje|rambla|ronda|glorieta|lugar|via|autopista|cuesta|subida|bajada|senda|de|del|la|las|el|los|\s)+/g, "").trim(); return (s[0] || "#").toUpperCase(); };
 let letraSel = "A";
+let catSel = "emergencia"; const catOff = new Set();
+function abrirLugares() {
+  if (!CAL) return;
+  const L2 = (CAL.lugares || []).filter(l => LUGTIPO[l.t]);
+  $("#p-tit").textContent = "Lugares";
+  $("#letras").className = "cats";
+  $("#letras").innerHTML = Object.entries(LUGCAT).map(([k, v]) => `<button class="${k === catSel ? "on" : ""}" data-cat="${k}">${v} (${L2.filter(l => LUGTIPO[l.t][3] === k).length})</button>`).join("")
+    + `<label><input type="checkbox" id="cat-mapa" ${catOff.has(catSel) ? "" : "checked"}> Mostrar esta categoría en el mapa</label>`;
+  const lista = L2.map((l, i) => ({ l, i: CAL.lugares.indexOf(l) })).filter(x => LUGTIPO[x.l.t][3] === catSel)
+    .sort((a, b) => LUGTIPO[a.l.t][0].localeCompare(LUGTIPO[b.l.t][0], "es") || a.l.n.localeCompare(b.l.n, "es"));
+  $("#lista").innerHTML = lista.map(x => { const ti = LUGTIPO[x.l.t]; const cerca = x.l.dir || "cerca de " + CAL.calles.map(c => ({ c, d: distCalle([x.l.lat, x.l.lon], c) })).sort((a, b) => a.d - b.d)[0].c.n;
+      return `<button data-l="${x.i}"><span class="ic" style="background:${ti[1]}">${ti[4]}</span>${esc(x.l.n)}${x.l.u ? " · <b>URGENCIAS</b>" : ""} <small>${ti[0]}</small><span class="dir">${esc(cerca)}</span></button>`; }).join("") || `<button disabled>No hay lugares de este tipo en el mapa.</button>`;
+  $("#panel").hidden = false;
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-cat]"); if (b) { catSel = b.dataset.cat; abrirLugares(); } });
+document.addEventListener("change", e => { if (e.target.id === "cat-mapa") { if (e.target.checked) catOff.delete(catSel); else catOff.add(catSel); pintar(); } });
+$("#btn-lugares").addEventListener("click", abrirLugares);
 function abrirIndice() {
+  $("#letras").className = "letras";
   if (!CAL) return;
   const letras = [...new Set(CAL.calles.map(c => clave(c.n)))].filter(x => /[A-ZÑ]/.test(x)).sort();
   if (!letras.includes(letraSel)) letraSel = letras[0];
