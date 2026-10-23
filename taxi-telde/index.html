@@ -941,6 +941,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .loc-btn a { font-size: 20px; line-height: 30px; font-weight: 700; color: #232a6b !important; }
 .sug small { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
 .leaflet-tooltip { font-family: var(--body); }
+.mapwrap { position: relative; }
+.map-estado { position: absolute; z-index: 800; left: 10px; right: 10px; top: 10px; background: rgba(255,255,255,.96); color: #1a1d2e; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.2); padding: 10px 12px; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.spin { width: 16px; height: 16px; border: 3px solid #d0d4e6; border-top-color: #232a6b; border-radius: 50%; animation: giro 1s linear infinite; }
+@keyframes giro { to { transform: rotate(360deg); } }
 .ab-pin span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #fff; font-family: var(--display); font-weight: 700; font-size: 17px; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.45); }
 .ab-txt { display: grid; gap: 4px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-weight: 600; }
 .ab-txt span { display: flex; align-items: center; gap: 8px; min-width: 0; }
@@ -2050,17 +2054,18 @@ function preparacion() {
 // ---------- Callejero interactivo (OpenStreetMap, cargado en el dispositivo) ----------
 const CK = "taxi-telde-calles-v3";
 const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter"];
-const QUERY = `[out:json][timeout:90];
+const QUERY = `[out:json][timeout:60];
 area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
 (way(area.a)["highway"]["name"]["highway"!~"^(footway|path|steps|track|cycleway|bridleway|service|proposed|construction|corridor|platform|elevator)$"];);
 out geom;
 node(area.a)["place"~"^(suburb|neighbourhood|quarter|village|hamlet|locality)$"]["name"];
-out;
+out;`;
+const QUERY_LUG = `[out:json][timeout:60];
+area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
 (nwr(area.a)["name"]["amenity"~"^(townhall|police|hospital|clinic|doctors|place_of_worship|marketplace|bus_station|courthouse|library|theatre|pharmacy|fire_station|post_office)$"];
- nwr(area.a)["name"]["tourism"~"^(museum|attraction|hotel)$"];
+ nwr(area.a)["name"]["tourism"~"^(museum|attraction)$"];
  nwr(area.a)["name"]["shop"="mall"];
- nwr(area.a)["name"]["leisure"~"^(park|stadium|sports_centre)$"];
- nwr(area.a)["name"]["historic"];
+ nwr(area.a)["name"]["leisure"~"^(stadium|sports_centre)$"];
  nwr(area.a)["name"]["aeroway"="aerodrome"];);
 out center;`;
 let CAL = null;           // {calles:[{n, segs:[[[lat,lon],...]], len, c:[lat,lon], bb:[s,w,n,e]}], places:[{n,lat,lon}], t}
@@ -2104,29 +2109,42 @@ function procesar(json) {
   const vistos = new Set(); const lug = lugares.filter(l => { const k = l.n + l.t; if (vistos.has(k)) return false; vistos.add(k); return true; }).sort((a, b) => a.n.localeCompare(b.n, "es"));
   return { calles, places, lugares: lug, t: Date.now() };
 }
-function cargarCache() { try { const c = JSON.parse(localStorage.getItem(CK) || "null"); if (c && c.calles && c.calles.length) return c; } catch (e) {} return null; }
-function guardarCache(c) { try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {} }
-
-async function cargarCalles() {
-  if (CAL || calState.loading) return;
-  CAL = cargarCache(); if (CAL) return;
-  calState.loading = true; calState.error = ""; renderCallejero();
-  for (const url of OVERPASS) {
-    try {
-      const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 100000);
-      const r = await fetch(url, { method: "POST", body: "data=" + encodeURIComponent(QUERY), headers: { "Content-Type": "application/x-www-form-urlencoded" }, signal: ctl.signal });
-      clearTimeout(tm);
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      const j = await r.json();
-      const c = procesar(j);
-      if (c.calles.length < 50) throw new Error("pocas calles");
-      CAL = c; guardarCache(c); break;
-    } catch (e) { calState.error = String(e && e.message || e); }
-  }
-  calState.loading = false;
-  if (tab === "calles") renderCallejero();
+function cargarCache() {
+  for (const k of [CK, "taxi-telde-calles-v2", "taxi-telde-calles-v1"]) { try { const c = JSON.parse(localStorage.getItem(k) || "null"); if (c && c.calles && c.calles.length) { c._viejo = k !== CK; return c; } } catch (e) {} }
+  return null;
 }
-
+function guardarCache(c) { try { localStorage.removeItem("taxi-telde-calles-v1"); localStorage.removeItem("taxi-telde-calles-v2"); } catch (e) {} try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {} }
+function pedirOverpass(q, ms) {
+  return Promise.any(OVERPASS.map(url => {
+    const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), ms);
+    return fetch(url, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, signal: ctl.signal })
+      .then(r => { clearTimeout(tm); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }));
+}
+async function cargarCalles() {
+  if (calState.loading || calState.intentado) return;
+  if (!CAL) CAL = cargarCache();
+  if (CAL && !CAL._viejo) { if (!CAL.lugares || !CAL.lugares.length) cargarLugares(); return; }
+  calState.intentado = true; calState.loading = true; calState.error = ""; refrescarEstado();
+  try {
+    const j = await pedirOverpass(QUERY, 75000);
+    const c = procesar(j);
+    if (c.calles.length < 50) throw new Error("pocas calles");
+    const lug = CAL && CAL.lugares; CAL = c; if (lug && lug.length) CAL.lugares = lug; GR = null; guardarCache(CAL);
+  } catch (e) { calState.error = (e && e.errors ? "servidor ocupado" : String(e && e.message || e)); }
+  calState.loading = false;
+  if (tab === "calles" && !calState.q && CAL && !CAL._viejo) renderCallejero(); else refrescarEstado();
+  if (CAL && (!CAL.lugares || !CAL.lugares.length)) cargarLugares();
+}
+async function cargarLugares() {
+  try { const j = await pedirOverpass(QUERY_LUG, 60000); const x = procesar({ elements: j.elements }); if (CAL) { CAL.lugares = x.lugares; guardarCache(CAL); pintarReferencias(); } } catch (e) {}
+}
+function refrescarEstado() {
+  const el = document.getElementById("map-estado"); if (!el) return;
+  if (calState.loading) { el.hidden = false; el.innerHTML = `<span class="spin"></span>${CAL ? "Actualizando las calles…" : "Descargando las calles de Telde… (la primera vez, hasta un minuto)"}`; }
+  else if (!CAL) { el.hidden = false; el.innerHTML = `No se han podido descargar las calles${calState.error ? " (" + esc(calState.error) + ")" : ""}. <button class="btn sm" data-cal="reintentar">Reintentar</button>`; }
+  else el.hidden = true;
+}
 function principales() { return CAL.calles.filter(c => c.len >= 250).sort((a, b) => b.len - a.len).slice(0, 80); }
 function enVista() {
   if (!mapa) return [];
@@ -2139,7 +2157,7 @@ const LUGTIPO = { townhall: ["Ayuntamiento", "#232a6b", 1], police: ["Policía",
 let capaLug = null, capaBarrios = null, miPos = null;
 const URL_CON = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
 const URL_SIN = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png";
-function ponerFondo(conNombres) { if (capaTiles) capaTiles.setUrl(conNombres ? URL_CON : URL_SIN); }
+let ponerFondo = function (conNombres) { if (capaTiles) capaTiles.setUrl(conNombres ? URL_CON : URL_SIN); }
 function pintarReferencias() {
   if (!mapa || !CAL || !capaLug) return;
   const z = mapa.getZoom();
@@ -2158,6 +2176,9 @@ function iniciarMapa() {
   mapa = L.map(el, { zoomControl: true, preferCanvas: true, attributionControl: true, minZoom: 12, maxZoom: 19 }).setView([27.9935, -15.4175], 16);
   const enTest = calState.q && !calState.q.done;
   capaTiles = L.tileLayer(enTest ? URL_SIN : URL_CON, { maxZoom: 19, subdomains: "abcd", attribution: "© OpenStreetMap · © CARTO" }).addTo(mapa);
+  let fallos = 0, cargadas = 0;
+  capaTiles.on("tileload", () => { cargadas++; });
+  capaTiles.on("tileerror", () => { if (++fallos === 6 && cargadas === 0) { capaTiles.remove(); capaTiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(mapa); capaTiles.bringToBack(); ponerFondo = () => {}; } });
   const rend = L.canvas({ tolerance: 12 });
   capaCalles = L.layerGroup().addTo(mapa); capaBarrios = L.layerGroup().addTo(mapa); capaLug = L.layerGroup().addTo(mapa); capaFoco = L.layerGroup().addTo(mapa);
   if (CAL) CAL.calles.forEach(c => {
@@ -2428,29 +2449,28 @@ function resumenZona() {
 }
 
 function renderCallejero() {
-  if (!CAL && !calState.loading) { cargarCalles(); }
   if (!window.L) { $("#app").innerHTML = `<section class="view"><div class="empty">El mapa no se puede cargar aquí. Ábrelo desde el link público de la app, con conexión a internet.</div></section>`; return; }
-  if (!CAL) {
-    $("#app").innerHTML = `<section class="view"><div class="section-h"><h2>Callejero de Telde</h2></div>
-      <div class="empty">${calState.loading ? "Descargando las calles de Telde desde OpenStreetMap… La primera vez tarda hasta un minuto; después queda guardado en este móvil." : `No se han podido descargar las calles${calState.error ? " (" + esc(calState.error) + ")" : ""}. Comprueba la conexión a internet y vuelve a intentarlo.<div class="row" style="justify-content:center;margin-top:12px"><button class="btn" data-cal="reintentar">Reintentar</button></div>`}</div>
-      <p class="note">Este mapa necesita internet y solo funciona desde el link público o el archivo de la app, no dentro de Claude.</p></section>`;
-    return;
-  }
-  const barrios = CAL.places;
+  if (!CAL) CAL = cargarCache();
+  const barrios = CAL ? CAL.places || [] : [];
   $("#app").innerHTML = `<section class="view">
-    <div class="section-h"><h2>Callejero de Telde</h2><span class="note num">${CAL.calles.length} calles</span></div>
+    <div class="section-h"><h2>Callejero de Telde</h2><span class="note num">${CAL ? CAL.calles.length + " calles" : ""}</span></div>
     <div class="cal-tools">
       <div class="search"><input id="cal-buscar" type="search" placeholder="Buscar calle o lugar…" autocomplete="off"><div id="cal-sug" class="sug" hidden></div></div>
       <select id="cal-barrio"><option value="">Ir a un barrio…</option>${barrios.map((b, i) => `<option value="${i}">${esc(b.n)}</option>`).join("")}</select>
     </div>
-    <div class="mapwrap"><div id="mapa"></div></div>
+    <div class="mapwrap"><div id="mapa"></div><div id="map-estado" class="map-estado" hidden></div></div>
     <div id="cal-panel" class="cal-panel"></div>
-    <p class="note">Mapa: © OpenStreetMap y CARTO. Los nombres salen de OpenStreetMap y pueden tener alguna errata; compáralos con el callejero oficial si dudas.</p>
+    <p class="note">Mapa: © OpenStreetMap y CARTO. Los nombres salen de OpenStreetMap y pueden tener alguna errata; compáralos con el callejero oficial si dudas.${location.protocol === "https:" && !/github\.io$/.test(location.hostname) ? " Si el mapa sale en gris, ábrelo desde el link público de la app." : ""}</p>
   </section>`;
   iniciarMapa();
-  if (calState.q && !calState.q.done) { renderPreguntaCalle(); const c = calState.q.items[calState.q.i]; if (calState.q.modo === "que" || calState.q.answered) foco(c, calState.q.answered ? (calState.q.res[calState.q.res.length - 1].ok ? "#12804a" : "#c8202f") : "#c8202f", true); }
-  else { calState.q = null; calState.mode = "explorar"; renderPreguntaCalle(); }
-  actualizarConteoVista();
+  const q = calState.q;
+  if (q && !q.done && CAL) {
+    if (q.modo === "ruta") prepararRuta();
+    else { renderPreguntaCalle(); const c = q.items[q.i]; if (q.modo === "que" || q.answered) foco(c, q.answered ? (q.res[q.res.length - 1].ok ? "#12804a" : "#c8202f") : "#c8202f", true); }
+  } else { calState.q = null; calState.mode = "explorar"; const el = document.getElementById("cal-panel"); if (el) el.innerHTML = CAL ? panelExplorar() : `<div class="cal-info"><b>Cargando las calles…</b><span>Mientras tanto puedes mover el mapa.</span></div>`; }
+  actualizarConteoVista(); resumenZona();
+  refrescarEstado();
+  cargarCalles();
 }
 
 document.addEventListener("click", e => {
@@ -2465,7 +2485,7 @@ document.addEventListener("click", e => {
   else if (a === "tool") { if (calState.mode === "rutaTool") { calState.mode = "explorar"; calState.tool = null; if (capaRuta) capaRuta.clearLayers(); } else { calState.mode = "rutaTool"; calState.tool = { pts: [] }; foco(null); } renderPreguntaCalle(); const el = document.getElementById("cal-info"); if (el && calState.mode === "rutaTool") el.innerHTML = "<b>Calcular ruta</b><span>Toca en el mapa el punto de origen.</span>"; resumenZona(); }
   else if (a === "prog") { pintarProgreso(!progVisible); renderPreguntaCalle(); resumenZona(); }
   else if (a === "salir") { calState.q = null; calState.mode = "explorar"; foco(null); if (capaRuta) capaRuta.clearLayers(); ponerFondo(true); renderPreguntaCalle(); actualizarConteoVista(); pintarProgreso(progVisible); }
-  else if (a === "reintentar") { calState.error = ""; cargarCalles(); }
+  else if (a === "reintentar") { calState.error = ""; calState.intentado = false; cargarCalles(); }
   else if (a === "lug") { const l = CAL.lugares[+b.dataset.i]; $("#cal-sug").hidden = true; $("#cal-buscar").value = l.n; mapa.setView([l.lat, l.lon], 17); const el = document.getElementById("cal-info"); if (el) el.innerHTML = `<b>${esc(l.n)}</b><span>${LUGTIPO[l.t][0]}</span>`; }
   else if (a === "sug") { const c = CAL.calles[+b.dataset.i]; $("#cal-sug").hidden = true; $("#cal-buscar").value = c.n; if (calState.q) return; foco(c, "#232a6b", true); mostrarInfo(c); }
 });
