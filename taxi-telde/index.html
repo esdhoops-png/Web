@@ -941,6 +941,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .loc-btn a { font-size: 20px; line-height: 30px; font-weight: 700; color: #232a6b !important; }
 .sug small { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
 .leaflet-tooltip { font-family: var(--body); }
+.ab-pin span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #fff; font-family: var(--display); font-weight: 700; font-size: 17px; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.45); }
+.ab-txt { display: grid; gap: 4px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-weight: 600; }
+.ab-txt span { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ab-txt i { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; font-style: normal; font-size: 13px; }
+.ab-txt i.a { background: #12804a; } .ab-txt i.b { background: #c8202f; }
+.ans small { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+.cm.wide { grid-column: 1 / -1; }
+.cm em { font-style: normal; font-weight: 700; }
+.cal-prog { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+.cal-prog:empty { display: none; }
+.zbar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--line); }
+.zbar i { display: block; height: 100%; }
+.zbar .d { background: #12804a; } .zbar .m { background: #e0a100; } .zbar .f { background: #c8202f; }
+.cal-info ol.pasos { margin: 4px 0; padding-left: 20px; display: grid; gap: 2px; font-size: 15px; color: var(--ink); }
+.cal-info ol.pasos small { color: var(--muted); font-family: var(--mono); font-size: 12px; }
 
 .leaflet-container { font-family: var(--body); }
 .cal-panel { display: grid; gap: 10px; }
@@ -2033,7 +2048,7 @@ function preparacion() {
 
 
 // ---------- Callejero interactivo (OpenStreetMap, cargado en el dispositivo) ----------
-const CK = "taxi-telde-calles-v2";
+const CK = "taxi-telde-calles-v3";
 const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter"];
 const QUERY = `[out:json][timeout:90];
 area["name"="Telde"]["admin_level"="8"]["boundary"="administrative"]->.a;
@@ -2066,10 +2081,12 @@ function distSeg(p, a, b) {
 function distCalle(p, c) { let m = Infinity; c.segs.forEach(s => { for (let i = 1; i < s.length; i++) m = Math.min(m, distSeg(p, s[i - 1], s[i])); if (s.length === 1) m = Math.min(m, distM(p, s[0])); }); return m; }
 
 function procesar(json) {
-  const by = {}; const places = []; const lugares = [];
+  const by = {}; const fl = {}; const places = []; const lugares = [];
   json.elements.forEach(e => {
     if (e.type === "way" && e.geometry && e.tags && e.tags.name) {
       const n = e.tags.name.trim(); (by[n] = by[n] || []).push(e.geometry.map(g => [+g.lat.toFixed(5), +g.lon.toFixed(5)]));
+      const t = e.tags; const ow = t.highway === "pedestrian" ? 9 : /^(yes|1|true)$/.test(t.oneway || "") ? 1 : t.oneway === "-1" ? -1 : (/roundabout|circular/.test(t.junction || "") && t.oneway !== "no") ? 1 : 0;
+      (fl[n] = fl[n] || []).push(ow);
     } else if (e.tags && e.tags.name && e.tags.place && e.type === "node") places.push({ n: e.tags.name, lat: e.lat, lon: e.lon, t: e.tags.place });
     else if (e.tags && e.tags.name) {
       const lat = e.lat != null ? e.lat : e.center && e.center.lat, lon = e.lon != null ? e.lon : e.center && e.center.lon;
@@ -2081,7 +2098,7 @@ function procesar(json) {
   const calles = Object.entries(by).map(([n, segs]) => {
     let len = 0, s = 90, w = 180, no = -90, ea = -180, cx = 0, cy = 0, k = 0;
     segs.forEach(sg => sg.forEach((p, i) => { if (i) len += distM(sg[i - 1], p); s = Math.min(s, p[0]); no = Math.max(no, p[0]); w = Math.min(w, p[1]); ea = Math.max(ea, p[1]); cx += p[0]; cy += p[1]; k++; }));
-    return { n, segs, len: Math.round(len), c: [cx / k, cy / k], bb: [s, w, no, ea] };
+    return { n, segs, f: fl[n], len: Math.round(len), c: [cx / k, cy / k], bb: [s, w, no, ea] };
   }).sort((a, b) => a.n.localeCompare(b.n, "es"));
   places.sort((a, b) => a.n.localeCompare(b.n, "es"));
   const vistos = new Set(); const lug = lugares.filter(l => { const k = l.n + l.t; if (vistos.has(k)) return false; vistos.add(k); return true; }).sort((a, b) => a.n.localeCompare(b.n, "es"));
@@ -2154,8 +2171,9 @@ function iniciarMapa() {
   mapa.on("locationerror", () => { const el = document.getElementById("cal-info"); if (el) el.innerHTML = "<b>No se ha podido obtener tu ubicación</b><span>Da permiso de ubicación al navegador.</span>"; });
   mapa.on("click", ev => clicMapa(ev));
   if (calState.view) mapa.setView(calState.view.c, calState.view.z);
-  mapa.on("moveend", () => { calState.view = { c: mapa.getCenter(), z: mapa.getZoom() }; actualizarConteoVista(); pintarReferencias(); });
-  setTimeout(() => { if (mapa) { mapa.invalidateSize(); pintarReferencias(); } }, 60);
+  mapa.on("moveend", () => { calState.view = { c: mapa.getCenter(), z: mapa.getZoom() }; actualizarConteoVista(); pintarReferencias(); resumenZona(); });
+  capaRuta = L.layerGroup().addTo(mapa); GR = GR && CAL ? GR : null;
+  setTimeout(() => { if (mapa) { mapa.invalidateSize(); pintarReferencias(); pintarProgreso(progVisible); } }, 60);
 }
 function foco(c, color, fit) {
   capaFoco.clearLayers();
@@ -2168,6 +2186,7 @@ function clicCalle(c, ev) {
   if (calState.mode === "explorar") { L.DomEvent.stopPropagation(ev); foco(c, "#232a6b"); mostrarInfo(c); }
 }
 function clicMapa(ev) {
+  if (calState.mode === "rutaTool") { clicRutaTool([ev.latlng.lat, ev.latlng.lng]); return; }
   const q = calState.q; if (!q || calState.mode !== "donde" || q.answered) return;
   const p = [ev.latlng.lat, ev.latlng.lng];
   const c = q.items[q.i]; const d = distCalle(p, c);
@@ -2183,6 +2202,7 @@ function mostrarInfo(c) {
 function actualizarConteoVista() { const el = document.getElementById("cnt-vista"); if (el && CAL) { const n = enVista().length; el.textContent = n + " calles"; const b = document.getElementById("btn-vista"); if (b) b.disabled = n < 6; } }
 
 function empezarCalles(modo, fuente) {
+  if (modo === "ruta") return empezarRutas(fuente);
   let pool = fuente === "principales" ? principales() : fuente === "falladas" ? falladasCalles() : enVista();
   if (!pool.length) return;
   calState.base = fuente;
@@ -2193,6 +2213,7 @@ function empezarCalles(modo, fuente) {
   prepararPregunta();
 }
 function prepararPregunta() {
+  if (calState.q.modo === "ruta") return prepararRuta();
   const q = calState.q; const c = q.items[q.i]; q.answered = false;
   ponerFondo(false);
   if (q.modo === "que") {
@@ -2225,7 +2246,7 @@ function siguienteCalle() {
   state.calles.push({ d: Date.now(), m: q.modo, n: q.items.length, ok: q.ok, s: Math.round((Date.now() - q.start) / 1000) });
   if (state.calles.length > 300) state.calles = state.calles.slice(-300);
   save();
-  q.done = true; foco(null); renderPreguntaCalle();
+  q.done = true; foco(null); if (capaRuta) capaRuta.clearLayers(); renderPreguntaCalle();
 }
 
 function renderPreguntaCalle() {
@@ -2234,11 +2255,12 @@ function renderPreguntaCalle() {
   if (!q) { el.innerHTML = panelExplorar(); return; }
   if (q.done) {
     const p = pct(q.ok, q.items.length);
-    el.innerHTML = `<div class="cp-head"><b>${q.ok}/${q.items.length} · ${p}%</b><span>${q.modo === "que" ? "¿Qué calle es?" : "Encuéntrala en el mapa"}</span></div>
+    el.innerHTML = `<div class="cp-head"><b>${q.ok}/${q.items.length} · ${p}%</b><span>${q.modo === "que" ? "¿Qué calle es?" : q.modo === "ruta" ? "¿Por dónde irías?" : "Encuéntrala en el mapa"}</span></div>
       <div class="cp-list">${q.res.map(r => `<span class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${esc(r.n)}</span>`).join("")}</div>
-      <div class="row"><button class="btn" data-cal="otra">Otra ronda</button>${falladasCalles().length ? `<button class="btn red" data-cal="test" data-m="${q.modo}" data-f="falladas">Repasar ${falladasCalles().length} falladas</button>` : ""}<button class="btn ghost" data-cal="salir">Salir</button></div>`;
+      <div class="row"><button class="btn" data-cal="otra">Otra ronda</button>${falladasCalles().length && q.modo !== "ruta" ? `<button class="btn red" data-cal="test" data-m="${q.modo}" data-f="falladas">Repasar ${falladasCalles().length} falladas</button>` : ""}<button class="btn ghost" data-cal="salir">Salir</button></div>`;
     return;
   }
+  if (q.modo === "ruta") { el.innerHTML = htmlRuta(q); return; }
   const c = q.items[q.i];
   const head = `<div class="cp-head"><b class="num">${q.i + 1}/${q.items.length}</b><span>${q.modo === "que" ? "¿Qué calle está marcada en rojo?" : "Toca en el mapa dónde está:"}</span><button class="btn ghost sm" data-cal="salir">Salir</button></div>`;
   if (q.modo === "que") {
@@ -2259,9 +2281,150 @@ function panelExplorar() {
         <div class="row"><button class="btn sm" data-cal="test" data-m="que" data-f="vista" id="btn-vista">Calles de esta zona · <span id="cnt-vista">…</span></button><button class="btn ghost sm" data-cal="test" data-m="que" data-f="principales">Calles principales</button></div></div>
       <div class="cm"><b>Encuéntrala</b><span>Te digo el nombre y la tocas en el mapa.</span>
         <div class="row"><button class="btn sm" data-cal="test" data-m="donde" data-f="vista">Calles de esta zona</button><button class="btn ghost sm" data-cal="test" data-m="donde" data-f="principales">Calles principales</button></div></div>
+      <div class="cm"><b>¿Por dónde irías?</b><span>Ruta más directa entre dos puntos (A y B), respetando direcciones prohibidas.</span>
+        <div class="row"><button class="btn sm" data-cal="test" data-m="ruta" data-f="vista">Rutas en esta zona</button><button class="btn ghost sm" data-cal="test" data-m="ruta" data-f="todo">Todo Telde</button></div></div>
+      <div class="cm"><b>Calcular una ruta</b><span>Toca origen y destino en el mapa y te digo por qué calles ir.</span>
+        <div class="row"><button class="btn sm" data-cal="tool">${calState.mode === "rutaTool" ? "Dejar de calcular" : "Calcular ruta"}</button></div></div>
+      <div class="cm wide"><b>Mi progreso en el mapa</b><span>Pinta las calles: <em style="color:#12804a">dominadas</em>, <em style="color:#e0a100">a medias</em> y <em style="color:#c8202f">falladas</em>.</span>
+        <div class="row"><button class="btn sm" data-cal="prog">${progVisible ? "Ocultar colores" : "Ver mi progreso"}</button></div><div id="cal-prog" class="cal-prog"></div></div>
       ${nf ? `<div class="cm red"><b>Calles falladas: ${nf}</b><span>Salen de la lista al acertarlas ${NEEDED} veces seguidas.</span><div class="row"><button class="btn red sm" data-cal="test" data-m="que" data-f="falladas">¿Qué calle es?</button><button class="btn red sm" data-cal="test" data-m="donde" data-f="falladas">Encuéntrala</button></div></div>` : ""}
     </div>
     ${ult ? `<p class="note">Última ronda: ${ult.ok}/${ult.n} · ${state.calles.length} ronda${state.calles.length === 1 ? "" : "s"} hechas</p>` : ""}`;
+}
+
+// --- Rutas: grafo de calles con sentidos y camino más corto ---
+let GR = null, capaRuta = null, progVisible = false;
+function grafo() {
+  if (GR) return GR;
+  const ids = new Map(), P = [], adj = [];
+  const id = p => { const k = p[0] + "," + p[1]; let i = ids.get(k); if (i === undefined) { i = P.length; ids.set(k, i); P.push(p); adj.push([]); } return i; };
+  CAL.calles.forEach((c, ci) => c.segs.forEach((sg, j) => {
+    const f = (c.f || [])[j] || 0; if (f === 9) return;
+    for (let i = 1; i < sg.length; i++) { const a = id(sg[i - 1]), b = id(sg[i]); const d = distM(sg[i - 1], sg[i]); if (f !== -1) adj[a].push([b, d, ci]); if (f !== 1) adj[b].push([a, d, ci]); }
+  }));
+  GR = { P, adj }; return GR;
+}
+function nodoCercano(p, bounds) {
+  const g = grafo(); let best = -1, bd = Infinity; const k = Math.cos(rad(p[0]));
+  for (let i = 0; i < g.P.length; i++) { if (!g.adj[i].length) continue; const q = g.P[i]; if (bounds && !bounds.contains(q)) continue; const dx = (q[1] - p[1]) * k, dy = q[0] - p[0]; const d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } }
+  return best;
+}
+function dijkstra(s, t, pen) {
+  const g = grafo(); const n = g.P.length; const dist = new Float64Array(n).fill(Infinity); const prev = new Int32Array(n).fill(-1); const pci = new Int32Array(n).fill(-1);
+  const h = [[0, s]]; dist[s] = 0;
+  const push = x => { h.push(x); let i = h.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (h[p][0] <= h[i][0]) break; [h[p], h[i]] = [h[i], h[p]]; i = p; } };
+  const pop = () => { const top = h[0]; const last = h.pop(); if (h.length) { h[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < h.length && h[l][0] < h[m][0]) m = l; if (r < h.length && h[r][0] < h[m][0]) m = r; if (m === i) break; [h[m], h[i]] = [h[i], h[m]]; i = m; } } return top; };
+  while (h.length) {
+    const [d, u] = pop(); if (d > dist[u]) continue; if (u === t) break;
+    for (const [v, w, ci] of g.adj[u]) { const nd = d + w * (pen && pen.has(u + ">" + v) ? pen.get(u + ">" + v) : 1); if (nd < dist[v]) { dist[v] = nd; prev[v] = u; pci[v] = ci; push([nd, v]); } }
+  }
+  if (!isFinite(dist[t])) return null;
+  const nodes = [], cis = []; for (let v = t; v !== -1; v = prev[v]) { nodes.push(v); cis.push(pci[v]); }
+  nodes.reverse(); cis.reverse();
+  let len = 0; const pasos = []; const keys = [];
+  for (let i = 1; i < nodes.length; i++) {
+    const a = g.P[nodes[i - 1]], b = g.P[nodes[i]]; const d = distM(a, b); len += d; keys.push(nodes[i - 1] + ">" + nodes[i]);
+    const nm = CAL.calles[cis[i]].n; const last = pasos[pasos.length - 1];
+    if (last && last.n === nm) last.len += d; else pasos.push({ n: nm, len: d });
+  }
+  // fusionar tramos muy cortos intermedios
+  const limpio = pasos.filter((p, i) => p.len >= 30 || i === 0 || i === pasos.length - 1).reduce((acc, p) => { const l = acc[acc.length - 1]; if (l && l.n === p.n) l.len += p.len; else acc.push({ ...p }); return acc; }, []);
+  return { len, pasos: limpio, coords: nodes.map(i => g.P[i]), keys };
+}
+function textoRuta(r, max) { const ns = r.pasos.map(p => p.n); const m = max || 5; return ns.length > m ? ns.slice(0, m - 1).join(" → ") + " → … → " + ns[ns.length - 1] : ns.join(" → "); }
+function fmtLen(m) { return m >= 1000 ? (m / 1000).toFixed(1).replace(".", ",") + " km" : Math.round(m) + " m"; }
+function marcaAB(p, letra, color) { return L.marker(p, { interactive: false, icon: L.divIcon({ className: "ab-pin", html: `<span style="background:${color}">${letra}</span>`, iconSize: null, iconAnchor: [14, 14] }) }); }
+function dibujarRuta(r, color, opts) { return L.polyline(r.coords, Object.assign({ color, weight: 7, opacity: .95, interactive: false }, opts || {})); }
+
+// herramienta: ruta más corta tocando origen y destino
+function clicRutaTool(p) {
+  const t = calState.tool || (calState.tool = { pts: [] });
+  if (t.pts.length >= 2) t.pts = [];
+  t.pts.push(p);
+  if (!capaRuta) capaRuta = L.layerGroup().addTo(mapa);
+  capaRuta.clearLayers(); foco(null);
+  t.pts.forEach((q, i) => marcaAB(q, i ? "B" : "A", i ? "#c8202f" : "#12804a").addTo(capaRuta));
+  const el = document.getElementById("cal-info");
+  if (t.pts.length === 1) { if (el) el.innerHTML = "<b>Origen marcado</b><span>Ahora toca el destino.</span>"; return; }
+  const s = nodoCercano(t.pts[0]), d = nodoCercano(t.pts[1]); const r = s >= 0 && d >= 0 ? dijkstra(s, d) : null;
+  if (!r) { if (el) el.innerHTML = "<b>No encuentro ruta</b><span>Prueba con otros puntos, más cerca de una calle.</span>"; return; }
+  dibujarRuta(r, "#ffffff", { weight: 11 }).addTo(capaRuta); dibujarRuta(r, "#1d4ed8").addTo(capaRuta);
+  if (el) el.innerHTML = `<b>Ruta más corta: ${fmtLen(r.len)}</b><ol class="pasos">${r.pasos.map(p => `<li>${esc(p.n)} <small>${fmtLen(p.len)}</small></li>`).join("")}</ol><span>Respeta las calles de sentido único que figuran en OpenStreetMap.</span>`;
+}
+
+// test: ¿por dónde irías?
+function puntosRuta(bounds) {
+  const g = grafo();
+  const lug = (CAL.lugares || []).filter(l => LUGTIPO[l.t] && (!bounds || bounds.contains([l.lat, l.lon])));
+  for (let k = 0; k < 40; k++) {
+    let A, B, an = "", bn = "";
+    if (lug.length >= 4 && Math.random() < .7) { const [x, y] = shuffle(lug).slice(0, 2); A = [x.lat, x.lon]; B = [y.lat, y.lon]; an = x.n; bn = y.n; }
+    else { const cand = []; for (let i = 0; i < g.P.length && cand.length < 400; i += 7) if (g.adj[i].length && (!bounds || bounds.contains(g.P[i]))) cand.push(i); if (cand.length < 2) return null; const [i1, i2] = shuffle(cand).slice(0, 2); A = g.P[i1]; B = g.P[i2]; }
+    const dd = distM(A, B); if (dd < 450 || dd > 3000) continue;
+    const s = nodoCercano(A), t = nodoCercano(B); if (s < 0 || t < 0) continue;
+    const best = dijkstra(s, t); if (!best || best.pasos.length < 2) continue;
+    const pen = new Map(); best.keys.forEach(k2 => pen.set(k2, 4));
+    const alt1 = dijkstra(s, t, pen); if (alt1) alt1.keys.forEach(k2 => pen.set(k2, 4));
+    const alt2 = dijkstra(s, t, pen);
+    const opts = [best, alt1, alt2].filter(Boolean).map(r => ({ r, txt: textoRuta(r) })).filter((o, i, arr) => arr.findIndex(x => x.txt === o.txt) === i);
+    if (opts.length < 3 || opts[1].r.len < best.len * 1.08) continue;
+    if (!an) an = (best.pasos[0] || {}).n || "Origen"; if (!bn) bn = (best.pasos[best.pasos.length - 1] || {}).n || "Destino";
+    return { A: g.P[s], B: g.P[t], an, bn, opts: shuffle(opts.map((o, i) => ({ ...o, ok: o.r === best }))) };
+  }
+  return null;
+}
+function empezarRutas(fuente) {
+  const bounds = fuente === "vista" && mapa ? mapa.getBounds() : null;
+  const items = []; for (let i = 0; i < 5; i++) { const it = puntosRuta(bounds); if (it) items.push(it); }
+  if (!items.length) { const el = document.getElementById("cal-info"); if (el) el.innerHTML = "<b>No hay suficientes calles en esta zona</b><span>Aleja un poco el mapa y vuelve a probar.</span>"; return; }
+  calState.mode = "ruta"; calState.tool = null; if (capaRuta) capaRuta.clearLayers();
+  calState.q = { modo: "ruta", fuente, items, i: 0, ok: 0, answered: false, res: [], start: Date.now() };
+  prepararRuta();
+}
+function prepararRuta() {
+  const q = calState.q; const it = q.items[q.i]; q.answered = false; ponerFondo(false); foco(null);
+  if (!capaRuta) capaRuta = L.layerGroup().addTo(mapa); capaRuta.clearLayers();
+  marcaAB(it.A, "A", "#12804a").addTo(capaRuta); marcaAB(it.B, "B", "#c8202f").addTo(capaRuta);
+  const all = it.opts.flatMap(o => o.r.coords); mapa.fitBounds(all, { padding: [30, 30], maxZoom: 17 });
+  renderPreguntaCalle();
+}
+function responderRuta(i) {
+  const q = calState.q; if (q.answered) return; q.answered = true; const it = q.items[q.i]; const o = it.opts[i];
+  if (o.ok) q.ok++; q.res.push({ n: it.an + " → " + it.bn, ok: o.ok, pick: i });
+  capaRuta.clearLayers();
+  it.opts.forEach((x, j) => { if (!x.ok && j !== i) dibujarRuta(x.r, "#8a8fa8", { weight: 5, dashArray: "6 8" }).addTo(capaRuta); });
+  if (!o.ok) dibujarRuta(o.r, "#c8202f", { weight: 6 }).addTo(capaRuta);
+  const best = it.opts.find(x => x.ok); dibujarRuta(best.r, "#ffffff", { weight: 11 }).addTo(capaRuta); dibujarRuta(best.r, "#12804a").addTo(capaRuta);
+  marcaAB(it.A, "A", "#12804a").addTo(capaRuta); marcaAB(it.B, "B", "#c8202f").addTo(capaRuta);
+  q.fb = o.ok ? `Correcto: es la más directa (${fmtLen(best.r.len)}).` : `La más directa era la verde: ${fmtLen(best.r.len)}. La que elegiste mide ${fmtLen(o.r.len)}. Ir por un camino más largo es infracción grave (art. 79.2.l).`;
+  renderPreguntaCalle();
+}
+function htmlRuta(q) {
+  const it = q.items[q.i];
+  const head = `<div class="cp-head"><b class="num">${q.i + 1}/${q.items.length}</b><span>¿Por dónde irías? Elige la ruta más directa.</span><button class="btn ghost sm" data-cal="salir">Salir</button></div>`;
+  const ab = `<div class="ab-txt"><span><i class="a">A</i>${esc(it.an)}</span><span><i class="b">B</i>${esc(it.bn)}</span></div>`;
+  const opts = `<div class="answers">${it.opts.map((o, i) => { let cls = ""; if (q.answered) { if (o.ok) cls = "ok"; else if (q.res[q.res.length - 1].pick === i) cls = "bad"; } return `<button class="ans ${cls}" data-cal="ropt" data-i="${i}" ${q.answered ? "disabled" : ""}><span class="k">${i + 1}</span><span>${esc(o.txt)}${q.answered ? ` <small>· ${fmtLen(o.r.len)}</small>` : ""}</span></button>`; }).join("")}</div>`;
+  const fb = q.answered ? `<div class="feedback ${q.res[q.res.length - 1].ok ? "" : "bad"}"><strong>${esc(q.fb)}</strong></div><div class="row"><span class="spacer"></span><button class="btn" data-cal="sig">${q.i === q.items.length - 1 ? "Ver resultado" : "Siguiente"}</button></div>` : "";
+  return head + ab + opts + fb;
+}
+
+// progreso en el mapa
+function pintarProgreso(on) {
+  progVisible = on;
+  if (!CAL) return;
+  CAL.calles.forEach(c => { if (!c._pl) return; const s = state.cf[c.n];
+    if (!on || !s) { c._pl.setStyle({ opacity: 0, weight: 10 }); return; }
+    const col = s.p ? "#c8202f" : (s.r || 0) >= 2 ? "#12804a" : "#e0a100";
+    c._pl.setStyle({ color: col, opacity: .85, weight: 6 }); });
+  resumenZona();
+}
+function resumenZona() {
+  const el = document.getElementById("cal-prog"); if (!el || !CAL) return;
+  const v = enVista(); let dom = 0, fal = 0, med = 0;
+  v.forEach(c => { const s = state.cf[c.n]; if (!s) return; if (s.p) fal++; else if ((s.r || 0) >= 2) dom++; else med++; });
+  const sin = v.length - dom - fal - med; const p = v.length ? Math.round(dom * 100 / v.length) : 0;
+  el.innerHTML = `<div class="zbar"><i class="d" style="width:${v.length ? dom * 100 / v.length : 0}%"></i><i class="m" style="width:${v.length ? med * 100 / v.length : 0}%"></i><i class="f" style="width:${v.length ? fal * 100 / v.length : 0}%"></i></div>
+    <span>En esta zona dominas <b>${p}%</b> · ${dom} dominadas · ${med} a medias · ${fal} falladas · ${sin} sin practicar</span>`;
 }
 
 function renderCallejero() {
@@ -2298,7 +2461,10 @@ document.addEventListener("click", e => {
   else if (a === "sig") siguienteCalle();
   else if (a === "nolase") responderCalle(false, {});
   else if (a === "otra") { const q = calState.q; empezarCalles(q.modo, q.fuente); }
-  else if (a === "salir") { calState.q = null; calState.mode = "explorar"; foco(null); ponerFondo(true); renderPreguntaCalle(); actualizarConteoVista(); }
+  else if (a === "ropt") responderRuta(+b.dataset.i);
+  else if (a === "tool") { if (calState.mode === "rutaTool") { calState.mode = "explorar"; calState.tool = null; if (capaRuta) capaRuta.clearLayers(); } else { calState.mode = "rutaTool"; calState.tool = { pts: [] }; foco(null); } renderPreguntaCalle(); const el = document.getElementById("cal-info"); if (el && calState.mode === "rutaTool") el.innerHTML = "<b>Calcular ruta</b><span>Toca en el mapa el punto de origen.</span>"; resumenZona(); }
+  else if (a === "prog") { pintarProgreso(!progVisible); renderPreguntaCalle(); resumenZona(); }
+  else if (a === "salir") { calState.q = null; calState.mode = "explorar"; foco(null); if (capaRuta) capaRuta.clearLayers(); ponerFondo(true); renderPreguntaCalle(); actualizarConteoVista(); pintarProgreso(progVisible); }
   else if (a === "reintentar") { calState.error = ""; cargarCalles(); }
   else if (a === "lug") { const l = CAL.lugares[+b.dataset.i]; $("#cal-sug").hidden = true; $("#cal-buscar").value = l.n; mapa.setView([l.lat, l.lon], 17); const el = document.getElementById("cal-info"); if (el) el.innerHTML = `<b>${esc(l.n)}</b><span>${LUGTIPO[l.t][0]}</span>`; }
   else if (a === "sug") { const c = CAL.calles[+b.dataset.i]; $("#cal-sug").hidden = true; $("#cal-buscar").value = c.n; if (calState.q) return; foco(c, "#232a6b", true); mostrarInfo(c); }
