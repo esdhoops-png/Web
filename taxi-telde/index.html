@@ -3,8 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Test Taxi Telde</title>
+<title>Taxi Telde</title>
 <meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#232a6b">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Taxi Telde">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -1052,6 +1060,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .g-inf b { color: var(--rojo); }
 .g-inf span { font-size: 14px; color: var(--ink); }
 .g-small { font-size: 12px; color: var(--muted); }
+.ins-card { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; background: var(--paper); border: 2px solid var(--indigo-ink); border-radius: 12px; padding: 12px 14px; }
+.ins-card img { border-radius: 10px; }
+.ins-card b { font-family: var(--display); font-size: 20px; text-transform: uppercase; display: block; }
+.ins-card span { font-size: 14px; color: var(--muted); display: block; }
+.ins-card .ins-pasos { margin-top: 4px; color: var(--ink); }
+@media (max-width: 460px) { .ins-card { grid-template-columns: auto 1fr; } .ins-card > .btn { grid-column: 1 / -1; } }
 .play-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: #171a28; color: #fff; border-radius: 12px; padding: 14px 16px; }
 .play-card .pc-ico { font-size: 34px; }
 .play-card b { font-family: var(--display); font-size: 22px; text-transform: uppercase; display: block; }
@@ -2916,6 +2930,23 @@ document.addEventListener("click", e => {
   else if (a === "drive") { conducir(s.km, s.min, () => { if (s.after) s.after(G); G.fb = null; setTimeout(() => { if (G && paso() === s) avanzar(); }, 500); }); }
 });
 
+// ---------- Instalar como app (solo en el link público) ----------
+let pedirInstalar = null;
+const enGithub = /github\.io$/.test(location.hostname);
+const esApp = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); pedirInstalar = e; if (tab === "plan" && !test && !vid) render(); });
+window.addEventListener("appinstalled", () => { pedirInstalar = null; if (tab === "plan") render(); });
+if (enGithub && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+function cardInstalar() {
+  if (!enGithub || esApp()) return "";
+  const como = pedirInstalar ? `<button class="btn red" id="btn-instalar">Instalar</button>`
+    : esIOS ? `<span class="ins-pasos">En Safari: toca <b>Compartir</b> (el cuadrado con la flecha) y después <b>«Añadir a pantalla de inicio»</b>.</span>`
+    : `<span class="ins-pasos">En Chrome: menú <b>⋮</b> y después <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</span>`;
+  return `<div class="ins-card"><img src="icon-192.png" alt="" width="48" height="48"><div><b>Instala la app en el móvil</b><span>Con su icono, a pantalla completa y funciona sin internet.</span>${pedirInstalar ? "" : como}</div>${pedirInstalar ? como : ""}</div>`;
+}
+document.addEventListener("click", async e => { if (e.target.id === "btn-instalar" && pedirInstalar) { pedirInstalar.prompt(); try { await pedirInstalar.userChoice; } catch (x) {} pedirInstalar = null; render(); } });
+
 function renderPlan() {
   const hoy = midnight(new Date());
   const quedan = diasHasta(hoy, EXAMEN);
@@ -2941,6 +2972,7 @@ function renderPlan() {
   const hechasHoy = tareas.filter(t => hecha(t, key)).length;
   const lunes = (INICIO.getDay() + 6) % 7;
   $("#app").innerHTML = `<section class="view">
+    ${cardInstalar()}
     <div class="countdown">
       <div class="cd-num num">${quedan > 0 ? quedan : quedan === 0 ? "HOY" : "✓"}</div>
       <div class="cd-txt"><b>${quedan > 1 ? "días para el examen" : quedan === 1 ? "día para el examen: mañana" : quedan === 0 ? "es el examen. ¡Mucha suerte!" : "El examen ya pasó"}</b>
