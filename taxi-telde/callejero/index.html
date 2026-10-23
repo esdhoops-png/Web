@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Callejero de Telde</title>
 <meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#232a6b">
+<link rel="icon" href="../icon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
@@ -960,6 +965,7 @@ async function cargar() {
 }
 function listo() { $("#estado").hidden = true; dibujarCalles(); pintar(); }
 cargar();
+if ("serviceWorker" in navigator && /github\.io$/.test(location.hostname)) navigator.serviceWorker.register("../sw.js").catch(() => {});
 </script>
 </body>
 </html>
