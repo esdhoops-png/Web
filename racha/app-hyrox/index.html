@@ -67,7 +67,7 @@ section[data-v]{display:flex;flex-direction:column;gap:16px}
 .phase h3{font:900 22px/1 var(--display);letter-spacing:-.03em}
 .phase h3 .ser{color:var(--accent);font-size:20px}
 .phase p{margin:0;color:var(--mute);font-size:14px}
-.wk{display:grid;grid-template-columns:52px repeat(6,minmax(0,1fr));gap:5px;align-items:stretch}
+.wk{display:grid;grid-template-columns:52px repeat(7,minmax(0,1fr));gap:5px;align-items:stretch}
 .wk .n{font:800 13px/1.2 var(--display);color:var(--mute);display:flex;flex-direction:column;justify-content:center}
 .wk .n small{font:500 11px var(--body)}
 .wk.cur .n{color:var(--accent)}
@@ -139,8 +139,8 @@ nav.tabs button[aria-current="true"] svg{color:var(--accent)}
 @media (max-width:480px){
   .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .stat b{font-size:24px}
-  .wk{grid-template-columns:38px repeat(6,minmax(0,1fr));gap:3px}
-  .ses{padding:5px 4px;font-size:10px;border-left-width:3px}.ses b{font-size:11px}
+  .wk{grid-template-columns:34px repeat(7,minmax(0,1fr));gap:3px}
+  .ses{padding:7px 3px;font-size:11px;border-left-width:3px;text-align:center}.wk .ses b{display:none}.wk .ses span{color:var(--fg);font-weight:700}.wk .ses.ok span{color:var(--ok)}
   .form{grid-template-columns:1fr}
   .stations{grid-template-columns:1fr}
 }
@@ -165,19 +165,27 @@ nav.tabs button[aria-current="true"] svg{color:var(--accent)}
       <div class="row" style="justify-content:space-between;align-items:baseline;margin-bottom:10px"><h3 class="blk" style="font-size:22px" id="wkTitle">Esta semana</h3><span class="lab" id="wkPhase"></span></div>
       <div class="week" id="weekStrip"></div>
     </div>
+    <div class="card" id="alarmCard">
+      <p class="lab" style="margin-bottom:8px">Alarma de cada mañana</p>
+      <div class="form">
+        <div class="f"><label for="alarmTime">Entreno a las</label><input type="time" id="alarmTime" value="06:30"></div>
+        <div class="f" style="justify-content:flex-end"><button class="btn primary" id="icsBtn" type="button">Añadir al calendario</button></div>
+        <div class="f full"><p class="note" id="icsNote">Descarga un archivo con los 84 entrenos, cada uno con su aviso a esa hora. Ábrelo en el móvil y elige «Añadir todos» en el calendario. Si cambias la hora o la fecha de inicio, vuelve a descargarlo.</p></div>
+      </div>
+    </div>
     <div class="card" id="setupCard">
       <p class="lab" style="margin-bottom:8px">Tu plan</p>
       <div class="form">
         <div class="f"><label for="start">Empiezo el</label><input type="date" id="start"></div>
         <div class="f"><label for="weekNow">Semana actual</label><input type="number" id="weekNow" min="1" max="12" readonly></div>
-        <div class="f full"><p class="note">6 entrenos en casa por semana: <b style="color:var(--fg)">lunes, miércoles y viernes</b> rondas (remo + burpees + carrera), <b style="color:var(--fg)">martes y jueves</b> pecho + abdominales, <b style="color:var(--fg)">sábado</b> rondas largas. El domingo, descanso.</p></div>
+        <div class="f full"><p class="note">Todos los días por la mañana: <b style="color:var(--fg)">lunes, miércoles y viernes</b> rondas (remo + burpees + carrera), <b style="color:var(--fg)">martes y jueves</b> pecho + abdominales, <b style="color:var(--fg)">sábado</b> rondas largas y <b style="color:var(--fg)">domingo</b> recuperación activa.</p></div>
       </div>
     </div>
   </section>
 
   <!-- PLAN -->
   <section data-v="plan" hidden>
-    <div class="hero"><p class="lab">72 sesiones · 6 días por semana</p><h1 class="blk" style="font-size:clamp(36px,10vw,56px)">El plan.<span class="ser">tres fases, una racha.</span></h1></div>
+    <div class="hero"><p class="lab">84 sesiones · todos los días</p><h1 class="blk" style="font-size:clamp(36px,10vw,56px)">El plan.<span class="ser">tres fases, una racha.</span></h1></div>
     <div class="legend" id="legend"></div>
     <div id="planList" style="display:flex;flex-direction:column;gap:22px"></div>
   </section>
@@ -273,10 +281,11 @@ const TYPES={
   r2:{name:"Rondas",sh:"Rondas",c:"#FF5A1F",dow:2},
   p2:{name:"Pecho + abdominales",sh:"Pecho",c:"#6FA8FF",dow:3},
   r3:{name:"Rondas",sh:"Rondas",c:"#FF5A1F",dow:4},
-  lg:{name:"Rondas largas",sh:"Largas",c:"#C98BFF",dow:5}
+  lg:{name:"Rondas largas",sh:"Largas",c:"#C98BFF",dow:5},
+  dm:{name:"Recuperación activa",sh:"Recup.",c:"#5BC48A",dow:6}
 };
-const ORDER=["r1","p1","r2","p2","r3","lg"];
-const PER_WEEK=ORDER.length,TOTAL=12*PER_WEEK,STREAK_MIN=4;
+const ORDER=["r1","p1","r2","p2","r3","lg","dm"];
+const PER_WEEK=ORDER.length,TOTAL=12*PER_WEEK,STREAK_MIN=5;
 const PHASES=[
   {n:"Fase 1 · Base",s:"semanas 1–4",d:"3–4 rondas entre semana y 4–5 el sábado. Flexiones completas desde el primer día.",w:[1,2,3,4]},
   {n:"Fase 2 · Construcción",s:"semanas 5–8",d:"4–5 rondas entre semana y 6–7 el sábado. Flexiones con pies elevados y mochila.",w:[5,6,7,8]},
@@ -308,6 +317,12 @@ const WARM_P=["10' de remo muy suave (recuperación de piernas)","Círculos de b
 function session(w,t){
   const id=`w${w}-${t}`,ty=TYPES[t],blocks=[];let sum="",tests=[],laps=false,mini;
   const ab=pick(ABS,w);
+  if(t==="dm"){
+    blocks.push({h:"Remo suave",sm:"RPE 3 · 20 spm",steps:["20' de remo muy suave, solo técnica"]});
+    blocks.push({h:"Movilidad",steps:["Cadera: 10 rotaciones por lado","Tobillos y gemelos contra la pared 1' por pierna","Espalda: gato-camello × 10","Pecho en el marco de la puerta 1'"]});
+    blocks.push({h:"Abdominales",sm:"2 series suaves",steps:ab.l});
+    return {id,w,t,sh:ty.sh,name:ty.name,c:ty.c,dow:ty.dow,blocks,sum:"20' remo suave + movilidad + abdominales",tests:[],laps:false,mini:"10' de remo suave",deload:DELOAD.includes(w)};
+  }
   if(t==="p1"||t==="p2"){
     const ch=pick(CHEST,w);
     blocks.push({h:"Calentamiento",steps:WARM_P});
@@ -399,7 +414,7 @@ function renderHoy(){
     return s?`<button class="d s${done(s.id)?" ok":""}${now?" now":""}" style="--c:${s.c}" data-open="${s.id}" aria-label="${esc(s.name)} ${d}">${d}<b>${dd.getDate()}</b><span class="dot"></span></button>`:`<div class="d${now?" now":""}">${d}<b>${dd.getDate()}</b><span class="dot"></span></div>`}).join("");
 }
 function renderPlan(){
-  $("#legend").innerHTML=[["Rondas","#FF5A1F","Lun · Mié · Vie"],["Pecho + abdominales","#6FA8FF","Mar · Jue"],["Rondas largas","#C98BFF","Sáb"]].map(([n,c,d])=>`<span class="tag" style="--c:${c}"><i></i>${n} · ${d}</span>`).join("");
+  $("#legend").innerHTML=[["Rondas","#FF5A1F","Lun · Mié · Vie"],["Pecho + abdominales","#6FA8FF","Mar · Jue"],["Rondas largas","#C98BFF","Sáb"],["Recuperación","#5BC48A","Dom"]].map(([n,c,d])=>`<span class="tag" style="--c:${c}"><i></i>${n} · ${d}</span>`).join("");
   const cw=curWeek();
   $("#planList").innerHTML=PHASES.map(p=>`<div class="phase"><h3>${esc(p.n)} <span class="ser">${esc(p.s)}</span></h3><p>${esc(p.d)}</p>${p.w.map(w=>`<div class="wk${w===cw?" cur":""}"><div class="n">S${w}<small>${weekCount(w)}/${PER_WEEK}${DELOAD.includes(w)?" · desc.":""}</small></div>${ORDER.map(t=>{const s=byId[`w${w}-${t}`],L=S.logs[s.id];return `<button class="ses${L?.done?" ok":""}" style="--c:${s.c}" data-open="${s.id}"><b>${esc(s.sh)}</b><span>${L?.done?(L.min?"Mínima ✓":"Hecha ✓"):(s.tests.length?"Test":DOW[s.dow]+" "+dateOf(s).getDate())}</span></button>`}).join("")}</div>`).join("")}</div>`).join("");
 }
@@ -496,6 +511,22 @@ function show(v){if(!VIEWS.includes(v))v="hoy";document.querySelectorAll("sectio
 function renderAll(){renderHoy();renderPlan();renderProg();renderGuide()}
 $("#tabs").onclick=e=>{const b=e.target.closest("[data-t]");if(b)show(b.dataset.t)};
 document.addEventListener("click",e=>{const o=e.target.closest("[data-open]");if(o)openSession(o.dataset.open)});
+function buildICS(){
+  const t=($("#alarmTime").value||"06:30").replace(":",""),now=new Date(),st=now.toISOString().replace(/[-:]/g,"").slice(0,15)+"Z";
+  const pad=n=>String(n).padStart(2,"0"),day=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  const clean=x=>String(x).replace(/[\\,;]/g,m=>"\\"+m).replace(/\n/g,"\\n");
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Racha Lab//Racha HYROX//ES","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Racha HYROX"];
+  PLAN.forEach(s=>{const d=dateOf(s);L.push("BEGIN:VEVENT",`UID:${s.id}-${S.start}@racha-hyrox`,`DTSTAMP:${st}`,`DTSTART:${day(d)}T${t}00`,`DURATION:PT${s.t==="dm"?45:60}M`,`SUMMARY:${clean("Racha HYROX · "+s.name)}`,`DESCRIPTION:${clean("Semana "+s.w+": "+s.sum+". Versión mínima: "+s.mini+".")}`,"BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${clean("Hora de entrenar: "+s.name)}`,"TRIGGER:PT0M","END:VALARM","END:VEVENT")});
+  L.push("END:VCALENDAR");return L.join("\r\n");
+}
+$("#icsBtn").onclick=()=>{
+  try{localStorage.setItem("racha.hyrox.alarm",$("#alarmTime").value)}catch(e){}
+  const blob=new Blob([buildICS()],{type:"text/calendar;charset=utf-8"}),u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download="racha-hyrox-entrenos.ics";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+  if(window.claude)$("#icsNote").textContent="Desde aquí el navegador puede bloquear la descarga. Hazlo desde la app instalada en el móvil (esdhoops-png.github.io/Web/racha/hyrox/).";
+  else toast("Archivo de alarmas descargado");
+};
+try{const a=localStorage.getItem("racha.hyrox.alarm");if(a)$("#alarmTime").value=a}catch(e){}
 $("#start").onchange=()=>{if($("#start").value){S.start=$("#start").value;save();renderAll();toast("Fecha de inicio cambiada")}};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&openId)closeSession()});
 
