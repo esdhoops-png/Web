@@ -299,18 +299,18 @@ const TYPES={
 const ORDER=["r1","p1","r2","p2","r3","lg","dm"];
 const PER_WEEK=ORDER.length,TOTAL=12*PER_WEEK,STREAK_MIN=5;
 const PHASES=[
-  {n:"Fase 1 · Base",s:"semanas 1–4",d:"3–4 rondas entre semana y 4–5 el sábado. Flexiones completas desde el primer día.",w:[1,2,3,4]},
-  {n:"Fase 2 · Construcción",s:"semanas 5–8",d:"4–5 rondas entre semana y 6–7 el sábado. Flexiones con pies elevados y mochila.",w:[5,6,7,8]},
-  {n:"Fase 3 · Específico",s:"semanas 9–12",d:"8 rondas cada sábado, ritmo de carrera y flexiones explosivas.",w:[9,10,11,12]}
+  {n:"Fase 1 · Base",s:"semanas 1–4",d:"1–2 rondas entre semana y 2–3 el sábado. Se trata de acostumbrar el cuerpo.",w:[1,2,3,4]},
+  {n:"Fase 2 · Construcción",s:"semanas 5–8",d:"2–3 rondas entre semana y 3–5 el sábado. Flexiones con pies elevados y mochila.",w:[5,6,7,8]},
+  {n:"Fase 3 · Específico",s:"semanas 9–12",d:"3–4 rondas entre semana y de 5 a 8 el sábado. En la semana 12, las 8 rondas.",w:[9,10,11,12]}
 ];
 const DELOAD=[4,8];
 const TESTW=[1,6,12];
-const RONDA_W={1:3,2:3,3:4,4:3,5:4,6:4,7:5,8:4,9:5,10:5,11:6,12:4};
-const RONDA_SAB={1:4,2:5,3:5,4:4,5:6,6:6,7:7,8:5,9:8,10:8,11:8,12:8};
+const RONDA_W={1:1,2:2,3:2,4:1,5:2,6:3,7:3,8:2,9:3,10:4,11:4,12:3};
+const RONDA_SAB={1:2,2:2,3:3,4:2,5:3,6:4,7:5,8:4,9:5,10:6,11:7,12:8};
 const ROUND=w=>[
   "1 km de remo · ritmo cómodo, 22 spm",
-  "12 burpees",
-  w<=4?"1 km corriendo · ritmo cómodo":w<=8?"1 km corriendo · ritmo constante":"1 km corriendo · a ritmo de carrera"
+  w<=2?"12 burpees · a tu ritmo, parando si hace falta":"12 burpees",
+  w<=4?"1 km corriendo · anda cuando lo necesites":w<=8?"1 km corriendo · ritmo constante":"1 km corriendo · a ritmo de carrera"
 ];
 const ABS=[
   {w:[1,4],l:["Crunch bicicleta × 20","Elevación de piernas tumbado × 12","Plancha 45\"","Mountain climbers × 20"]},
@@ -350,12 +350,12 @@ function session(w,t){
       tests=[{k:"row1k",label:"Tiempo 1000 m remo (mm:ss)"},{k:"run1k",label:"Tiempo 1 km carrera (mm:ss)"}];
       blocks.push({h:"Test",sm:"semana "+w,steps:["En la ronda 1, haz el remo y el km de carrera a tope y apunta los dos tiempos","El resto de rondas, a ritmo cómodo"]});
     }
-    blocks.push({h:`${r} rondas`,sm:"anda 1' entre rondas si lo necesitas",steps:ROUND(w),rounds:r});
+    blocks.push({h:`${r} ronda${r>1?"s":""}`,sm:"anda 1' entre rondas si lo necesitas",steps:ROUND(w),rounds:r});
     blocks.push({h:"Abdominales",sm:"2 series",steps:ab.l});
     blocks.push({h:"Vuelta a la calma",steps:["5' andando + estirar gemelos, cuádriceps, cadera y espalda"]});
-    sum=`${r} rondas · 1 km remo + 12 burpees + 1 km carrera`;
+    sum=`${r} ronda${r>1?"s":""} · 1 km remo + 12 burpees + 1 km carrera`;
     laps=true;
-    mini="2 rondas y 1 serie de abdominales";
+    mini="1 ronda (andando el km si hace falta) y 1 serie de abdominales";
   }
   return {id,w,t,sh:ty.sh,name:ty.name,c:ty.c,dow:ty.dow,blocks,sum,tests,laps,mini,deload:DELOAD.includes(w)};
 }
