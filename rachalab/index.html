@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RachaLab</title>
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#121314">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RachaLab">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: una columna (máx. 680px) bajo una cabecera negra fija y una barra de pestañas abajo, pensada para usarse con una mano. */
+:root {
+  --bg: #f4f3ee;
+  --paper: #ffffff;
+  --ink: #141414;
+  --muted: #5f6066;
+  --line: #e1dfd6;
+  --soft: #ecebe4;
+  --night: #121314;
+  --on-night: #f4f3ee;
+  --acc: #ffd83d;
+  --on-acc: #141414;
+  --acc-text: #7a5f00;
+  --acc-soft: #fff4c2;
+  --ok: #12804a;
+  --ok-soft: #e2f3e9;
+  --run: #d1495b;
+  --row: #2f6fb3;
+  --str: #7a4fb5;
+  --hyb: #c77700;
+  --easy: #2c8c74;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e0f10; --paper: #18191b; --ink: #ecebe6; --muted: #9c9da3; --line: #2a2b2f; --soft: #222326;
+    --acc-text: #ffd83d; --acc-soft: #2e2810; --ok: #4cd38b; --ok-soft: #15301f;
+    --run: #ff7a8a; --row: #6aa8ec; --str: #b693ea; --hyb: #f0a63a; --easy: #5fd0b2;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e0f10; --paper: #18191b; --ink: #ecebe6; --muted: #9c9da3; --line: #2a2b2f; --soft: #222326;
+  --acc-text: #ffd83d; --acc-soft: #2e2810; --ok: #4cd38b; --ok-soft: #15301f;
+  --run: #ff7a8a; --row: #6aa8ec; --str: #b693ea; --hyb: #f0a63a; --easy: #5fd0b2;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: .01em; text-wrap: balance; line-height: 1.1; }
+.num, .mono { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); }
+
+/* Cabecera */
+.top { position: sticky; top: 0; z-index: 20; background: var(--night); color: var(--on-night); padding: calc(env(safe-area-inset-top) + 10px) 16px 10px; }
+.top-in { max-width: 680px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.logo { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: .03em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.logo b { color: var(--acc); }
+.logo svg { width: 26px; height: 26px; }
+.top .sp { flex: 1; }
+.wk-chip { white-space: nowrap; font-family: var(--display); font-weight: 700; font-size: 15px; background: #2a2b2f; color: var(--on-night); padding: 3px 10px; border-radius: 999px; letter-spacing: .04em; text-transform: uppercase; }
+.icon-btn { background: transparent; border: 0; color: inherit; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; }
+.icon-btn:hover { background: rgba(255,255,255,.08); }
+.icon-btn svg { width: 22px; height: 22px; }
+
+main { max-width: 680px; margin: 0 auto; padding: 16px 16px calc(96px + env(safe-area-inset-bottom)); }
+
+/* Barra de pestañas */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--paper); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+.tabs-in { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab { background: none; border: 0; padding: 8px 4px 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-current="page"] { color: var(--ink); }
+.tab[aria-current="page"] .tab-ic { background: var(--acc); color: var(--on-acc); }
+.tab-ic { border-radius: 999px; padding: 3px 16px; display: grid; place-items: center; }
+
+/* Piezas */
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+.card h2 { font-size: 24px; }
+.card h3 { font-size: 19px; }
+.eyebrow { font-family: var(--display); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.row { display: flex; gap: 10px; align-items: center; }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1; min-width: 0; }
+.stack > * + * { margin-top: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--line); background: var(--paper); border-radius: 12px; padding: 11px 16px; font-weight: 700; text-decoration: none; min-height: 46px; }
+.btn.pri { background: var(--acc); color: var(--on-acc); border-color: var(--acc); }
+.btn.dark { background: var(--night); color: var(--on-night); border-color: var(--night); }
+.btn.ghost { background: transparent; }
+.btn.block { width: 100%; }
+.btn.sm { min-height: 36px; padding: 6px 12px; font-size: 14px; border-radius: 10px; }
+.btn svg { width: 20px; height: 20px; }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: var(--soft); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.pill.acc { background: var(--acc-soft); color: var(--acc-text); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+
+.t-run { --c: var(--run); } .t-row { --c: var(--row); } .t-str { --c: var(--str); } .t-hyb { --c: var(--hyb); } .t-easy { --c: var(--easy); }
+.tdot { width: 10px; height: 10px; border-radius: 999px; background: var(--c); flex: none; }
+.ttag { font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: var(--c); }
+
+/* Hoy */
+.hero { background: var(--night); color: var(--on-night); border-color: #2a2b2f; position: relative; overflow: hidden; isolation: isolate; }
+.hero .eyebrow { color: #a9aab0; }
+.hero h2 { font-size: 34px; }
+.hero .muted { color: #b9bac0; }
+.hero::after { content: ""; position: absolute; right: -30px; top: -20px; width: 150px; height: 150px; background: var(--c, var(--acc)); opacity: .18; transform: skewX(-20deg); z-index: -1; }
+.hero-meta { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0 14px; font-weight: 600; }
+.hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.hero-meta svg { width: 18px; height: 18px; opacity: .8; }
+.weekstrip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 8px; }
+.wd { text-align: center; border-radius: 10px; padding: 6px 0 8px; background: var(--soft); font-size: 12px; font-weight: 700; color: var(--muted); border: 2px solid transparent; }
+.wd .d { font-family: var(--display); font-size: 18px; color: var(--ink); display: block; }
+.wd .mk { display: block; width: 8px; height: 8px; margin: 3px auto 0; border-radius: 999px; background: transparent; }
+.wd.has .mk { background: var(--c); }
+.wd.done { background: var(--ok-soft); }
+.wd.done .mk { background: var(--ok); }
+.wd.today { border-color: var(--ink); }
+button.wd { cursor: pointer; }
+.progressbar { height: 8px; background: var(--soft); border-radius: 999px; overflow: hidden; }
+.progressbar i { display: block; height: 100%; background: var(--acc); border-radius: 999px; }
+.hero .progressbar { background: #2a2b2f; }
+
+/* Lista de sesiones */
+.slist { list-style: none; margin: 0; padding: 0; }
+.sitem { display: flex; align-items: center; gap: 12px; padding: 12px 4px; border-top: 1px solid var(--line); width: 100%; background: none; border-left: 0; border-right: 0; border-bottom: 0; text-align: left; }
+.slist li:first-child .sitem { border-top: 0; }
+.sitem .day { width: 38px; flex: none; font-family: var(--display); font-weight: 700; font-size: 15px; text-transform: uppercase; color: var(--muted); }
+.sitem .tt { font-weight: 700; line-height: 1.25; }
+.sitem .ss { font-size: 14px; color: var(--muted); }
+.check { width: 28px; height: 28px; flex: none; border-radius: 999px; border: 2px solid var(--line); display: grid; place-items: center; }
+.check.on { background: var(--ok); border-color: var(--ok); color: #fff; }
+.check svg { width: 16px; height: 16px; }
+
+/* Plan */
+.phase { margin: 22px 0 8px; display: flex; align-items: baseline; gap: 10px; }
+.phase h2 { font-size: 26px; text-transform: uppercase; }
+.phase .n { font-family: var(--display); font-weight: 800; font-size: 26px; color: var(--acc-text); }
+.week { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 8px; overflow: hidden; }
+.week > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+.week > summary::-webkit-details-marker { display: none; }
+.week > summary .wn { font-family: var(--display); font-weight: 700; font-size: 19px; }
+.week > summary .chev { transition: transform .2s; width: 18px; height: 18px; color: var(--muted); }
+.week[open] > summary .chev { transform: rotate(90deg); }
+.week .slist { padding: 0 10px 6px; }
+.mini-bars { display: flex; gap: 3px; }
+.mini-bars i { width: 14px; height: 6px; border-radius: 3px; background: var(--soft); }
+.mini-bars i.on { background: var(--ok); }
+.week.cur { border-color: var(--ink); }
+
+/* Detalle de sesión (hoja) */
+.sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 40; display: flex; align-items: flex-end; justify-content: center; }
+.sheet { background: var(--bg); width: 100%; max-width: 680px; max-height: 94vh; overflow: auto; border-radius: 20px 20px 0 0; padding: 0 0 calc(20px + env(safe-area-inset-bottom)); overscroll-behavior: contain; }
+.sheet-head { position: sticky; top: 0; z-index: 2; background: var(--night); color: var(--on-night); padding: 14px 16px 16px; }
+.sheet-head .row { align-items: flex-start; }
+.sheet-head h2 { font-size: 30px; }
+.sheet-head .muted { color: #b9bac0; }
+.sheet-body { padding: 16px; }
+.blk { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+.blk h3 { font-size: 17px; text-transform: uppercase; letter-spacing: .05em; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.blk h3 .n { width: 24px; height: 24px; border-radius: 999px; background: var(--c, var(--acc)); color: #fff; display: grid; place-items: center; font-size: 14px; }
+.blk ul { margin: 0; padding-left: 20px; }
+.blk li { margin: 4px 0; }
+.blk li::marker { color: var(--muted); }
+.tip { background: var(--acc-soft); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; display: flex; gap: 10px; }
+.tip svg { width: 22px; height: 22px; flex: none; color: var(--acc-text); margin-top: 1px; }
+.exl { background: none; border: 0; padding: 0; font-weight: 700; text-decoration: underline; text-decoration-color: var(--acc); text-decoration-thickness: 2px; text-underline-offset: 3px; text-align: left; }
+
+/* Formulario de registro */
+.field { display: block; margin-bottom: 12px; }
+.field > span { display: block; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.inp { width: 100%; border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 10px 12px; min-height: 44px; }
+textarea.inp { min-height: 70px; resize: vertical; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--paper); border-radius: 10px; min-width: 40px; height: 40px; padding: 0 10px; font-weight: 700; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Temporizador */
+.timer { position: fixed; inset: 0; z-index: 90; background: var(--night); color: var(--on-night); display: flex; flex-direction: column; padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 16px); }
+.timer.k-work { background: #1d1410; }
+.timer.k-rest { background: #0f1a14; }
+.tm-top { display: flex; align-items: center; gap: 10px; max-width: 680px; margin: 0 auto; width: 100%; }
+.tm-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; max-width: 680px; margin: 0 auto; width: 100%; }
+.tm-kind { font-family: var(--display); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 18px; padding: 4px 14px; border-radius: 999px; background: #2a2b2f; }
+.k-work .tm-kind { background: var(--run); color: #fff; }
+.k-rest .tm-kind { background: #2c8c74; color: #fff; }
+.tm-label { font-family: var(--display); font-size: clamp(30px, 8vw, 46px); font-weight: 700; margin: 14px 0 4px; line-height: 1.05; }
+.tm-clock { font-family: var(--mono); font-weight: 600; font-size: clamp(76px, 26vw, 150px); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.tm-sub { color: #b9bac0; margin-top: 8px; min-height: 24px; }
+.tm-next { margin-top: 18px; color: #b9bac0; }
+.tm-next b { color: var(--on-night); }
+.tm-bar { height: 6px; background: #2a2b2f; border-radius: 999px; overflow: hidden; margin: 18px 0 0; width: 100%; }
+.tm-bar i { display: block; height: 100%; background: var(--acc); }
+.tm-ctrl { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px; max-width: 680px; margin: 0 auto; width: 100%; }
+.tm-ctrl .btn { min-height: 64px; font-size: 18px; border-color: #2a2b2f; background: #222326; color: var(--on-night); }
+.tm-ctrl .btn.pri { background: var(--acc); color: var(--on-acc); border-color: var(--acc); }
+
+/* Progreso */
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.kpi { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.kpi .v { font-family: var(--display); font-weight: 800; font-size: 34px; line-height: 1; }
+.kpi .v small { font-size: 18px; font-weight: 600; color: var(--muted); }
+.kpi .l { font-size: 13px; color: var(--muted); font-weight: 600; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-family: var(--body); font-size: 11px; fill: var(--muted); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); font-weight: 600; margin-top: 6px; }
+.legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.log { list-style: none; margin: 0; padding: 0; }
+.log li { padding: 10px 0; border-top: 1px solid var(--line); display: flex; gap: 10px; align-items: baseline; }
+.log li:first-child { border-top: 0; }
+.log .dt { width: 64px; flex: none; color: var(--muted); font-size: 13px; font-weight: 600; }
+
+/* Guía */
+.station { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.station:first-of-type { border-top: 0; }
+.station .k { width: 44px; height: 44px; border-radius: 12px; background: var(--night); color: var(--acc); font-family: var(--display); font-weight: 800; font-size: 22px; display: grid; place-items: center; }
+.station h3 { font-size: 20px; }
+.station .home { margin-top: 4px; font-size: 15px; }
+.station .home b { color: var(--acc-text); }
+.exgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.exbtn { text-align: left; border: 1px solid var(--line); background: var(--paper); border-radius: 12px; padding: 10px 12px; font-weight: 700; min-height: 48px; line-height: 1.25; }
+.exbtn small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl th, .tbl td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+.tbl th { font-weight: 700; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; border-top: 0; }
+details.faq { border-top: 1px solid var(--line); padding: 10px 0; }
+details.faq:first-of-type { border-top: 0; }
+details.faq summary { font-weight: 700; cursor: pointer; }
+details.faq p { margin: 8px 0 0; }
+
+/* Bienvenida */
+.welcome { min-height: 100vh; background: var(--night); color: var(--on-night); padding: calc(env(safe-area-inset-top) + 28px) 16px 40px; }
+.welcome-in { max-width: 560px; margin: 0 auto; }
+.welcome h1 { font-size: clamp(44px, 13vw, 72px); text-transform: uppercase; font-weight: 800; line-height: .95; }
+.welcome h1 b { color: var(--acc); display: block; }
+.welcome .lead { font-size: 18px; color: #c9cad0; margin: 14px 0 22px; }
+.welcome .card { background: #1b1c1e; border-color: #2a2b2f; color: var(--on-night); }
+.welcome .inp { background: #121314; border-color: #34353a; }
+.welcome .chip { background: #121314; border-color: #34353a; }
+.welcome .chip[aria-pressed="true"] { background: var(--acc); color: var(--on-acc); border-color: var(--acc); }
+.welcome .muted { color: #a9aab0; }
+.feat { display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; }
+.feat li { display: flex; gap: 10px; align-items: flex-start; }
+.feat svg { width: 22px; height: 22px; color: var(--acc); flex: none; margin-top: 1px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; border: 1px solid #34353a; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+.opt input { margin-top: 5px; accent-color: var(--acc); }
+.opt b { display: block; }
+
+.toast { position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 600; z-index: 80; max-width: calc(100% - 32px); box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+.empty { text-align: center; padding: 18px 8px; color: var(--muted); }
+@media (max-width: 380px) { .exgrid { grid-template-columns: 1fr; } .hero h2 { font-size: 30px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="layer"></div>
+<script>
+"use strict";
+/* =========================================================
+   RachaLab — Hyrox desde cero: plan de 16 semanas para casa
+   (carrera + máquina de remo + fuerza con peso corporal,
+   mochila y garrafas). Todo se guarda en este dispositivo.
+   ========================================================= */
+
+const LS_KEY = "rachalab-v1";
+const SEMANAS = 16;
+const DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+const DIAS_L = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
+const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const ORDEN = { 3: ["run", "str", "row"], 4: ["run", "str", "row", "easy"], 5: ["run", "str", "row", "easy", "hyb"] };
+const TIPOS = {
+  run: { n: "Carrera", c: "t-run" },
+  row: { n: "Remo", c: "t-row" },
+  str: { n: "Fuerza", c: "t-str" },
+  easy: { n: "Rodaje suave", c: "t-easy" },
+  hyb: { n: "Híbrido", c: "t-hyb" },
+};
+const FASES = [
+  { n: "Base", d: "Crear el hábito, aprender la técnica de remo y llegar a correr sin parar.", w: [1, 4] },
+  { n: "Construcción", d: "Más volumen: carreras continuas, primeras series de remo y fuerza con mochila.", w: [5, 8] },
+  { n: "Fuerza y motor", d: "Fuerza unilateral, cargas con garrafas y combinar correr con esfuerzos.", w: [9, 12] },
+  { n: "Específico Hyrox", d: "Series de 1 km, estaciones caseras y tu primera simulación de Hyrox.", w: [13, 16] },
+];
+const DESCARGA = [4, 8, 12];
+const TESTS = {
+  row1k: { n: "1000 m remo", c: "var(--row)" },
+  run1k: { n: "1 km carrera", c: "var(--run)" },
+  sim: { n: "Mini Hyrox casero", c: "var(--hyb)" },
+};
+
+/* ---------- Ejercicios ---------- */
+const EX = {
+  remo: { n: "Remo (técnica)", g: "Máquina de remo", how: ["Orden al empujar: <b>piernas → cuerpo → brazos</b>. Al volver: brazos → cuerpo → piernas.", "Espalda recta, hombros bajos. El tirador llega a la parte baja del pecho.", "Ritmo 1:2 — empujas rápido y vuelves despacio, el doble de lento.", "Resistencia (damper) en 4–6. Más no es mejor: cansa la espalda.", "Paladas suaves: 20–24 por minuto (spm). Fuertes: 26–30 spm."], easy: "Rema solo con brazos y cuerpo unas paladas para notar la secuencia.", hard: "Mantén el ritmo por 500 m (/500m en la pantalla) constante en toda la serie.", hx: "Estación 5 (Rowing 1000 m) y sustituto del SkiErg." },
+  correr: { n: "Correr suave", g: "Carrera", how: ["<b>Suave de verdad</b>: puedes hablar con frases cortas. Si no puedes, anda.", "Pasos cortos y rápidos, cae con el pie debajo del cuerpo, no por delante.", "Brazos relajados a 90°, mirada al frente.", "Mejor tierra o asfalto liso que bajadas fuertes al principio."], easy: "Más tiempo andando entre tramos de trote.", hard: "Alarga el trote un minuto por semana, nunca más de un 10 % de volumen semanal.", hx: "8 km en total en una carrera Hyrox (8 × 1 km)." },
+  sentadilla: { n: "Sentadilla", g: "Pierna", how: ["Pies al ancho de hombros, puntas un poco abiertas.", "Baja llevando la cadera atrás, como sentándote; rodillas en la dirección de los pies.", "Pecho alto y talones apoyados. Sube empujando el suelo."], easy: "Siéntate y levántate de una silla.", hard: "Con mochila cargada abrazada al pecho (goblet).", hx: "Base de los Wall Balls y de todas las estaciones de pierna." },
+  flexion: { n: "Flexiones", g: "Empuje", how: ["Manos un poco más abiertas que los hombros.", "Cuerpo en bloque: glúteo y abdomen apretados, sin hundir la cadera.", "Baja el pecho hasta casi tocar y empuja."], easy: "Manos en una mesa o en la pared (cuanto más alto, más fácil), o de rodillas.", hard: "Pies elevados o bajar en 3 segundos.", hx: "Fase de suelo del burpee." },
+  zancada: { n: "Zancadas", g: "Pierna", how: ["Paso largo, baja hasta que la rodilla de atrás casi toca el suelo.", "Tronco vertical; la rodilla de delante no se va hacia dentro.", "Atrás (más fácil para las rodillas) o caminando (como en Hyrox)."], easy: "Zancada atrás apoyándote en una pared o silla.", hard: "Con mochila al hombro o sobre la espalda.", hx: "Estación 7: Sandbag Lunges 100 m." },
+  puente: { n: "Puente de glúteo", g: "Cadera", how: ["Tumbado boca arriba, rodillas flexionadas, pies cerca del culo.", "Sube la cadera apretando glúteos hasta alinear rodilla-cadera-hombro.", "1 segundo arriba, baja controlando."], easy: "Menos recorrido.", hard: "A una pierna o con mochila sobre la cadera.", hx: "Protege la espalda en remo, empuje y zancadas." },
+  plancha: { n: "Plancha", g: "Core", how: ["Antebrazos bajo los hombros, cuerpo recto de cabeza a talones.", "Aprieta glúteo y abdomen, respira normal.", "Si se hunde la cadera, para: la técnica manda."], easy: "De rodillas.", hard: "Levanta alternando un brazo o una pierna.", hx: "Core para cargar garrafas, empujar trineo y zancadas." },
+  remoMochila: { n: "Remo con mochila", g: "Tirón", how: ["Mochila con libros/agua en la mano. Inclina el tronco 45° con la espalda recta.", "Tira llevando el codo hacia la cadera y junta escápulas.", "Baja despacio."], easy: "Remo invertido bajo una mesa robusta con las rodillas dobladas, o menos peso.", hard: "A una mano con garrafa de 8 L, pausa de 1'' arriba.", hx: "Sled Pull (tirar del trineo) y remo." },
+  pesoMuerto: { n: "Peso muerto rumano", g: "Cadera", how: ["De pie con mochila o garrafas, rodillas un poco flexionadas.", "Echa la cadera atrás deslizando el peso por los muslos, espalda recta.", "Baja hasta notar estirar los isquios y sube apretando glúteo."], easy: "Sin peso, con las manos en la cadera.", hard: "A una pierna.", hx: "Recoger y llevar garrafas (Farmers Carry), tirar del trineo." },
+  bulgara: { n: "Sentadilla búlgara", g: "Pierna", how: ["Pie de atrás apoyado en el sofá o una silla.", "Baja vertical hasta que la rodilla de atrás casi toque el suelo.", "El peso en la pierna de delante."], easy: "Zancada estática con el pie de atrás en el suelo.", hard: "Con mochila o garrafas en las manos.", hx: "Fuerza unilateral para zancadas y empuje." },
+  thruster: { n: "Sentadilla + press", g: "Completo", how: ["Garrafa, mochila o balón a la altura del pecho.", "Sentadilla completa y, al subir, aprovecha el impulso para empujarla por encima de la cabeza.", "Fluido y constante: así se hacen los Wall Balls."], easy: "Sin peso o solo sentadilla.", hard: "Más peso o lanzar un balón medicinal contra la pared a ~3 m.", hx: "Estación 8: Wall Balls (100 repeticiones)." },
+  wallball: { n: "Wall ball casero", g: "Completo", how: ["Si tienes balón medicinal (4–6 kg) y una pared exterior: sentadilla y lánzalo a una marca a unos 2,7–3 m.", "Si no: sentadilla + press con garrafa o mochila (ver «Sentadilla + press»).", "Haz series cortas con poco descanso: así se gestionan las 100 de la carrera."], easy: "Menos peso y series de 5.", hard: "Series de 20–25 sin parar.", hx: "Estación 8: Wall Balls." },
+  burpee: { n: "Burpee", g: "Completo", how: ["De pie → manos al suelo → pies atrás → pecho al suelo.", "Vuelve a juntar los pies hacia las manos y ponte de pie.", "Respira en cada repetición, ritmo constante."], easy: "Sin bajar el pecho y dando los pasos atrás de uno en uno.", hard: "Burpee con salto hacia delante (broad jump).", hx: "Base de los Burpee Broad Jumps." },
+  burpeeBJ: { n: "Burpee + salto adelante", g: "Completo", how: ["Burpee completo y, al ponerte de pie, salto horizontal con los dos pies.", "Aterriza suave y vuelve a bajar desde ahí.", "En Hyrox se recorren 80 m así."], easy: "Burpee normal + paso largo adelante en vez de salto.", hard: "Saltos más largos y sin pausa.", hx: "Estación 4: Burpee Broad Jumps 80 m." },
+  farmer: { n: "Paseo del granjero", g: "Carga", how: ["Una garrafa de agua o bolsa pesada en cada mano (5 L = 5 kg; 8 L = 8 kg).", "Hombros atrás y abajo, abdomen firme, pasos cortos y rápidos.", "No dejes que el peso te incline hacia un lado."], easy: "Menos peso o tramos más cortos.", hard: "Garrafas de 8–10 L o mochila cargada a la espalda además.", hx: "Estación 6: Farmers Carry 200 m." },
+  hollow: { n: "Hollow (barquita)", g: "Core", how: ["Boca arriba, lumbar pegada al suelo.", "Despega hombros y piernas, brazos estirados.", "Aguanta sin que la lumbar se levante."], easy: "Rodillas dobladas y brazos a los lados.", hard: "Brazos y piernas más estirados y más bajos.", hx: "Core para todas las estaciones." },
+  empuje: { n: "Empuje en pared (sled push)", g: "Pierna", how: ["Manos en una pared, cuerpo inclinado a unos 45°.", "Pasos cortos y potentes empujando el suelo hacia atrás, como si movieras la pared.", "Brazos firmes, cadera baja. Series de 20–30''."], easy: "Menos inclinación y más pausa.", hard: "Bear crawl (andar a cuatro patas) 20 m o sprint en cuesta 15''.", hx: "Estación 2: Sled Push 50 m (no hay trineo en casa: este es el sustituto)." },
+  arrastre: { n: "Arrastre (sled pull)", g: "Tirón", how: ["Ata una cuerda o toalla a una mochila pesada sobre el suelo liso.", "Échate atrás en cuclillas y tira mano sobre mano hasta traerla.", "Sin cuerda: remo con mochila rápido 20–30 repeticiones."], easy: "Menos peso.", hard: "Mochila más pesada o más metros.", hx: "Estación 3: Sled Pull 50 m." },
+  movilidad: { n: "Movilidad", g: "Recuperación", how: ["Círculos de cadera, tobillo y hombro (10 por lado).", "Sentadilla profunda aguantada 30'' agarrado a algo.", "Estira gemelo, cuádriceps, isquios, glúteo y pecho 30'' cada uno."], easy: "Lo que puedas, sin dolor.", hard: "10–15' diarios hacen magia.", hx: "Llegar sin molestias al día de la carrera." },
+};
+
+/* ---------- Utilidades ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fm = s => { const m = Math.floor(s / 60), r = s % 60; return m && r ? `${m}'${String(r).padStart(2, "0")}''` : m ? `${m}'` : `${r}''`; };
+const mmss = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(r).padStart(2, "0"); };
+const parseT = t => { t = String(t || "").trim().replace(",", "."); if (!t) return null; const p = t.split(":").map(Number); if (p.some(isNaN)) return null; if (p.length === 1) return Math.round(p[0] * 60); if (p.length === 2) return p[0] * 60 + p[1]; return p[0] * 3600 + p[1] * 60 + p[2]; };
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const fromIso = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const lunesDe = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); return addDays(x, -((x.getDay() + 6) % 7)); };
+const wdIdx = d => (d.getDay() + 6) % 7;
+const fechaCorta = d => `${d.getDate()} ${MESES[d.getMonth()]}`;
+const hoy = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };
+const ICO = {
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6" stroke-linecap="round"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4.5" width="4" height="15" rx="1"/><rect x="14" y="4.5" width="4" height="15" rx="1"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  chev: '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  bulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
+  flame: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 22c4 0 7-2.8 7-6.8 0-3.7-2.6-6-4.2-8.7-.5 2-1.6 3.2-2.8 3.7.3-3-1-6.2-3.5-8.2.2 3.4-3.5 6.4-3.5 11.2C5 19.2 8 22 12 22z"/></svg>',
+  logo: '<svg viewBox="0 0 24 24" fill="#ffd83d"><path d="M3 5h3.2l6 7-6 7H3l6-7zM11 5h3.2l6 7-6 7H11l6-7z"/></svg>',
+  today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7z" stroke-linejoin="round"/></svg>',
+  plan: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4" stroke-linecap="round"/></svg>',
+  prog: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 16l4-5 3 3 5-7"/></svg>',
+  guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>',
+};
+
+/* ---------- Estado ---------- */
+let state = loadLocal();
+function nuevoEstado(p) { return { v: 1, nombre: p.nombre || "", dias: p.dias, inicio: p.inicio, nivel: p.nivel || 1, voz: true, logs: {}, tests: [], creado: Date.now() }; }
+function loadLocal() { try { const s = JSON.parse(localStorage.getItem(LS_KEY) || "null"); if (s && Array.isArray(s.dias)) { s.logs = s.logs || {}; s.tests = s.tests || []; return s; } } catch (e) {} return null; }
+function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {} }
+
+/* ---------- Calendario ---------- */
+// La semana 1 empieza el lunes de la fecha de inicio. «nivel» desplaza el punto de partida (3 = empezar con algo de base).
+function semanaDeFecha(d) {
+  const diff = Math.floor((d - fromIso(state.inicio)) / 864e5);
+  if (diff < 0) return 0;
+  return Math.floor(diff / 7) + state.nivel;
+}
+function fechaDe(week, slot) {
+  const lunes = addDays(fromIso(state.inicio), (week - state.nivel) * 7);
+  return addDays(lunes, state.dias[slot]);
+}
+function tiposSemana() { return ORDEN[state.dias.length]; }
+function sesionesSemana(w) { return tiposSemana().map((t, i) => ({ ...sesion(w, t), slot: i, fecha: w >= state.nivel ? fechaDe(w, i) : null })); }
+function faseDe(w) { return FASES.findIndex(f => w >= f.w[0] && w <= f.w[1]); }
+const hecho = id => !!state.logs[id];
+
+/* ---------- Constructor de pasos del temporizador ---------- */
+const P = (l, s, k = "work", sub = "") => ({ l, s, k, sub });
+const calent = (s, l) => P(l || "Calentamiento", s, "prep");
+const calma = (s, l) => P(l || "Vuelta a la calma", s, "prep");
+function series(n, on, off, lOn, lOff, subOn = "", subOff = "") {
+  const out = [];
+  for (let i = 1; i <= n; i++) { out.push(P(lOn, on, "work", `${subOn ? subOn + " · " : ""}Serie ${i} de ${n}`)); if (i < n && off) out.push(P(lOff, off, "rest", subOff)); }
+  return out;
+}
+const L = (k, t) => `[[${k}|${t}]]`;
+
+/* ---------- El plan ---------- */
+function sesion(w, t) {
+  const f = faseDe(w), wi = (w - 1) % 4, s = { id: `w${w}-${t}`, w, t, fase: f, descarga: DESCARGA.includes(w) };
+  return Object.assign(s, ({ run: sRun, row: sRow, str: sStr, easy: sEasy, hyb: sHyb })[t](w, wi));
+}
+
+const CAL_RUN = ["5' andando a paso vivo", `${L("movilidad", "Movilidad")}: 10 círculos de cadera, 10 balanceos de pierna por lado, 15 elevaciones de talón`];
+const CALMA_RUN = ["5' andando suave", "Estira gemelo, cuádriceps e isquios (30'' cada uno)"];
+const CAL_ROW = ["3' remando muy suave (solo brazos y cuerpo el primer minuto)", `10 ${L("sentadilla", "sentadillas")} y 10 balanceos de brazos`];
+const CAL_STR = ["5' de remo suave o andar a paso vivo", `${L("movilidad", "Movilidad")} de cadera y hombros (2')`, "1 ronda del circuito con la mitad de repeticiones"];
+
+function sRun(w) {
+  const base = { warm: CAL_RUN, cool: CALMA_RUN, metric: "run" };
+  const IV = { 1: [8, 60, 120], 2: [8, 90, 90], 3: [6, 120, 60], 4: [5, 180, 60], 5: [4, 300, 60], 6: [3, 480, 60], 7: [2, 720, 90] };
+  if (IV[w]) {
+    const [n, on, off] = IV[w];
+    return { ...base, title: `Correr y andar: ${n} × ${fm(on)}`, mins: Math.round((n * on + (n - 1) * off) / 60) + 10,
+      sub: `${n} tramos de ${fm(on)} trotando con ${fm(off)} andando`,
+      main: [{ h: "Bloque principal", l: [`${n} × ( ${fm(on)} ${L("correr", "trotando suave")} + ${fm(off)} andando )`, "Si en algún tramo te ahogas, anda 30'' y sigue: terminar es lo que cuenta."] }],
+      tip: w === 1 ? "Hoy no se trata de correr rápido. Ve tan lento que te parezca ridículo: así se construye la base sin lesiones." : w === 4 ? "Semana de asimilar. Tramos más largos pero el mismo ritmo cómodo." : w === 7 ? "Dos bloques de 12 minutos: la semana que viene ya corres 20' seguidos." : "Ritmo de charla: tienes que poder decir frases cortas mientras trotas.",
+      steps: [calent(300, "Anda a paso vivo"), ...series(n, on, off, "Trota suave", "Anda"), calma(300, "Anda suave")] };
+  }
+  if (w === 8 || w === 16) {
+    return { ...base, title: w === 8 ? "Test: 1 km de carrera" : "Test final: 1 km de carrera", mins: 30, test: "run1k",
+      sub: "Calentar bien, 1 km a tope sostenible y soltar",
+      main: [{ h: "Calentar", l: ["8' trote muy suave", "3 aceleraciones de 15'' (subiendo el ritmo poco a poco), andando 45'' entre ellas"] }, { h: "Test", l: ["<b>1 km</b> al ritmo más rápido que puedas mantener todo el kilómetro. Usa el GPS del móvil o un recorrido que conozcas.", "Empieza controlado: el primer tercio debe parecer fácil."] }, { h: "Soltar", l: ["10' trote o paseo muy suave"] }],
+      tip: w === 8 ? "Apunta el tiempo: es tu referencia para calcular el ritmo de las series de 1 km de la fase específica." : "Compáralo con el test de la semana 8. ¡Mira lo que has avanzado!",
+      steps: [calent(480, "Trote muy suave"), ...series(3, 15, 45, "Acelera progresivo", "Anda"), P("TEST 1 km — ¡vamos!", 0, "work", "Toca «Siguiente» al terminar el kilómetro"), calma(600, "Trote o paseo muy suave")] };
+  }
+  if (w === 10) return { ...base, title: "Cambios de ritmo 6 × 2'", mins: 40, sub: "6 × 2' alegre con 2' trote suave",
+    main: [{ h: "Calentar", l: ["10' trote suave"] }, { h: "Bloque principal", l: [`6 × ( 2' a ritmo alegre (7/10) + 2' ${L("correr", "trote suave")} )`, "Alegre = respiras fuerte pero controlas; no es un sprint."] }, { h: "Soltar", l: ["5' trote muy suave"] }],
+    tip: "Los cambios de ritmo enseñan a tu cuerpo a recuperar corriendo, justo lo que pasa entre estaciones de Hyrox.",
+    steps: [calent(600, "Trote suave"), ...series(6, 120, 120, "Ritmo alegre", "Trote suave"), calma(300, "Trote muy suave")] };
+  if (w >= 13 && w <= 15) {
+    const n = { 13: 4, 14: 5, 15: 6 }[w], rest = w === 15 ? 90 : 120;
+    return { ...base, title: `${n} × 1 km a ritmo Hyrox`, mins: 15 + n * 8, sub: `Series de 1 km con ${fm(rest)} de descanso`,
+      main: [{ h: "Calentar", l: ["10' trote suave + 3 aceleraciones de 15''"] }, { h: "Bloque principal", l: [`${n} × <b>1 km</b> a ritmo Hyrox, ${fm(rest)} andando entre series`, "Ritmo Hyrox = el que podrías repetir 8 veces. Suele ser 20–40'' más lento por km que tu test de 1 km.", "Objetivo: que todas las series salgan casi iguales."] }, { h: "Soltar", l: ["5' trote muy suave"] }],
+      tip: "Así es una carrera Hyrox: 8 kilómetros cortados por estaciones. Aprende tu ritmo aquí.",
+      steps: [calent(600, "Trote suave"), ...series(3, 15, 45, "Acelera progresivo", "Anda"), ...series(n, 0, rest, "1 km a ritmo Hyrox", "Descansa andando", "Toca «Siguiente» al acabar el km"), calma(300, "Trote muy suave")] };
+  }
+  const C = { 9: 25, 11: 30, 12: 20 }[w];
+  return { ...base, title: `${C}' de carrera continua`, mins: C + 10, sub: w === 12 ? "Semana de descarga: suave y corto" : `${C} minutos seguidos a ritmo de charla`,
+    main: [{ h: "Bloque principal", l: [`${C}' ${L("correr", "corriendo suave")} sin parar`, "Si necesitas parar, anda 1' y retoma."] }],
+    tip: w === 12 ? "Descargar también es entrenar: el cuerpo asimila y vuelves más fuerte." : "Mira cuánto has avanzado: hace unas semanas trotabas 1 minuto.",
+    steps: [calent(300, "Anda a paso vivo"), P("Corre suave", C * 60, "work", "Ritmo de charla"), calma(300, "Anda suave")] };
+}
+
+function sRow(w) {
+  const base = { warm: CAL_ROW, cool: ["3' remo muy suave", "Estira espalda (postura del niño), isquios y pecho"], metric: "row" };
+  if (w === 1 || w === 8 || w === 16) {
+    const titulo = { 1: "Técnica de remo + test inicial 1000 m", 8: "Test: 1000 m de remo", 16: "Test final: 1000 m de remo" }[w];
+    return { ...base, title: titulo, mins: 30, test: "row1k", sub: w === 1 ? "Aprender la secuencia y medir tu punto de partida" : "Mide cuánto has mejorado",
+      main: [{ h: "Técnica", l: [`5' de ${L("remo", "técnica")}: 1' solo brazos, 1' brazos + cuerpo, 3' palada completa a 20–22 spm`, "Resistencia (damper) en 4–6."] }, { h: "Test", l: ["<b>1000 m</b> lo más rápido que puedas manteniendo la técnica.", "Primeros 250 m controlados, de 250 a 750 constante, últimos 250 m vacía el depósito.", "Apunta el tiempo que marque la pantalla."] }],
+      tip: w === 1 ? "Este número no importa hoy: es tu punto de partida. Lo repetirás en la semana 8 y en la 16." : "Usa el mismo damper que en el test anterior para que la comparación sea justa.",
+      steps: [calent(180, "Remo muy suave"), P("Técnica: solo brazos", 60, "prep"), P("Técnica: brazos + cuerpo", 60, "prep"), P("Palada completa suave", 180, "prep", "20–22 paladas por minuto"), P("Descansa y prepárate", 120, "rest"), P("TEST 1000 m", 0, "work", "Toca «Siguiente» al terminar"), calma(300, "Remo muy suave")] };
+  }
+  const IV = { 2: [6, 120, 60], 3: [4, 240, 60], 4: [3, 300, 60], 5: [2, 600, 120], 7: [1, 1200, 0], 12: [1, 900, 0] };
+  if (IV[w]) {
+    const [n, on, off] = IV[w];
+    return { ...base, title: n > 1 ? `Remo ${n} × ${fm(on)}` : `${fm(on)} de remo continuo`, mins: Math.round((n * on + (n - 1) * off) / 60) + 10,
+      sub: n > 1 ? `${n} bloques de ${fm(on)} con ${fm(off)} de descanso` : "Ritmo constante y cómodo",
+      main: [{ h: "Bloque principal", l: [n > 1 ? `${n} × ${fm(on)} de ${L("remo", "remo")} suave-moderado (22–24 spm) con ${fm(off)} de descanso` : `${fm(on)} de ${L("remo", "remo")} continuo a 22–24 spm`, "Fíjate en el ritmo /500m de la pantalla e intenta que no suba."] }],
+      tip: w === 12 ? "Semana de descarga: rema cómodo y céntrate en la técnica." : "En remo la potencia sale de las piernas (60 %), no de los brazos.",
+      steps: [calent(180, "Remo muy suave"), ...series(n, on, off, "Rema a 22–24 spm", "Descansa"), calma(180, "Remo muy suave")] };
+  }
+  const DIST = { 6: [6, 500, 90, "moderado-fuerte"], 9: [8, 250, 60, "fuerte"], 10: [5, 500, 60, "fuerte"], 11: [3, 1000, 120, "ritmo de carrera"] };
+  if (DIST[w]) {
+    const [n, m, rest, int] = DIST[w];
+    return { ...base, title: `Remo ${n} × ${m} m`, mins: Math.round(n * (m / 1000 * 4.5 + rest / 60)) + 10, sub: `Series de ${m} m a ritmo ${int}`,
+      main: [{ h: "Bloque principal", l: [`${n} × <b>${m} m</b> de ${L("remo", "remo")} a ritmo ${int} (26–28 spm), ${fm(rest)} de descanso`, "Apunta el ritmo /500m de cada serie: la última debe ser igual o mejor que la primera."] }],
+      tip: "Sal un pelín más lento de lo que crees. Las series igualadas valen más que una primera heroica.",
+      steps: [calent(300, "Remo suave subiendo"), ...series(n, 0, rest, `${m} m a ritmo ${int}`, "Descansa", "Toca «Siguiente» al terminar los metros"), calma(180, "Remo muy suave")] };
+  }
+  if (w === 15) return { ...base, metric: null, test: "sim", title: "Mini Hyrox casero", mins: 60, sub: "Tu primera simulación: 8 × (500 m + estación)",
+    main: [{ h: "Calentar", l: ["8' trote suave + 5' remo suave + 10 sentadillas + 5 burpees"] }, { h: "Simulación (cronometra el total)", l: [
+      `500 m corriendo + <b>500 m de ${L("remo", "remo")}</b> (en lugar del SkiErg)`,
+      `500 m corriendo + <b>4 × 20''</b> de ${L("empuje", "empuje en pared")} (sled push)`,
+      `500 m corriendo + <b>25 m de ${L("arrastre", "arrastre")}</b> o 25 remos con mochila (sled pull)`,
+      `500 m corriendo + <b>20 ${L("burpeeBJ", "burpees con salto adelante")}</b>`,
+      `500 m corriendo + <b>500 m de ${L("remo", "remo")}</b>`,
+      `500 m corriendo + <b>100 m de ${L("farmer", "paseo del granjero")}</b> con garrafas`,
+      `500 m corriendo + <b>40 ${L("zancada", "zancadas")}</b> con mochila`,
+      `500 m corriendo + <b>50 ${L("wallball", "wall balls")}</b> caseros`] }, { h: "Soltar", l: ["10' andar + estiramientos"] }],
+    tip: "Es media distancia de una Hyrox real. Ritmo de crucero: no se gana en la primera estación, se pierde.",
+    steps: [calent(480, "Trote suave"), calent(300, "Remo suave"), ...["500 m remo", "Empuje en pared 4 × 20''", "Arrastre o 25 remos con mochila", "20 burpees con salto", "500 m remo", "100 m paseo del granjero", "40 zancadas con mochila", "50 wall balls"].flatMap((e, i) => [P("Corre 500 m", 0, "work", `Ronda ${i + 1} de 8`), P(e, 0, "work", `Estación ${i + 1} de 8`)]), calma(600, "Anda y estira")] };
+  // Fase específica: remo combinado con estaciones (semanas 13 y 14)
+  const R = w === 13 ? [4, 500, 15, 10] : [3, 1000, 20, 20];
+  return { ...base, title: `Remo + estaciones (${R[0]} rondas)`, mins: w === 13 ? 40 : 45, sub: `${R[1]} m de remo + wall balls + ${w === 13 ? "burpees" : "zancadas"}`,
+    main: [{ h: `${R[0]} rondas, 2' de descanso entre rondas`, l: [`<b>${R[1]} m</b> de ${L("remo", "remo")} a ritmo de carrera`, `<b>${R[2]}</b> ${L("wallball", "wall balls")} caseros`, w === 13 ? `<b>${R[3]}</b> ${L("burpeeBJ", "burpees con salto adelante")}` : `<b>${R[3]}</b> ${L("zancada", "zancadas")} con mochila`] }],
+    tip: "Sal del remo y ponte con las estaciones sin pararte: aprender a moverte cansado es Hyrox.",
+    steps: [calent(300, "Remo suave subiendo"), ...Array.from({ length: R[0] }, (_, i) => [P(`${R[1]} m remo`, 0, "work", `Ronda ${i + 1} de ${R[0]}`), P(`${R[2]} wall balls`, 0, "work", `Ronda ${i + 1} de ${R[0]}`), P(w === 13 ? `${R[3]} burpees con salto` : `${R[3]} zancadas con mochila`, 0, "work", `Ronda ${i + 1} de ${R[0]}`), ...(i < R[0] - 1 ? [P("Descansa", 120, "rest")] : [])]).flat(), calma(180, "Remo muy suave")] };
+}
+
+function circuito(rondas, rest, items, sub) {
+  return Array.from({ length: rondas }, (_, i) => [P("Haz el circuito", 0, "work", `Ronda ${i + 1} de ${rondas}${sub ? " · " + sub : ""}`), ...(i < rondas - 1 ? [P("Descansa", rest, "rest")] : [])]).flat();
+}
+function sStr(w, wi) {
+  const base = { warm: CAL_STR, cool: [`5' de ${L("movilidad", "movilidad")} y estiramientos`], metric: null };
+  if (w <= 4) {
+    const r = [3, 3, 4, 2][wi], k = [0, 2, 2, 0][wi];
+    const items = [`${10 + k} ${L("sentadilla", "sentadillas")} (a una silla si lo necesitas)`, `${6 + k} ${L("flexion", "flexiones inclinadas")} (manos en la mesa)`, `${6 + k / 2} ${L("zancada", "zancadas atrás")} por pierna`, `${10 + k} ${L("remoMochila", "remos con mochila")}`, `${12 + k} ${L("puente", "puentes de glúteo")}`, `${20 + k * 5}'' de ${L("plancha", "plancha")}`];
+    return { ...base, title: `Circuito de fuerza en casa (${r} rondas)`, mins: 15 + r * 6, sub: "Cuerpo entero con tu peso y una mochila",
+      main: [{ h: `${r} rondas · 90'' de descanso entre rondas`, l: items }],
+      tip: w === 1 ? "Técnica antes que velocidad. Tienes que acabar con la sensación de que podrías hacer un par más de cada." : w === 4 ? "Semana de descarga: menos rondas, mejor técnica." : "Llena la mochila con libros o botellas: 5–8 kg está bien para empezar.",
+      steps: [calent(300), ...circuito(r, 90, items), calma(300, "Movilidad y estiramientos")] };
+  }
+  if (w <= 8) {
+    const s = [3, 4, 4, 2][wi];
+    const ej = [[L("sentadilla", "Sentadilla goblet con mochila"), "12"], [L("flexion", "Flexiones"), "8–10 (de rodillas si hace falta)"], [L("zancada", "Zancadas caminando"), "10 por pierna"], [L("remoMochila", "Remo con mochila"), "12"], [L("pesoMuerto", "Peso muerto rumano con mochila"), "12"], [L("plancha", "Plancha"), "40''"]];
+    const items = ej.map(([e, r]) => `${e}: ${s} × ${r}`);
+    if (w < 8) items.push(`Final: 3 × 6 ${L("burpee", "burpees")} (1' de descanso)`);
+    return { ...base, title: `Fuerza con mochila (${s} series)`, mins: 20 + s * 8, sub: "Ejercicio por ejercicio, 60–75'' de descanso entre series",
+      main: [{ h: "Fuerza", l: items }],
+      tip: w === 8 ? "Semana de descarga y tests: series reducidas, nada de llegar al fallo." : "Cuando hagas todas las repeticiones con buena técnica, añade 1–2 kg a la mochila.",
+      steps: [calent(300), ...ej.flatMap(([e, r], j) => series(s, 0, 75, e.replace(/\[\[\w+\|([^\]]+)\]\]/, "$1"), "Descansa", `${r}`)), ...(w < 8 ? series(3, 0, 60, "6 burpees", "Descansa") : []), calma(300, "Movilidad y estiramientos")] };
+  }
+  if (w <= 12) {
+    const s = [4, 4, 5, 2][wi];
+    const ej = [[L("bulgara", "Sentadilla búlgara"), "8 por pierna"], [L("thruster", "Sentadilla + press con garrafa"), "12"], [L("flexion", "Flexiones"), "10–12"], [L("remoMochila", "Remo a una mano con garrafa"), "12 por brazo"], [L("farmer", "Paseo del granjero con 2 garrafas"), "1'"], [L("hollow", "Hollow"), "25''"]];
+    const items = ej.map(([e, r]) => `${e}: ${s} × ${r}`);
+    if (w < 12) items.push(`Final EMOM 8': 6 ${L("burpee", "burpees")} al empezar cada minuto, descansa lo que sobre`);
+    return { ...base, title: `Fuerza y carga (${s} series)`, mins: 25 + s * 8, sub: "Unilateral, empujes y cargas con garrafas",
+      main: [{ h: "Fuerza", l: items }],
+      tip: w === 12 ? "Descarga: 2 series y a casa. Llega fresco a la fase específica." : "Garrafas de 5–8 L (5–8 kg cada una) son tu kettlebell casera.",
+      steps: [calent(300), ...ej.flatMap(([e, r]) => series(s, 0, 75, e.replace(/\[\[\w+\|([^\]]+)\]\]/, "$1"), "Descansa", r)), ...(w < 12 ? Array.from({ length: 8 }, (_, i) => P("6 burpees y descansa", 60, "work", `EMOM · minuto ${i + 1} de 8`)) : []), calma(300, "Movilidad y estiramientos")] };
+  }
+  if (w === 16) {
+    const items = [`10 ${L("thruster", "sentadillas + press")}`, `8 ${L("zancada", "zancadas")} por pierna`, `5 ${L("burpee", "burpees")}`, `30'' ${L("farmer", "paseo del granjero")}`];
+    return { ...base, title: "Activación ligera", mins: 25, sub: "Mover el cuerpo sin cansarlo", main: [{ h: "2 rondas tranquilas, 1' de descanso", l: items }],
+      tip: "Semana de tests: hoy toca sentirse ágil, no cansarse.",
+      steps: [calent(300), ...circuito(2, 60, items), calma(300, "Movilidad")] };
+  }
+  const min = w === 15 ? 15 : 12;
+  const est = [[`15 ${L("wallball", "wall balls")} caseros`, "15 wall balls"], [`8 ${L("burpeeBJ", "burpees con salto adelante")}`, "8 burpees con salto"], [`16 ${L("zancada", "zancadas")} con mochila`, "16 zancadas con mochila"]];
+  return { ...base, title: `Estaciones Hyrox en casa (EMOM ${min}')`, mins: 45, sub: "Wall balls, burpees, zancadas, empuje, arrastre y granjero",
+    main: [{ h: `Bloque 1 · EMOM ${min}'`, l: [...est.map(e => e[0]), "Cada minuto empiezas un ejercicio (rotando); descansa lo que te sobre del minuto."] },
+      { h: "Bloque 2 · 3 rondas, 90'' de descanso", l: [`4 × 20'' de ${L("empuje", "empuje en pared")}`, `20 m de ${L("arrastre", "arrastre")} o 20 remos rápidos con mochila`, `1' de ${L("farmer", "paseo del granjero")}`] }],
+    tip: "Ritmo de carrera, no de sprint: en Hyrox ganas si nunca te paras del todo.",
+    steps: [calent(300), ...Array.from({ length: min }, (_, i) => P(est[i % 3][1], 60, "work", `EMOM · minuto ${i + 1} de ${min}`)), P("Descansa", 120, "rest"),
+      ...Array.from({ length: 3 }, (_, i) => [...series(4, 20, 20, "Empuje en pared", "Suelta", `Ronda ${i + 1} de 3`), P("Arrastre o 20 remos", 0, "work", `Ronda ${i + 1} de 3`), P("Paseo del granjero", 60, "work", `Ronda ${i + 1} de 3`), ...(i < 2 ? [P("Descansa", 90, "rest")] : [])]).flat(), calma(300, "Movilidad y estiramientos")] };
+}
+
+function sEasy(w) {
+  const base = { warm: ["5' andando a paso vivo"], cool: CALMA_RUN, metric: "run" };
+  const IV = { 1: [5, 30, 150], 2: [6, 60, 120], 3: [5, 120, 120], 5: [4, 240, 60], 6: [3, 360, 60], 7: [2, 600, 60] };
+  if (IV[w]) {
+    const [n, on, off] = IV[w];
+    return { ...base, title: `Paseo activo con ${n} × ${fm(on)} de trote`, mins: Math.round((n * (on + off)) / 60) + 10, sub: "Sesión suave para sumar minutos",
+      main: [{ h: "Bloque principal", l: [`${n} × ( ${fm(on)} ${L("correr", "trote muy suave")} + ${fm(off)} andando rápido )`] }],
+      tip: "Esta sesión es más fácil que la de carrera de la semana. Si estás cansado, hazla toda andando: también suma.",
+      steps: [calent(300, "Anda a paso vivo"), ...series(n, on, off, "Trote muy suave", "Anda rápido"), calma(300, "Anda suave")] };
+  }
+  if (w === 4) return { ...base, title: "25' andando rápido", mins: 30, sub: "Descarga: solo caminar a buen ritmo", main: [{ h: "Bloque principal", l: ["25' andando rápido, mejor con alguna cuesta"] }], tip: "Caminar rápido también construye resistencia y no castiga las piernas.", steps: [P("Anda rápido", 1500, "work"), calma(300, "Anda suave")] };
+  const C = { 8: 20, 9: 25, 10: 30, 11: 35, 12: 25, 13: 35, 14: 40, 15: 30, 16: 20 }[w];
+  return { ...base, title: `Rodaje suave ${C}'`, mins: C + 10, sub: "Más lento que tu carrera normal, de charla",
+    main: [{ h: "Bloque principal", l: [`${C}' ${L("correr", "corriendo muy suave")}`, "Puedes alternar con andar si las piernas lo piden."] }],
+    tip: "Los rodajes suaves son el 80 % de lo que hace mejorar a un corredor. No los conviertas en carreras.",
+    steps: [calent(300, "Anda a paso vivo"), P("Rodaje muy suave", C * 60, "work", "Ritmo de charla"), calma(300, "Anda suave")] };
+}
+
+function sHyb(w) {
+  const base = { warm: ["5' remo suave", `${L("movilidad", "Movilidad")} 2'`], cool: [`${L("movilidad", "Movilidad")} 5'`], metric: null };
+  if (w <= 4) {
+    const r = w === 4 ? 2 : 3;
+    const items = [`3' de ${L("remo", "remo")} suave`, `10 ${L("sentadilla", "sentadillas")}`, `5 ${L("burpee", "burpees")} lentos (sin salto)`];
+    return { ...base, title: `Remo + movimiento (${r} rondas)`, mins: 30, sub: "Encadenar remo y ejercicios a ritmo suave", main: [{ h: `${r} rondas, 1' de descanso`, l: items }, { h: "Extra", l: [`10' de ${L("movilidad", "movilidad")}`] }],
+      tip: "Sesión para sumar movimiento sin machacarte. Todo a ritmo de conversación.",
+      steps: [...Array.from({ length: r }, (_, i) => [P("Remo suave", 180, "work", `Ronda ${i + 1} de ${r}`), P("10 sentadillas + 5 burpees", 0, "work", `Ronda ${i + 1} de ${r}`), ...(i < r - 1 ? [P("Descansa", 60, "rest")] : [])]).flat(), calma(600, "Movilidad")] };
+  }
+  if (w <= 8) {
+    const r = w === 8 ? 2 : w === 5 ? 3 : 4;
+    const items = [`3' de ${L("correr", "trote suave")}`, `500 m de ${L("remo", "remo")}`, `10 ${L("sentadilla", "sentadillas con mochila")}`];
+    return { ...base, warm: ["5' andando a paso vivo"], title: `Correr + remar (${r} rondas)`, mins: 15 + r * 9, sub: "Primer contacto con el cambio carrera ↔ máquina",
+      main: [{ h: `${r} rondas, 2' de descanso`, l: items }], tip: "Notarás las piernas raras al pasar de una cosa a otra: es justo lo que entrenas.",
+      steps: [calent(300, "Anda a paso vivo"), ...Array.from({ length: r }, (_, i) => [P("Trote suave", 180, "work", `Ronda ${i + 1} de ${r}`), P("500 m remo", 0, "work", `Ronda ${i + 1} de ${r}`), P("10 sentadillas con mochila", 0, "work", `Ronda ${i + 1} de ${r}`), ...(i < r - 1 ? [P("Descansa", 120, "rest")] : [])]).flat(), calma(300, "Movilidad")] };
+  }
+  if (w <= 12) {
+    const r = w === 12 ? 2 : 4;
+    const items = [`800 m ${L("correr", "corriendo")}`, `15 ${L("thruster", "sentadillas + press")}`, `250 m de ${L("remo", "remo")} fuerte`];
+    return { ...base, warm: ["8' trote suave"], title: `Correr cansado (${r} rondas)`, mins: 15 + r * 10, sub: "Carrera comprometida: correr justo después de esfuerzo",
+      main: [{ h: `${r} rondas, 90'' de descanso`, l: items }], tip: "Tras el remo sal a correr sin pausa. Los primeros 200 m costarán; luego las piernas vuelven.",
+      steps: [calent(480, "Trote suave"), ...Array.from({ length: r }, (_, i) => [P("Corre 800 m", 0, "work", `Ronda ${i + 1} de ${r}`), P("15 sentadillas + press", 0, "work", `Ronda ${i + 1} de ${r}`), P("250 m remo fuerte", 0, "work", `Ronda ${i + 1} de ${r}`), ...(i < r - 1 ? [P("Descansa", 90, "rest")] : [])]).flat(), calma(300, "Movilidad")] };
+  }
+  if (w >= 15) return { ...base, title: "Movilidad + remo suave", mins: 30, sub: "Recuperación activa", main: [{ h: "Bloque principal", l: [`15' de ${L("remo", "remo")} muy suave`, `15' de ${L("movilidad", "movilidad")}`] }], tip: "Recuperar es parte del plan: esta semana importan otros días.", steps: [P("Remo muy suave", 900, "work"), calma(900, "Movilidad")] };
+  const est = w === 13 ? ["20 wall balls", "15 burpees con salto", "1' paseo del granjero", "30 zancadas con mochila"] : ["25 wall balls", "20 burpees con salto", "90'' paseo del granjero", "40 zancadas con mochila"];
+  return { ...base, warm: ["8' trote suave + 3 aceleraciones"], title: "Medio Hyrox: 4 × (1 km + estación)", mins: 50, sub: "Kilómetro a ritmo de carrera + estación",
+    main: [{ h: "4 rondas sin descanso planificado", l: est.map(e => `1 km ${L("correr", "corriendo")} + ${e}`) }], tip: "Cronométralo y anótalo: te dirá cuánto tiempo pierdes en las estaciones.",
+    steps: [calent(480, "Trote suave"), ...est.flatMap((e, i) => [P("Corre 1 km", 0, "work", `Ronda ${i + 1} de 4`), P(e, 0, "work", `Estación ${i + 1} de 4`)]), calma(300, "Movilidad")] };
+}
+
+/* ---------- Texto con enlaces a ejercicios ---------- */
+const fmt = s => s.replace(/\[\[(\w+)\|([^\]]+)\]\]/g, (_, k, t) => `<button class="exl" data-ex="${k}">${t}</button>`);
+
+/* ---------- Render principal ---------- */
+let tab = "hoy";
+function render() {
+  const app = $("#app");
+  if (!state) { app.innerHTML = vistaBienvenida(); return; }
+  const w = semanaDeFecha(hoy());
+  app.innerHTML = `
+  <header class="top"><div class="top-in">
+    <div class="logo">${ICO.logo}<span>Racha<b>Lab</b></span></div>
+    <span class="sp"></span>
+    ${w >= 1 ? `<span class="wk-chip num">${w > SEMANAS ? "Plan completado" : `Semana ${w}/${SEMANAS}`}</span>` : ""}
+    <button class="icon-btn" id="btn-ajustes" aria-label="Ajustes">${ICO.gear}</button>
+  </div></header>
+  <main id="main">${({ hoy: vistaHoy, plan: vistaPlan, prog: vistaProgreso, guia: vistaGuia })[tab]()}</main>
+  <nav class="tabs" aria-label="Secciones"><div class="tabs-in">
+    ${[["hoy", "Hoy", ICO.today], ["plan", "Plan", ICO.plan], ["prog", "Progreso", ICO.prog], ["guia", "Guía", ICO.guide]].map(([k, n, ic]) => `<button class="tab" data-tab="${k}" ${tab === k ? 'aria-current="page"' : ""}><span class="tab-ic">${ic}</span>${n}</button>`).join("")}
+  </div></nav>`;
+}
+
+/* ---------- Bienvenida ---------- */
+let wiz = null;
+function vistaBienvenida() {
+  if (!wiz) { const h = hoy(), lun = lunesDe(h); wiz = { nombre: "", dias: [0, 2, 4], inicio: iso(wdIdx(h) <= 2 ? lun : addDays(lun, 7)), nivel: 1 }; }
+  const ok = wiz.dias.length >= 3 && wiz.dias.length <= 5;
+  return `<div class="welcome"><div class="welcome-in">
+    <p class="eyebrow" style="color:#a9aab0">RachaLab · plan de 16 semanas en casa</p>
+    <h1>Hyrox<b>desde cero</b></h1>
+    <p class="lead">Con tu máquina de remo, unas zapatillas y una mochila. Empiezas andando y trotando y acabas haciendo tu primera simulación de Hyrox.</p>
+    <ul class="feat">
+      <li>${ICO.check}<span>Sesión del día con calentamiento, bloque principal y vuelta a la calma.</span></li>
+      <li>${ICO.check}<span>Temporizador con voz y pitidos para correr, remar y hacer circuitos.</span></li>
+      <li>${ICO.check}<span>Tests de 1000 m de remo y 1 km de carrera para ver tu progreso.</span></li>
+      <li>${ICO.check}<span>Las 8 estaciones de Hyrox explicadas con sustitutos para hacer en casa.</span></li>
+    </ul>
+    <div class="card">
+      <label class="field"><span>¿Cómo te llamas? (opcional)</span><input class="inp" id="wz-nombre" value="${esc(wiz.nombre)}" autocomplete="given-name" maxlength="30"></label>
+      <div class="field"><span>¿Qué días vas a entrenar? (elige de 3 a 5)</span>
+        <div class="chips">${DIAS.map((d, i) => `<button class="chip" data-wzdia="${i}" aria-pressed="${wiz.dias.includes(i)}">${d}</button>`).join("")}</div>
+        <p class="small muted" style="margin:6px 0 0">${wiz.dias.length} días · ${ok ? (wiz.dias.length === 3 ? "ideal para empezar desde cero" : wiz.dias.length === 4 ? "añade un rodaje suave" : "añade rodaje suave y una sesión híbrida") : "elige entre 3 y 5 días"}</p>
+      </div>
+      <label class="field"><span>¿Qué semana empiezas?</span><input class="inp" type="date" id="wz-inicio" value="${wiz.inicio}"><span class="small muted" style="font-weight:400">El plan arranca el lunes de esa semana.</span></label>
+      <div class="field"><span>¿Desde dónde partes?</span>
+        <label class="opt"><input type="radio" name="nivel" value="1" ${wiz.nivel === 1 ? "checked" : ""}><span><b>Desde cero</b><span class="small muted">No corro o no aguanto 5 minutos trotando.</span></span></label>
+        <label class="opt"><input type="radio" name="nivel" value="3" ${wiz.nivel === 3 ? "checked" : ""}><span><b>Con algo de base</b><span class="small muted">Trotar 10 minutos seguidos no me cuesta. Empiezo en la semana 3.</span></span></label>
+      </div>
+      <button class="btn pri block" id="wz-ok" ${ok ? "" : "disabled"}>Empezar mi plan</button>
+      <p class="small muted" style="margin:10px 0 0">Si tienes alguna lesión, problema de corazón o llevas años sin hacer deporte, consulta antes con tu médico. Tus datos se guardan solo en este dispositivo.</p>
+    </div>
+  </div></div>`;
+}
+
+/* ---------- Hoy ---------- */
+function vistaHoy() {
+  const d = hoy(), w = semanaDeFecha(d), nombre = state.nombre ? `, ${esc(state.nombre)}` : "";
+  let out = "";
+  if (w === 0) {
+    const ini = fromIso(state.inicio);
+    out += `<div class="card hero"><p class="eyebrow">Cuenta atrás</p><h2>Tu plan empieza el ${DIAS_L[wdIdx(ini)]} ${fechaCorta(ini)}</h2>
+      <p class="muted">Faltan ${Math.round((ini - d) / 864e5)} días. Mientras tanto, aprende la técnica de remo y prepara tu mochila y un par de garrafas.</p>
+      <div class="row wrap"><button class="btn pri" data-ex="remo">Técnica de remo</button><button class="btn dark" data-tab="plan" style="border-color:#34353a">Ver la semana 1</button></div></div>`;
+    out += semanaCard(state.nivel, d, true);
+    return out + cardInstalar();
+  }
+  if (w > SEMANAS) {
+    out += `<div class="card hero"><p class="eyebrow">¡Lo has conseguido${nombre}!</p><h2>Plan de 16 semanas completado</h2><p class="muted">Ya tienes la base para tu primera Hyrox. Para seguir: apúntate a una carrera (en parejas es ideal para la primera) unas 4–6 semanas vista y repite las sesiones de la fase específica (semanas 13–16) desde la pestaña Plan.</p>
+      <div class="row wrap"><button class="btn pri" data-tab="plan">Ver el plan</button><button class="btn dark" data-tab="prog" style="border-color:#34353a">Ver mi progreso</button></div></div>`;
+    return out;
+  }
+  const ses = sesionesSemana(w), hoyS = ses.find(s => iso(s.fecha) === iso(d));
+  const pend = ses.filter(s => s.fecha < d && !hecho(s.id));
+  const prox = ses.find(s => s.fecha > d && !hecho(s.id)) || (w < SEMANAS ? sesionesSemana(w + 1)[0] : null);
+  const f = FASES[faseDe(w)];
+  if (hoyS) {
+    const T = TIPOS[hoyS.t];
+    out += `<div class="card hero ${T.c}">
+      <p class="eyebrow">Hoy · ${DIAS_L[wdIdx(d)]} ${fechaCorta(d)}</p>
+      <div class="row" style="margin-bottom:4px"><span class="tdot"></span><span class="ttag">${T.n}</span>${hoyS.test ? '<span class="pill acc">Test</span>' : ""}${hecho(hoyS.id) ? '<span class="pill ok">Hecha</span>' : ""}</div>
+      <h2>${hoyS.title}</h2>
+      <div class="hero-meta"><span>${ICO.clock}~${hoyS.mins} min</span></div>
+      <p class="muted" style="margin:0 0 14px">${hoyS.sub}</p>
+      <div class="row wrap"><button class="btn pri" data-open="${hoyS.id}">${hecho(hoyS.id) ? "Ver sesión" : "Ver la sesión"}</button>${hecho(hoyS.id) ? "" : `<button class="btn dark" data-timer="${hoyS.id}" style="border-color:#34353a">${ICO.play} Empezar</button>`}</div>
+    </div>`;
+  } else {
+    out += `<div class="card hero"><p class="eyebrow">Hoy · ${DIAS_L[wdIdx(d)]} ${fechaCorta(d)}</p><h2>Día de descanso${nombre}</h2>
+      <p class="muted">El músculo crece descansando. Si te apetece moverte: paseo de 20–30', ${"10' de movilidad"} o remo muy suave.</p>
+      ${prox ? `<p style="margin:0 0 12px">Próxima: <b>${prox.title}</b> — ${DIAS_L[wdIdx(prox.fecha)]} ${fechaCorta(prox.fecha)}</p><div class="row wrap"><button class="btn pri" data-open="${prox.id}">Ver la próxima</button><button class="btn dark" data-ex="movilidad" style="border-color:#34353a">Movilidad</button></div>` : ""}
+    </div>`;
+  }
+  if (pend.length) {
+    out += `<div class="card"><p class="eyebrow">Pendiente esta semana</p><ul class="slist">${pend.map(itemSesion).join("")}</ul>
+      <p class="small muted" style="margin:6px 0 0">¿Se te pasó un día? Hazla hoy o mañana. Si se te acumulan, salta a la del día: mejor no hacer dos fuertes seguidas.</p></div>`;
+  }
+  out += semanaCard(w, d);
+  out += `<div class="card"><p class="eyebrow">Fase ${faseDe(w) + 1} de 4 · ${f.n}${DESCARGA.includes(w) ? " · semana de descarga" : ""}</p><p style="margin:0 0 10px">${f.d}</p>
+    <div class="progressbar" aria-label="Progreso del plan"><i style="width:${Math.round(totalHechas() / totalSesiones() * 100)}%"></i></div>
+    <p class="small muted" style="margin:6px 0 0">${totalHechas()} de ${totalSesiones()} sesiones completadas</p></div>`;
+  return out + cardInstalar();
+}
+function semanaCard(w, d, lista) {
+  const ses = sesionesSemana(w), lunes = addDays(fromIso(state.inicio), (w - state.nivel) * 7);
+  const hechas = ses.filter(s => hecho(s.id)).length;
+  return `<div class="card"><div class="row"><p class="eyebrow grow">Semana ${w} · ${hechas}/${ses.length} hechas</p></div>
+    <div class="weekstrip">${DIAS.map((n, i) => {
+      const dd = addDays(lunes, i), s = ses.find(x => x.slot === state.dias.indexOf(i) && state.dias.includes(i));
+      const cls = ["wd", s ? "has " + TIPOS[s.t].c : "", s && hecho(s.id) ? "done" : "", iso(dd) === iso(d) ? "today" : ""].join(" ");
+      return s ? `<button class="${cls}" data-open="${s.id}" aria-label="${DIAS_L[i]}: ${esc(s.title)}">${n}<span class="d num">${dd.getDate()}</span><span class="mk"></span></button>` : `<div class="${cls}">${n}<span class="d num">${dd.getDate()}</span><span class="mk"></span></div>`;
+    }).join("")}</div>
+    ${lista ? `<ul class="slist" style="margin-top:8px">${ses.map(itemSesion).join("")}</ul>` : ""}</div>`;
+}
+function itemSesion(s) {
+  const T = TIPOS[s.t], h = hecho(s.id);
+  return `<li><button class="sitem ${T.c}" data-open="${s.id}">
+    <span class="day">${s.fecha ? DIAS[wdIdx(s.fecha)] : ""}</span>
+    <span class="grow"><span class="row" style="gap:6px"><span class="tdot"></span><span class="ttag" style="font-size:12px">${T.n}</span>${s.test ? '<span class="pill acc">Test</span>' : ""}</span>
+    <span class="tt" style="display:block">${s.title}</span><span class="ss">~${s.mins} min</span></span>
+    <span class="check ${h ? "on" : ""}" aria-label="${h ? "Hecha" : "Pendiente"}">${h ? ICO.check : ""}</span></button></li>`;
+}
+function totalSesiones() { return (SEMANAS - state.nivel + 1) * state.dias.length; }
+function totalHechas() { let n = 0; for (let w = state.nivel; w <= SEMANAS; w++) for (const t of tiposSemana()) if (hecho(`w${w}-${t}`)) n++; return n; }
+
+/* ---------- Plan ---------- */
+function vistaPlan() {
+  const cur = semanaDeFecha(hoy());
+  let out = `<div class="card"><h2>Tu plan de 16 semanas</h2><p class="muted" style="margin:6px 0 0">${state.dias.length} sesiones por semana: ${state.dias.map(i => DIAS_L[i]).join(", ")}. Cada 4 semanas hay una semana de descarga para asimilar.</p>
+    <div class="legend" style="margin-top:10px">${tiposSemana().map(t => `<span class="${TIPOS[t].c}"><i style="background:var(--c);height:10px;width:10px;border-radius:99px"></i>${TIPOS[t].n}</span>`).join("")}</div></div>`;
+  FASES.forEach((f, fi) => {
+    out += `<div class="phase"><span class="n">${fi + 1}</span><h2>${f.n}</h2><span class="small muted">Sem. ${f.w[0]}–${f.w[1]}</span></div><p class="small muted" style="margin:-4px 0 10px">${f.d}</p>`;
+    for (let w = f.w[0]; w <= f.w[1]; w++) {
+      if (w < state.nivel) continue;
+      const ses = sesionesSemana(w), lunes = addDays(fromIso(state.inicio), (w - state.nivel) * 7);
+      out += `<details class="week ${w === cur ? "cur" : ""}" ${w === cur || (cur < state.nivel && w === state.nivel) ? "open" : ""}>
+        <summary>${ICO.chev}<span class="wn">Semana ${w}</span>${DESCARGA.includes(w) ? '<span class="pill">Descarga</span>' : ""}${w === cur ? '<span class="pill acc">Ahora</span>' : ""}
+        <span class="grow small muted" style="text-align:right">${fechaCorta(lunes)}</span><span class="mini-bars">${ses.map(s => `<i class="${hecho(s.id) ? "on" : ""}"></i>`).join("")}</span></summary>
+        <ul class="slist">${ses.map(itemSesion).join("")}</ul></details>`;
+    }
+  });
+  return out;
+}
+
+/* ---------- Progreso ---------- */
+function vistaProgreso() {
+  const logs = Object.entries(state.logs).map(([id, l]) => ({ id, ...l })).sort((a, b) => (b.fecha || "").localeCompare(a.fecha || "") || b.ts - a.ts);
+  const km = logs.reduce((a, l) => a + (l.km || 0), 0), m = logs.reduce((a, l) => a + (l.m || 0), 0), min = logs.reduce((a, l) => a + (l.min || 0), 0);
+  const racha = rachaSemanas();
+  let out = `<div class="kpis">
+    <div class="kpi"><div class="v num">${totalHechas()}<small>/${totalSesiones()}</small></div><div class="l">Sesiones hechas</div></div>
+    <div class="kpi"><div class="v num">${racha}<small> sem.</small></div><div class="l">Racha de semanas completas</div></div>
+    <div class="kpi"><div class="v num">${km.toLocaleString("es-ES", { maximumFractionDigits: 1 })}<small> km</small></div><div class="l">Corridos (apuntados)</div></div>
+    <div class="kpi"><div class="v num">${(m / 1000).toLocaleString("es-ES", { maximumFractionDigits: 1 })}<small> km</small></div><div class="l">Remados (apuntados)</div></div>
+  </div>`;
+  out += `<div class="card"><div class="row"><h3 class="grow">Tests</h3><button class="btn sm" id="btn-addtest">+ Añadir test</button></div>${graficoTests()}</div>`;
+  out += `<div class="card"><h3>Constancia por semana</h3>${graficoSemanas()}<p class="small muted" style="margin:6px 0 0">${Math.round(min / 60)} h ${min % 60} min de entreno apuntadas en total.</p></div>`;
+  out += `<div class="card"><h3>Historial</h3>${logs.length ? `<ul class="log">${logs.slice(0, 40).map(l => {
+    const [w, t] = l.id.slice(1).split("-"), s = sesion(+w, t), T = TIPOS[t];
+    const datos = [l.min ? `${l.min} min` : "", l.km ? `${l.km} km` : "", l.m ? `${l.m} m` : "", l.rpe ? `esfuerzo ${l.rpe}/10` : "", l.test ? `test ${mmss(l.test)}` : ""].filter(Boolean).join(" · ");
+    return `<li><span class="dt">${l.fecha ? fechaCorta(fromIso(l.fecha)) : ""}</span><button class="sitem ${T.c}" style="padding:0;border:0" data-open="${l.id}"><span class="grow"><span class="tt" style="display:block">${s.title}</span><span class="ss">Sem. ${w} · ${datos || T.n}${l.nota ? " · " + esc(l.nota) : ""}</span></span></button></li>`;
+  }).join("")}</ul>` : `<p class="empty">Aún no has registrado ninguna sesión. Cuando acabes una, pulsa «Marcar como hecha».</p>`}</div>`;
+  return out;
+}
+function rachaSemanas() {
+  const cur = Math.min(semanaDeFecha(hoy()), SEMANAS); let n = 0;
+  const completa = w => sesionesSemana(w).every(s => hecho(s.id));
+  let w = cur; if (w >= state.nivel && !completa(w)) w--;
+  for (; w >= state.nivel; w--) { if (completa(w)) n++; else break; }
+  return n;
+}
+function graficoTests() {
+  const keys = ["row1k", "run1k", "sim"].filter(k => state.tests.some(t => t.k === k));
+  if (!keys.length) return `<p class="empty">Tu primer test llega con el remo de la semana 1. Cada test que registres aparecerá aquí.</p>`;
+  let out = "";
+  for (const k of keys) {
+    const pts = state.tests.filter(t => t.k === k).sort((a, b) => a.d.localeCompare(b.d) || a.ts - b.ts);
+    const first = pts[0], last = pts[pts.length - 1], best = pts.reduce((a, b) => b.s < a.s ? b : a);
+    const W = 320, H = 120, px = 34, py = 14;
+    const ys = pts.map(p => p.s), lo = Math.min(...ys), hi = Math.max(...ys), span = Math.max(hi - lo, 10);
+    const X = i => pts.length === 1 ? W / 2 : px + i * (W - px - 12) / (pts.length - 1);
+    const Y = s => py + (s - (lo - span * .15)) / (span * 1.3) * (H - 2 * py);
+    const line = pts.map((p, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(p.s).toFixed(1)}`).join("");
+    const mejora = first.s - last.s;
+    out += `<div style="margin-top:12px"><div class="row"><b class="grow" style="color:${TESTS[k].c}">${TESTS[k].n}</b><span class="small muted">Mejor: <b class="mono">${mmss(best.s)}</b></span></div>
+      <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución ${TESTS[k].n}">
+        <line x1="${px}" x2="${W - 8}" y1="${H - 4}" y2="${H - 4}" stroke="var(--line)"/>
+        <text x="0" y="${Y(hi) + 4}">${mmss(hi)}</text>${hi !== lo ? `<text x="0" y="${Y(lo) + 4}">${mmss(lo)}</text>` : ""}
+        <path d="${line}" fill="none" stroke="${TESTS[k].c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        ${pts.map((p, i) => `<circle cx="${X(i)}" cy="${Y(p.s)}" r="4.5" fill="var(--paper)" stroke="${TESTS[k].c}" stroke-width="2.5"><title>${fechaCorta(fromIso(p.d))}: ${mmss(p.s)}</title></circle>`).join("")}
+      </svg>
+      <p class="small muted" style="margin:0">${pts.length} registro${pts.length > 1 ? "s" : ""} · último ${mmss(last.s)} (${fechaCorta(fromIso(last.d))})${pts.length > 1 ? ` · ${mejora > 0 ? `<b style="color:var(--ok)">${mmss(mejora)} más rápido</b> que el primero` : mejora < 0 ? `${mmss(-mejora)} más lento que el primero` : "igual que el primero"}` : ""}</p></div>`;
+  }
+  return out;
+}
+function graficoSemanas() {
+  const n = state.dias.length, W = 320, H = 90, ws = [];
+  for (let w = state.nivel; w <= SEMANAS; w++) ws.push(w);
+  const bw = (W - 10) / ws.length, cur = semanaDeFecha(hoy());
+  return `<svg class="chart" viewBox="0 0 ${W} ${H + 16}" role="img" aria-label="Sesiones hechas por semana">
+    ${ws.map((w, i) => { const h = sesionesSemana(w).filter(s => hecho(s.id)).length, x = 5 + i * bw;
+      return `<rect x="${x + 2}" y="10" width="${bw - 4}" height="${H - 10}" rx="3" fill="var(--soft)"/><rect x="${x + 2}" y="${H - (H - 10) * h / n}" width="${bw - 4}" height="${(H - 10) * h / n}" rx="3" fill="${h === n ? "var(--ok)" : "var(--acc)"}"><title>Semana ${w}: ${h}/${n}</title></rect>
+      <text x="${x + bw / 2}" y="${H + 13}" text-anchor="middle" style="${w === cur ? "font-weight:700;fill:var(--ink)" : ""}">${w}</text>`; }).join("")}
+  </svg>`;
+}
+
+/* ---------- Guía ---------- */
+const ESTACIONES = [
+  ["SkiErg", "1000 m", "Tirar de dos asas desde arriba, como esquí de fondo.", `<b>En casa:</b> ${L("remo", "remo")} 1000 m o tirones rápidos con banda elástica.`],
+  ["Sled Push", "50 m", "Empujar un trineo cargado (Open: 152 kg hombres / 102 kg mujeres, con el trineo).", `<b>En casa:</b> ${L("empuje", "empuje en pared")}, bear crawl o sprints en cuesta.`],
+  ["Sled Pull", "50 m", "Tirar de una cuerda para traer el trineo (Open: 103 / 78 kg).", `<b>En casa:</b> ${L("arrastre", "arrastre de mochila")} con cuerda o ${L("remoMochila", "remo con mochila")}.`],
+  ["Burpee Broad Jumps", "80 m", "Burpee y salto hacia delante, repetido hasta cubrir 80 m.", `<b>En casa:</b> ${L("burpeeBJ", "burpees con salto")} en el pasillo o en la calle.`],
+  ["Rowing", "1000 m", "Remo en máquina, igual que la tuya.", `<b>En casa:</b> ¡tu ${L("remo", "máquina de remo")}! Es tu gran ventaja.`],
+  ["Farmers Carry", "200 m", "Llevar dos kettlebells (Open: 2 × 24 kg / 2 × 16 kg).", `<b>En casa:</b> ${L("farmer", "garrafas de agua")} o bolsas de la compra cargadas.`],
+  ["Sandbag Lunges", "100 m", "Zancadas caminando con un saco al hombro (Open: 20 / 10 kg).", `<b>En casa:</b> ${L("zancada", "zancadas")} con mochila cargada.`],
+  ["Wall Balls", "100 reps", "Sentadilla y lanzar un balón a una diana (Open: 6 kg a 3 m / 4 kg a 2,7 m).", `<b>En casa:</b> ${L("wallball", "wall ball casero")} o ${L("thruster", "sentadilla + press")}.`],
+];
+function vistaGuia() {
+  return `<div class="card"><p class="eyebrow">Qué es Hyrox</p><h2>8 km de carrera + 8 estaciones</h2>
+    <p style="margin:8px 0 0">Una carrera Hyrox siempre es igual en todo el mundo: corres <b>1 km</b>, haces una <b>estación</b>, y repites 8 veces. Los participantes populares tardan entre 1 h 15 y 1 h 45. Puedes correrla en individual, en parejas (repartís las estaciones) o en relevos de 4: <b>empezar en parejas o relevos es una gran primera meta.</b></p></div>
+  <div class="card"><h3>Las 8 estaciones y cómo entrenarlas en casa</h3>
+    ${ESTACIONES.map(([n, d, q, c], i) => `<div class="station"><span class="k">${i + 1}</span><div><h3>${n} <span class="muted small" style="font-family:var(--body)">${d}</span></h3><div class="small muted">${q}</div><div class="home">${fmt(c)}</div></div></div>`).join("")}
+    <p class="small muted" style="margin:8px 0 0">Pesos de la categoría Open; pueden variar ligeramente según temporada. Revisa la web oficial antes de inscribirte.</p></div>
+  <div class="card"><h3>Ejercicios</h3><p class="small muted" style="margin:2px 0 10px">Toca uno para ver cómo se hace, cómo facilitarlo y cómo hacerlo más difícil.</p>
+    <div class="exgrid">${Object.entries(EX).map(([k, e]) => `<button class="exbtn" data-ex="${k}">${e.n}<small>${e.g}</small></button>`).join("")}</div></div>
+  <div class="card"><h3>Material casero</h3><table class="tbl"><tr><th>En el gimnasio</th><th>En tu casa</th></tr>
+    <tr><td>Kettlebell / mancuerna</td><td>Garrafa de agua (1 L = 1 kg) o bolsa con botellas</td></tr>
+    <tr><td>Sandbag / barra</td><td>Mochila con libros, arena o botellas (empieza con 5–8 kg)</td></tr>
+    <tr><td>Balón medicinal</td><td>Garrafa, mochila o un balón viejo relleno de arena</td></tr>
+    <tr><td>Banco</td><td>Sofá, silla firme o escalón</td></tr>
+    <tr><td>SkiErg</td><td>Tu máquina de remo</td></tr></table></div>
+  <div class="card"><h3>Ritmos y esfuerzo (escala 1–10)</h3><table class="tbl"><tr><th>Nivel</th><th>Cómo se siente</th></tr>
+    <tr><td><b>3–4</b> Suave</td><td>Puedes hablar con frases completas. La mayoría de días.</td></tr>
+    <tr><td><b>5–6</b> Moderado</td><td>Frases cortas. Ritmo de series largas.</td></tr>
+    <tr><td><b>7–8</b> Fuerte</td><td>Solo palabras sueltas. Series cortas y tests.</td></tr>
+    <tr><td><b>9–10</b> Máximo</td><td>No puedes hablar. Solo el final de un test.</td></tr></table></div>
+  <div class="card"><h3>Para ponerte fuerte (y no lesionarte)</h3>
+    <details class="faq"><summary>¿Cuánto debo comer de proteína?</summary><p>Para ganar fuerza, alrededor de 1,6 g por kilo de peso al día, repartidos en 3–4 comidas (huevos, carne, pescado, legumbres, yogur, queso fresco). Ejemplo: 75 kg → unos 120 g al día.</p></details>
+    <details class="faq"><summary>¿Qué hago con las agujetas?</summary><p>Son normales las primeras semanas. Moverte suave (andar, remo muy suave) las alivia antes que el reposo total. Si una zona duele de forma aguda o la molestia empeora al entrenar, para y descansa.</p></details>
+    <details class="faq"><summary>¿Cómo progreso la fuerza sin pesas?</summary><p>Por este orden: más repeticiones con buena técnica → más series → más lento al bajar (3 segundos) → más peso en la mochila → versiones más difíciles (pies elevados, una pierna). Cambia una cosa cada vez.</p></details>
+    <details class="faq"><summary>¿Y si me salto una semana?</summary><p>Si fueron unos días, sigue donde estabas. Si fue más de una semana, repite la última semana que completaste. Puedes cambiar la fecha de inicio en Ajustes para que el calendario cuadre.</p></details>
+    <details class="faq"><summary>¿Cuánto dormir?</summary><p>7–9 horas. Es el momento en que tu cuerpo repara el músculo: dormir mal anula parte del entrenamiento.</p></details>
+    <details class="faq"><summary>¿Necesito zapatillas especiales?</summary><p>Unas zapatillas de correr cómodas y que no estén gastadas. Para Hyrox se usan las mismas para correr y para las estaciones.</p></details>
+  </div>`;
+}
+
+/* ---------- Hoja: detalle de sesión ---------- */
+function sesionPorId(id) { const m = /^w(\d+)-(\w+)$/.exec(id); if (!m) return null; const w = +m[1], t = m[2]; const slot = tiposSemana().indexOf(t); return { ...sesion(w, t), slot, fecha: slot >= 0 && w >= state.nivel ? fechaDe(w, slot) : null }; }
+function abrirSesion(id) {
+  const s = sesionPorId(id); if (!s) return;
+  const T = TIPOS[s.t], l = state.logs[id];
+  const blocks = [{ h: "Calentamiento", l: s.warm }, ...s.main, { h: "Vuelta a la calma", l: s.cool }];
+  abrirHoja(`<div class="sheet-head ${T.c}"><div class="row"><div class="grow">
+      <p class="eyebrow" style="color:#a9aab0">Semana ${s.w} · ${s.fecha ? `${DIAS_L[wdIdx(s.fecha)]} ${fechaCorta(s.fecha)}` : ""}</p>
+      <div class="row" style="gap:6px"><span class="tdot"></span><span class="ttag">${T.n}</span>${s.test ? '<span class="pill acc">Test</span>' : ""}${s.descarga ? '<span class="pill">Descarga</span>' : ""}</div>
+      <h2 style="margin-top:4px">${s.title}</h2><p class="muted" style="margin:4px 0 0">~${s.mins} min · ${s.sub}</p></div>
+      <button class="icon-btn" data-close aria-label="Cerrar">${ICO.x}</button></div></div>
+    <div class="sheet-body ${T.c}">
+      ${s.tip ? `<div class="tip">${ICO.bulb}<span>${s.tip}</span></div>` : ""}
+      ${blocks.map((b, i) => `<div class="blk"><h3><span class="n">${i + 1}</span>${b.h}</h3><ul>${b.l.map(x => `<li>${fmt(x)}</li>`).join("")}</ul></div>`).join("")}
+      <button class="btn pri block" data-timer="${id}" style="margin-bottom:10px">${ICO.play} Empezar con temporizador</button>
+      ${l ? `<div class="blk" style="border-color:var(--ok)"><h3 style="color:var(--ok)">${ICO.check.replace("<svg", '<svg width="20" height="20"')} Hecha el ${fechaCorta(fromIso(l.fecha))}</h3>
+          <p style="margin:0">${[l.min ? `${l.min} min` : "", l.km ? `${l.km} km` : "", l.m ? `${l.m} m` : "", l.rpe ? `esfuerzo ${l.rpe}/10` : "", l.test ? `test ${mmss(l.test)}` : ""].filter(Boolean).join(" · ") || "Sin datos"}${l.nota ? `<br><span class="muted">${esc(l.nota)}</span>` : ""}</p>
+          <div class="row" style="margin-top:10px"><button class="btn sm" data-log="${id}">Editar</button><button class="btn sm ghost" data-unlog="${id}">Desmarcar</button></div></div>`
+        : `<button class="btn dark block" data-log="${id}">${ICO.check} Marcar como hecha</button>`}
+    </div>`);
+}
+function abrirRegistro(id, pre = {}) {
+  const s = sesionPorId(id), l = state.logs[id] || {};
+  const rpe = l.rpe || pre.rpe || 0;
+  abrirHoja(`<div class="sheet-head"><div class="row"><div class="grow"><p class="eyebrow" style="color:#a9aab0">Registrar sesión</p><h2>${s.title}</h2></div><button class="icon-btn" data-close aria-label="Cerrar">${ICO.x}</button></div></div>
+    <form class="sheet-body" id="f-log">
+      <div class="grid2"><label class="field"><span>Fecha</span><input class="inp" type="date" name="fecha" value="${l.fecha || iso(hoy())}" required></label>
+      <label class="field"><span>Duración (min)</span><input class="inp" type="number" inputmode="numeric" min="0" max="600" name="min" value="${l.min ?? pre.min ?? s.mins}"></label></div>
+      ${s.metric === "run" ? `<label class="field"><span>Distancia corrida (km)</span><input class="inp" type="number" inputmode="decimal" step="0.01" min="0" max="100" name="km" value="${l.km ?? ""}" placeholder="Ej. 3,5"></label>` : ""}
+      ${s.metric === "row" ? `<label class="field"><span>Metros remados</span><input class="inp" type="number" inputmode="numeric" step="10" min="0" max="50000" name="m" value="${l.m ?? ""}" placeholder="Lo que marque la pantalla"></label>` : ""}
+      ${s.test ? `<label class="field"><span>Tiempo del test: ${TESTS[s.test].n} (min:seg)</span><input class="inp mono" name="test" inputmode="numeric" placeholder="${s.test === "sim" ? "Ej. 52:30" : "Ej. 4:35"}" value="${l.test ? mmss(l.test) : pre.test ? mmss(pre.test) : ""}"></label>` : ""}
+      <div class="field"><span>¿Cuánto te costó? (1 = paseo, 10 = máximo)</span><div class="chips" id="rpe">${Array.from({ length: 10 }, (_, i) => `<button type="button" class="chip" data-rpe="${i + 1}" aria-pressed="${rpe === i + 1}">${i + 1}</button>`).join("")}</div><input type="hidden" name="rpe" value="${rpe || ""}"></div>
+      <label class="field"><span>Notas</span><textarea class="inp" name="nota" maxlength="300" placeholder="¿Cómo te has sentido? ¿Alguna molestia?">${esc(l.nota || "")}</textarea></label>
+      <button class="btn pri block" type="submit">${ICO.check} Guardar</button>
+    </form>`);
+}
+function guardarRegistro(id, fd) {
+  const s = sesionPorId(id), num = k => { const v = parseFloat(String(fd.get(k) || "").replace(",", ".")); return isFinite(v) && v > 0 ? v : null; };
+  const log = { fecha: fd.get("fecha") || iso(hoy()), min: num("min") ? Math.round(num("min")) : null, km: num("km"), m: num("m") ? Math.round(num("m")) : null, rpe: +fd.get("rpe") || null, nota: String(fd.get("nota") || "").trim(), ts: Date.now() };
+  state.tests = state.tests.filter(t => t.src !== id);
+  if (s.test) { const t = parseT(fd.get("test")); if (fd.get("test") && t == null) { toast("Escribe el tiempo como min:seg, por ejemplo 4:35"); return false; } if (t) { log.test = t; state.tests.push({ k: s.test, s: t, d: log.fecha, src: id, ts: Date.now() }); } }
+  state.logs[id] = log; save();
+  const best = log.test && state.tests.filter(t => t.k === s.test).every(t => t.s >= log.test) && state.tests.filter(t => t.k === s.test).length > 1;
+  toast(best ? "¡Nuevo récord personal! 🎉" : "Sesión guardada. ¡Bien hecho!");
+  return true;
+}
+function abrirTestManual() {
+  abrirHoja(`<div class="sheet-head"><div class="row"><div class="grow"><p class="eyebrow" style="color:#a9aab0">Progreso</p><h2>Añadir un test</h2></div><button class="icon-btn" data-close aria-label="Cerrar">${ICO.x}</button></div></div>
+    <form class="sheet-body" id="f-test">
+      <label class="field"><span>Prueba</span><select class="inp" name="k">${Object.entries(TESTS).map(([k, t]) => `<option value="${k}">${t.n}</option>`).join("")}</select></label>
+      <div class="grid2"><label class="field"><span>Fecha</span><input class="inp" type="date" name="d" value="${iso(hoy())}" required></label>
+      <label class="field"><span>Tiempo (min:seg)</span><input class="inp mono" name="s" inputmode="numeric" placeholder="4:35" required></label></div>
+      <button class="btn pri block" type="submit">Guardar test</button>
+    </form>`);
+}
+
+/* ---------- Ajustes ---------- */
+function abrirAjustes() {
+  abrirHoja(`<div class="sheet-head"><div class="row"><div class="grow"><p class="eyebrow" style="color:#a9aab0">Ajustes</p><h2>Tu plan</h2></div><button class="icon-btn" data-close aria-label="Cerrar">${ICO.x}</button></div></div>
+    <form class="sheet-body" id="f-ajustes">
+      <label class="field"><span>Nombre</span><input class="inp" name="nombre" value="${esc(state.nombre)}" maxlength="30"></label>
+      <div class="field"><span>Días de entreno (3 a 5)</span><div class="chips">${DIAS.map((d, i) => `<button type="button" class="chip" data-adia="${i}" aria-pressed="${state.dias.includes(i)}">${d}</button>`).join("")}</div>
+        <p class="small muted" style="margin:6px 0 0">Si cambias el número de días, las sesiones ya registradas se mantienen, pero el reparto de la semana cambia.</p></div>
+      <label class="field"><span>Semana de inicio</span><input class="inp" type="date" name="inicio" value="${state.inicio}"><span class="small muted" style="font-weight:400">¿Te has saltado semanas? Retrasa esta fecha para que el calendario cuadre.</span></label>
+      <label class="field"><span>Punto de partida</span><select class="inp" name="nivel"><option value="1" ${state.nivel === 1 ? "selected" : ""}>Desde cero (semana 1)</option><option value="3" ${state.nivel === 3 ? "selected" : ""}>Con algo de base (semana 3)</option></select></label>
+      <label class="opt" style="border-color:var(--line)"><input type="checkbox" name="voz" ${state.voz ? "checked" : ""}><span><b>Voz en el temporizador</b><span class="small muted">Te dice en voz alta qué toca en cada cambio.</span></span></label>
+      <button class="btn pri block" type="submit">Guardar cambios</button>
+      <div class="blk" style="margin-top:16px"><h3>Copia de seguridad</h3><p class="small muted" style="margin:0 0 10px">Tus datos se guardan solo en este navegador. Descarga una copia para pasarla a otro móvil o no perderla.</p>
+        <div class="row wrap"><button type="button" class="btn sm" id="btn-export">Descargar copia</button><label class="btn sm">Cargar copia<input type="file" id="in-import" accept="application/json,.json" hidden></label></div></div>
+      <button type="button" class="btn ghost block" id="btn-reset" style="color:var(--run)">Borrar todo y empezar de nuevo</button>
+    </form>`);
+}
+
+/* ---------- Hojas, ejercicios, avisos ---------- */
+function abrirHoja(html) {
+  $("#layer").innerHTML = `<div class="sheet-bg" data-bg><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  document.body.style.overflow = "hidden";
+  const f = $("#layer .sheet [data-close]"); if (f) f.focus({ preventScroll: true });
+}
+function cerrarHoja() { $("#layer").innerHTML = ""; document.body.style.overflow = ""; }
+let pilaHojas = [];
+function abrirEjercicio(k) {
+  const e = EX[k]; if (!e) return;
+  const prev = $("#layer").innerHTML; pilaHojas.push(prev);
+  abrirHoja(`<div class="sheet-head"><div class="row"><div class="grow"><p class="eyebrow" style="color:#a9aab0">${e.g}</p><h2>${e.n}</h2></div><button class="icon-btn" data-back aria-label="Cerrar">${ICO.x}</button></div></div>
+    <div class="sheet-body"><div class="blk"><h3>Cómo se hace</h3><ul>${e.how.map(x => `<li>${x}</li>`).join("")}</ul></div>
+      <div class="blk"><h3>Más fácil</h3><p style="margin:0">${e.easy}</p></div>
+      <div class="blk"><h3>Más difícil</h3><p style="margin:0">${e.hard}</p></div>
+      <div class="tip">${ICO.flame}<span><b>En Hyrox:</b> ${e.hx}</span></div></div>`);
+}
+function volverHoja() { const prev = pilaHojas.pop(); if (prev) { $("#layer").innerHTML = prev; document.body.style.overflow = "hidden"; } else cerrarHoja(); }
+let toastT;
+function toast(msg) { let t = $(".toast"); if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); } t.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 2800); }
+
+/* ---------- Temporizador ---------- */
+let TM = null, actx = null, wake = null;
+function beep(f = 880, dur = .15, vol = .25) {
+  try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = f; o.type = "square"; g.gain.value = vol; o.connect(g); g.connect(actx.destination); const t = actx.currentTime; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur); o.start(t); o.stop(t + dur + .02); } catch (e) {}
+}
+function hablar(txt) { if (!state.voz || !("speechSynthesis" in window)) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(txt); u.lang = "es-ES"; u.rate = 1.05; speechSynthesis.speak(u); } catch (e) {} }
+async function pedirWake() { try { if ("wakeLock" in navigator) { wake = await navigator.wakeLock.request("screen"); } } catch (e) {} }
+function iniciarTimer(id) {
+  const s = sesionPorId(id); if (!s) return;
+  cerrarHoja(); pilaHojas = [];
+  TM = { id, s, steps: s.steps, i: 0, t0: Date.now(), acc: 0, pausa: false, total0: Date.now(), last: -1, tick: null };
+  try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume(); } catch (e) {}
+  pedirWake();
+  entrarPaso();
+  TM.tick = setInterval(pintarTimer, 200);
+}
+function transcurrido() { return TM.acc + (TM.pausa ? 0 : (Date.now() - TM.t0) / 1000); }
+function entrarPaso() {
+  const p = TM.steps[TM.i]; TM.t0 = Date.now(); TM.acc = 0; TM.last = -1;
+  beep(p.k === "rest" ? 660 : 990, .25);
+  hablar(p.l + (p.s ? `, ${fmHabla(p.s)}` : ""));
+  if (navigator.vibrate) try { navigator.vibrate(p.k === "rest" ? [120] : [200, 80, 200]); } catch (e) {}
+  pintarTimer(true);
+}
+const fmHabla = s => { const m = Math.floor(s / 60), r = s % 60; return [m ? `${m} minuto${m > 1 ? "s" : ""}` : "", r ? `${r} segundos` : ""].filter(Boolean).join(" y "); };
+function siguientePaso() { if (TM.i < TM.steps.length - 1) { TM.i++; entrarPaso(); } else terminarTimer(); }
+function anteriorPaso() { if (transcurrido() > 3 || TM.i === 0) { TM.t0 = Date.now(); TM.acc = 0; pintarTimer(true); } else { TM.i--; entrarPaso(); } }
+function pintarTimer(full) {
+  if (!TM) return;
+  const p = TM.steps[TM.i], el = transcurrido();
+  if (p.s) {
+    const rest = p.s - el;
+    const sec = Math.ceil(rest);
+    if (sec !== TM.last) { TM.last = sec; if (sec <= 3 && sec > 0 && !TM.pausa) beep(740, .1, .2); }
+    if (rest <= 0 && !TM.pausa) { siguientePaso(); return; }
+  }
+  const sig = TM.steps[TM.i + 1];
+  const kind = { work: "Trabajo", rest: "Descanso", prep: "Prepárate" }[p.k];
+  const html = `<div class="timer k-${p.k}" role="dialog" aria-label="Temporizador">
+    <div class="tm-top"><button class="icon-btn" id="tm-close" aria-label="Salir">${ICO.x}</button><span class="grow small" style="color:#b9bac0">${esc(TM.s.title)}</span><span class="mono small" style="color:#b9bac0">${TM.i + 1}/${TM.steps.length}</span></div>
+    <div class="tm-mid">
+      <span class="tm-kind">${kind}</span>
+      <div class="tm-label">${esc(p.l)}</div>
+      <div class="tm-clock" id="tm-clock">${p.s ? mmss(Math.ceil(p.s - el)) : mmss(el)}</div>
+      <div class="tm-sub">${esc(p.sub || (p.s ? "" : "Cronómetro en marcha · toca «Siguiente» al terminar"))}</div>
+      <div class="tm-bar"><i id="tm-bar" style="width:${p.s ? Math.min(100, el / p.s * 100) : 0}%"></i></div>
+      <div class="tm-next">${sig ? `Después: <b>${esc(sig.l)}</b>${sig.s ? ` · ${fm(sig.s)}` : ""}` : "Último paso"}</div>
+      <div class="small" style="color:#8d8e94;margin-top:6px">Tiempo total <span class="mono" id="tm-total">${mmss((Date.now() - TM.total0) / 1000)}</span></div>
+    </div>
+    <div class="tm-ctrl"><button class="btn" id="tm-prev">Atrás</button><button class="btn pri" id="tm-pp">${TM.pausa ? ICO.play + " Seguir" : ICO.pause + " Pausa"}</button><button class="btn" id="tm-next">${sig ? "Siguiente" : "Terminar"}</button></div>
+  </div>`;
+  let root = $("#timer-root");
+  if (!root) { root = document.createElement("div"); root.id = "timer-root"; document.body.appendChild(root); }
+  if (full || !$("#tm-clock")) { root.innerHTML = html; return; }
+  $("#tm-clock").textContent = p.s ? mmss(Math.ceil(p.s - el)) : mmss(el);
+  $("#tm-bar").style.width = (p.s ? Math.min(100, el / p.s * 100) : 0) + "%";
+  $("#tm-total").textContent = mmss((Date.now() - TM.total0) / 1000);
+}
+function pausar() { if (TM.pausa) { TM.t0 = Date.now(); TM.pausa = false; } else { TM.acc = transcurrido(); TM.pausa = true; } pintarTimer(true); }
+function cerrarTimer() { if (!TM) return; clearInterval(TM.tick); TM = null; const r = $("#timer-root"); if (r) r.remove(); try { wake && wake.release(); } catch (e) {} wake = null; try { speechSynthesis.cancel(); } catch (e) {} }
+function terminarTimer() {
+  const id = TM.id, min = Math.round((Date.now() - TM.total0) / 60000);
+  beep(1200, .4); hablar("¡Sesión terminada! Buen trabajo.");
+  cerrarTimer(); render();
+  abrirRegistro(id, { min: Math.max(1, min) });
+}
+document.addEventListener("visibilitychange", () => { if (TM && document.visibilityState === "visible") { pedirWake(); pintarTimer(true); } });
+
+/* ---------- Instalar como app ---------- */
+let pedirInstalar = null;
+const enGithub = /github\.io$/.test(location.hostname);
+const esApp = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); pedirInstalar = e; if (state && tab === "hoy") render(); });
+window.addEventListener("appinstalled", () => { pedirInstalar = null; if (state) render(); });
+if (enGithub && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+function cardInstalar() {
+  if (!enGithub || esApp()) return "";
+  const como = pedirInstalar ? `<button class="btn pri" id="btn-instalar">Instalar</button>`
+    : esIOS ? `<span class="small">En Safari: toca <b>Compartir</b> (el cuadrado con la flecha) y después <b>«Añadir a pantalla de inicio»</b>.</span>`
+    : `<span class="small">En Chrome: menú <b>⋮</b> y después <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</span>`;
+  return `<div class="card"><h3>Llévala en el móvil</h3><p class="small muted" style="margin:4px 0 10px">Instálala como app: se abre a pantalla completa y funciona sin conexión cuando sales a correr.</p>${como}</div>`;
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click", e => {
+  const b = e.target.closest("button, [data-bg], label"); if (!b) return;
+  const d = b.dataset;
+  if (d.bg !== undefined) { if (e.target === b) { pilaHojas = []; cerrarHoja(); } return; }
+  if (d.tab) { tab = d.tab; pilaHojas = []; cerrarHoja(); render(); scrollTo(0, 0); return; }
+  if (d.ex) { e.preventDefault(); abrirEjercicio(d.ex); return; }
+  if (d.open) { pilaHojas = []; abrirSesion(d.open); return; }
+  if (d.timer) { iniciarTimer(d.timer); return; }
+  if (d.log) { pilaHojas = []; abrirRegistro(d.log); return; }
+  if (d.unlog) { if (confirm("¿Desmarcar esta sesión? Se borrarán sus datos.")) { delete state.logs[d.unlog]; state.tests = state.tests.filter(t => t.src !== d.unlog); save(); cerrarHoja(); render(); } return; }
+  if (d.close !== undefined) { pilaHojas = []; cerrarHoja(); return; }
+  if (d.back !== undefined) { volverHoja(); return; }
+  if (d.wzdia) { const i = +d.wzdia; wiz.nombre = $("#wz-nombre").value; wiz.inicio = $("#wz-inicio").value || wiz.inicio; wiz.dias = wiz.dias.includes(i) ? wiz.dias.filter(x => x !== i) : wiz.dias.length < 5 ? [...wiz.dias, i].sort() : wiz.dias; render(); return; }
+  if (d.adia) { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); return; }
+  if (d.rpe) { $("#rpe").querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b)); $('#f-log [name="rpe"]').value = d.rpe; return; }
+  switch (b.id) {
+    case "wz-ok": {
+      const nivel = +(document.querySelector('input[name="nivel"]:checked')?.value || 1);
+      const ini = $("#wz-inicio").value ? iso(lunesDe(fromIso($("#wz-inicio").value))) : wiz.inicio;
+      state = nuevoEstado({ nombre: $("#wz-nombre").value.trim(), dias: wiz.dias.slice().sort(), inicio: ini, nivel });
+      save(); tab = "hoy"; render(); scrollTo(0, 0); toast("¡Plan creado! A por ello."); return;
+    }
+    case "btn-ajustes": abrirAjustes(); return;
+    case "btn-addtest": abrirTestManual(); return;
+    case "btn-instalar": if (pedirInstalar) { pedirInstalar.prompt(); pedirInstalar.userChoice.finally(() => { pedirInstalar = null; render(); }); } return;
+    case "btn-export": {
+      const blob = new Blob([JSON.stringify(state, null, 1)], { type: "application/json" });
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `rachalab-${iso(hoy())}.json`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); return;
+    }
+    case "btn-reset": if (confirm("¿Seguro? Se borrará tu plan y todo tu historial de este dispositivo.")) { try { localStorage.removeItem(LS_KEY); } catch (er) {} state = null; wiz = null; cerrarHoja(); render(); } return;
+    case "tm-close": if (confirm("¿Salir del temporizador?")) cerrarTimer(); return;
+    case "tm-pp": pausar(); return;
+    case "tm-next": siguientePaso(); return;
+    case "tm-prev": anteriorPaso(); return;
+  }
+});
+document.addEventListener("change", e => {
+  if (e.target.name === "nivel" && wiz && !state) { wiz.nivel = +e.target.value; wiz.nombre = $("#wz-nombre").value; wiz.inicio = $("#wz-inicio").value || wiz.inicio; }
+  if (e.target.id === "in-import") {
+    const f = e.target.files[0]; if (!f) return;
+    f.text().then(txt => { const s = JSON.parse(txt); if (!s || !Array.isArray(s.dias) || !s.inicio) throw 0; s.logs = s.logs || {}; s.tests = s.tests || []; state = s; save(); cerrarHoja(); render(); toast("Copia cargada correctamente."); }).catch(() => toast("Ese archivo no es una copia válida."));
+  }
+});
+document.addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target, fd = new FormData(f);
+  if (f.id === "f-log") { if (guardarRegistro(sesionAbierta, fd)) { cerrarHoja(); render(); } }
+  if (f.id === "f-test") { const s = parseT(fd.get("s")); if (!s) { toast("Escribe el tiempo como min:seg, por ejemplo 4:35"); return; } state.tests.push({ k: fd.get("k"), s, d: fd.get("d") || iso(hoy()), ts: Date.now() }); save(); cerrarHoja(); render(); toast("Test guardado."); }
+  if (f.id === "f-ajustes") {
+    const dias = [...f.querySelectorAll("[data-adia]")].filter(c => c.getAttribute("aria-pressed") === "true").map(c => +c.dataset.adia).sort();
+    if (dias.length < 3 || dias.length > 5) { toast("Elige entre 3 y 5 días de entreno."); return; }
+    state.nombre = String(fd.get("nombre") || "").trim(); state.dias = dias; state.nivel = +fd.get("nivel") || 1; state.voz = !!fd.get("voz");
+    if (fd.get("inicio")) state.inicio = iso(lunesDe(fromIso(fd.get("inicio"))));
+    save(); cerrarHoja(); render(); toast("Ajustes guardados.");
+  }
+});
+// Recuerda qué sesión se está registrando (el formulario no lleva el id visible).
+let sesionAbierta = null;
+const _abrirRegistro = abrirRegistro;
+abrirRegistro = function (id, pre) { sesionAbierta = id; _abrirRegistro(id, pre); };
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { if (TM) return; if (pilaHojas.length) volverHoja(); else cerrarHoja(); }
+  if (TM && e.key === " ") { e.preventDefault(); pausar(); }
+});
+render();
+</script>
+</body>
+</html>
