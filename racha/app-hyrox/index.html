@@ -156,7 +156,7 @@ nav.tabs button[aria-current="true"] svg{color:var(--accent)}
   <!-- HOY -->
   <section data-v="hoy">
     <div class="hero">
-      <p class="lab">De cero a HYROX · 12 semanas</p>
+      <p class="lab">Camino a HYROX · 12 semanas</p>
       <h1 class="blk">Hoy suma.<span class="ser">aunque sea la versión mínima.</span></h1>
     </div>
     <div class="stats" id="stats"></div>
@@ -247,7 +247,7 @@ nav.tabs button[aria-current="true"] svg{color:var(--accent)}
       <h3 class="blk" style="font-size:22px">Reglas de la racha</h3>
       <ul>
         <li>Si un día no puedes con todo, haz la <b>versión mínima</b>. Cuenta igual para la racha.</li>
-        <li>Correr se empieza <b>andando y corriendo</b>. Si el RPE pasa de 6 en los intervalos suaves, anda más.</li>
+        <li>Entre semana, las rondas van a <b>ritmo cómodo</b> (RPE 6–7). El sábado es el día largo: dosifica las primeras rondas.</li><li>Rodillas, tobillos o espalda: si algo duele de forma punzante, quita una ronda ese día. Venir del fútbol americano ayuda con la fuerza, pero correr muchos km es otro impacto.</li>
         <li>Dolor punzante o en articulaciones: para. Agujetas: normal las primeras semanas.</li>
         <li>Si tienes alguna lesión o problema de salud, consulta antes con tu médico.</li>
       </ul>
@@ -278,28 +278,28 @@ const TYPES={
 const ORDER=["r1","p1","r2","p2","r3","lg"];
 const PER_WEEK=ORDER.length,TOTAL=12*PER_WEEK,STREAK_MIN=4;
 const PHASES=[
-  {n:"Fase 1 · Base",s:"semanas 1–4",d:"Rondas cortas, correr andando lo que haga falta y flexiones inclinadas. Aprender la técnica.",w:[1,2,3,4]},
-  {n:"Fase 2 · Construcción",s:"semanas 5–8",d:"Más rondas, flexiones completas y abdominales con más volumen.",w:[5,6,7,8]},
-  {n:"Fase 3 · Específico",s:"semanas 9–12",d:"Hasta 8 rondas el sábado, flexiones avanzadas y ritmo de carrera.",w:[9,10,11,12]}
+  {n:"Fase 1 · Base",s:"semanas 1–4",d:"3–4 rondas entre semana y 4–5 el sábado. Flexiones completas desde el primer día.",w:[1,2,3,4]},
+  {n:"Fase 2 · Construcción",s:"semanas 5–8",d:"4–5 rondas entre semana y 6–7 el sábado. Flexiones con pies elevados y mochila.",w:[5,6,7,8]},
+  {n:"Fase 3 · Específico",s:"semanas 9–12",d:"8 rondas cada sábado, ritmo de carrera y flexiones explosivas.",w:[9,10,11,12]}
 ];
 const DELOAD=[4,8];
 const TESTW=[1,6,12];
-const RONDA_W={1:2,2:2,3:3,4:2,5:3,6:3,7:4,8:3,9:4,10:4,11:4,12:3};
-const RONDA_SAB={1:2,2:3,3:3,4:2,5:4,6:4,7:5,8:4,9:6,10:6,11:7,12:8};
+const RONDA_W={1:3,2:3,3:4,4:3,5:4,6:4,7:5,8:4,9:5,10:5,11:6,12:4};
+const RONDA_SAB={1:4,2:5,3:5,4:4,5:6,6:6,7:7,8:5,9:8,10:8,11:8,12:8};
 const ROUND=w=>[
   "1 km de remo · ritmo cómodo, 22 spm",
-  w<=4?"12 burpees · con paso atrás si no salen enteros":"12 burpees",
-  w<=4?"1 km corriendo · anda cuando lo necesites":w<=8?"1 km corriendo · suave y seguido":"1 km corriendo · a ritmo de carrera"
+  "12 burpees",
+  w<=4?"1 km corriendo · ritmo cómodo":w<=8?"1 km corriendo · ritmo constante":"1 km corriendo · a ritmo de carrera"
 ];
 const ABS=[
-  {w:[1,4],l:["Crunch × 12","Elevación de piernas tumbado × 8","Plancha 20\""]},
-  {w:[5,8],l:["Crunch bicicleta × 16","Elevación de piernas tumbado × 12","Plancha 40\"","Mountain climbers × 20"]},
-  {w:[9,12],l:["V-ups × 10","Elevación de piernas tumbado × 15","Hollow hold 30\"","Russian twist con mochila × 20"]}
+  {w:[1,4],l:["Crunch bicicleta × 20","Elevación de piernas tumbado × 12","Plancha 45\"","Mountain climbers × 20"]},
+  {w:[5,8],l:["V-ups × 10","Elevación de piernas tumbado × 15","Plancha 60\"","Russian twist con mochila × 20"]},
+  {w:[9,12],l:["V-ups × 15","Elevación de piernas con giro × 12","Hollow hold 40\"","Russian twist con mochila × 30","Plancha con toque de hombro × 20"]}
 ];
 const CHEST=[
-  {w:[1,4],l:["Flexión inclinada (manos en mesa o sofá) 4 × 8–10","Flexión con rodillas 3 × 8","Fondos en silla 3 × 8","Flexión isométrica: aguanta abajo 3 × 10\""]},
-  {w:[5,8],l:["Flexión completa 5 × 8–12","Flexión abierta 3 × 10","Fondos en silla 3 × 12","Flexión lenta (3\" bajando) 3 × 6","Pullover con mochila tumbado 3 × 12"]},
-  {w:[9,12],l:["Flexión con pies en silla 4 × 8–10","Flexión diamante 3 × 8","Fondos en silla con pies elevados 3 × 12","Press de suelo con mochila 3 × 12","Flexión con mochila en la espalda 3 × máx."]}
+  {w:[1,4],l:["Flexión completa 5 × 12–15","Flexión abierta 3 × 12","Fondos en silla 4 × 12","Flexión lenta (3\" bajando) 3 × 8","Pullover con mochila tumbado 3 × 15"]},
+  {w:[5,8],l:["Flexión con pies en silla 5 × 10–12","Flexión diamante 4 × 10","Fondos en silla con pies elevados 4 × 12","Press de suelo con mochila 4 × 12","Flexión con mochila en la espalda 3 × máx."]},
+  {w:[9,12],l:["Flexión con mochila y pies en silla 5 × 10","Flexión con palmada 4 × 6–8","Fondos en silla con mochila 4 × 10","Flexión arquero 3 × 6 por lado","Flexión con pausa abajo (2\") 3 × máx."]}
 ];
 const pick=(arr,w)=>arr.find(x=>w>=x.w[0]&&w<=x.w[1]);
 const WARM_R=["3' de remo muy suave","10 sentadillas al aire + 10 rotaciones de cadera + 1' de trote"];
@@ -328,7 +328,7 @@ function session(w,t){
     blocks.push({h:"Vuelta a la calma",steps:["5' andando + estirar gemelos, cuádriceps, cadera y espalda"]});
     sum=`${r} rondas · 1 km remo + 12 burpees + 1 km carrera`;
     laps=true;
-    mini="1 ronda y 1 serie de abdominales";
+    mini="2 rondas y 1 serie de abdominales";
   }
   return {id,w,t,sh:ty.sh,name:ty.name,c:ty.c,dow:ty.dow,blocks,sum,tests,laps,mini,deload:DELOAD.includes(w)};
 }
