@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>La isla del tesoro</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Chewy&display=swap">
+<style>
+/* Layout: aventura pirata; mar de fondo, pergaminos encima, un mapa del tesoro con islas que se pueden tocar */
+:root {
+  --sea: #1f6fa8;
+  --sea-deep: #164f7a;
+  --foam: #d8f0ff;
+  --parch: #f6e7c4;
+  --parch-2: #ecd6a6;
+  --wood: #8b5a2b;
+  --ink: #3b2716;
+  --ink-soft: #7a6046;
+  --red: #c0392b;
+  --gold: #f2b632;
+  --green: #2e8b57;
+  --display: "Chewy", "Comic Sans MS", system-ui, sans-serif;
+  --body: "Andika", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background:
+    repeating-radial-gradient(circle at 20% 110%, transparent 0 26px, rgba(255, 255, 255, .06) 26px 29px),
+    linear-gradient(180deg, var(--sea) 0, var(--sea-deep) 100%) fixed,
+    var(--sea-deep);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap {
+  max-width: 540px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 40px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.05; letter-spacing: .02em; text-wrap: balance; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; }
+button:focus-visible, input:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
+.parch { background: var(--parch); border: 3px solid var(--wood); border-radius: 18px; box-shadow: inset 0 0 0 4px var(--parch-2), 0 6px 0 rgba(0, 0, 0, .25); }
+
+.top { display: flex; align-items: center; gap: 10px; }
+.top .spacer { flex: 1; }
+.pill { display: inline-flex; align-items: center; gap: 6px; background: var(--parch); border: 3px solid var(--wood); border-radius: 999px; padding: 3px 12px; font-family: var(--display); font-size: 21px; font-variant-numeric: tabular-nums; }
+.iconbtn { width: 46px; height: 46px; border-radius: 50%; background: var(--parch); border: 3px solid var(--wood); display: grid; place-items: center; font-size: 20px; line-height: 1; }
+
+.mascot { display: flex; align-items: center; gap: 10px; }
+.mascot svg { width: 74px; height: 80px; flex: none; }
+.bubble { flex: 1; min-width: 0; background: var(--parch); border: 3px solid var(--wood); border-radius: 20px; padding: 10px 14px; font-size: 18px; }
+.bubble b { color: var(--red); }
+@media (prefers-reduced-motion: no-preference) {
+  .hop { animation: hop .5s ease; }
+  @keyframes hop { 30% { transform: translateY(-12px) rotate(-6deg); } 60% { transform: translateY(0) rotate(4deg); } }
+  .bob { animation: bob 3s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-6px) rotate(-3deg); } }
+  .xmark { animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { transform: translate(-50%, -50%) scale(1.12); } }
+}
+
+/* portada */
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 8px 10px; align-items: center; color: #fff; }
+.hero > div:first-child { min-width: 0; }
+.hero .eyebrow { font-family: var(--display); color: var(--gold); font-size: 18px; letter-spacing: .06em; }
+.hero h1 { font-size: clamp(38px, 11vw, 56px); text-shadow: 0 4px 0 var(--sea-deep); }
+.hero p { margin: 4px 0 0; color: var(--foam); }
+.hero svg { width: 104px; height: 112px; display: block; }
+.hero .bubble { grid-column: 1 / -1; color: var(--ink); }
+.namebox { display: flex; gap: 10px; align-items: center; padding: 8px 8px 8px 16px; }
+.namebox label { font-size: 16px; color: var(--ink-soft); white-space: nowrap; }
+.namebox input { flex: 1; min-width: 0; font: inherit; color: var(--ink); border: 0; border-bottom: 2px dashed var(--wood); padding: 6px 4px; background: transparent; }
+
+.map { position: relative; width: 100%; aspect-ratio: 5 / 6; max-width: 100%; padding: 0; overflow: hidden; }
+.map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.isle { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; padding: 0; width: 42%; }
+.isle .ic { width: 58px; height: 58px; border-radius: 50%; background: var(--tc); border: 3px solid var(--ink); display: grid; place-items: center; font-size: 28px; box-shadow: 0 5px 0 rgba(59, 39, 22, .35); }
+.isle .nm { font-family: var(--display); font-size: 16px; line-height: 1.05; text-align: center; background: var(--parch); border: 2px solid var(--wood); border-radius: 10px; padding: 2px 8px; }
+.isle .st { font-size: 14px; color: var(--gold); -webkit-text-stroke: .6px var(--ink); letter-spacing: 1px; min-height: 18px; }
+.isle:active .ic { transform: translateY(3px); box-shadow: 0 2px 0 rgba(59, 39, 22, .35); }
+.xmark { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; background: none; padding: 0; width: 60%; }
+.xmark .x { font-family: var(--display); font-size: 64px; line-height: .9; color: var(--red); text-shadow: 0 4px 0 rgba(0, 0, 0, .2); }
+.xmark .nm { font-family: var(--display); font-size: 20px; background: var(--red); color: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 2px 10px; text-align: center; }
+.xmark small { display: block; font-family: var(--body); font-size: 13px; }
+.section-label { font-family: var(--display); font-size: 26px; color: #fff; }
+.section-label small { display: block; font-family: var(--body); font-size: 15px; color: var(--foam); }
+.chest { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.chest .section-label { color: var(--ink); }
+.chest .section-label small { color: var(--ink-soft); }
+.treasures { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.treasures span { aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; font-size: 26px; border-radius: 10px; background: var(--parch-2); }
+.treasures span.on { background: #fff3c4; box-shadow: inset 0 0 0 3px var(--gold); }
+.treasures span.off { font-family: var(--display); font-size: 20px; color: var(--wood); opacity: .5; }
+
+/* juego */
+.rope { display: flex; gap: 6px; align-items: center; padding: 6px 10px; background: rgba(0, 0, 0, .18); border-radius: 999px; }
+.rope i { flex: 1; height: 16px; border-radius: 50%; background: var(--parch-2); border: 2px solid var(--wood); max-width: 26px; }
+.rope i.ok { background: var(--gold); }
+.rope i.ko { background: var(--red); }
+.rope i.now { background: #fff; transform: scale(1.25); }
+.tag { font-family: var(--display); font-size: 18px; color: #fff; background: var(--tc); border: 2px solid var(--ink); border-radius: 10px; padding: 2px 12px; align-self: flex-start; }
+.board { padding: 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.q { font-size: 22px; font-weight: 700; margin: 0; text-wrap: balance; }
+.q b { color: var(--red); }
+.emoji { font-size: 84px; line-height: 1; margin: 0; }
+.bigword { font-weight: 700; font-size: 40px; line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
+.listen { background: var(--parch-2); border-radius: 999px; padding: 5px 14px; font-size: 16px; color: var(--ink); }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.choices.cols1 { grid-template-columns: 1fr; }
+.choice { min-height: 66px; border-radius: 16px; background: #fffaf0; border: 3px solid var(--wood); font-weight: 700; font-size: 21px; padding: 8px 10px; box-shadow: 0 4px 0 var(--wood); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; overflow-wrap: anywhere; }
+.choice.emo { font-size: 40px; line-height: 1; }
+.choice small { font-size: 14px; }
+.choice:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--wood); }
+.choice.right { background: var(--green); border-color: #1d5c39; color: #fff; }
+.choice.wrong { background: var(--red); border-color: #7f2219; color: #fff; }
+.choice.missed { box-shadow: 0 0 0 4px var(--green); }
+.choice.sel { background: #fff3c4; border-color: var(--gold); box-shadow: 0 4px 0 #b88310; }
+.choice:disabled { cursor: default; }
+.multi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; }
+.multi .choice { min-height: 0; aspect-ratio: 1; padding: 4px; }
+.multi.words { grid-template-columns: 1fr 1fr; }
+.multi.words .choice { aspect-ratio: auto; min-height: 56px; }
+@media (prefers-reduced-motion: no-preference) { .shake { animation: shake .4s; } @keyframes shake { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } } }
+
+/* cofres para clasificar */
+.current { min-width: 60%; border-radius: 16px; background: #fff; border: 3px dashed var(--wood); padding: 10px 16px; font-weight: 700; font-size: 30px; }
+.current.emo { font-size: 54px; line-height: 1.1; }
+.current .of { display: block; font-size: 14px; font-weight: 400; color: var(--ink-soft); }
+.cofres { display: grid; grid-template-columns: repeat(var(--n, 2), 1fr); gap: 10px; width: 100%; }
+.cofre { display: flex; flex-direction: column; align-items: center; gap: 4px; border-radius: 16px; background: var(--wood); color: #fff; border: 3px solid var(--ink); padding: 10px 6px; box-shadow: 0 5px 0 var(--ink); min-height: 120px; }
+.cofre:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.cofre .lid { font-size: 34px; line-height: 1; }
+.cofre .lb { font-family: var(--display); font-size: 20px; line-height: 1.05; }
+.cofre .in { font-size: 14px; color: var(--parch); line-height: 1.3; overflow-wrap: anywhere; }
+.cofre.bad { background: var(--red); }
+
+/* sílabas */
+.built { min-height: 64px; width: 100%; border: 3px dashed var(--wood); border-radius: 16px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; background: #fffaf0; }
+.built.ok { border-color: var(--green); background: #e3f4e9; }
+.built.ko { border-color: var(--red); background: #fbe3df; }
+.bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
+.chip { border-radius: 12px; background: var(--gold); border: 3px solid var(--ink); padding: 6px 14px; font-weight: 700; font-size: 26px; box-shadow: 0 4px 0 var(--ink); }
+.built .chip { background: #fff3c4; box-shadow: none; }
+.clapbtn { width: 130px; height: 130px; border-radius: 50%; background: var(--gold); border: 4px solid var(--ink); font-size: 64px; box-shadow: 0 7px 0 var(--ink); display: grid; place-items: center; }
+.clapbtn:active { transform: translateY(5px); box-shadow: 0 2px 0 var(--ink); }
+.claps { display: flex; gap: 8px; min-height: 40px; align-items: center; font-family: var(--display); font-size: 22px; }
+.claps i { width: 30px; height: 30px; border-radius: 50%; background: var(--red); border: 2px solid var(--ink); }
+
+/* frase para corregir */
+.sentence { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
+.sentence button { border-radius: 12px; background: #fffaf0; border: 3px solid var(--wood); padding: 6px 12px; font-weight: 700; font-size: 24px; box-shadow: 0 3px 0 var(--wood); }
+.sentence button.sel { background: #fff3c4; border-color: var(--gold); }
+.sentence button.right { background: var(--green); border-color: #1d5c39; color: #fff; }
+.sentence button.wrong { background: var(--red); border-color: #7f2219; color: #fff; }
+.sentence button.missed { box-shadow: 0 0 0 4px var(--green); }
+
+.go { width: 100%; min-height: 58px; border-radius: 16px; background: var(--red); color: #fff; border: 3px solid var(--ink); font-family: var(--display); font-size: 26px; box-shadow: 0 5px 0 var(--ink); letter-spacing: .03em; }
+.go.alt { background: var(--parch); color: var(--ink); }
+.go:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.explain { background: #fff6e0; border: 3px solid var(--red); border-radius: 14px; padding: 10px 14px; text-align: left; width: 100%; font-size: 19px; }
+.explain strong { color: var(--red); }
+
+.result { text-align: center; align-items: center; }
+.result .score { font-family: var(--display); font-size: 80px; line-height: 1; color: var(--sea-deep); font-variant-numeric: tabular-nums; }
+.result .stars { font-size: 50px; letter-spacing: 6px; color: var(--gold); -webkit-text-stroke: 2px var(--ink); }
+.result .stars .dim { color: var(--parch-2); }
+.result .loot { font-size: 74px; line-height: 1; }
+#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 50; width: 100%; height: 100%; }
+.parents { font-size: 14px; color: var(--foam); text-align: center; margin: 0; }
+</style>
+</head>
+<body>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<main class="wrap" id="app">
+  <div class="board parch">
+    <h2>La isla del tesoro</h2>
+    <p class="q">Si solo ves este mensaje, el juego no se ha podido abrir aquí.</p>
+    <p>Ábrelo con el navegador <b>Chrome</b> o <b>Safari</b>, no con la vista previa de WhatsApp o del correo.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const sample = (a, n) => shuffle(a).slice(0, n);
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+  // ---------- guardado ----------
+  const KEY = "lengua-pirata-v1";
+  let save = { name: "", coins: 0, best: {}, loot: [], sound: true };
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (s) save = Object.assign(save, s);
+    else for (const k of ["lengua-fresi-v1", "mates-bruno-v1", "mates-dino-v1", "ingles-viaje-v1"]) { const m = JSON.parse(localStorage.getItem(k) || "null"); if (m && m.name) { save.name = m.name; break; } }
+  } catch (e) {}
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+
+  // ---------- sonido y voz ----------
+  let actx = null;
+  function tone(freq, start, dur, type) {
+    if (!save.sound) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, actx.currentTime + start);
+      g.gain.exponentialRampToValueAtTime(0.25, actx.currentTime + start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + start + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(actx.currentTime + start); o.stop(actx.currentTime + start + dur + 0.05);
+    } catch (e) {}
+  }
+  const sndCoin = () => { tone(988, 0, .08, "square"); tone(1319, .08, .25, "square"); };
+  const sndKo = () => { tone(220, 0, .2, "triangle"); tone(165, .16, .3, "triangle"); };
+  const sndTap = () => tone(520, 0, .05, "triangle");
+  const sndClap = () => tone(180, 0, .08, "square");
+  const sndWin = () => [523, 659, 784, 659, 784, 1047].forEach((f, i) => tone(f, i * .14, .2, "square"));
+  const canSpeak = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function";
+  function speak(text) {
+    try {
+      if (!canSpeak) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "es-ES"; u.rate = 0.85;
+      const vs = speechSynthesis.getVoices();
+      const v = vs.find(v => /^es(-|_)ES/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang));
+      if (v) u.voice = v;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  // ---------- monedas al acertar ----------
+  const cv = document.getElementById("confetti"), cx = cv.getContext("2d");
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let parts = [], raf = 0;
+  function coins(n) {
+    if (reduce) return;
+    cv.width = innerWidth; cv.height = innerHeight;
+    for (let i = 0; i < n; i++) parts.push({ x: innerWidth / 2 + rnd(-60, 60), y: innerHeight * .45, vx: (Math.random() - .5) * 13, vy: -Math.random() * 14 - 4, r: rnd(7, 11), s: Math.random() * 6, life: 70 + rnd(0, 30) });
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+  function step() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter(p => p.life-- > 0);
+    for (const p of parts) {
+      p.vy += .45; p.x += p.vx; p.y += p.vy; p.s += .25;
+      const w = Math.abs(Math.cos(p.s)) * p.r + 1;
+      cx.beginPath(); cx.ellipse(p.x, p.y, w, p.r, 0, 0, Math.PI * 2); cx.fillStyle = "#f2b632"; cx.fill(); cx.lineWidth = 2; cx.strokeStyle = "#a8740c"; cx.stroke();
+    }
+    raf = parts.length ? requestAnimationFrame(step) : 0;
+    if (!raf) cx.clearRect(0, 0, cv.width, cv.height);
+  }
+
+  // ---------- datos ----------
+  const HEALTHY = [["🍎","manzana"],["🍌","plátano"],["🍐","pera"],["🍇","uvas"],["🍓","fresa"],["🍊","naranja"],["🍉","sandía"],["🍍","piña"],["🥝","kiwi"],["🍒","cerezas"],["🥕","zanahoria"],["🥦","brócoli"],["🍅","tomate"],["🥒","pepino"],["🐟","pescado"],["🥚","huevo"],["🥛","leche"],["🧀","queso"],["🍞","pan"],["🍚","arroz"],["🥑","aguacate"]];
+  const TREATS = [["🍭","piruleta"],["🍩","donut"],["🥤","refresco"],["🍟","patatas fritas"],["🍬","caramelo"],["🍰","pastel"],["🍔","hamburguesa"],["🧁","magdalena"],["🍫","chocolatina"]];
+  const GROUPS = {
+    "frutas": ["manzana","pera","plátano","fresa","naranja","uva","cereza","kiwi","piña"],
+    "animales": ["perro","gato","vaca","caballo","pato","oveja","conejo","león"],
+    "cosas del colegio": ["lápiz","goma","mochila","cuaderno","pizarra","estuche","libro","regla"],
+    "ropa": ["camiseta","pantalón","falda","abrigo","calcetín","gorro","bufanda","zapato"],
+    "partes del cuerpo": ["mano","pie","cabeza","brazo","nariz","boca","rodilla","oreja"],
+    "juguetes": ["pelota","muñeca","cometa","peonza","puzle","comba","yoyó","patinete"],
+    "cosas del mar": ["barco","ola","pez","ancla","concha","isla","arena","pulpo"]
+  };
+  const GICON = { "frutas": "🍎", "animales": "🐶", "cosas del colegio": "✏️", "ropa": "👕", "partes del cuerpo": "✋", "juguetes": "🪀", "cosas del mar": "⚓" };
+  const PICS = [["🍎","man-za-na"],["🍌","plá-ta-no"],["🍊","na-ran-ja"],["🍒","ce-re-za"],["🍐","pe-ra"],["🍓","fre-sa"],["🍍","pi-ña"],["🍇","u-va"],["🍅","to-ma-te"],["🥕","za-na-ho-ria"],["🥒","pe-pi-no"],["🥔","pa-ta-ta"],["🧀","que-so"],["🥚","hue-vo"],["🥛","le-che"],["🍪","ga-lle-ta"],["🦋","ma-ri-po-sa"],["🐘","e-le-fan-te"],["🐴","ca-ba-llo"],["🐰","co-ne-jo"],["🐶","pe-rro"],["🐱","ga-to"],["🐢","tor-tu-ga"],["⚽","pe-lo-ta"],["🎒","mo-chi-la"],["📖","li-bro"],["🍑","me-lo-co-tón"],["🥑","a-gua-ca-te"],["🍆","be-ren-je-na"],["🥦","bró-co-li"],["🍉","san-dí-a"],["☂️","pa-ra-guas"],["🐞","ma-ri-qui-ta"],["🐊","co-co-dri-lo"],["🦛","hi-po-pó-ta-mo"],["🦜","lo-ro"],["⚓","an-cla"],["🏝️","is-la"]];
+  const nSyl = s => s.split("-").length;
+  const NAMES = ["lucía","pablo","martina","hugo","sara","leo","carmen","álvaro","julia","mateo"];
+  const CITIES = ["sevilla","madrid","málaga","granada","valencia","cádiz","córdoba","jaén"];
+  const PETS = ["toby","luna","coco","nala","bobi","kira"];
+  const COMMON = ["mesa","perro","sopa","barco","libro","casa","árbol","playa","pelota","fresa"];
+  const SENTENCES = ["*{n} vive en {c}.", "*mi perro se llama {p}.", "*este verano fuimos a {c}.", "*{n} y {n} comen ensalada.", "*la gata de {n} se llama {p}.", "*hoy hay lentejas. *mañana comeremos pescado.", "*en {c} hay muchas naranjas.", "*mi amiga {n} tiene un conejo.", "*el abuelo de {n} vive en {c}.", "*el loro {p} come fruta.", "*me gusta el mar. *mañana iremos a {c}."];
+  const REASON = { start: "va al principio de la frase", dot: "va después de un punto", name: "es el nombre de una persona", city: "es el nombre de un lugar", pet: "es el nombre de un animal" };
+  function buildSentence() {
+    const used = new Set(), fresh = l => { let x; do { x = pick(l); } while (used.has(x)); used.add(x); return x; };
+    return pick(SENTENCES).split(" ").map((raw, i) => {
+      let type = null, w = raw;
+      if (w.startsWith("*")) { w = w.slice(1); type = i === 0 ? "start" : "dot"; }
+      w = w.replace("{n}", () => { type = type || "name"; return fresh(NAMES); }).replace("{c}", () => { type = type || "city"; return fresh(CITIES); }).replace("{p}", () => { type = type || "pet"; return fresh(PETS); });
+      return { w, cap: !!type, type };
+    });
+  }
+  const bare = w => w.replace(/[.,]/g, "");
+
+  // ---------- islas ----------
+  const TOPICS = {
+    comida: { name: "Isla Fiambrera", es: "Alimentos saludables", icon: "🧺", color: "#2e8b57", x: 27, y: 20 },
+    campo:  { name: "Isla de los Cofres", es: "Campo semántico", icon: "🪙", color: "#d4881c", x: 73, y: 33 },
+    silabas:{ name: "Isla Palmada", es: "Sílabas", icon: "👏", color: "#8a4fbf", x: 27, y: 52 },
+    mayus:  { name: "Isla Mayúscula", es: "Las mayúsculas", icon: "🅰️", color: "#1f6fa8", x: 73, y: 64 }
+  };
+  const LOOT = ["💎", "👑", "🗝️", "🧭", "⚓", "🔭", "💍", "🐚", "🗺️", "🏺", "🦜", "⚔️"];
+  const EXAM_DATE = new Date(2026, 9, 29);
+  const PER_ROUND = 8, PER_EXAM = 3;
+
+  // ---------- retos ----------
+  const GEN = {
+    comida() {
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const good = sample(HEALTHY, rnd(3, 5)), bad = sample(TREATS, 8 - good.length);
+        return { kind: "multi", html: '<p class="q">Prepara la fiambrera del pirata: toca <b>todos los alimentos saludables</b></p>', say: "Prepara la fiambrera del pirata. Toca todos los alimentos saludables.",
+          items: shuffle(good.map(x => ({ label: x[0], name: x[1], good: true })).concat(bad.map(x => ({ label: x[0], name: x[1], good: false })))),
+          explain: "Saludables: <strong>" + good.map(x => x[1]).join(", ") + "</strong>. " + cap(bad.map(x => x[1]).join(", ")) + ": solo de vez en cuando." };
+      }
+      if (v === 1) {
+        const good = sample(HEALTHY, 3), bad = sample(TREATS, 3);
+        return { kind: "sort", emo: true, html: '<p class="q">¿En qué cofre va cada alimento?</p>', say: "Mete cada alimento en su cofre: para todos los días, o solo de vez en cuando.",
+          bins: [{ key: "si", label: "Todos los días", lid: "🥗" }, { key: "no", label: "De vez en cuando", lid: "🍬" }],
+          items: shuffle(good.map(x => ({ label: x[0], name: x[1], bin: "si" })).concat(bad.map(x => ({ label: x[0], name: x[1], bin: "no" })))),
+          explain: "Para todos los días: <strong>" + good.map(x => x[1]).join(", ") + "</strong>. De vez en cuando: " + bad.map(x => x[1]).join(", ") + "." };
+      }
+      const [e, w] = pick(HEALTHY);
+      return { kind: "choice", html: '<p class="q">¿Cómo se llama?</p><p class="emoji">' + e + "</p>", say: "¿Cómo se llama este alimento?",
+        options: shuffle([w].concat(sample(HEALTHY.filter(x => x[1] !== w), 3).map(x => x[1]))).map(x => ({ label: x, value: x })), answer: w, explain: "Es <strong>" + w + "</strong>." };
+    },
+    campo() {
+      const keys = Object.keys(GROUPS), v = rnd(0, 2);
+      if (v === 0) {
+        const [g1, g2] = sample(keys, 2), w1 = sample(GROUPS[g1], 3), w2 = sample(GROUPS[g2], 3);
+        return { kind: "sort", html: '<p class="q">Guarda cada palabra en su cofre</p>', say: "Guarda cada palabra en su cofre: " + g1 + " o " + g2 + ".",
+          bins: [{ key: g1, label: cap(g1), lid: GICON[g1] }, { key: g2, label: cap(g2), lid: GICON[g2] }],
+          items: shuffle(w1.map(x => ({ label: x, bin: g1 })).concat(w2.map(x => ({ label: x, bin: g2 })))),
+          explain: cap(g1) + ": <strong>" + w1.join(", ") + "</strong>. " + cap(g2) + ": <strong>" + w2.join(", ") + "</strong>." };
+      }
+      if (v === 1) {
+        const g = pick(keys), good = sample(GROUPS[g], 4), bad = sample(keys.filter(k => k !== g), 4).map(k => pick(GROUPS[k]));
+        return { kind: "multi", words: true, html: '<p class="q">Toca <b>todas</b> las palabras del grupo de <b>' + g + "</b></p>", say: "Toca todas las palabras del grupo de " + g + ".",
+          items: shuffle(good.map(x => ({ label: x, good: true })).concat(bad.map(x => ({ label: x, good: false })))),
+          explain: "Del grupo de " + g + " son: <strong>" + good.join(", ") + "</strong>." };
+      }
+      const g = pick(keys), three = sample(GROUPS[g], 3), og = pick(keys.filter(k => k !== g)), odd = pick(GROUPS[og]);
+      const all = shuffle(three.concat(odd));
+      return { kind: "choice", html: '<p class="q">¡Un intruso en el barco! ¿Qué palabra <b>no es del grupo</b>?</p>', say: "¿Qué palabra no es del grupo? " + all.join(", "),
+        options: all.map(x => ({ label: x, value: x })), answer: odd, explain: three.join(", ") + " son <strong>" + g + "</strong>. «" + odd + "» es de " + og + "." };
+    },
+    silabas() {
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const [e, s] = pick(PICS.filter(p => nSyl(p[1]) >= 2));
+        return { kind: "chips", parts: s.split("-"), word: s.replace(/-/g, ""), html: '<p class="q">Monta la palabra con las sílabas</p><p class="emoji">' + e + "</p>", say: "Monta la palabra con las sílabas.",
+          explain: "Se forma así: <strong>" + s.split("-").join(" · ") + "</strong> → " + s.replace(/-/g, "") + "." };
+      }
+      if (v === 1) {
+        const [e, s] = pick(PICS), n = nSyl(s);
+        return { kind: "clap", answer: Math.min(n, 4), real: n, html: '<p class="q">Da una palmada por cada sílaba</p><p class="emoji">' + e + '</p><p class="bigword">' + s.replace(/-/g, "") + "</p>", say: s.replace(/-/g, ""),
+          explain: "<strong>" + s.replace(/-/g, "") + "</strong> tiene " + n + " sílabas: " + s.split("-").join(" · ") + (n > 3 ? " (más de tres)" : "") + "." };
+      }
+      const pool = shuffle(PICS), pickN = c => pool.filter(p => (c === 4 ? nSyl(p[1]) >= 4 : nSyl(p[1]) === c));
+      const items = shuffle([].concat(pickN(2).slice(0, 2), pickN(3).slice(0, 2), pickN(4).slice(0, 1))).map(p => ({ label: p[1].replace(/-/g, ""), bin: String(Math.min(nSyl(p[1]), 4)), s: p[1] }));
+      return { kind: "sort", html: '<p class="q">Mete cada palabra en su barril</p>', say: "Mete cada palabra en el barril de dos sílabas, tres sílabas o más de tres.",
+        bins: [{ key: "2", label: "2 sílabas", lid: "🛢️" }, { key: "3", label: "3 sílabas", lid: "🛢️" }, { key: "4", label: "Más de 3", lid: "🛢️" }],
+        items, explain: items.map(i => i.s.split("-").join("·")).join(" &nbsp; ") };
+    },
+    mayus() {
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const toks = buildSentence();
+        return { kind: "tapmany", toks, html: '<p class="q">El loro lo ha escrito todo en minúscula. <b>Toca las palabras que llevan mayúscula.</b></p>', say: "Toca todas las palabras que deberían empezar por mayúscula.",
+          explain: "Así está bien: <strong>" + toks.map(t => t.cap ? cap(t.w) : t.w).join(" ") + "</strong>" };
+      }
+      if (v === 1) {
+        const toks = buildSentence(), caps = toks.filter(t => t.cap), t = pick(caps), word = cap(bare(t.w));
+        const shown = toks.map(x => x.cap ? (x === t ? "<b>" + cap(x.w) + "</b>" : cap(x.w)) : x.w).join(" ");
+        const opts = ["start", "dot", "name", "city", "pet"].filter(k => k !== t.type);
+        const options = shuffle([t.type].concat(sample(opts, 2))).map(k => ({ label: cap(REASON[k]), value: k }));
+        return { kind: "choice", cols: 1, html: '<p class="q">¿Por qué <b>' + word + "</b> lleva mayúscula?</p><p style=\"font-size:24px;margin:0\">" + shown + "</p>", say: "¿Por qué " + word + " lleva mayúscula?",
+          options, answer: t.type, explain: "<strong>" + word + "</strong> lleva mayúscula porque " + REASON[t.type] + "." };
+      }
+      const props = sample(NAMES, 1).concat(sample(CITIES, 1), sample(PETS, 1)), comm = sample(COMMON, 3);
+      return { kind: "sort", html: '<p class="q">Si van en mitad de una frase, ¿llevan mayúscula?</p>', say: "Si estas palabras van en mitad de una frase, ¿llevan mayúscula o minúscula?",
+        bins: [{ key: "M", label: "Con mayúscula", lid: "🅰️" }, { key: "m", label: "Con minúscula", lid: "🔡" }],
+        items: shuffle(props.map(x => ({ label: x, bin: "M" })).concat(comm.map(x => ({ label: x, bin: "m" })))),
+        explain: "Los nombres de personas, lugares y mascotas van con mayúscula: <strong>" + props.map(cap).join(", ") + "</strong>. " + comm.join(", ") + " van con minúscula." };
+    }
+  };
+
+  // ---------- pantalla ----------
+  let game = null;
+  const app = document.getElementById("app");
+  const PARROT = '<svg viewBox="0 0 90 100" aria-hidden="true"><path d="M30 92l-6 6M44 92v7M38 92l2 7" stroke="#3b2716" stroke-width="4" stroke-linecap="round"/><path d="M58 70c14 10 22 22 22 28-12-2-22-10-28-20z" fill="#1f6fa8" stroke="#3b2716" stroke-width="3" stroke-linejoin="round"/><ellipse cx="40" cy="64" rx="22" ry="28" fill="#2e9e5b" stroke="#3b2716" stroke-width="3"/><path d="M26 58c6 14 14 22 26 26-14 4-26-6-26-26z" fill="#f2b632" stroke="#3b2716" stroke-width="3" stroke-linejoin="round"/><circle cx="44" cy="34" r="20" fill="#e74c3c" stroke="#3b2716" stroke-width="3"/><path d="M60 32c10 0 14 8 10 16-4-4-8-6-12-6z" fill="#f2b632" stroke="#3b2716" stroke-width="3" stroke-linejoin="round"/><circle cx="50" cy="31" r="6" fill="#fff" stroke="#3b2716" stroke-width="2"/><circle cx="51.5" cy="31" r="3" fill="#3b2716"/><path d="M34 26l-8 10" stroke="#3b2716" stroke-width="2"/><ellipse cx="36" cy="32" rx="6" ry="5" fill="#3b2716"/><path d="M20 20c8-14 40-14 48 0-8-4-40-4-48 0z" fill="#3b2716"/><path d="M24 16c6-10 32-10 40 0" fill="#3b2716"/><circle cx="44" cy="12" r="3" fill="#fff"/></svg>';
+  function mascotHTML(msg) { return '<div class="mascot"><div id="pet">' + PARROT + '</div><div class="bubble" id="bubble" aria-live="polite">' + msg + "</div></div>"; }
+  function say(msg) { const b = document.getElementById("bubble"); if (b) b.innerHTML = msg; const o = document.getElementById("pet"); if (o) { o.classList.remove("hop"); void o.offsetWidth; o.classList.add("hop"); } }
+  const nm = () => save.name ? ", " + esc(save.name) : "";
+  function daysLeft() { const now = new Date(); now.setHours(0, 0, 0, 0); return Math.round((EXAM_DATE - now) / 86400000); }
+  function starsFor(s, t) { const p = s / t; return p >= .9 ? 3 : p >= .7 ? 2 : p >= .4 ? 1 : 0; }
+  const starRow = n => "★".repeat(n) + "☆".repeat(3 - n);
+
+  function mapSVG() {
+    const pts = Object.values(TOPICS).map(t => [t.x * 5, t.y * 6]).concat([[250, 510]]);
+    let d = "M" + pts[0].join(" ");
+    for (let i = 1; i < pts.length; i++) d += " Q" + ((pts[i - 1][0] + pts[i][0]) / 2 + (i % 2 ? 40 : -40)) + " " + ((pts[i - 1][1] + pts[i][1]) / 2) + " " + pts[i].join(" ");
+    const blob = (x, y, r) => '<path d="M' + (x - r) + " " + y + "c0-" + r * .8 + " " + r * .6 + "-" + r + " " + r + "-" + r * .9 + "s" + r * 1.1 + " " + r * .3 + " " + r + " " + r * .9 + "-" + r * .4 + " " + r + "-" + r + " " + r * .9 + "-" + r + "-" + r * .2 + "-" + r + "-" + r * .9 + 'z" fill="#e9cf93" stroke="#c9a35a" stroke-width="4"/>';
+    return '<svg viewBox="0 0 500 600" preserveAspectRatio="none" aria-hidden="true"><rect width="500" height="600" fill="#f6e7c4"/><rect x="10" y="10" width="480" height="580" rx="16" fill="#cfe9f5"/>' +
+      '<g fill="none" stroke="#fff" stroke-width="3" opacity=".6"><path d="M40 120q15-10 30 0t30 0"/><path d="M380 160q15-10 30 0t30 0"/><path d="M60 450q15-10 30 0t30 0"/><path d="M360 470q15-10 30 0t30 0"/><path d="M200 260q15-10 30 0t30 0"/></g>' +
+      Object.values(TOPICS).map(t => blob(t.x * 5, t.y * 6 + 6, 70)).join("") + blob(250, 516, 90) +
+      '<path d="' + d + '" fill="none" stroke="#c0392b" stroke-width="5" stroke-dasharray="4 12" stroke-linecap="round"/>' +
+      '<g transform="translate(440 70)"><circle r="34" fill="#f6e7c4" stroke="#8b5a2b" stroke-width="3"/><path d="M0-28l6 22 22 6-22 6-6 22-6-22-22-6 22-6z" fill="#c0392b"/><text y="-36" text-anchor="middle" font-family="Chewy, sans-serif" font-size="18" fill="#3b2716">N</text></g>' +
+      '<rect x="4" y="4" width="492" height="592" rx="18" fill="none" stroke="#8b5a2b" stroke-width="8"/></svg>';
+  }
+
+  function home() {
+    game = null;
+    const d = daysLeft();
+    const when = d > 1 ? "Faltan " + d + " días" : d === 1 ? "¡Es mañana!" : d === 0 ? "¡Es hoy!" : "¡Sigue practicando!";
+    app.innerHTML =
+      '<div class="top"><span class="pill" title="Monedas">🪙 ' + save.coins + '</span><span class="spacer"></span><button class="iconbtn" id="snd" aria-label="Sonido">' + (save.sound ? "🔊" : "🔇") + "</button></div>" +
+      '<div class="hero"><div><span class="eyebrow">Lengua · Tema 1</span><h1>La isla del tesoro</h1><p>Recorre las islas, gana monedas y encuentra el tesoro.</p></div><div class="bob">' + PARROT + "</div>" +
+      '<div class="bubble" id="bubble">' + (save.name ? "¡Ahoy" + nm() + "! Soy el <b>loro Paco</b>. ¿A qué isla navegamos hoy?" : "¡Ahoy, grumete! Soy el <b>loro Paco</b>. ¿Cómo te llamas?") + "</div></div>" +
+      '<div class="namebox parch"><label for="name">Grumete</label><input id="name" maxlength="16" autocomplete="off" placeholder="Escribe tu nombre" value="' + esc(save.name) + '"></div>' +
+      '<div class="section-label">El mapa del tesoro<small>Toca una isla para practicar. La X es el simulacro de la prueba.</small></div>' +
+      '<div class="map parch">' + mapSVG() +
+      Object.keys(TOPICS).map(k => { const t = TOPICS[k], b = save.best[k] || 0;
+        return '<button class="isle" data-go="' + k + '" style="left:' + t.x + "%;top:" + t.y + "%;--tc:" + t.color + '"><span class="ic">' + t.icon + '</span><span class="nm">' + t.name + '</span><span class="st">' + (b ? starRow(b) : "") + "</span></button>"; }).join("") +
+      '<button class="xmark" data-go="examen" style="left:50%;top:86%"><span class="x">✕</span><span class="nm">El gran tesoro<small>Jueves 29 · ' + when + (save.best.examen ? " · " + starRow(save.best.examen) : "") + "</small></span></button></div>" +
+      '<div class="chest parch"><div class="section-label">Mi cofre<small>Ganas un tesoro cuando aciertas casi todo (7 de 8, o 10 de 12 en el gran tesoro).</small></div><div class="treasures">' +
+      LOOT.map(t => save.loot.includes(t) ? '<span class="on">' + t + "</span>" : '<span class="off">?</span>').join("") + "</div></div>" +
+      '<p class="parents">Para mamá y papá: son los contenidos de la prueba de Lengua del tema 1, con juegos distintos a los de la otra app. El progreso se guarda solo en este dispositivo.</p>';
+    app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => start(b.dataset.go)));
+    document.getElementById("snd").addEventListener("click", e => { save.sound = !save.sound; persist(); e.currentTarget.textContent = save.sound ? "🔊" : "🔇"; });
+    const inp = document.getElementById("name");
+    inp.addEventListener("change", () => { save.name = inp.value.trim().slice(0, 16); persist(); home(); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") inp.blur(); });
+    window.scrollTo(0, 0);
+  }
+
+  function start(key) {
+    let qs = [];
+    if (key === "examen") { Object.keys(TOPICS).forEach(k => { for (let i = 0; i < PER_EXAM; i++) qs.push(Object.assign(GEN[k](), { topic: k })); }); qs = shuffle(qs); }
+    else for (let i = 0; i < PER_ROUND; i++) qs.push(Object.assign(GEN[key](), { topic: key }));
+    game = { key, qs, i: 0, score: 0, marks: [] };
+    question();
+  }
+
+  function question() {
+    const q = game.qs[game.i], tp = TOPICS[q.topic];
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al mapa">←</button><span class="pill">' + (game.i + 1) + " / " + game.qs.length + '</span><span class="spacer"></span><span class="pill">🪙 ' + save.coins + "</span></div>" +
+      '<div class="rope">' + game.qs.map((_, i) => '<i class="' + (game.marks[i] === true ? "ok" : game.marks[i] === false ? "ko" : i === game.i ? "now" : "") + '"></i>').join("") + "</div>" +
+      '<span class="tag" style="--tc:' + tp.color + '">' + tp.icon + " " + tp.name + "</span>" +
+      '<div class="board parch">' + q.html + '<button class="listen" id="listen">🔊 Escuchar</button><div id="area" style="width:100%;display:flex;flex-direction:column;gap:14px;align-items:center"></div></div>' +
+      mascotHTML(game.i === 0 ? "¡Leven anclas" + nm() + "!" : pick(["¡Rrrr, piensa con calma!", "Lee bien, grumete.", "¡A por la siguiente moneda!", "¡Tú puedes, pirata!"]));
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("listen").addEventListener("click", () => speak(q.say));
+    const area = document.getElementById("area");
+    ({ choice: renderChoices, multi: renderMulti, sort: renderSort, chips: renderChips, clap: renderClap, tapmany: renderTapMany })[q.kind](q, area);
+    window.scrollTo(0, 0);
+  }
+
+  function checkRow(area, onCheck, label) {
+    const b = document.createElement("button");
+    b.className = "go"; b.setAttribute("data-check", ""); b.textContent = label || "¡Comprobar!";
+    b.addEventListener("click", onCheck);
+    area.appendChild(b);
+    return b;
+  }
+
+  function renderChoices(q, area) {
+    const box = document.createElement("div");
+    box.className = "choices" + (q.cols === 1 ? " cols1" : "");
+    q.options.forEach(o => {
+      const b = document.createElement("button");
+      b.className = "choice"; b.innerHTML = o.label;
+      b.addEventListener("click", () => {
+        const ok = o.value === q.answer;
+        box.querySelectorAll("button").forEach((x, i) => { x.disabled = true; if (q.options[i].value === q.answer) x.classList.add("right"); });
+        if (!ok) b.classList.add("wrong", "shake");
+        finish(ok, area);
+      });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+
+  function renderMulti(q, area) {
+    const box = document.createElement("div");
+    box.className = "multi" + (q.words ? " words" : "");
+    const on = new Set();
+    q.items.forEach((it, i) => {
+      const b = document.createElement("button");
+      b.className = "choice" + (q.words ? "" : " emo"); b.innerHTML = it.label;
+      if (it.name) b.setAttribute("aria-label", it.name);
+      b.addEventListener("click", () => { sndTap(); on.has(i) ? on.delete(i) : on.add(i); b.classList.toggle("sel", on.has(i)); });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+    const go = checkRow(area, () => {
+      if (!on.size) { say("Toca al menos una, grumete."); return; }
+      let ok = true;
+      box.querySelectorAll("button").forEach((b, i) => {
+        b.disabled = true; b.classList.remove("sel");
+        const g = q.items[i].good, s = on.has(i);
+        if (g && s) b.classList.add("right"); else if (!g && s) { b.classList.add("wrong"); ok = false; } else if (g && !s) { b.classList.add("missed"); ok = false; }
+      });
+      go.remove(); finish(ok, area);
+    });
+  }
+
+  function renderSort(q, area) {
+    let i = 0, errors = 0, busy = false;
+    const cur = document.createElement("div");
+    cur.className = "current" + (q.emo ? " emo" : "");
+    const bins = document.createElement("div");
+    bins.className = "cofres"; bins.style.setProperty("--n", q.bins.length);
+    const inside = {};
+    q.bins.forEach(bn => {
+      inside[bn.key] = [];
+      const b = document.createElement("button");
+      b.className = "cofre"; b.dataset.k = bn.key;
+      b.innerHTML = '<span class="lid">' + bn.lid + '</span><span class="lb">' + bn.label + '</span><span class="in"></span>';
+      b.addEventListener("click", () => {
+        if (busy || i >= q.items.length) return;
+        const it = q.items[i];
+        const put = () => { inside[it.bin].push(it.label); bins.querySelector('[data-k="' + it.bin + '"] .in').innerHTML = inside[it.bin].join(q.emo ? " " : ", "); i++; paint(); };
+        if (it.bin === bn.key) { sndTap(); put(); }
+        else {
+          errors++; sndKo(); busy = true; b.classList.add("bad", "shake");
+          say("¡Ese no! «" + (it.name || it.label) + "» va en <b>" + q.bins.find(x => x.key === it.bin).label.toLowerCase() + "</b>.");
+          setTimeout(() => { b.classList.remove("bad", "shake"); busy = false; put(); }, 900);
+        }
+      });
+      bins.appendChild(b);
+    });
+    function paint() {
+      if (i < q.items.length) { const it = q.items[i]; cur.innerHTML = it.label + '<span class="of">' + (i + 1) + " de " + q.items.length + "</span>"; }
+      else { cur.remove(); bins.querySelectorAll("button").forEach(b => b.disabled = true); finish(errors === 0, area); }
+    }
+    area.appendChild(cur); area.appendChild(bins);
+    paint();
+  }
+
+  function renderChips(q, area) {
+    let order; do { order = shuffle(q.parts.map((_, i) => i)); } while (order.map(i => q.parts[i]).join("") === q.word);
+    const built = document.createElement("div"), bank = document.createElement("div");
+    built.className = "built"; bank.className = "bank";
+    const picked = []; let done = false;
+    function paint() {
+      built.innerHTML = picked.length ? "" : '<span style="color:var(--ink-soft)">Toca las sílabas en orden</span>'; bank.innerHTML = "";
+      picked.forEach((idx, k) => { const c = document.createElement("button"); c.className = "chip"; c.textContent = q.parts[idx]; c.addEventListener("click", () => { if (done) return; picked.splice(k, 1); paint(); }); built.appendChild(c); });
+      order.filter(i => !picked.includes(i)).forEach(idx => {
+        const c = document.createElement("button"); c.className = "chip"; c.textContent = q.parts[idx];
+        c.addEventListener("click", () => {
+          if (done) return; sndTap(); picked.push(idx); paint();
+          if (picked.length === q.parts.length) {
+            done = true;
+            const ok = picked.map(i => q.parts[i]).join("") === q.word;
+            built.classList.add(ok ? "ok" : "ko"); if (!ok) built.classList.add("shake");
+            built.querySelectorAll("button").forEach(x => x.disabled = true);
+            finish(ok, area);
+          }
+        });
+        bank.appendChild(c);
+      });
+    }
+    area.appendChild(built); area.appendChild(bank); paint();
+  }
+
+  function renderClap(q, area) {
+    let n = 0;
+    const claps = document.createElement("div"); claps.className = "claps";
+    const btn = document.createElement("button"); btn.className = "clapbtn"; btn.textContent = "👏"; btn.setAttribute("aria-label", "Dar una palmada");
+    const paint = () => { claps.innerHTML = n ? "<i></i>".repeat(Math.min(n, 8)) + " " + n : '<span style="font-family:var(--body);font-size:16px;color:var(--ink-soft)">Toca la mano una vez por sílaba</span>'; };
+    btn.addEventListener("click", () => { if (n < 8) n++; sndClap(); paint(); });
+    const row = document.createElement("div"); row.className = "btnrow";
+    row.innerHTML = '<button class="go alt">Borrar</button>';
+    row.firstChild.addEventListener("click", () => { n = 0; paint(); });
+    area.appendChild(btn); area.appendChild(claps); area.appendChild(row);
+    paint();
+    const go = checkRow(row, () => {
+      if (!n) { say("¡Da alguna palmada primero!"); return; }
+      const ok = n === q.real;
+      btn.disabled = true; row.remove();
+      claps.style.color = ok ? "var(--green)" : "var(--red)";
+      finish(ok, area);
+    });
+    go.style.minHeight = "58px";
+  }
+
+  function renderTapMany(q, area) {
+    const box = document.createElement("div"); box.className = "sentence";
+    const on = new Set();
+    q.toks.forEach((t, i) => {
+      const b = document.createElement("button"); b.textContent = t.w;
+      b.addEventListener("click", () => { sndTap(); on.has(i) ? on.delete(i) : on.add(i); b.textContent = on.has(i) ? cap(t.w) : t.w; b.classList.toggle("sel", on.has(i)); });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+    const go = checkRow(area, () => {
+      let ok = true;
+      box.querySelectorAll("button").forEach((b, i) => {
+        const t = q.toks[i], s = on.has(i);
+        b.disabled = true; b.classList.remove("sel"); b.textContent = t.cap ? cap(t.w) : t.w;
+        if (t.cap && s) b.classList.add("right"); else if (!t.cap && s) { b.classList.add("wrong"); ok = false; } else if (t.cap && !s) { b.classList.add("missed"); ok = false; }
+      });
+      go.remove(); finish(ok, area);
+    });
+  }
+
+  function finish(ok, area) {
+    game.marks[game.i] = ok;
+    const r = document.querySelectorAll(".rope i")[game.i]; if (r) r.className = ok ? "ok" : "ko";
+    if (ok) {
+      game.score++; save.coins++; persist(); sndCoin(); coins(26);
+      say(pick(["¡Rrrr, muy bien" + nm() + "!", "¡Una moneda de oro!", "¡Eso es, pirata!", "¡Al cofre!", "¡Fenomenal, grumete!"]));
+      setTimeout(next, 1500);
+    } else {
+      sndKo();
+      say(pick(["¡Casi! Mira cómo es.", "No pasa nada, así se aprende.", "¡Rrrr! Fíjate bien."]));
+      const ex = document.createElement("div"); ex.className = "explain"; ex.innerHTML = game.qs[game.i].explain;
+      const b = document.createElement("button"); b.className = "go"; b.textContent = "Seguir"; b.addEventListener("click", next);
+      area.appendChild(ex); area.appendChild(b);
+      b.focus({ preventScroll: true });
+    }
+  }
+  function next() { if (!game) return; game.i++; if (game.i < game.qs.length) question(); else results(); }
+
+  function results() {
+    const total = game.qs.length, s = game.score, st = starsFor(s, total), need = game.key === "examen" ? 10 : 7;
+    let loot = "";
+    if (s >= need) { const left = LOOT.filter(x => !save.loot.includes(x)); loot = left.length ? pick(left) : pick(LOOT); if (left.length) save.loot.push(loot); }
+    save.best[game.key] = Math.max(save.best[game.key] || 0, st); persist();
+    if (st >= 2) { sndWin(); coins(90); }
+    const msg = st === 3 ? "¡Increíble" + nm() + "! Estás lista para la prueba." : st === 2 ? "¡Muy bien" + nm() + "! Un poquito más y lo bordas." : st === 1 ? "¡Buen trabajo! Repetimos y verás cómo sale mejor." : "¡Ánimo! Practicando se aprende. ¿Otra vez?";
+    const title = game.key === "examen" ? "El gran tesoro" : TOPICS[game.key].name;
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al mapa">←</button><span class="spacer"></span><span class="pill">🪙 ' + save.coins + "</span></div>" +
+      '<div class="board parch result"><h2>' + title + '</h2><div class="score">' + s + " / " + total + '</div><div class="stars">' + "★".repeat(st) + '<span class="dim">' + "★".repeat(3 - st) + "</span></div>" +
+      (loot ? '<div class="loot">' + loot + '</div><p class="q">¡Nuevo tesoro para tu cofre!</p>' : '<p class="q">Con ' + need + " aciertos encuentras un tesoro.</p>") +
+      '<div class="btnrow"><button class="go alt" id="home">Al mapa</button><button class="go" id="again">Otra vez</button></div></div>' + mascotHTML(msg);
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("home").addEventListener("click", home);
+    const k = game.key;
+    document.getElementById("again").addEventListener("click", () => start(k));
+    window.scrollTo(0, 0);
+  }
+
+  home();
+})();
+</script>
+</body>
+</html>

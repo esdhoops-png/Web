@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Viaje a California</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Lilita+One&display=swap">
+<style>
+/* Layout: un viaje en avión; cielo con nubes, tarjetas de embarque con talón troquelado, pasaporte con sellos */
+:root {
+  --sky: #d9efff;
+  --sky-2: #a9d8ff;
+  --navy: #1d2b53;
+  --ink-soft: #56668c;
+  --cream: #fffaf0;
+  --card: #ffffff;
+  --red: #e2453c;
+  --blue: #2a64d6;
+  --gold: #f5b82e;
+  --green: #2a9d63;
+  --c-rooms: #ff8a3d;
+  --c-things: #1f9e93;
+  --c-preps: #7b5cd6;
+  --c-gram: #e2453c;
+  --display: "Lilita One", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --body: "Andika", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse 90px 34px at 12% 120px, #fff 98%, transparent 100%),
+    radial-gradient(ellipse 60px 26px at 22% 104px, #fff 98%, transparent 100%),
+    radial-gradient(ellipse 110px 38px at 88% 420px, #fff 98%, transparent 100%),
+    radial-gradient(ellipse 70px 28px at 78% 404px, #fff 98%, transparent 100%),
+    linear-gradient(180deg, var(--sky-2) 0, var(--sky) 520px) fixed,
+    var(--sky);
+  color: var(--navy);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap {
+  max-width: 540px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.05; text-wrap: balance; letter-spacing: .01em; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; }
+button:focus-visible, input:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
+.airmail { height: 8px; border-radius: 4px; background: repeating-linear-gradient(-45deg, var(--red) 0 12px, #fff 12px 18px, var(--blue) 18px 30px, #fff 30px 36px); }
+
+.top { display: flex; align-items: center; gap: 10px; }
+.top .spacer { flex: 1; }
+.pill { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border-radius: 999px; padding: 6px 14px; font-family: var(--display); font-size: 18px; box-shadow: 0 3px 0 rgba(29, 43, 83, .15); font-variant-numeric: tabular-nums; }
+.iconbtn { width: 46px; height: 46px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-size: 20px; line-height: 1; box-shadow: 0 3px 0 rgba(29, 43, 83, .15); }
+
+/* Peluche, el conejo piloto */
+.mascot { display: flex; align-items: center; gap: 10px; }
+.mascot svg { width: 70px; height: 70px; flex: none; }
+.bubble { flex: 1; min-width: 0; background: var(--card); border-radius: 22px; padding: 10px 16px; font-size: 18px; box-shadow: 0 3px 0 rgba(29, 43, 83, .12); }
+.bubble b { color: var(--blue); }
+.bubble i { font-style: normal; color: var(--red); font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .hop { animation: hop .5s ease; }
+  @keyframes hop { 30% { transform: translateY(-12px) rotate(-6deg); } 60% { transform: translateY(0) rotate(4deg); } }
+  .fly { animation: fly 2.6s ease-in-out infinite; }
+  @keyframes fly { 50% { transform: translateY(-5px) rotate(-3deg); } }
+}
+
+/* portada */
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; }
+.hero .eyebrow { font-family: var(--display); color: var(--blue); font-size: 16px; letter-spacing: .08em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(38px, 11vw, 54px); color: var(--navy); }
+.hero p { margin: 4px 0 0; color: var(--ink-soft); }
+.hero svg { width: 108px; height: 108px; }
+.hero .bubble { grid-column: 1 / -1; }
+.namebox { display: flex; gap: 10px; align-items: center; background: var(--card); border-radius: 16px; padding: 8px 8px 8px 16px; }
+.namebox label { font-size: 15px; color: var(--ink-soft); white-space: nowrap; text-transform: uppercase; letter-spacing: .06em; }
+.namebox input { flex: 1; min-width: 0; font: inherit; color: var(--navy); border: 0; border-bottom: 2px dashed var(--sky-2); padding: 6px 4px; background: transparent; }
+.map { background: var(--card); border-radius: 22px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.map svg { width: 100%; height: auto; display: block; }
+.map .cap { font-size: 15px; color: var(--ink-soft); text-align: center; margin: 0; }
+.section-label { font-family: var(--display); font-size: 24px; }
+.section-label small { display: block; font-family: var(--body); font-size: 15px; color: var(--ink-soft); }
+
+/* tarjetas de embarque */
+.passes { display: flex; flex-direction: column; gap: 14px; }
+.pass {
+  position: relative; display: grid; grid-template-columns: 1fr 86px; text-align: left; padding: 0;
+  background: var(--cream); border-radius: 18px; box-shadow: 0 5px 0 rgba(29, 43, 83, .18); overflow: hidden;
+}
+.pass:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(29, 43, 83, .18); }
+.pass .main { padding: 12px 14px 12px 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0; border-left: 8px solid var(--tc); }
+.pass .route { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 30px; line-height: 1; }
+.pass .route .arrow { flex: 1; height: 0; border-top: 3px dotted var(--ink-soft); position: relative; min-width: 24px; }
+.pass .route .arrow::after { content: "✈"; position: absolute; left: 50%; top: -14px; transform: translateX(-50%); font-size: 18px; color: var(--tc); }
+.pass .city { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+.pass h3 { font-size: 22px; color: var(--tc); margin-top: 4px; }
+.pass .meta { font-size: 14px; color: var(--ink-soft); }
+.pass .stub { border-left: 3px dashed #d8cdb6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 8px; text-align: center; }
+.pass .stub b { font-family: var(--display); font-weight: 400; font-size: 13px; letter-spacing: .08em; color: var(--ink-soft); }
+.pass .stub span { font-family: var(--display); font-size: 26px; color: var(--navy); }
+.pass .stub em { font-style: normal; font-size: 15px; color: var(--gold); letter-spacing: 1px; }
+.pass::before, .pass::after { content: ""; position: absolute; right: 77px; width: 20px; height: 20px; border-radius: 50%; background: var(--sky); }
+.pass::before { top: -10px; }
+.pass::after { bottom: -10px; }
+.pass.final { background: var(--navy); color: #fff; }
+.pass.final .main { border-left-color: var(--gold); }
+.pass.final h3 { color: var(--gold); }
+.pass.final .city, .pass.final .meta, .pass.final .stub b { color: #b9c4e6; }
+.pass.final .stub { border-left-color: #3a4a7a; }
+.pass.final .stub span { color: #fff; }
+
+/* pasaporte */
+.passport { background: var(--navy); color: #fff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.passport h2 { font-size: 24px; color: var(--gold); letter-spacing: .06em; }
+.passport p { margin: 0; font-size: 15px; color: #b9c4e6; }
+.stamps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.stamps span { aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; border-radius: 50%; font-size: 24px; border: 2px dashed #3a4a7a; color: #3a4a7a; font-family: var(--display); }
+.stamps span.on { border: 3px double var(--gold); background: rgba(245, 184, 46, .12); }
+.stamps span:nth-child(odd).on { transform: rotate(-12deg); }
+.stamps span:nth-child(even).on { transform: rotate(9deg); }
+
+/* juego */
+.flight { background: var(--card); border-radius: 18px; padding: 10px 14px; display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-family: var(--display); font-size: 20px; }
+.track { position: relative; height: 26px; }
+.track .line { position: absolute; left: 0; right: 0; top: 12px; height: 0; border-top: 3px dotted var(--sky-2); }
+.track .segs { position: absolute; left: 0; right: 0; top: 9px; display: flex; gap: 3px; }
+.track .segs i { flex: 1; height: 8px; border-radius: 4px; background: transparent; }
+.track .segs i.ok { background: var(--green); }
+.track .segs i.ko { background: var(--red); }
+.track .plane { position: absolute; top: -4px; font-size: 24px; line-height: 1; transform: translateX(-50%); transition: left .6s ease; }
+.tag { font-family: var(--display); font-size: 16px; color: #fff; background: var(--tc); border-radius: 8px; padding: 3px 12px; align-self: flex-start; letter-spacing: .02em; }
+.board { background: var(--card); border-radius: 26px; padding: 18px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; box-shadow: 0 5px 0 rgba(29, 43, 83, .12); }
+.q { font-size: 22px; font-weight: 700; margin: 0; text-wrap: balance; }
+.q .en { color: var(--blue); }
+.q small { display: block; font-size: 16px; font-weight: 400; color: var(--ink-soft); }
+.pic { width: 150px; height: 150px; }
+.pic svg, .choice svg { width: 100%; height: 100%; display: block; }
+.scene { width: min(260px, 100%); }
+.scene svg { width: 100%; height: auto; display: block; }
+.word { font-family: var(--display); font-size: 46px; line-height: 1.05; margin: 0; letter-spacing: .02em; overflow-wrap: anywhere; }
+.word .gap { display: inline-block; min-width: .7em; border-bottom: 5px solid var(--red); color: var(--red); }
+.es { font-size: 30px; font-weight: 700; margin: 0; }
+.playbig { width: 120px; height: 120px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 52px; box-shadow: 0 6px 0 #1a3f8c; display: grid; place-items: center; }
+.playbig:active { transform: translateY(4px); box-shadow: 0 2px 0 #1a3f8c; }
+.listen { background: var(--sky); border-radius: 999px; padding: 6px 16px; font-size: 16px; color: var(--navy); }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.choices.cols1 { grid-template-columns: 1fr; }
+.choices.cols3 { grid-template-columns: repeat(3, 1fr); }
+.choice {
+  min-height: 68px; border-radius: 18px; background: var(--sky); color: var(--navy);
+  font-family: var(--display); font-size: 26px; padding: 8px 10px; letter-spacing: .02em;
+  box-shadow: 0 5px 0 var(--sky-2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  overflow-wrap: anywhere;
+}
+.choice.img { aspect-ratio: 1; max-width: 100%; padding: 10px; background: var(--cream); box-shadow: 0 5px 0 #eadfc6; }
+.choice.img.wide { aspect-ratio: 6 / 5; }
+.choice.sent { font-family: var(--body); font-weight: 700; font-size: 21px; text-align: left; align-items: flex-start; }
+.choice:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 var(--sky-2); }
+.choice.right { background: var(--green); color: #fff; box-shadow: 0 5px 0 #1b6b42; }
+.choice.wrong { background: var(--red); color: #fff; box-shadow: 0 5px 0 #96271f; }
+.choice:disabled { cursor: default; }
+@media (prefers-reduced-motion: no-preference) { .shake { animation: shake .4s; } @keyframes shake { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } } }
+
+/* ordenar frase */
+.built { min-height: 64px; width: 100%; border: 3px dashed var(--sky-2); border-radius: 16px; padding: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.built .end { font-family: var(--display); font-size: 26px; }
+.bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
+.chip { border-radius: 12px; background: var(--cream); padding: 8px 14px; font-family: var(--display); font-size: 24px; box-shadow: 0 4px 0 #eadfc6; letter-spacing: .02em; }
+.built .chip { background: var(--sky); box-shadow: 0 4px 0 var(--sky-2); }
+.built.ok { border-color: var(--green); background: #e6f6ed; }
+.built.ko { border-color: var(--red); background: #fdeceb; }
+
+.go { width: 100%; min-height: 60px; border-radius: 18px; background: var(--blue); color: #fff; font-family: var(--display); font-size: 26px; box-shadow: 0 6px 0 #1a3f8c; letter-spacing: .02em; }
+.go.alt { background: var(--cream); color: var(--navy); box-shadow: 0 6px 0 #eadfc6; }
+.go:active { transform: translateY(4px); box-shadow: 0 2px 0 #1a3f8c; }
+.explain { background: #fdeceb; border-radius: 16px; padding: 12px 16px; text-align: left; width: 100%; font-size: 19px; }
+.explain strong { color: var(--red); }
+.explain .en { color: var(--blue); font-weight: 700; }
+
+.result { text-align: center; align-items: center; }
+.result .landed { font-family: var(--display); font-size: 18px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
+.result .score { font-family: var(--display); font-size: 80px; line-height: 1; font-variant-numeric: tabular-nums; }
+.result .stars { font-size: 50px; letter-spacing: 6px; color: var(--gold); }
+.result .stars .dim { color: #d6dcea; }
+.result .stamp { width: 120px; height: 120px; border-radius: 50%; border: 5px double var(--red); color: var(--red); display: grid; place-items: center; transform: rotate(-12deg); font-size: 54px; }
+.btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+
+#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 50; width: 100%; height: 100%; }
+.parents { font-size: 14px; color: var(--ink-soft); text-align: center; margin: 0; }
+</style>
+</head>
+<body>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<main class="wrap" id="app">
+  <div class="board">
+    <h2>Viaje a California</h2>
+    <p class="q">Si solo ves este mensaje, el juego no se ha podido abrir aquí.</p>
+    <p>Ábrelo con el navegador <b>Chrome</b> o <b>Safari</b>, no con la vista previa de WhatsApp o del correo.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const sample = (a, n) => shuffle(a).slice(0, n);
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+  // ---------- guardado (solo en este navegador) ----------
+  const KEY = "ingles-viaje-v1";
+  let save = { name: "", stars: 0, best: {}, stamps: [], sound: true };
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (s) save = Object.assign(save, s);
+    else for (const k of ["lengua-fresi-v1", "mates-bruno-v1"]) { const m = JSON.parse(localStorage.getItem(k) || "null"); if (m && m.name) { save.name = m.name; break; } }
+  } catch (e) {}
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+
+  // ---------- sonido y voz ----------
+  let actx = null;
+  function tone(freq, start, dur, type) {
+    if (!save.sound) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, actx.currentTime + start);
+      g.gain.exponentialRampToValueAtTime(0.25, actx.currentTime + start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + start + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(actx.currentTime + start); o.stop(actx.currentTime + start + dur + 0.05);
+    } catch (e) {}
+  }
+  const sndOk = () => { tone(660, 0, .15); tone(880, .12, .18); tone(1320, .26, .25); };
+  const sndKo = () => { tone(260, 0, .25, "triangle"); tone(200, .18, .3, "triangle"); };
+  const sndWin = () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i * .13, .2));
+  const canSpeak = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function";
+  function speak(text, lang) {
+    try {
+      if (!canSpeak) return;
+      lang = lang || "en-GB";
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang; u.rate = lang.startsWith("en") ? 0.8 : 0.9;
+      const vs = speechSynthesis.getVoices(), base = lang.slice(0, 2);
+      const v = vs.find(v => v.lang.replace("_", "-").toLowerCase() === lang.toLowerCase()) || vs.find(v => v.lang.toLowerCase().startsWith(base));
+      if (v) u.voice = v;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  // ---------- confeti ----------
+  const cv = document.getElementById("confetti"), cx = cv.getContext("2d");
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let parts = [], raf = 0;
+  function confetti(n) {
+    if (reduce) return;
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ["#e2453c", "#2a64d6", "#f5b82e", "#ff8a3d", "#1f9e93", "#7b5cd6"];
+    for (let i = 0; i < n; i++) parts.push({ x: innerWidth / 2 + rnd(-60, 60), y: innerHeight * .45, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: rnd(5, 9), c: pick(cols), a: Math.random() * 6, life: 70 + rnd(0, 30) });
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+  function step() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter(p => p.life-- > 0);
+    for (const p of parts) {
+      p.vy += .45; p.x += p.vx; p.y += p.vy; p.a += .2;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.fillRect(-p.r / 2, -p.r / 3, p.r, p.r * .66); cx.restore();
+    }
+    raf = parts.length ? requestAnimationFrame(step) : 0;
+    if (!raf) cx.clearRect(0, 0, cv.width, cv.height);
+  }
+
+  // ---------- dibujos (como las fichas de clase) ----------
+  const ST = 'stroke="#26324a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"';
+  const ICONS = {
+    bathroom: '<circle cx="40" cy="46" r="6" fill="#bfe6ff"/><circle cx="53" cy="43" r="7" fill="#bfe6ff"/><circle cx="66" cy="46" r="6" fill="#bfe6ff"/><path d="M28 52V26a9 9 0 0 1 18 0" fill="none" ' + ST + '/><circle cx="46" cy="34" r="3" fill="#5aa9f2"/><circle cx="43" cy="42" r="2.5" fill="#5aa9f2"/><rect x="10" y="50" width="80" height="10" rx="4" fill="#e8eef5" ' + ST + '/><path d="M14 60h72v6a14 14 0 0 1-14 14H28a14 14 0 0 1-14-14z" fill="#fff" ' + ST + '/><path d="M26 80l-4 8M74 80l4 8" ' + ST + '/>',
+    bedroom: '<rect x="10" y="30" width="16" height="56" rx="3" fill="#e9963f" ' + ST + '/><rect x="76" y="48" width="14" height="38" rx="3" fill="#e9963f" ' + ST + '/><rect x="26" y="52" width="50" height="18" rx="3" fill="#fff" ' + ST + '/><rect x="30" y="42" width="20" height="12" rx="5" fill="#fff" ' + ST + '/><path d="M48 52h28v18H48z" fill="#f7b267" ' + ST + '/><path d="M26 78h50" ' + ST + '/>',
+    kitchen: '<path d="M44 12c-3 4 3 6 0 10M56 12c-3 4 3 6 0 10" fill="none" stroke="#9aa7b8" stroke-width="3" stroke-linecap="round"/><path d="M36 24h28v12H36z" fill="#9aa7b8" ' + ST + '/><path d="M32 24h36" ' + ST + '/><rect x="16" y="36" width="68" height="52" rx="4" fill="#fff" ' + ST + '/><path d="M16 48h68" ' + ST + '/><circle cx="28" cy="42" r="2.5" fill="#26324a"/><circle cx="38" cy="42" r="2.5" fill="#26324a"/><rect x="26" y="56" width="48" height="24" rx="3" fill="#bfe0ff" ' + ST + '/><path d="M34 62h32" ' + ST + '/>',
+    "living room": '<rect x="68" y="12" width="4" height="40" fill="#26324a"/><path d="M60 12h20l-4-8H64z" fill="#fde2a6" ' + ST + '/><rect x="18" y="40" width="64" height="24" rx="8" fill="#e98a4a" ' + ST + '/><rect x="8" y="52" width="16" height="28" rx="6" fill="#f2a65a" ' + ST + '/><rect x="76" y="52" width="16" height="28" rx="6" fill="#f2a65a" ' + ST + '/><rect x="24" y="62" width="52" height="18" rx="4" fill="#f2a65a" ' + ST + '/><path d="M22 80v6M78 80v6" ' + ST + '/>',
+    hall: '<rect x="10" y="10" width="80" height="80" fill="#f4f1ea" ' + ST + '/><path d="M38 66h24l28 24H10z" fill="#f5a623" ' + ST + '/><rect x="38" y="34" width="24" height="32" fill="#9aa3ad" ' + ST + '/><rect x="44" y="42" width="12" height="24" fill="#ffd23f" ' + ST + '/><path d="M10 10l28 24M90 10L62 34" ' + ST + '/><path d="M16 26l12 10v30l-12 10z" fill="#ffd23f" ' + ST + '/><path d="M84 26l-12 10v30l12 10z" fill="#ffd23f" ' + ST + '/><ellipse cx="50" cy="20" rx="7" ry="4" fill="#ffd23f" ' + ST + '/>',
+    garden: '<circle cx="80" cy="20" r="9" fill="#ffd23f" ' + ST + '/><path d="M30 86V52M50 86V42M70 86V56" ' + ST + '/><circle cx="30" cy="46" r="9" fill="#ff7aa2" ' + ST + '/><circle cx="50" cy="36" r="9" fill="#b98cf0" ' + ST + '/><circle cx="70" cy="50" r="9" fill="#ff7aa2" ' + ST + '/><path d="M12 86c3-12 8-18 14-20M88 86c-3-12-8-18-14-20M40 86c1-8 4-12 8-14M60 86c-1-8-4-12-8-14" fill="none" stroke="#3fb56d" stroke-width="5" stroke-linecap="round"/><path d="M8 88h84" ' + ST + '/>',
+    bookcase: '<rect x="20" y="10" width="60" height="78" rx="4" fill="#c98a4b" ' + ST + '/><rect x="25" y="15" width="50" height="68" fill="#f2c590"/><rect x="28" y="20" width="7" height="16" fill="#e2453c"/><rect x="36" y="18" width="7" height="18" fill="#2a64d6"/><rect x="52" y="26" width="18" height="10" fill="#3fb56d"/><rect x="30" y="46" width="16" height="14" fill="#ffd23f"/><rect x="56" y="42" width="7" height="18" fill="#e2453c"/><rect x="64" y="44" width="7" height="16" fill="#7b5cd6"/><rect x="28" y="68" width="7" height="16" fill="#2a64d6"/><rect x="48" y="72" width="22" height="12" fill="#e2453c"/><path d="M20 37h60M20 61h60" ' + ST + '/><rect x="20" y="10" width="60" height="78" rx="4" fill="none" ' + ST + '/><path d="M26 88v4M74 88v4" ' + ST + '/>',
+    chair: '<rect x="30" y="10" width="40" height="34" rx="9" fill="#f3d34a" ' + ST + '/><path d="M36 44v8M64 44v8" ' + ST + '/><rect x="22" y="50" width="56" height="13" rx="6" fill="#e9b93a" ' + ST + '/><path d="M30 63l-4 25M70 63l4 25M33 76h34" ' + ST + '/>',
+    cupboard: '<rect x="18" y="10" width="64" height="76" rx="4" fill="#d9674a" ' + ST + '/><path d="M50 10v76" ' + ST + '/><path d="M44 42v14M56 42v14" ' + ST + '/><path d="M24 86v6M76 86v6" ' + ST + '/>',
+    door: '<rect x="26" y="8" width="48" height="84" rx="3" fill="#d9783f" ' + ST + '/><rect x="34" y="18" width="32" height="28" rx="2" fill="#eb9a5f" ' + ST + '/><rect x="34" y="54" width="32" height="28" rx="2" fill="#eb9a5f" ' + ST + '/><circle cx="67" cy="50" r="3.5" fill="#26324a"/>',
+    plant: '<path d="M50 60C40 40 42 24 50 10c8 14 10 30 0 50zM50 60C34 52 24 40 22 26c14 2 24 14 28 34zM50 60c16-8 26-20 28-34-14 2-24 14-28 34z" fill="#6cc070" ' + ST + '/><path d="M31 62h38l-6 26H37z" fill="#f2a65a" ' + ST + '/><rect x="27" y="56" width="46" height="9" rx="3" fill="#e98a4a" ' + ST + '/>',
+    rug: '<path d="M28 14V5M36 14V5M44 14V5M52 14V5M60 14V5M68 14V5M28 86v9M36 86v9M44 86v9M52 86v9M60 86v9M68 86v9" stroke="#26324a" stroke-width="3" stroke-linecap="round"/><rect x="22" y="14" width="56" height="72" rx="3" fill="#f6b7b0" ' + ST + '/><path d="M50 24l17 26-17 26-17-26z" fill="#f5d38a" ' + ST + '/><path d="M50 40l7 10-7 10-7-10z" fill="#e2453c"/>',
+    table: '<ellipse cx="50" cy="38" rx="40" ry="9" fill="#c9b8a8" ' + ST + '/><path d="M50 47v40M36 46l-14 40M64 46l14 40" ' + ST + '/>',
+    window: '<rect x="18" y="10" width="64" height="72" rx="3" fill="#ffd23f" ' + ST + '/><rect x="25" y="17" width="50" height="58" fill="#5aa9f2" ' + ST + '/><path d="M50 17v58M25 46h50" ' + ST + '/><path d="M31 28l8-6M31 35l13-10" stroke="#fff" stroke-width="3" stroke-linecap="round"/><rect x="12" y="80" width="76" height="9" rx="3" fill="#ffd23f" ' + ST + '/>'
+  };
+  const icon = w => '<svg viewBox="0 0 100 100" aria-hidden="true">' + ICONS[w] + "</svg>";
+
+  // escena para in / on / under / behind
+  function itemSVG(kind, x, y) {
+    if (kind === "cat") return '<path d="M' + (x - 12) + " " + (y - 4) + "l2-14 9 8zM" + (x + 12) + " " + (y - 4) + 'l-2-14-9 8z" fill="#f39a3d" ' + ST + '/><circle cx="' + x + '" cy="' + y + '" r="13" fill="#f7a94a" ' + ST + '/><circle cx="' + (x - 5) + '" cy="' + (y - 2) + '" r="2.2" fill="#26324a"/><circle cx="' + (x + 5) + '" cy="' + (y - 2) + '" r="2.2" fill="#26324a"/><path d="M' + (x - 3) + " " + (y + 5) + "q3 3 6 0" + '" fill="none" stroke="#26324a" stroke-width="2.5" stroke-linecap="round"/>';
+    return '<circle cx="' + x + '" cy="' + y + '" r="12" fill="#e2453c" ' + ST + '/><path d="M' + (x - 6) + " " + (y - 3) + "a7 7 0 0 1 6-5" + '" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>';
+  }
+  const OBJ = {
+    box: { svg: '<rect x="30" y="50" width="60" height="40" fill="#e8c48f" ' + ST + '/><path d="M52 50v14h16V50" fill="none" stroke="#c99b5e" stroke-width="3"/>', pos: { in: [60, 50], on: [60, 37], behind: [92, 46] }, name: "box", es: "la caja" },
+    table: { svg: '<rect x="16" y="40" width="88" height="9" rx="3" fill="#c9b8a8" ' + ST + '/><path d="M24 49v41M96 49v41" ' + ST + '/>', pos: { on: [60, 27], under: [60, 77] }, name: "table", es: "la mesa" },
+    chair: { svg: '<rect x="72" y="8" width="10" height="42" rx="4" fill="#f3d34a" ' + ST + '/><rect x="34" y="44" width="50" height="9" rx="4" fill="#e9b93a" ' + ST + '/><path d="M40 53v37M78 53v37" ' + ST + '/>', pos: { on: [55, 31], under: [59, 76] }, name: "chair", es: "la silla" }
+  };
+  const PREPS = { in: "dentro de", on: "encima de", under: "debajo de", behind: "detrás de" };
+  const objsFor = p => Object.keys(OBJ).filter(k => OBJ[k].pos[p]);
+  function scene(prep, obj, item) {
+    const o = OBJ[obj], [x, y] = o.pos[prep], it = itemSVG(item, x, y);
+    const back = prep === "in" || prep === "behind";
+    const flaps = obj === "box" && prep === "in" ? '<path d="M30 50l-12-12M90 50l12-12" ' + ST + "/>" : "";
+    return '<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M6 91h108" stroke="#c9d3e0" stroke-width="3" stroke-linecap="round"/>' + flaps + (back ? it + o.svg : o.svg + it) + "</svg>";
+  }
+
+  // ---------- datos de la unidad ----------
+  const ROOMS = ["bathroom", "bedroom", "garden", "hall", "kitchen", "living room"];
+  const THINGS = ["bookcase", "chair", "cupboard", "door", "plant", "rug", "table", "window"];
+  const ES = { bathroom: "el baño", bedroom: "el dormitorio", garden: "el jardín", hall: "el recibidor", kitchen: "la cocina", "living room": "el salón",
+    bookcase: "la estantería", chair: "la silla", cupboard: "el armario", door: "la puerta", plant: "la planta", rug: "la alfombra", table: "la mesa", window: "la ventana" };
+  const PEOPLE = [["Sara", "👧"], ["Alejandro", "👦"], ["Lucy", "👧"], ["Tom", "👦"], ["Mum", "👩"], ["Dad", "👨"]];
+  const SENTENCES = ["Sara is in the garden.", "Alejandro is in the kitchen.", "Where is my pencil?", "It is under the chair.", "The ball is on the table.", "The cat is behind the box.",
+    "Mum is in the bedroom.", "The plant is in the living room.", "The rug is in the hall.", "Where is the cat?", "Dad is in the bathroom.", "The ball is under the table."];
+
+  const LEGS = [
+    { key: "rooms", from: "LPA", to: "NYC", fromCity: "Gran Canaria", toCity: "Nueva York", name: "Rooms", es: "Las habitaciones de la casa", color: "var(--c-rooms)", gate: "A1", seat: "1A" },
+    { key: "things", from: "NYC", to: "CHI", fromCity: "Nueva York", toCity: "Chicago", name: "Things at home", es: "Cosas de la casa", color: "var(--c-things)", gate: "B2", seat: "2B" },
+    { key: "preps", from: "CHI", to: "DEN", fromCity: "Chicago", toCity: "Denver", name: "In, on, under, behind", es: "¿Dónde está?", color: "var(--c-preps)", gate: "C3", seat: "3C" },
+    { key: "grammar", from: "DEN", to: "LAX", fromCity: "Denver", toCity: "Los Ángeles", name: "Where is…?", es: "Frases en inglés", color: "var(--c-gram)", gate: "D4", seat: "4D" }
+  ];
+  const LEG = Object.fromEntries(LEGS.map(l => [l.key, l]));
+  const EXAM = { key: "examen", from: "LPA", to: "LAX", fromCity: "Gran Canaria", toCity: "California", name: "Unit 1 test", es: "Simulacro de la prueba", color: "var(--gold)" };
+  const STAMPS = ["🗽", "🍎", "🌭", "🏙️", "🦅", "⛰️", "🤠", "🌉", "🎢", "🏄", "🌴", "🎬"];
+
+  // ---------- generadores ----------
+  function vocab(pool) {
+    const v = rnd(0, 4), w = pick(pool);
+    const others = n => sample(pool.filter(x => x !== w), n);
+    if (v === 0) return { kind: "choice", html: '<p class="q"><span class="en">What is it?</span><small>¿Qué es?</small></p><div class="pic">' + icon(w) + "</div>", say: "What is it?",
+      options: shuffle([w].concat(others(3))).map(x => ({ label: x, value: x })), answer: w, explain: 'Es <span class="en">' + w + "</span> (" + ES[w] + ")." };
+    if (v === 1) return { kind: "choice", html: '<p class="q">Find: <span class="en">' + w + "</span><small>Busca el dibujo</small></p>", say: w,
+      options: shuffle([w].concat(others(3))).map(x => ({ label: icon(x), value: x, cls: "img" })), answer: w, explain: '<span class="en">' + cap(w) + "</span> es " + ES[w] + "." };
+    if (v === 2 && canSpeak) return { kind: "choice", listen: true, html: '<p class="q"><span class="en">Listen and choose</span><small>Escucha y elige el dibujo</small></p><button class="playbig" id="play" aria-label="Escuchar la palabra">🔊</button>', say: w,
+      options: shuffle([w].concat(others(3))).map(x => ({ label: icon(x), value: x, cls: "img" })), answer: w, explain: 'Has oído <span class="en">' + w + "</span> (" + ES[w] + ")." };
+    if (v === 3 || v === 2) return { kind: "choice", html: '<p class="q">¿Cómo se dice en inglés?</p><p class="es">' + ES[w] + "</p>", say: ES[w], sayLang: "es-ES",
+      options: shuffle([w].concat(others(3))).map(x => ({ label: x, value: x })), answer: w, explain: cap(ES[w]) + ' se dice <span class="en">' + w + "</span>." };
+    const idx = shuffle(Array.from(w).map((c, i) => i).filter(i => w[i] !== " "))[0], letter = w[idx];
+    const pool2 = "aeioubcdghklmnprstw".split("").filter(c => c !== letter);
+    const shown = w.slice(0, idx) + '<span class="gap">?</span>' + w.slice(idx + 1);
+    return { kind: "choice", cols: 3, html: '<p class="q"><span class="en">Missing letter</span><small>¿Qué letra falta?</small></p><div class="pic" style="width:110px;height:110px">' + icon(w) + '</div><p class="word">' + shown + "</p>", say: w,
+      options: shuffle([letter].concat(sample(pool2, 2))).map(x => ({ label: x, value: x })), answer: letter, explain: 'Se escribe <span class="en">' + w + "</span>." };
+  }
+  const itemName = it => it === "cat" ? "cat" : "ball";
+  const itemEs = it => it === "cat" ? "el gato" : "la pelota";
+  function randScene(prep) { prep = prep || pick(Object.keys(PREPS)); return { prep, obj: pick(objsFor(prep)), item: pick(["ball", "cat"]) }; }
+
+  const GEN = {
+    rooms: () => vocab(ROOMS),
+    things: () => vocab(THINGS),
+    preps() {
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const s = randScene();
+        return { kind: "choice", html: '<p class="q"><span class="en">Where is the ' + itemName(s.item) + "?</span><small>¿Dónde está " + itemEs(s.item) + "?</small></p><div class=\"scene\">" + scene(s.prep, s.obj, s.item) + "</div>", say: "Where is the " + itemName(s.item) + "?",
+          options: Object.keys(PREPS).map(p => ({ label: p, value: p })), answer: s.prep,
+          explain: '<span class="en">The ' + itemName(s.item) + " is " + s.prep + " the " + s.obj + ".</span> " + cap(itemEs(s.item)) + " está " + PREPS[s.prep] + " " + OBJ[s.obj].es + "." };
+      }
+      if (v === 1) {
+        const item = pick(["ball", "cat"]), obj = pick(["box", "table", "chair"]);
+        const preps = Object.keys(PREPS).filter(p => OBJ[obj].pos[p]);
+        const prep = pick(preps);
+        const opts = shuffle(Object.keys(PREPS)).map(p => ({ p, o: OBJ[obj].pos[p] ? obj : pick(objsFor(p)) }));
+        return { kind: "choice", html: '<p class="q"><span class="en">The ' + itemName(item) + " is " + prep + " the " + obj + ".</span><small>Busca el dibujo</small></p>", say: "The " + itemName(item) + " is " + prep + " the " + obj + ".",
+          options: opts.map(x => ({ label: scene(x.p, x.o, item), value: x.p + "|" + x.o, cls: "img wide" })), answer: prep + "|" + obj,
+          explain: '<span class="en">' + prep + "</span> significa «" + PREPS[prep] + "»." };
+      }
+      const p = pick(Object.keys(PREPS));
+      return { kind: "choice", html: '<p class="q">¿Cómo se dice en inglés?</p><p class="es">' + PREPS[p] + "</p>", say: PREPS[p], sayLang: "es-ES",
+        options: shuffle(Object.keys(PREPS)).map(x => ({ label: x, value: x })), answer: p, explain: "«" + cap(PREPS[p]) + '» se dice <span class="en">' + p + "</span>." };
+    },
+    grammar() {
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const s = pick(SENTENCES), end = s.slice(-1), words = s.slice(0, -1).split(" ");
+        return { kind: "order", words, end, html: '<p class="q"><span class="en">Make the sentence</span><small>Toca las palabras en orden</small></p>', say: s,
+          explain: 'La frase es: <span class="en">' + s + "</span>" };
+      }
+      if (v === 1) {
+        const [who, emo] = pick(PEOPLE), room = pick(ROOMS);
+        const opts = [room].concat(sample(ROOMS.filter(r => r !== room), 2));
+        return { kind: "choice", cols: 1, html: '<p class="q"><span class="en">Where is ' + who + "?</span><small>¿Dónde está " + who + "?</small></p><div class=\"pic\" style=\"position:relative\">" + icon(room) + '<span style="position:absolute;right:-14px;bottom:-6px;font-size:54px;line-height:1">' + emo + "</span></div>", say: "Where is " + who + "?",
+          options: shuffle(opts).map(r => ({ label: who + " is in the " + r + ".", value: r, cls: "sent" })), answer: room,
+          explain: '<span class="en">' + who + " is in the " + room + ".</span> " + who + " está en " + ES[room] + "." };
+      }
+      const s = randScene();
+      const wrong = sample(Object.keys(PREPS).filter(p => p !== s.prep), 2);
+      return { kind: "choice", cols: 1, html: '<p class="q"><span class="en">Where is the ' + itemName(s.item) + "?</span><small>Elige la respuesta</small></p><div class=\"scene\">" + scene(s.prep, s.obj, s.item) + "</div>", say: "Where is the " + itemName(s.item) + "?",
+        options: shuffle([s.prep].concat(wrong)).map(p => ({ label: "It is " + p + " the " + s.obj + ".", value: p, cls: "sent" })), answer: s.prep,
+        explain: '<span class="en">It is ' + s.prep + " the " + s.obj + ".</span> Está " + PREPS[s.prep] + " " + OBJ[s.obj].es + "." };
+    }
+  };
+
+  // ---------- pantalla ----------
+  let game = null;
+  const app = document.getElementById("app");
+  const BUNNY = '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M30 40C22 26 20 8 28 4s16 16 16 34z" fill="#f4f1f6" ' + ST + '/><path d="M31 34c-4-10-5-20-1-24s8 10 9 24z" fill="#f7b8c8"/><path d="M70 40c8-14 10-32 2-36s-16 16-16 34z" fill="#f4f1f6" ' + ST + '/><path d="M69 34c4-10 5-20 1-24s-8 10-9 24z" fill="#f7b8c8"/><ellipse cx="50" cy="62" rx="32" ry="29" fill="#f4f1f6" ' + ST + '/><path d="M22 52c2-18 54-18 56 0z" fill="#2a64d6" ' + ST + '/><rect x="20" y="49" width="60" height="7" rx="3.5" fill="#1d2b53"/><circle cx="50" cy="42" r="4.5" fill="#f5b82e" ' + ST + '/><circle cx="38" cy="65" r="4" fill="#26324a"/><circle cx="62" cy="65" r="4" fill="#26324a"/><circle cx="39.5" cy="63.5" r="1.3" fill="#fff"/><circle cx="63.5" cy="63.5" r="1.3" fill="#fff"/><path d="M46 72h8l-4 4z" fill="#f08aa4" stroke="#26324a" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 76v4M50 80q-5 4-9 1M50 80q5 4 9 1" fill="none" stroke="#26324a" stroke-width="2.5" stroke-linecap="round"/><rect x="45" y="81" width="10" height="7" rx="2" fill="#fff" stroke="#26324a" stroke-width="2"/><path d="M28 74h0M72 74h0" stroke="#f7b8c8" stroke-width="8" stroke-linecap="round"/></svg>';
+  function mascotHTML(msg) { return '<div class="mascot"><div id="pet">' + BUNNY + '</div><div class="bubble" id="bubble" aria-live="polite">' + msg + "</div></div>"; }
+  function say(msg) { const b = document.getElementById("bubble"); if (b) b.innerHTML = msg; const o = document.getElementById("pet"); if (o) { o.classList.remove("hop"); void o.offsetWidth; o.classList.add("hop"); } }
+  const nm = () => save.name ? ", " + esc(save.name) : "";
+  function starsFor(score, total) { const p = score / total; return p >= .9 ? 3 : p >= .7 ? 2 : p >= .4 ? 1 : 0; }
+  const starRow = n => "★".repeat(n) + "☆".repeat(3 - n);
+
+  function mapSVG() {
+    const P = { LPA: [256, 146], NYC: [176, 78], CHI: [134, 66], DEN: [88, 88], LAX: [38, 118] };
+    const order = ["LPA", "NYC", "CHI", "DEN", "LAX"];
+    const done = LEGS.map(l => !!save.best[l.key]);
+    const nextIdx = done.indexOf(false) === -1 ? 4 : done.indexOf(false);
+    let path = "M" + P.LPA.join(" ");
+    for (let i = 1; i < order.length; i++) { const [a, b] = P[order[i - 1]], [c, d] = P[order[i]]; path += " Q" + ((a + c) / 2 + (i % 2 ? 26 : -26)) + " " + ((b + d) / 2 - 18) + " " + c + " " + d; }
+    const plane = P[order[nextIdx]];
+    let pins = "";
+    order.forEach((k, i) => {
+      const [x, y] = P[k], reached = i === 0 || done[i - 1];
+      pins += '<circle cx="' + x + '" cy="' + y + '" r="' + (k === "LAX" ? 11 : 8) + '" fill="' + (reached ? (k === "LAX" ? "#f5b82e" : "#2a9d63") : "#fff") + '" stroke="#1d2b53" stroke-width="3"/>' +
+        '<text x="' + x + '" y="' + (y + (k === "CHI" || k === "NYC" ? -14 : 24)) + '" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="14" fill="#1d2b53">' + k + "</text>";
+    });
+    return '<svg viewBox="0 0 300 200" role="img" aria-label="Mapa del viaje de Gran Canaria a California"><rect width="300" height="200" rx="14" fill="#e9f5ff"/>' +
+      '<path d="M14 60c20-20 70-26 120-22 30 2 50 10 62 28 6 14-6 30-24 40-20 12-28 30-50 34-30 6-50-4-70-12-20-8-40-20-40-42 0-10 0-20 2-26z" fill="#d6ecd2"/><path d="M244 82c14-6 34-4 40 6 4 12-2 26-16 30-14 4-28-2-30-14-2-8 0-18 6-22z" fill="#d6ecd2"/><ellipse cx="256" cy="146" rx="10" ry="8" fill="#d6ecd2"/>' +
+      '<text x="150" y="176" text-anchor="middle" font-family="Andika, sans-serif" font-size="12" fill="#7a8db0">Océano Atlántico</text>' +
+      '<path d="' + path + '" fill="none" stroke="#2a64d6" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>' + pins +
+      '<text class="fly" x="' + (plane[0] > 230 ? plane[0] - 40 : plane[0] + 14) + '" y="' + (plane[1] - 8) + '" font-size="24">✈️</text></svg>';
+  }
+
+  function passHTML(l, final) {
+    const best = save.best[l.key] || 0;
+    return '<button class="pass' + (final ? " final" : "") + '" data-go="' + l.key + '" style="--tc:' + l.color + '"><span class="main">' +
+      '<span class="route"><span>' + l.from + '</span><span class="arrow"></span><span>' + l.to + "</span></span>" +
+      '<span class="city"><span>' + l.fromCity + "</span><span>" + l.toCity + "</span></span>" +
+      "<h3>" + l.name + '</h3><span class="meta">' + l.es + (final ? " · 16 preguntas de todo" : " · 10 preguntas") + "</span></span>" +
+      '<span class="stub"><b>' + (final ? "FINAL" : "GATE") + "</b><span>" + (final ? "🌴" : l.gate) + "</span><em>" + (best ? starRow(best) : "") + "</em></span></button>";
+  }
+
+  function home() {
+    game = null;
+    app.innerHTML =
+      '<div class="top"><span class="pill" title="Estrellas">⭐ ' + save.stars + '</span><span class="spacer"></span><button class="iconbtn" id="snd" aria-label="Sonido">' + (save.sound ? "🔊" : "🔇") + "</button></div>" +
+      '<div class="hero"><div><span class="eyebrow">English · Unit 1: Our house</span><h1>Viaje a California</h1><p>Cruza el océano y vuela de ciudad en ciudad hasta la casa de Peluche en California.</p></div><div class="fly">' + BUNNY + "</div>" +
+      '<div class="bubble" id="bubble">' + (save.name ? "<i>Hello" + nm() + "!</i> Soy <b>Peluche</b>, el conejo piloto. ¿Despegamos?" : "<i>Hello!</i> Soy <b>Peluche</b>, el conejo piloto. ¿Cómo te llamas?") + "</div></div>" +
+      '<div class="namebox"><label for="name">Pasajero</label><input id="name" maxlength="16" autocomplete="off" placeholder="Escribe tu nombre" value="' + esc(save.name) + '"></div>' +
+      '<div class="map">' + mapSVG() + '<p class="cap">Cada vuelo que completas te acerca a California.</p></div>' +
+      '<div class="airmail"></div>' +
+      '<div class="section-label">Tus tarjetas de embarque<small>Elige un vuelo para practicar.</small></div>' +
+      '<div class="passes">' + LEGS.map(l => passHTML(l)).join("") + passHTML(EXAM, true) + "</div>" +
+      '<div class="passport"><h2>PASSPORT · PASAPORTE</h2><p>Gana un sello cada vez que aciertes casi todo (8 de 10, o 13 de 16 en el simulacro).</p><div class="stamps">' +
+      STAMPS.map(s => save.stamps.includes(s) ? '<span class="on">' + s + "</span>" : "<span>?</span>").join("") + "</div></div>" +
+      '<p class="parents">Para mamá y papá: es el vocabulario y la gramática de la Unit 1 «Our house». Con 🔊 se oye la pronunciación en inglés. El progreso se guarda solo en este dispositivo.</p>';
+    app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => start(b.dataset.go)));
+    document.getElementById("snd").addEventListener("click", e => { save.sound = !save.sound; persist(); e.currentTarget.textContent = save.sound ? "🔊" : "🔇"; });
+    const inp = document.getElementById("name");
+    inp.addEventListener("change", () => { save.name = inp.value.trim().slice(0, 16); persist(); home(); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") inp.blur(); });
+    window.scrollTo(0, 0);
+  }
+
+  function start(key) {
+    let qs = [];
+    if (key === "examen") {
+      LEGS.forEach(l => { for (let i = 0; i < 4; i++) qs.push(Object.assign(GEN[l.key](), { topic: l.key })); });
+      qs = shuffle(qs);
+    } else {
+      for (let i = 0; i < 10; i++) qs.push(Object.assign(GEN[key](), { topic: key }));
+    }
+    game = { key, leg: key === "examen" ? EXAM : LEG[key], qs, i: 0, score: 0, marks: [] };
+    question();
+  }
+
+  function trackHTML() {
+    const n = game.qs.length, pos = (game.i + .5) / n * 100;
+    return '<div class="flight"><span>' + game.leg.from + '</span><div class="track"><div class="line"></div><div class="segs">' +
+      game.qs.map((_, i) => '<i class="' + (game.marks[i] === true ? "ok" : game.marks[i] === false ? "ko" : "") + '"></i>').join("") +
+      '</div><span class="plane" style="left:' + pos + '%">✈️</span></div><span>' + game.leg.to + "</span></div>";
+  }
+
+  function question() {
+    const q = game.qs[game.i], tp = LEG[q.topic], total = game.qs.length;
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al inicio">←</button><span class="pill">' + (game.i + 1) + " / " + total + '</span><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
+      trackHTML() +
+      '<span class="tag" style="--tc:' + tp.color + '">' + tp.name + "</span>" +
+      '<div class="board">' + q.html + (q.listen ? "" : '<button class="listen" id="listen">🔊 ' + (q.sayLang ? "Escuchar" : "Listen") + "</button>") + '<div id="area" style="width:100%;display:flex;flex-direction:column;gap:14px;align-items:center"></div></div>' +
+      mascotHTML(game.i === 0 ? (game.key === "examen" ? "<i>Fasten your seatbelt!</i> ¡Abróchate el cinturón" + nm() + "!" : "<i>Let's go!</i> ¡Despegamos" + nm() + "!") : pick(["<i>Take your time.</i> Tranquila, sin prisa.", "<i>Look carefully.</i> Mira bien.", "<i>Next one!</i> ¡La siguiente!", "<i>You can do it!</i> ¡Tú puedes!"]));
+    document.getElementById("back").addEventListener("click", home);
+    const lb = document.getElementById("listen") || document.getElementById("play");
+    if (lb) lb.addEventListener("click", () => speak(q.say, q.sayLang));
+    const area = document.getElementById("area");
+    if (q.kind === "order") renderOrder(q, area); else renderChoices(q, area);
+    window.scrollTo(0, 0);
+  }
+
+  function renderChoices(q, area) {
+    const box = document.createElement("div");
+    box.className = "choices" + (q.cols === 3 ? " cols3" : q.cols === 1 ? " cols1" : "");
+    q.options.forEach(o => {
+      const b = document.createElement("button");
+      b.className = "choice" + (o.cls ? " " + o.cls : "");
+      b.innerHTML = o.label;
+      b.addEventListener("click", () => {
+        const ok = o.value === q.answer;
+        box.querySelectorAll("button").forEach((x, i) => { x.disabled = true; if (q.options[i].value === q.answer) x.classList.add("right"); });
+        if (!ok) b.classList.add("wrong", "shake");
+        finish(ok, area);
+      });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+
+  function renderOrder(q, area) {
+    let order;
+    do { order = shuffle(q.words.map((w, i) => i)); } while (q.words.length > 1 && order.every((v, i) => q.words[v] === q.words[i]));
+    const built = document.createElement("div"), bank = document.createElement("div");
+    built.className = "built"; bank.className = "bank";
+    const picked = [];
+    let done = false;
+    function paint() {
+      built.innerHTML = ""; bank.innerHTML = "";
+      picked.forEach((idx, k) => {
+        const c = document.createElement("button");
+        c.className = "chip"; c.textContent = q.words[idx];
+        c.addEventListener("click", () => { if (done) return; picked.splice(k, 1); paint(); });
+        built.appendChild(c);
+      });
+      const end = document.createElement("span"); end.className = "end"; end.textContent = q.end; built.appendChild(end);
+      order.filter(i => !picked.includes(i)).forEach(idx => {
+        const c = document.createElement("button");
+        c.className = "chip"; c.textContent = q.words[idx];
+        c.addEventListener("click", () => {
+          if (done) return;
+          picked.push(idx); paint();
+          if (picked.length === q.words.length) {
+            done = true;
+            const ok = picked.map(i => q.words[i]).join(" ") === q.words.join(" ");
+            built.classList.add(ok ? "ok" : "ko");
+            if (!ok) built.classList.add("shake");
+            built.querySelectorAll("button").forEach(x => x.disabled = true);
+            finish(ok, area);
+          }
+        });
+        bank.appendChild(c);
+      });
+    }
+    area.appendChild(built); area.appendChild(bank);
+    paint();
+  }
+
+  function finish(ok, area) {
+    game.marks[game.i] = ok;
+    const seg = document.querySelectorAll(".track .segs i")[game.i];
+    if (seg) seg.className = ok ? "ok" : "ko";
+    if (ok) {
+      game.score++; save.stars++; persist();
+      sndOk(); confetti(40);
+      say(pick(["<i>Well done" + nm() + "!</i>", "<i>Great job!</i> ¡Genial!", "<i>Excellent!</i>", "<i>Super!</i> ¡Muy bien!", "<i>Fantastic!</i>", "<i>Yes!</i> ¡Eso es!"]));
+      setTimeout(next, 1300);
+    } else {
+      sndKo();
+      say(pick(["<i>Oops!</i> ¡Casi! Mira:", "<i>Don't worry!</i> Así se aprende.", "<i>Look!</i> Fíjate bien."]));
+      const ex = document.createElement("div");
+      ex.className = "explain";
+      ex.innerHTML = game.qs[game.i].explain;
+      const b = document.createElement("button");
+      b.className = "go"; b.textContent = "Next ✈";
+      b.addEventListener("click", next);
+      area.appendChild(ex); area.appendChild(b);
+      b.focus({ preventScroll: true });
+    }
+  }
+
+  function next() {
+    if (!game) return;
+    game.i++;
+    if (game.i < game.qs.length) question(); else results();
+  }
+
+  function results() {
+    const total = game.qs.length, s = game.score, st = starsFor(s, total);
+    const need = game.key === "examen" ? 13 : 8;
+    let stamp = "";
+    if (s >= need) {
+      const left = STAMPS.filter(x => !save.stamps.includes(x));
+      stamp = left.length ? pick(left) : pick(STAMPS);
+      if (left.length) save.stamps.push(stamp);
+    }
+    save.best[game.key] = Math.max(save.best[game.key] || 0, st);
+    persist();
+    if (st >= 2) { sndWin(); confetti(140); }
+    const msg = st === 3 ? "<i>Amazing" + nm() + "!</i> ¡Estás lista para la prueba!" : st === 2 ? "<i>Very good!</i> Un poquito más y lo bordas." : st === 1 ? "<i>Good try!</i> Repetimos el vuelo y verás." : "<i>Don't give up!</i> ¿Volamos otra vez?";
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al inicio">←</button><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
+      '<div class="board result"><span class="landed">' + (game.key === "examen" ? "Welcome to California!" : "Landed in " + game.leg.toCity + "!") + "</span><h2>" + game.leg.name + '</h2><div class="score">' + s + " / " + total + '</div><div class="stars">' +
+      "★".repeat(st) + '<span class="dim">' + "★".repeat(3 - st) + "</span></div>" +
+      (stamp ? '<div class="stamp">' + stamp + '</div><p class="q">¡Nuevo sello en tu pasaporte!</p>' : '<p class="q">Con ' + need + " aciertos ganas un sello para el pasaporte.</p>") +
+      '<div class="btnrow"><button class="go alt" id="home">Inicio</button><button class="go" id="again">Otra vez</button></div></div>' +
+      mascotHTML(msg);
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("home").addEventListener("click", home);
+    const k = game.key;
+    document.getElementById("again").addEventListener("click", () => start(k));
+    window.scrollTo(0, 0);
+  }
+
+  home();
+})();
+</script>
+</body>
+</html>

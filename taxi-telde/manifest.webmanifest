@@ -1,0 +1,20 @@
+{
+  "name": "Taxi Telde · Examen",
+  "short_name": "Taxi Telde",
+  "description": "Tests, lecciones, callejero y juego para preparar el examen del permiso municipal de taxi de Telde.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f8fc",
+  "theme_color": "#232a6b",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Callejero", "url": "./callejero/", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}

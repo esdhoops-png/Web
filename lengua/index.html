@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lengua con Fresi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@600;700&display=swap">
+<style>
+/* Layout: el huerto de Fresi; un camino de parcelas que baja hasta la cesta del examen, tarjetas blandas sin bordes de tinta */
+:root {
+  --bg: #eef6e2;       /* lechuga clara */
+  --sun: #fff3c4;
+  --soil: #a7714c;     /* tierra del camino */
+  --soil-soft: #e9d6c3;
+  --ink: #23412b;      /* verde oscuro */
+  --ink-soft: #5d7a63;
+  --card: #ffffff;
+  --red: #e4553f;      /* tomate */
+  --red-soft: #fde3dd;
+  --green: #3c9d4f;
+  --green-soft: #def2d8;
+  --hl: #ffd84d;
+  --c-voc: #4fae5b;
+  --c-cam: #f28f2c;
+  --c-sil: #a565d6;
+  --c-may: #2f95d1;
+  --c-exa: #e4553f;
+  --shadow: 0 6px 0 rgba(35, 65, 43, .14), 0 10px 24px rgba(35, 65, 43, .08);
+  --display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Andika", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 92% -40px, var(--sun) 0 170px, transparent 171px), var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap {
+  max-width: 540px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.05; text-wrap: balance; font-weight: 700; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; }
+button:focus-visible, input:focus-visible { outline: 4px solid var(--hl); outline-offset: 3px; }
+
+.top { display: flex; align-items: center; gap: 10px; }
+.top .spacer { flex: 1; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--card); border-radius: 999px; box-shadow: var(--shadow);
+  padding: 6px 14px; font-family: var(--display); font-weight: 700; font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.iconbtn {
+  width: 46px; height: 46px; border-radius: 16px;
+  background: var(--card); box-shadow: var(--shadow);
+  display: grid; place-items: center; font-size: 20px; line-height: 1;
+}
+
+/* Fresi */
+.mascot { display: flex; align-items: center; gap: 12px; }
+.mascot svg { width: 64px; height: 64px; flex: none; }
+.bubble {
+  position: relative; flex: 1; min-width: 0;
+  background: var(--card); border-radius: 22px 22px 22px 6px; box-shadow: var(--shadow);
+  padding: 10px 16px; font-size: 18px;
+}
+.bubble b { color: var(--red); }
+@media (prefers-reduced-motion: no-preference) {
+  .mascot .lid, .hero .lid { animation: blink 4s infinite; transform-origin: center 40px; }
+  @keyframes blink { 0%, 94%, 100% { transform: scaleY(0); } 97% { transform: scaleY(1); } }
+  .hop { animation: hop .5s ease; }
+  @keyframes hop { 30% { transform: translateY(-12px) rotate(-6deg); } 60% { transform: translateY(0) rotate(4deg); } }
+  .hero svg { animation: sway 3s ease-in-out infinite; transform-origin: 50% 90%; }
+  @keyframes sway { 50% { transform: rotate(-5deg); } }
+}
+
+/* portada */
+.hero { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 8px; }
+.hero svg { width: 118px; height: 118px; }
+.hero .eyebrow { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--green); }
+.hero h1 { font-size: clamp(36px, 10vw, 50px); margin-top: 4px; }
+.hero h1 mark { background: none; color: var(--red); }
+.hero p { margin: 6px 0 0; color: var(--ink-soft); }
+.hero .say { grid-column: 1 / -1; }
+.namebox { display: flex; gap: 10px; align-items: center; background: var(--card); border-radius: 18px; padding: 8px 8px 8px 16px; box-shadow: var(--shadow); }
+.namebox label { font-size: 16px; color: var(--ink-soft); white-space: nowrap; }
+.namebox input {
+  flex: 1; min-width: 0; font: inherit; color: var(--ink); border: 0;
+  border-radius: 12px; padding: 8px 12px; background: var(--bg);
+}
+.section-label { font-family: var(--display); font-weight: 700; font-size: 22px; }
+.section-label small { display: block; font-family: var(--body); font-weight: 400; font-size: 15px; color: var(--ink-soft); }
+
+/* el camino */
+.path { position: relative; display: flex; flex-direction: column; gap: 14px; padding-block: 6px; }
+.path::before {
+  content: ""; position: absolute; left: 50%; top: 40px; bottom: 70px; width: 0;
+  border-left: 8px dotted var(--soil); transform: translateX(-4px); opacity: .55;
+}
+.stop { position: relative; display: grid; grid-template-columns: 1fr 92px 1fr; align-items: center; gap: 10px; background: none; text-align: left; padding: 0; }
+.stop .plot {
+  grid-column: 2; width: 92px; height: 92px; border-radius: 50%;
+  background: var(--tc); color: #fff; display: grid; place-items: center;
+  font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .18), 0 0 0 6px var(--bg), 0 0 0 9px var(--soil-soft);
+}
+.stop .label { background: var(--card); border-radius: 18px; padding: 10px 12px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stop .label h3 { font-size: 18px; }
+.stop .label span { font-size: 14px; color: var(--ink-soft); }
+.stop.L .label { grid-column: 1; grid-row: 1; }
+.stop.R .label { grid-column: 3; grid-row: 1; }
+.stop.L .plot, .stop.R .plot { grid-row: 1; }
+.stop:active .plot { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0, 0, 0, .18), 0 0 0 6px var(--bg), 0 0 0 9px var(--soil-soft); }
+.exam-card {
+  position: relative; margin-top: 10px; border-radius: 28px; background: var(--c-exa); color: #fff;
+  padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; text-align: left;
+  box-shadow: 0 7px 0 #a83322, 0 12px 24px rgba(0, 0, 0, .12);
+}
+.exam-card:active { transform: translateY(4px); box-shadow: 0 3px 0 #a83322; }
+.exam-card .eyebrow { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; opacity: .9; }
+.exam-card h2 { font-size: 30px; }
+.exam-card .basket { position: absolute; right: 16px; top: -18px; font-size: 52px; line-height: 1; }
+.exam-card .when { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: 700; background: rgba(255, 255, 255, .18); border-radius: 12px; padding: 6px 10px; margin-top: 4px; }
+.album { background: var(--card); border-radius: 24px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow); }
+.stickers { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.stickers span { aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; font-size: 26px; border-radius: 50%; background: var(--bg); }
+.stickers span.on { background: var(--sun); box-shadow: inset 0 0 0 3px var(--hl); }
+.stickers span.off { color: var(--soil-soft); font-family: var(--display); font-weight: 700; font-size: 18px; }
+
+/* oruga de progreso */
+.dots { display: flex; align-items: center; flex-wrap: wrap; row-gap: 6px; padding-left: 4px; }
+.dots i { width: 22px; height: 22px; border-radius: 50%; margin-left: -5px; background: var(--card); box-shadow: inset 0 0 0 3px var(--green-soft); }
+.dots i.ok { background: var(--green); box-shadow: none; }
+.dots i.ko { background: #f39a5a; box-shadow: none; }
+.dots i.now { background: var(--hl); box-shadow: none; transform: scale(1.15); }
+.dots .head { margin-left: -2px; font-size: 26px; line-height: 1; }
+.tag { font-family: var(--display); font-weight: 600; font-size: 15px; color: #fff; background: var(--tc); border-radius: 10px; padding: 3px 12px; align-self: flex-start; }
+.board {
+  background: var(--card); border-radius: 30px; box-shadow: var(--shadow);
+  padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+}
+.q { font-size: 22px; font-weight: 700; margin: 0; text-wrap: balance; }
+.q b { color: var(--red); }
+.emoji { font-size: 88px; line-height: 1; margin: 0; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .08)); }
+.bigword { font-family: var(--body); font-weight: 700; font-size: 44px; line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
+.chips { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.chips span { border-radius: 999px; padding: 4px 14px; font-weight: 700; font-size: 24px; background: var(--bg); }
+.chips.syl span:nth-child(3n+1) { background: #ffdcd3; }
+.chips.syl span:nth-child(3n+2) { background: #d7f0cf; }
+.chips.syl span:nth-child(3n) { background: #ecdcfb; }
+.listen { background: var(--bg); border-radius: 999px; padding: 6px 16px; font-size: 16px; color: var(--ink-soft); }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.choices.cols1 { grid-template-columns: 1fr; }
+.choices.cols3 { grid-template-columns: repeat(3, 1fr); }
+.choice {
+  min-height: 70px; border-radius: 20px; background: var(--green-soft); color: var(--ink);
+  font-family: var(--body); font-weight: 700; font-size: 22px; padding: 8px 10px;
+  box-shadow: 0 5px 0 #b5d9aa; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  overflow-wrap: anywhere;
+}
+.choice.emo { font-size: 46px; line-height: 1; }
+.choice.sent { font-size: 20px; text-align: left; align-items: flex-start; }
+.choice small { font-size: 14px; }
+.choice:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 #b5d9aa; }
+.choice.right { background: var(--green); color: #fff; box-shadow: 0 5px 0 #276b35; }
+.choice.wrong { background: var(--red); color: #fff; box-shadow: 0 5px 0 #9c3324; }
+.choice:disabled { cursor: default; }
+@media (prefers-reduced-motion: no-preference) { .shake { animation: shake .4s; } @keyframes shake { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } } }
+
+.sentence { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
+.sentence button {
+  border-radius: 14px; background: var(--green-soft); padding: 8px 14px;
+  font-family: var(--body); font-weight: 700; font-size: 24px; box-shadow: 0 4px 0 #b5d9aa;
+}
+.sentence button.right { background: var(--green); color: #fff; box-shadow: 0 4px 0 #276b35; }
+.sentence button.wrong { background: var(--red); color: #fff; box-shadow: 0 4px 0 #9c3324; }
+
+.go {
+  width: 100%; min-height: 60px; border-radius: 20px; background: var(--green); color: #fff;
+  font-family: var(--display); font-weight: 700; font-size: 24px; box-shadow: 0 6px 0 #276b35;
+}
+.go.alt { background: var(--bg); color: var(--ink); box-shadow: 0 6px 0 #c9dfb9; }
+.go:active { transform: translateY(4px); box-shadow: 0 2px 0 #276b35; }
+.explain { background: var(--red-soft); border-radius: 18px; padding: 12px 16px; text-align: left; width: 100%; font-size: 19px; }
+.explain strong { color: var(--red); }
+
+.result { text-align: center; align-items: center; }
+.result .score { font-family: var(--display); font-weight: 700; font-size: 80px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--green); }
+.result .stars { font-size: 52px; letter-spacing: 6px; color: #f2b705; }
+.result .stars .dim { color: var(--soil-soft); }
+.result .sticker { font-size: 72px; line-height: 1; }
+.btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+
+#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 50; width: 100%; height: 100%; }
+.parents { font-size: 14px; color: var(--ink-soft); text-align: center; margin: 0; }
+</style>
+</head>
+<body>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<main class="wrap" id="app">
+  <div class="board">
+    <h2>Lengua con Fresi</h2>
+    <p class="q">Si solo ves este mensaje, el juego no se ha podido abrir aquí.</p>
+    <p>Ábrelo con el navegador <b>Chrome</b> o <b>Safari</b>, no con la vista previa de WhatsApp o del correo.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const sample = (a, n) => shuffle(a).slice(0, n);
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+  // ---------- guardado (solo en este navegador) ----------
+  const KEY = "lengua-fresi-v1";
+  let save = { name: "", stars: 0, best: {}, stickers: [], sound: true };
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (s) save = Object.assign(save, s);
+    else { const m = JSON.parse(localStorage.getItem("mates-bruno-v1") || "null"); if (m && m.name) save.name = m.name; }
+  } catch (e) {}
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+
+  // ---------- sonido y voz ----------
+  let actx = null;
+  function tone(freq, start, dur, type) {
+    if (!save.sound) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, actx.currentTime + start);
+      g.gain.exponentialRampToValueAtTime(0.25, actx.currentTime + start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + start + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(actx.currentTime + start); o.stop(actx.currentTime + start + dur + 0.05);
+    } catch (e) {}
+  }
+  const sndOk = () => { tone(660, 0, .15); tone(880, .12, .18); tone(1320, .26, .25); };
+  const sndKo = () => { tone(260, 0, .25, "triangle"); tone(200, .18, .3, "triangle"); };
+  const sndWin = () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i * .13, .2));
+  function speak(text) {
+    try {
+      if (!("speechSynthesis" in window)) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "es-ES"; u.rate = 0.85;
+      const vs = speechSynthesis.getVoices();
+      const v = vs.find(v => /^es(-|_)ES/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang));
+      if (v) u.voice = v;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  // ---------- confeti ----------
+  const cv = document.getElementById("confetti"), cx = cv.getContext("2d");
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let parts = [], raf = 0;
+  function confetti(n) {
+    if (reduce) return;
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ["#46ad62", "#ff9a3d", "#8a63e8", "#2f9fe0", "#ff7a8a", "#ffd23d"];
+    for (let i = 0; i < n; i++) parts.push({ x: innerWidth / 2 + rnd(-60, 60), y: innerHeight * .45, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: rnd(5, 9), c: pick(cols), a: Math.random() * 6, life: 70 + rnd(0, 30) });
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+  function step() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter(p => p.life-- > 0);
+    for (const p of parts) {
+      p.vy += .45; p.x += p.vx; p.y += p.vy; p.a += .2;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.fillRect(-p.r / 2, -p.r / 3, p.r, p.r * .66); cx.restore();
+    }
+    raf = parts.length ? requestAnimationFrame(step) : 0;
+    if (!raf) cx.clearRect(0, 0, cv.width, cv.height);
+  }
+
+  // ---------- temas (lo que dice el profe) ----------
+  const TOPICS = {
+    vocab:  { name: "Alimentos saludables", color: "var(--c-voc)", art: "🥕🍎" },
+    campo:  { name: "Campo semántico", color: "var(--c-cam)", art: "🐶🐱" },
+    silabas:{ name: "Sílabas", color: "var(--c-sil)", art: "ca·sa" },
+    mayus:  { name: "Las mayúsculas", color: "var(--c-may)", art: "Aa" }
+  };
+  const STICKERS = ["🍓","🍉","🍍","🥝","🍒","🥕","🥦","🌽","🍋","🍑","🥑","🍇","🐝","🐞","🦔","🐿️","🌻","🍄"];
+  const EXAM_DATE = new Date(2026, 9, 29);
+
+  // ---------- datos ----------
+  const HEALTHY = [
+    ["🍎","manzana"],["🍌","plátano"],["🍐","pera"],["🍇","uvas"],["🍓","fresa"],["🍊","naranja"],["🍉","sandía"],["🍍","piña"],
+    ["🥝","kiwi"],["🍒","cerezas"],["🍑","melocotón"],["🥕","zanahoria"],["🥦","brócoli"],["🍅","tomate"],["🥒","pepino"],
+    ["🥬","lechuga"],["🍆","berenjena"],["🐟","pescado"],["🥚","huevo"],["🥛","leche"],["🧀","queso"],["🍞","pan"],["🍚","arroz"],["🥑","aguacate"]
+  ];
+  const TREATS = [["🍭","piruleta"],["🍩","donut"],["🥤","refresco"],["🍟","patatas fritas"],["🍬","caramelo"],["🍰","pastel"],["🍔","hamburguesa"],["🧁","magdalena"]];
+
+  const GROUPS = {
+    "frutas":           ["manzana","pera","plátano","fresa","naranja","uva","cereza","kiwi","piña"],
+    "verduras":         ["lechuga","zanahoria","pepino","cebolla","brócoli","calabacín","espinacas","coliflor"],
+    "animales":         ["perro","gato","vaca","caballo","pato","oveja","conejo","león"],
+    "cosas del colegio":["lápiz","goma","mochila","cuaderno","pizarra","estuche","libro","regla"],
+    "ropa":             ["camiseta","pantalón","falda","abrigo","calcetín","gorro","bufanda","zapato"],
+    "partes del cuerpo":["mano","pie","cabeza","brazo","nariz","boca","rodilla","oreja"],
+    "juguetes":         ["pelota","muñeca","cometa","peonza","puzle","comba","yoyó","patinete"]
+  };
+  // frutas y verduras no se mezclan en la misma pregunta para no confundir
+  const CLASH = { "frutas": "verduras", "verduras": "frutas" };
+
+  const SYL = {
+    2: ["ca-sa","me-sa","pe-ra","u-va","le-che","pi-ña","ki-wi","fre-sa","a-gua","que-so","hue-vo","so-pa","ga-to","pe-rro","li-bro","lá-piz","go-ma","pa-to","a-rroz","yo-gur","ma-no","sal-sa","pas-ta","nue-ces"],
+    3: ["man-za-na","plá-ta-no","to-ma-te","pa-ta-ta","le-chu-ga","ce-bo-lla","na-ran-ja","pes-ca-do","ce-re-za","pe-pi-no","mo-chi-la","cua-der-no","ga-lle-ta","san-dí-a","ju-dí-as","bró-co-li","len-te-jas","pi-za-rra","pe-lo-ta","co-me-ta"],
+    4: ["za-na-ho-ria","ma-ri-po-sa","es-pi-na-cas","me-lo-co-tón","ma-ca-rro-nes","ca-ra-me-lo","bo-ca-di-llo","be-ren-je-na","al-bón-di-gas","hi-po-pó-ta-mo","e-le-fan-te","ca-la-ba-cín","chi-ri-mo-ya","a-gua-ca-te","ma-te-má-ti-cas"]
+  };
+  const sylCat = n => n >= 4 ? 4 : n;
+  const sylLabel = c => c === 4 ? "Más de 3" : c + " sílabas";
+
+  // Frases: *palabra = principio de frase (o tras punto), {n} persona, {c} lugar, {p} mascota
+  const NAMES = ["lucía","pablo","martina","hugo","sara","leo","carmen","álvaro","julia","mateo"];
+  const CITIES = ["sevilla","madrid","málaga","granada","valencia","cádiz","córdoba","jaén"];
+  const PETS = ["toby","luna","coco","nala","bobi","kira"];
+  const SENTENCES = [
+    "*{n} vive en {c}.",
+    "*mi perro se llama {p}.",
+    "*este verano fuimos a {c}.",
+    "*{n} come fruta en el recreo.",
+    "*me gusta la sopa. *mi favorita es la de pollo.",
+    "*{n} y {n} comen ensalada.",
+    "*la gata de {n} se llama {p}.",
+    "*hoy hay lentejas. *mañana comeremos pescado.",
+    "*en {c} hay muchas naranjas.",
+    "*mi amiga {n} tiene un conejo.",
+    "*el abuelo de {n} vive en {c}.",
+    "*bebo agua todos los días."
+  ];
+  function buildSentence() {
+    const used = new Set();
+    const fresh = list => { let x; do { x = pick(list); } while (used.has(x)); used.add(x); return x; };
+    return pick(SENTENCES).split(" ").map((raw, i) => {
+      let type = null, w = raw;
+      if (w.startsWith("*")) { w = w.slice(1); type = i === 0 ? "start" : "dot"; }
+      w = w.replace("{n}", () => { type = type || "name"; return fresh(NAMES); })
+           .replace("{c}", () => { type = type || "city"; return fresh(CITIES); })
+           .replace("{p}", () => { type = type || "pet"; return fresh(PETS); });
+      return { w, cap: !!type, type };
+    });
+  }
+  const show = t => (t.cap ? cap(t.w) : t.w);
+  const bare = w => w.replace(/[.,]/g, "");
+  const REASON = {
+    start: "va al principio de la frase",
+    dot: "va después de un punto",
+    name: "es el nombre de una persona",
+    city: "es el nombre de un lugar",
+    pet: "es el nombre de un animal"
+  };
+
+  // ---------- generadores ----------
+  const GEN = {
+    vocab() {
+      const v = rnd(0, 3);
+      if (v === 0) {
+        const [e, w] = pick(HEALTHY);
+        const opts = [w].concat(sample(HEALTHY.filter(x => x[1] !== w), 3).map(x => x[1]));
+        return { kind: "choice", html: '<p class="q">¿Cómo se llama este alimento?</p><p class="emoji">' + e + "</p>", say: "¿Cómo se llama este alimento?",
+          options: shuffle(opts).map(x => ({ label: x, value: x })), answer: w, explain: "Es <strong>" + w + "</strong>." };
+      }
+      if (v === 1) {
+        const [e, w] = pick(HEALTHY);
+        const opts = [e].concat(sample(HEALTHY.filter(x => x[0] !== e), 3).map(x => x[0]));
+        return { kind: "choice", html: '<p class="q">¿Dónde está…?</p><p class="bigword">' + w + "</p>", say: "¿Dónde está " + w + "?",
+          options: shuffle(opts).map(x => ({ label: x, value: x, cls: "emo" })), answer: e, explain: "<strong>" + w + "</strong> es " + e + "." };
+      }
+      if (v === 2) {
+        const notH = Math.random() < .5;
+        const ans = notH ? pick(TREATS) : pick(HEALTHY);
+        const others = notH ? sample(HEALTHY, 3) : sample(TREATS, 3);
+        return { kind: "choice", html: '<p class="q">¿Cuál ' + (notH ? "<b>NO</b> es" : "es") + " un alimento saludable?</p>", say: notH ? "¿Cuál no es un alimento saludable?" : "¿Cuál es un alimento saludable?",
+          options: shuffle([ans].concat(others)).map(x => ({ label: x[0] + "<small>" + x[1] + "</small>", value: x[1], cls: "emo" })), answer: ans[1],
+          explain: notH ? "<strong>" + cap(ans[1]) + "</strong> tiene mucho azúcar o grasa: solo de vez en cuando." : "<strong>" + cap(ans[1]) + "</strong> es saludable. Los otros, solo de vez en cuando." };
+      }
+      const treat = Math.random() < .4, it = treat ? pick(TREATS) : pick(HEALTHY);
+      return { kind: "choice", cols: 1, html: '<p class="q">¿Cuándo lo comemos?</p><p class="emoji">' + it[0] + '</p><p class="bigword" style="font-size:30px">' + it[1] + "</p>", say: "¿" + cap(it[1]) + ": lo podemos comer todos los días o solo de vez en cuando?",
+        options: [{ label: "Todos los días", value: "si" }, { label: "Solo de vez en cuando", value: "no" }], answer: treat ? "no" : "si",
+        explain: treat ? "<strong>" + cap(it[1]) + "</strong> tiene mucho azúcar o grasa: solo de vez en cuando." : "<strong>" + cap(it[1]) + "</strong> es saludable: lo podemos comer a menudo." };
+    },
+    campo() {
+      const keys = Object.keys(GROUPS), g = pick(keys);
+      const otherKeys = keys.filter(k => k !== g && k !== CLASH[g]);
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const three = sample(GROUPS[g], 3), og = pick(otherKeys), odd = pick(GROUPS[og]);
+        return { kind: "choice", html: '<p class="q">¿Qué palabra <b>NO</b> es del mismo grupo?</p>', say: "¿Qué palabra no es del mismo grupo? " + shuffle(three.concat(odd)).join(", "),
+          options: shuffle(three.concat(odd)).map(x => ({ label: x, value: x })), answer: odd,
+          explain: three.join(", ") + " son <strong>" + g + "</strong>. «" + odd + "» es de " + og + "." };
+      }
+      if (v === 1) {
+        const three = sample(GROUPS[g], 3);
+        const opts = [g].concat(sample(otherKeys, 3));
+        return { kind: "choice", cols: 1, html: '<p class="q">¿De qué grupo son estas palabras?</p><div class="chips">' + three.map(x => "<span>" + x + "</span>").join("") + "</div>", say: "¿De qué grupo son estas palabras? " + three.join(", "),
+          options: shuffle(opts).map(x => ({ label: cap(x), value: x })), answer: g, explain: three.join(", ") + " son <strong>" + g + "</strong>: pertenecen al mismo campo semántico." };
+      }
+      const ans = pick(GROUPS[g]), others = sample(otherKeys, 3).map(k => pick(GROUPS[k]));
+      return { kind: "choice", html: '<p class="q">¿Qué palabra es del grupo de <b>' + g + "</b>?</p>", say: "¿Qué palabra es del grupo de " + g + "?",
+        options: shuffle([ans].concat(others)).map(x => ({ label: x, value: x })), answer: ans, explain: "<strong>" + cap(ans) + "</strong> es del grupo de " + g + "." };
+    },
+    silabas() {
+      const v = rnd(0, 2);
+      const chips = s => '<div class="chips syl">' + s.split("-").map(x => "<span>" + x + "</span>").join("") + "</div>";
+      if (v === 0) {
+        const c = pick([2, 3, 4]), s = pick(SYL[c]), word = s.replace(/-/g, ""), n = s.split("-").length;
+        return { kind: "choice", cols: 3, html: '<p class="q">¿Cuántas sílabas tiene?</p><p class="bigword">' + word + "</p>", say: "¿Cuántas sílabas tiene " + word + "? Da palmadas: " + s.split("-").join(", "),
+          options: [2, 3, 4].map(k => ({ label: k === 4 ? "Más de 3" : String(k), value: k })), answer: c,
+          explain: "<strong>" + word + "</strong> tiene " + n + " sílabas:" + chips(s) };
+      }
+      if (v === 1) {
+        const c = pick([2, 3, 4]), s = pick(SYL[c]), word = s.replace(/-/g, "");
+        const wrong = new Set();
+        for (let t = 0; wrong.size < 2 && t < 40; t++) {
+          const parts = s.split("-");
+          const i = rnd(0, parts.length - 2), dir = Math.random() < .5 ? -1 : 1;
+          let a = parts[i], b = parts[i + 1];
+          if (dir < 0 && a.length > 1) { b = a.slice(-1) + b; a = a.slice(0, -1); }
+          else if (dir > 0 && b.length > 1) { a = a + b[0]; b = b.slice(1); }
+          else continue;
+          parts[i] = a; parts[i + 1] = b;
+          const w = parts.join("-");
+          if (w !== s) wrong.add(w);
+        }
+        const opts = shuffle([s].concat(Array.from(wrong)));
+        return { kind: "choice", cols: 1, html: '<p class="q">¿Cómo se separa en sílabas?</p><p class="bigword">' + word + "</p>", say: "¿Cómo se separa " + word + " en sílabas?",
+          options: opts.map(x => ({ label: x.split("-").join(" · "), value: x })), answer: s, explain: "Se separa así:" + chips(s) };
+      }
+      const c = pick([2, 3, 4]);
+      const opts = [2, 3, 4].map(k => pick(SYL[k]));
+      const ans = opts[c - 2];
+      return { kind: "choice", cols: 3, html: '<p class="q">¿Qué palabra tiene <b>' + (c === 4 ? "más de 3 sílabas" : c + " sílabas") + "</b>?</p>", say: "¿Qué palabra tiene " + (c === 4 ? "más de tres sílabas" : c + " sílabas") + "?",
+        options: shuffle(opts).map(x => ({ label: x.replace(/-/g, ""), value: x })), answer: ans,
+        explain: opts.map(x => x.replace(/-/g, "") + ": " + x.split("-").length).join(" · ") + ". La buena es <strong>" + ans.replace(/-/g, "") + "</strong>." };
+    },
+    mayus() {
+      const v = rnd(0, 2);
+      if (v === 0) {
+        const toks = buildSentence();
+        const caps = toks.map((t, i) => i).filter(i => toks[i].cap);
+        const i = pick(caps);
+        return { kind: "tap", toks, target: i, html: '<p class="q">Toca la palabra que debería empezar por <b>mayúscula</b>.</p>', say: "Toca la palabra que debería empezar por mayúscula.",
+          explain: "<strong>" + cap(bare(toks[i].w)) + "</strong> lleva mayúscula porque " + REASON[toks[i].type] + "." };
+      }
+      if (v === 1) {
+        const toks = buildSentence(), correct = toks.map(show).join(" ");
+        const wrong = new Set(), reasons = {};
+        for (let t = 0; wrong.size < 2 && t < 40; t++) {
+          const i = rnd(0, toks.length - 1), copy = toks.map(x => Object.assign({}, x));
+          copy[i].cap = !copy[i].cap;
+          const s = copy.map(show).join(" ");
+          if (s !== correct && !wrong.has(s)) { wrong.add(s); }
+        }
+        const named = toks.filter(t => t.cap).map(t => "«" + cap(bare(t.w)) + "» (" + REASON[t.type] + ")");
+        return { kind: "choice", cols: 1, html: '<p class="q">¿Qué frase está <b>bien escrita</b>?</p>', say: "¿Qué frase está bien escrita? Fíjate en las mayúsculas.",
+          options: shuffle([correct].concat(Array.from(wrong))).map(x => ({ label: esc(x), value: x, cls: "sent" })), answer: correct,
+          explain: "Llevan mayúscula: " + named.join(", ") + "." };
+      }
+      const proper = Math.random() < .5;
+      let w, why;
+      if (proper) { const t = pick(["name", "city", "pet"]); w = pick(t === "name" ? NAMES : t === "city" ? CITIES : PETS); why = REASON[t]; }
+      else { const k = pick(Object.keys(GROUPS)); w = pick(GROUPS[k]); why = "es una palabra común, no un nombre propio"; }
+      return { kind: "choice", cols: 1, html: '<p class="q">Si va en mitad de una frase, ¿empieza por mayúscula?</p><p class="bigword">' + w + "</p>", say: "Si va en mitad de una frase, ¿" + w + " empieza por mayúscula?",
+        options: [{ label: "Sí: " + cap(w), value: true }, { label: "No: " + w, value: false }], answer: proper,
+        explain: "<strong>" + (proper ? cap(w) : w) + "</strong> " + (proper ? "lleva" : "no lleva") + " mayúscula porque " + why + "." };
+    }
+  };
+
+  // ---------- pantalla ----------
+  let game = null;
+  const app = document.getElementById("app");
+  const BERRY = '<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 76 C16 66 6 44 13 30 C19 19 32 20 40 25 C48 20 61 19 67 30 C74 44 64 66 40 76Z" fill="#e2443b"/><g fill="#ffd97a"><ellipse cx="22" cy="40" rx="1.6" ry="2.4"/><ellipse cx="58" cy="40" rx="1.6" ry="2.4"/><ellipse cx="26" cy="56" rx="1.6" ry="2.4"/><ellipse cx="54" cy="56" rx="1.6" ry="2.4"/><ellipse cx="40" cy="66" rx="1.6" ry="2.4"/><ellipse cx="33" cy="61" rx="1.4" ry="2"/><ellipse cx="47" cy="61" rx="1.4" ry="2"/></g><path d="M40 27 L26 14 L36 20 L34 6 L40 17 L46 6 L44 20 L54 14Z" fill="#3a9f5a"/><circle cx="31" cy="40" r="8" fill="#fff"/><circle cx="49" cy="40" r="8" fill="#fff"/><circle cx="32" cy="41" r="4" fill="#2c2552"/><circle cx="48" cy="41" r="4" fill="#2c2552"/><circle cx="33.5" cy="39.5" r="1.3" fill="#fff"/><circle cx="49.5" cy="39.5" r="1.3" fill="#fff"/><g class="lid"><circle cx="31" cy="40" r="8.5" fill="#e2443b"/><circle cx="49" cy="40" r="8.5" fill="#e2443b"/></g><path d="M33 51 Q40 57 47 51" stroke="#2c2552" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="24" cy="50" r="3" fill="#ff8f8a"/><circle cx="56" cy="50" r="3" fill="#ff8f8a"/></svg>';
+  function mascotHTML(msg) { return '<div class="mascot"><div id="pet">' + BERRY + '</div><div class="bubble" id="bubble" aria-live="polite">' + msg + "</div></div>"; }
+  function say(msg) { const b = document.getElementById("bubble"); if (b) b.innerHTML = msg; const o = document.getElementById("pet"); if (o) { o.classList.remove("hop"); void o.offsetWidth; o.classList.add("hop"); } }
+  const nm = () => save.name ? ", " + esc(save.name) : "";
+  function daysLeft() { const now = new Date(); now.setHours(0, 0, 0, 0); return Math.round((EXAM_DATE - now) / 86400000); }
+  function starsFor(score, total) { const p = score / total; return p >= .9 ? 3 : p >= .7 ? 2 : p >= .4 ? 1 : 0; }
+  const starRow = n => "★".repeat(n) + "☆".repeat(3 - n);
+
+  function home() {
+    game = null;
+    const d = daysLeft();
+    const when = d > 1 ? "Faltan " + d + " días" : d === 1 ? "¡Es mañana!" : d === 0 ? "¡Es hoy! ¡Mucha suerte!" : "Ya pasó: ¡sigue practicando!";
+    const best = k => save.best[k] ? starRow(save.best[k]) : "Sin jugar todavía";
+    app.innerHTML =
+      '<div class="top"><span class="pill" title="Estrellas">⭐ ' + save.stars + '</span><span class="spacer"></span><button class="iconbtn" id="snd" aria-label="Sonido">' + (save.sound ? "🔊" : "🔇") + "</button></div>" +
+      '<div class="hero"><div><span class="eyebrow">El huerto de las palabras</span><h1>¡Hola' + (save.name ? ", <mark>" + esc(save.name) + "</mark>" : "") + "!</h1><p>Vamos a preparar la prueba de Lengua del tema 1.</p></div>" + BERRY +
+        '<div class="bubble say" id="bubble" aria-live="polite">' + (save.name ? "Soy <b>Fresi</b>. Sigue el camino del huerto parcela a parcela" + nm() + "." : "Soy <b>Fresi</b>, la fresa de las palabras. ¿Cómo te llamas?") + "</div></div>" +
+      '<div class="namebox"><label for="name">Tu nombre</label><input id="name" maxlength="16" autocomplete="off" placeholder="Escribe tu nombre" value="' + esc(save.name) + '"></div>' +
+      '<div class="section-label">El camino del huerto<small>Practica cada tema y llega a la cesta del examen.</small></div>' +
+      '<div class="path">' + Object.keys(TOPICS).map((k, i) =>
+        '<button class="stop ' + (i % 2 ? "R" : "L") + '" data-go="' + k + '" style="--tc:' + TOPICS[k].color + '"><span class="plot">' + TOPICS[k].art + '</span><span class="label"><h3>' + TOPICS[k].name + "</h3><span>" + best(k) + "</span></span></button>").join("") +
+      '<button class="exam-card" data-go="examen"><span class="basket" aria-hidden="true">🧺</span><span class="eyebrow">Jueves 29 de octubre</span><h2>Simulacro de la prueba</h2><span>16 preguntas de todos los temas, como en el examen.</span><span class="when"><span>' + when + "</span><span>" + (save.best.examen ? starRow(save.best.examen) : "") + "</span></span></button></div>" +
+      '<div class="album"><div class="section-label">Mi cesta de pegatinas<small>Consigue una cada vez que aciertes casi todo (8 de 10, o 13 de 16 en el simulacro).</small></div><div class="stickers">' +
+      STICKERS.map(s => save.stickers.includes(s) ? '<span class="on">' + s + "</span>" : '<span class="off">?</span>').join("") + "</div></div>" +
+      '<p class="parents">Para mamá y papá: los temas son los que indicó el profesor (tema 1 del libro). El progreso se guarda solo en este dispositivo.</p>';
+    app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => start(b.dataset.go)));
+    document.getElementById("snd").addEventListener("click", e => { save.sound = !save.sound; persist(); e.currentTarget.textContent = save.sound ? "🔊" : "🔇"; });
+    const inp = document.getElementById("name");
+    inp.addEventListener("change", () => { save.name = inp.value.trim().slice(0, 16); persist(); home(); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") inp.blur(); });
+    window.scrollTo(0, 0);
+  }
+
+  function start(key) {
+    let qs = [];
+    if (key === "examen") {
+      Object.keys(TOPICS).forEach(k => { for (let i = 0; i < 4; i++) qs.push(Object.assign(GEN[k](), { topic: k })); });
+      qs = shuffle(qs);
+    } else {
+      for (let i = 0; i < 10; i++) qs.push(Object.assign(GEN[key](), { topic: key }));
+    }
+    game = { key, qs, i: 0, score: 0, marks: [] };
+    question();
+  }
+
+  function question() {
+    const q = game.qs[game.i], tp = TOPICS[q.topic], total = game.qs.length;
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al inicio">←</button><span class="pill">' + (game.i + 1) + " / " + total + '</span><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
+      '<div class="dots">' + game.qs.map((_, i) => '<i class="' + (game.marks[i] === true ? "ok" : game.marks[i] === false ? "ko" : i === game.i ? "now" : "") + '"></i>').join("") + '<span class="head" aria-hidden="true">🐛</span></div>' +
+      '<span class="tag" style="--tc:' + tp.color + '">' + tp.name + "</span>" +
+      '<div class="board">' + q.html + '<button class="listen" id="listen">🔊 Escuchar</button><div id="area" style="width:100%;display:flex;flex-direction:column;gap:14px;align-items:center"></div></div>' +
+      mascotHTML(game.i === 0 ? (game.key === "examen" ? "¡Como en el examen! Lee despacio cada pregunta" + nm() + "." : "¡Vamos allá" + nm() + "! Tú puedes.") : pick(["Piensa con calma.", "Lee bien la pregunta.", "¡Seguimos!", "Tómate tu tiempo."]));
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("listen").addEventListener("click", () => speak(q.say));
+    const area = document.getElementById("area");
+    if (q.kind === "tap") renderTap(q, area); else renderChoices(q, area);
+    window.scrollTo(0, 0);
+  }
+
+  function renderChoices(q, area) {
+    const box = document.createElement("div");
+    box.className = "choices" + (q.cols === 3 ? " cols3" : q.cols === 1 ? " cols1" : "");
+    q.options.forEach(o => {
+      const b = document.createElement("button");
+      b.className = "choice" + (o.cls ? " " + o.cls : "");
+      b.innerHTML = o.label;
+      b.addEventListener("click", () => {
+        const ok = o.value === q.answer;
+        box.querySelectorAll("button").forEach((x, i) => { x.disabled = true; if (q.options[i].value === q.answer) x.classList.add("right"); });
+        if (!ok) b.classList.add("wrong", "shake");
+        finish(ok, area);
+      });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+
+  function renderTap(q, area) {
+    const box = document.createElement("div");
+    box.className = "sentence";
+    q.toks.forEach((t, i) => {
+      const b = document.createElement("button");
+      b.textContent = i === q.target ? t.w : show(t);
+      b.addEventListener("click", () => {
+        const ok = i === q.target;
+        box.querySelectorAll("button").forEach(x => x.disabled = true);
+        const tb = box.children[q.target];
+        tb.textContent = show(q.toks[q.target]); tb.classList.add("right");
+        if (!ok) b.classList.add("wrong", "shake");
+        finish(ok, area);
+      });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+
+  function finish(ok, area) {
+    game.marks[game.i] = ok;
+    const dot = document.querySelectorAll(".dots i")[game.i];
+    if (ok) {
+      game.score++; save.stars++; persist();
+      sndOk(); confetti(40);
+      say(pick(["¡Muy bien" + nm() + "!", "¡Genial!", "¡Eso es!", "¡Fenomenal!", "¡Súper" + nm() + "!", "¡Lo has clavado!"]));
+      dot.className = "ok";
+      const ex = document.createElement("div");
+      if (game.qs[game.i].topic === "silabas") { ex.className = "explain"; ex.style.borderColor = "var(--green)"; ex.style.background = "#eefaf1"; ex.innerHTML = game.qs[game.i].explain; area.appendChild(ex); setTimeout(next, 2200); }
+      else setTimeout(next, 1300);
+    } else {
+      sndKo();
+      say(pick(["¡Casi! Mira cómo es.", "No pasa nada, así se aprende.", "Uy, fíjate bien en esto."]));
+      dot.className = "ko";
+      const ex = document.createElement("div");
+      ex.className = "explain";
+      ex.innerHTML = game.qs[game.i].explain;
+      const b = document.createElement("button");
+      b.className = "go"; b.textContent = "Seguir";
+      b.addEventListener("click", next);
+      area.appendChild(ex); area.appendChild(b);
+      b.focus({ preventScroll: true });
+    }
+  }
+
+  function next() {
+    if (!game) return;
+    game.i++;
+    if (game.i < game.qs.length) question(); else results();
+  }
+
+  function results() {
+    const total = game.qs.length, s = game.score, st = starsFor(s, total);
+    const need = game.key === "examen" ? 13 : 8;
+    let sticker = "";
+    if (s >= need) {
+      const left = STICKERS.filter(x => !save.stickers.includes(x));
+      sticker = left.length ? pick(left) : pick(STICKERS);
+      if (left.length) save.stickers.push(sticker);
+    }
+    save.best[game.key] = Math.max(save.best[game.key] || 0, st);
+    persist();
+    if (st >= 2) { sndWin(); confetti(140); }
+    const msg = st === 3 ? "¡Increíble" + nm() + "! Estás lista para la prueba." : st === 2 ? "¡Muy bien" + nm() + "! Un poquito más y lo bordas." : st === 1 ? "¡Buen trabajo! Repetimos y verás cómo sale mejor." : "¡Ánimo! Practicando se aprende. ¿Otra vez?";
+    const title = game.key === "examen" ? "Simulacro de la prueba" : TOPICS[game.key].name;
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver al inicio">←</button><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
+      '<div class="board result"><h2>' + title + '</h2><div class="score">' + s + " / " + total + '</div><div class="stars">' +
+      "★".repeat(st) + '<span class="dim">' + "★".repeat(3 - st) + "</span></div>" +
+      (sticker ? '<div class="sticker">' + sticker + '</div><p class="q">¡Nueva pegatina para tu álbum!</p>' : '<p class="q">Con ' + need + " aciertos ganas una pegatina.</p>") +
+      '<div class="btnrow"><button class="go alt" id="home">Inicio</button><button class="go" id="again">Otra vez</button></div></div>' +
+      mascotHTML(msg);
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("home").addEventListener("click", home);
+    const k = game.key;
+    document.getElementById("again").addEventListener("click", () => start(k));
+    window.scrollTo(0, 0);
+  }
+
+  home();
+})();
+</script>
+</body>
+</html>
