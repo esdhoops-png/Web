@@ -106,6 +106,18 @@ section[data-v]{display:flex;flex-direction:column;gap:16px}
 .steps label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--raise);cursor:pointer}
 .steps input{width:20px;height:20px;accent-color:var(--accent);flex:none;margin-top:2px}
 .steps label.on span{color:var(--mute);text-decoration:line-through}
+.steps li{display:flex;gap:6px;align-items:stretch}
+.steps li>label{flex:1;min-width:0}
+.clip{flex:none;display:flex;align-items:center;justify-content:center;gap:6px;min-width:76px;border:1px dashed var(--line);border-radius:12px;background:none;color:var(--mute);font:600 12px/1.1 var(--body);padding:6px 8px;cursor:pointer;position:relative;overflow:hidden}
+.clip svg{width:16px;height:16px;flex:none}
+.clip.has{border-style:solid;border-color:var(--accent);color:var(--fg);padding:0;min-width:64px}
+.clip.has{height:56px;align-self:center}.clip.has video{width:64px;height:56px;object-fit:cover;display:block;pointer-events:none}
+.clip.has i{position:absolute;right:3px;bottom:3px;background:var(--accent);color:var(--accent-ink);font:800 10px/1 var(--body);font-style:normal;padding:2px 4px;border-radius:4px}
+.clipx{flex:none;border:0;background:none;color:var(--mute);padding:0 4px;font-size:18px}
+.rl{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.rl li{display:flex;gap:8px;align-items:center;justify-content:space-between;background:var(--raise);border-radius:12px;padding:6px 6px 6px 12px}
+.rl li span{min-width:0}
+.reelcard{border-color:var(--accent)}
 .steps em{display:block;font-style:normal;font-size:13px;color:var(--mute)}
 .mini{border:1px dashed var(--accent);border-radius:14px;padding:12px 14px;font-size:14px}
 .mini b{color:var(--accent)}
@@ -464,8 +476,9 @@ function openSession(id){
   <button class="back" id="close">← Volver</button>
   <div class="sh"><p class="lab">Semana ${s.w} · ${esc(fdate.format(dateOf(s)))}${s.deload?" · descarga":""}</p><h2 class="blk">${esc(s.name)}</h2>
   <div class="meta"><span class="tag" style="--c:${s.c}"><i></i>${esc(s.sum)}</span>${L.done?`<span class="tag done">${L.min?"Versión mínima hecha":"Hecha"}</span>`:""}</div></div>
-  ${s.blocks.map(b=>`<div class="card block"><h4>${esc(b.h)}${b.sm?`<small>${esc(b.sm)}</small>`:""}</h4>${b.rounds?`<p class="note">Cada ronda:</p><ol class="note" style="margin:0;padding-left:20px;color:var(--fg)">${b.steps.map(st=>`<li>${esc(st)}</li>`).join("")}</ol><ul class="steps rounds">${[...Array(b.rounds)].map((_,i)=>{const key="r"+i;return `<li><label class="${ck[key]?"on":""}"><input type="checkbox" data-ck="${key}" ${ck[key]?"checked":""}><span>Ronda ${i+1} de ${b.rounds}</span></label></li>`}).join("")}</ul>`:`<ul class="steps">${b.steps.map(st=>{const key="c"+(k++);return `<li><label class="${ck[key]?"on":""}"><input type="checkbox" data-ck="${key}" ${ck[key]?"checked":""}><span>${esc(st)}</span></label></li>`}).join("")}</ul>`}</div>`).join("")}
+  ${s.blocks.map(b=>`<div class="card block"><h4>${esc(b.h)}${b.sm?`<small>${esc(b.sm)}</small>`:""}</h4>${b.rounds?`<p class="note">Cada ronda:</p><ul class="rl">${b.steps.map((st,j)=>`<li><span>${esc(st)}</span>${clipBtn(id,"x"+j,st)}</li>`).join("")}</ul><ul class="steps rounds">${[...Array(b.rounds)].map((_,i)=>{const key="r"+i;return `<li><label class="${ck[key]?"on":""}"><input type="checkbox" data-ck="${key}" ${ck[key]?"checked":""}><span>Ronda ${i+1} de ${b.rounds}</span></label></li>`}).join("")}</ul>`:`<ul class="steps">${b.steps.map(st=>{const key="c"+(k++);return `<li><label class="${ck[key]?"on":""}"><input type="checkbox" data-ck="${key}" ${ck[key]?"checked":""}><span>${esc(st)}</span></label>${["Calentamiento","Vuelta a la calma","Test"].includes(b.h)?"":clipBtn(id,key,st)}</li>`}).join("")}</ul>`}</div>`).join("")}
   ${s.laps?`<div class="card timer" id="timer"><span class="ph work" id="tPh">Cronómetro</span><div class="clock" id="tClock">0:00</div><div class="rd" id="tRd">Pulsa «Ronda hecha» al terminar cada ronda</div><div class="row" style="justify-content:center"><button class="btn primary" id="tGo">Empezar</button><button class="btn" id="tLap">Ronda hecha</button><button class="btn ghost" id="tReset">Reiniciar</button></div><div id="tLaps" class="steps" style="width:100%"></div></div>`:""}
+  <div class="card reelcard" id="reelCard"><h4 class="blk" style="font-size:20px;margin:0 0 6px">Vídeos para el Reel</h4><p class="note" id="reelInfo">Graba un clip corto (5–10") de cada ejercicio con el botón de la cámara. Al terminar, mándamelos todos de una vez y te monto el Reel.</p><div class="row" style="margin-top:12px"><button class="btn primary" id="shareClips" type="button">Compartir los vídeos</button><button class="btn ghost" id="dlClips" type="button">Guardar en el móvil</button></div></div>
   <div class="mini"><b>Versión mínima:</b> ${esc(s.mini)}. Si hoy no da para más, hazla y cuenta para la racha.</div>
   <div class="card"><h4 class="blk" style="font-size:20px;margin:0 0 12px">Registro</h4>
     <div class="form">
@@ -483,6 +496,7 @@ function openSession(id){
   $("#sheet").hidden=false;$("#sheet").scrollTop=0;document.body.style.overflow="hidden";
   let rpe=L.rpe||null;
   $("#close").onclick=closeSession;
+  wireClips(id);
   $("#sheetBody").querySelectorAll("[data-ck]").forEach(c=>c.onchange=()=>{const l=S.logs[id]||(S.logs[id]={});l.ck=l.ck||{};l.ck[c.dataset.ck]=c.checked;c.parentElement.classList.toggle("on",c.checked);save()});
   $("#rpe").onclick=e=>{const b=e.target.closest("[data-rpe]");if(!b)return;rpe=+b.dataset.rpe;$("#rpe").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));$("#rpeh").textContent=RPEH[rpe]};
   const commit=min=>{const l=S.logs[id]||(S.logs[id]={});Object.assign(l,{done:true,min,rpe,tests:Object.fromEntries(s.tests.map(t=>[t.k,$("#fT_"+t.k).value.trim()])),total:$("#fDist").value.trim(),notes:$("#fNotes").value.trim(),at:new Date().toISOString()});save();toast(min?"Versión mínima apuntada":"Sesión apuntada");closeSession()};
@@ -490,6 +504,32 @@ function openSession(id){
   $("#markMin").onclick=()=>commit(true);
   if($("#unmark"))$("#unmark").onclick=()=>{const b=$("#unmark");if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="¿Seguro? Pulsa otra vez";setTimeout(()=>{if(b.isConnected){b.dataset.sure="";b.textContent="Desmarcar"}},3000);return}S.logs[id].done=false;save();toast("Sesión desmarcada");closeSession()};
   if(s.laps)setupWatch(id);
+}
+/* vídeos por ejercicio (se guardan en el móvil, en IndexedDB) */
+const CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg>';
+function clipBtn(id,key,label){return `<button type="button" class="clip" data-clip="${esc(key)}" data-label="${esc(label)}" aria-label="Vídeo de: ${esc(label)}">${CAM}<span>Vídeo</span></button>`}
+let idbP=null;
+function idb(){return idbP||(idbP=new Promise((ok,ko)=>{const r=indexedDB.open("racha-hyrox",1);r.onupgradeneeded=()=>r.result.createObjectStore("clips");r.onsuccess=()=>ok(r.result);r.onerror=()=>ko(r.error)}))}
+async function clipOp(mode,fn){const db=await idb();return new Promise((ok,ko)=>{const tx=db.transaction("clips",mode),st=tx.objectStore("clips");const r=fn(st);tx.oncomplete=()=>ok(r&&r.result);tx.onerror=()=>ko(tx.error)})}
+const putClip=(k,v)=>clipOp("readwrite",st=>st.put(v,k));
+const delClip=k=>clipOp("readwrite",st=>st.delete(k));
+const getClip=k=>clipOp("readonly",st=>st.get(k));
+async function sessionClips(id){const keys=[...document.querySelectorAll("#sheetBody [data-clip]")].map(b=>b.dataset.clip);const out=[];for(const k of keys){try{const v=await getClip(id+"|"+k);if(v)out.push(v)}catch(e){}}return out}
+const slug=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40);
+function clipFiles(id,clips){const s=byId[id];return clips.map((c,i)=>new File([c.blob],`S${s.w}-${s.sh.toLowerCase()}-${String(i+1).padStart(2,"0")}-${slug(c.label)}.${(c.type||"video/mp4").includes("quicktime")?"mov":"mp4"}`,{type:c.type||"video/mp4"}))}
+async function wireClips(id){
+  const btns=[...document.querySelectorAll("#sheetBody [data-clip]")];
+  const paint=async b=>{let v=null;try{v=await getClip(id+"|"+b.dataset.clip)}catch(e){}
+    if(b._url){URL.revokeObjectURL(b._url);b._url=null}
+    if(v){b._url=URL.createObjectURL(v.blob);b.classList.add("has");b.innerHTML=`<video src="${b._url}#t=0.3" muted playsinline preload="metadata"></video><i>✓</i>`;b.setAttribute("aria-label","Cambiar vídeo de: "+b.dataset.label);
+      if(!b.nextElementSibling||!b.nextElementSibling.classList.contains("clipx")){const x=document.createElement("button");x.type="button";x.className="clipx";x.textContent="×";x.setAttribute("aria-label","Quitar vídeo");x.onclick=async()=>{await delClip(id+"|"+b.dataset.clip);x.remove();b.classList.remove("has");b.innerHTML=CAM+"<span>Vídeo</span>";count()};b.after(x)}}
+  };
+  const count=async()=>{const c=await sessionClips(id);$("#reelInfo").textContent=c.length?`${c.length} vídeo${c.length>1?"s":""} grabado${c.length>1?"s":""}. Cuando acabes, pulsa «Compartir los vídeos» y mándamelos.`:"Graba un clip corto (5–10\") de cada ejercicio con el botón de la cámara. Al terminar, mándamelos todos de una vez y te monto el Reel."};
+  btns.forEach(b=>{paint(b);b.onclick=()=>{const inp=document.createElement("input");inp.type="file";inp.accept="video/*";inp.setAttribute("capture","environment");inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;try{await putClip(id+"|"+b.dataset.clip,{blob:f,type:f.type,label:b.dataset.label,at:new Date().toISOString()});await paint(b);count();toast("Vídeo guardado")}catch(e){toast("No se pudo guardar el vídeo: queda poco espacio")}};inp.click()}});
+  count();
+  $("#shareClips").onclick=async()=>{const c=await sessionClips(id);if(!c.length){toast("Aún no hay vídeos en esta sesión");return}const files=clipFiles(id,c);
+    if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:"Racha HYROX · vídeos para el Reel"})}catch(e){}}else{toast("Este navegador no deja compartir: usa «Guardar en el móvil»")}};
+  $("#dlClips").onclick=async()=>{const c=await sessionClips(id);if(!c.length){toast("Aún no hay vídeos en esta sesión");return}clipFiles(id,c).forEach((f,i)=>setTimeout(()=>{const u=URL.createObjectURL(f),a=document.createElement("a");a.href=u;a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000)},i*400))};
 }
 function closeSession(){stopTimer();$("#sheet").hidden=true;document.body.style.overflow="";openId=null;renderAll()}
 
