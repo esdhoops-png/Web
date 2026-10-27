@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La carta · Cuor di Pizza</title>
+<meta name="description" content="La carta de Cuor di Pizza: pizzas rojas y blancas, entrantes para compartir y postres italianos.">
+<meta name="theme-color" content="#F5EEE2">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cuor di Pizza">
+<meta property="og:title" content="La carta · Cuor di Pizza">
+<meta property="og:image" content="assets/img/og-cuor-di-pizza.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=DM+Sans:opsz,wght@9..40,400..600&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a class="logo" href="index.html" aria-label="Cuor di Pizza, ir al inicio">
+      <span class="logo__cuor">Cuor</span><span class="logo__di">di</span><span class="logo__pizza">Pizza</span>
+    </a>
+    <nav class="nav__links" aria-label="Principal">
+      <a href="index.html#inicio">Inicio</a>
+      <a href="index.html#esencia">Nuestra esencia</a>
+      <a href="carta.html" class="is-active" aria-current="page">Carta</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="btn btn--primary btn--sm nav__cta" href="#contacto" data-link="maps">
+      <span class="btn__label">Cómo llegar</span>
+    </a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+  <nav class="menu__links" aria-label="Menú móvil">
+    <a href="index.html#inicio" style="--i:0"><span>01</span>Inicio</a>
+    <a href="index.html#esencia" style="--i:1"><span>02</span>Nuestra esencia</a>
+    <a href="carta.html" style="--i:2" aria-current="page"><span>03</span>Carta</a>
+    <a href="#contacto" style="--i:3"><span>04</span>Contacto</a>
+  </nav>
+  <div class="menu__foot" style="--i:4">
+    <a class="btn btn--primary" href="#contacto" data-link="maps"><span class="btn__label">Cómo llegar</span></a>
+    <p class="menu__note"><span lang="it">Benvenuti</span> · Cuor di Pizza</p>
+  </div>
+</div>
+
+<main id="main" class="menu-page">
+  <div class="container">
+    <header class="menu-page__head">
+      <div>
+        <p class="eyebrow" data-reveal="up">La carta</p>
+        <h1 class="display" data-reveal="lines">
+          <span class="line"><span>Nuestra</span></span>
+          <span class="line"><span><em>carta.</em></span></span>
+        </h1>
+      </div>
+      <div data-reveal="up" style="--d:2">
+        <p class="lead">Pizzas para compartir, algo para empezar y un dulce para terminar.</p>
+        <div class="demo-banner" data-demo-note hidden>
+          <span aria-hidden="true">✎</span>
+          <p><strong>Carta de demostración.</strong> Los nombres, descripciones y precios son provisionales y se sustituirán por la carta real de Cuor di Pizza.</p>
+        </div>
+        <a class="link" id="menu-pdf" href="#" target="_blank" rel="noopener" hidden>Descargar la carta en PDF</a>
+      </div>
+    </header>
+
+    <nav class="menu-cats" id="menu-cats" aria-label="Categorías de la carta"></nav>
+
+    <!-- Se rellena desde assets/js/config.js (menu) -->
+    <div id="menu-list"></div>
+
+    <div class="menu-page__foot">
+      <h2 class="h2" data-reveal="lines"><span class="line"><span>¿Te <em>esperamos?</em></span></span></h2>
+      <div class="actions" id="cta-actions" data-reveal="up">
+        <a class="btn btn--primary" href="#contacto" data-link="maps"><span class="btn__label">Cómo llegar</span></a>
+        <a class="btn btn--outline" href="index.html"><span class="btn__label">Volver al inicio</span></a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" id="contacto" aria-labelledby="footer-title">
+  <div class="container">
+    <p class="footer__wordmark" id="footer-title" data-reveal="lines">
+      <span class="line"><span>Cuor <em>di</em> Pizza</span></span>
+    </p>
+
+    <div class="footer__grid">
+      <div class="footer__col" data-reveal="up">
+        <h2 class="footer__h">Visítanos</h2>
+        <address data-fill="address"></address>
+        <a class="link link--light" data-link="maps" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+      <div class="footer__col" data-reveal="up" style="--d:1">
+        <h2 class="footer__h">Horario</h2>
+        <dl class="hours" data-fill="hours"></dl>
+      </div>
+      <div class="footer__col" data-reveal="up" style="--d:2">
+        <h2 class="footer__h">Contacto</h2>
+        <ul class="plain" data-fill="contact"></ul>
+      </div>
+      <div class="footer__col" data-reveal="up" style="--d:3">
+        <h2 class="footer__h">Síguenos</h2>
+        <ul class="plain" data-fill="social"></ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© <span data-fill="year"></span> Cuor di Pizza · Un local del Grupo 5mentarios</p>
+      <ul class="footer__legal" data-fill="legal"></ul>
+      <p class="footer__credit">Fotografías provisionales: Unsplash</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

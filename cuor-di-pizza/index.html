@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuor di Pizza · Pizzería italiana en Gran Canaria</title>
+<meta name="description" content="Cuor di Pizza, pizzería italiana en Gran Canaria. Pizza hecha con cariño para compartir alrededor de la mesa. Consulta la carta, el horario y cómo llegar.">
+<meta name="theme-color" content="#F5EEE2">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<meta property="og:type" content="restaurant">
+<meta property="og:site_name" content="Cuor di Pizza">
+<meta property="og:title" content="Cuor di Pizza · La felicidad cabe en una pizza">
+<meta property="og:description" content="Hecha con cariño, compartida alrededor de la mesa. Benvenuti a Cuor di Pizza.">
+<meta property="og:image" content="assets/img/og-cuor-di-pizza.jpg">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=DM+Sans:opsz,wght@9..40,400..600&display=swap">
+<link rel="preload" as="image" href="assets/img/hero-1200.webp" imagesrcset="assets/img/hero-700.webp 700w, assets/img/hero-1200.webp 1200w" imagesizes="(min-width: 960px) 44vw, 92vw" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- ============================ NAVEGACIÓN ============================ -->
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a class="logo" href="#inicio" aria-label="Cuor di Pizza, ir al inicio">
+      <span class="logo__cuor">Cuor</span><span class="logo__di">di</span><span class="logo__pizza">Pizza</span>
+    </a>
+    <nav class="nav__links" aria-label="Principal">
+      <a href="#inicio" data-nav="inicio">Inicio</a>
+      <a href="#esencia" data-nav="esencia">Nuestra esencia</a>
+      <a href="#carta" data-nav="carta">Carta</a>
+      <a href="#contacto" data-nav="contacto">Contacto</a>
+    </nav>
+    <a class="btn btn--primary btn--sm nav__cta" href="carta.html" data-link="menu">
+      <span class="btn__label" data-text="Ver la carta">Ver la carta</span>
+    </a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Menú móvil -->
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+  <nav class="menu__links" aria-label="Menú móvil">
+    <a href="#inicio" style="--i:0"><span>01</span>Inicio</a>
+    <a href="#esencia" style="--i:1"><span>02</span>Nuestra esencia</a>
+    <a href="#carta" style="--i:2"><span>03</span>Carta</a>
+    <a href="#contacto" style="--i:3"><span>04</span>Contacto</a>
+  </nav>
+  <div class="menu__foot" style="--i:4">
+    <a class="btn btn--primary" href="carta.html" data-link="menu"><span class="btn__label" data-text="Ver la carta completa">Ver la carta completa</span></a>
+    <p class="menu__note"><span lang="it">Benvenuti</span> · Cuor di Pizza</p>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ================================ HERO ================================ -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="hero__grid container">
+      <div class="hero__text">
+        <p class="eyebrow hero__eyebrow">Pizzería italiana · Gran Canaria</p>
+        <h1 class="display hero__title" id="hero-title">
+          <span class="line"><span>La felicidad</span></span>
+          <span class="line"><span>cabe en</span></span>
+          <span class="line"><span>una <em>pizza.</em></span></span>
+        </h1>
+        <p class="hero__lead">Hecha con cariño, compartida alrededor de la mesa. <span lang="it">Benvenuti</span> a Cuor di Pizza.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#carta">
+            <span class="btn__label" data-text="Descubre nuestra carta">Descubre nuestra carta</span>
+            <svg class="btn__arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+          </a>
+          <a class="link" href="#esencia">Nuestra historia</a>
+        </div>
+      </div>
+
+      <figure class="hero__media">
+        <div class="hero__parallax" data-speed="-0.06">
+          <div class="arch hero__arch">
+            <img class="hero__img" src="assets/img/hero-1200.webp"
+                 srcset="assets/img/hero-700.webp 700w, assets/img/hero-1200.webp 1200w"
+                 sizes="(min-width: 960px) 44vw, 92vw" width="1200" height="1501"
+                 alt="Pizza napolitana recién horneada, con borde tostado, tomate, mozzarella y albahaca"
+                 fetchpriority="high" decoding="async">
+          </div>
+        </div>
+        <figcaption class="caption hero__caption"><span>N.º 01</span> Margherita, recién salida del horno</figcaption>
+      </figure>
+    </div>
+
+    <a class="scroll-cue" href="#esencia" aria-label="Bajar a Nuestra esencia">
+      <span class="scroll-cue__line" aria-hidden="true"></span>
+      <span class="scroll-cue__label">Desliza</span>
+    </a>
+  </section>
+
+  <!-- ============================ ESENCIA ============================ -->
+  <section class="essence section" id="esencia" aria-labelledby="essence-title">
+    <div class="container">
+      <header class="essence__head">
+        <p class="eyebrow" data-reveal="up">Nuestra esencia</p>
+        <h2 class="h2" id="essence-title" data-reveal="lines">
+          <span class="line"><span>Más que pizza,</span></span>
+          <span class="line"><span><em>momentos</em> para</span></span>
+          <span class="line"><span>recordar.</span></span>
+        </h2>
+        <svg class="heart-line essence__heart" viewBox="0 0 240 110" aria-hidden="true" data-reveal="draw">
+          <path pathLength="1" d="M4 100C60 100 100 99 120 92 90 70 76 52 80 34 84 16 108 12 120 32 132 12 156 16 160 34 164 52 150 70 120 92 140 99 180 100 236 100"/>
+        </svg>
+      </header>
+
+      <div class="essence__grid">
+        <figure class="essence__main">
+          <div class="mask" data-reveal="mask">
+            <img src="assets/img/mesa-1200.webp" srcset="assets/img/mesa-700.webp 700w, assets/img/mesa-1200.webp 1200w"
+                 sizes="(min-width: 960px) 46vw, 92vw" width="1200" height="1800" loading="lazy" decoding="async"
+                 alt="Varias manos alrededor de una mesa compartiendo porciones de pizza">
+          </div>
+          <figcaption class="caption" data-reveal="up">Una pizza en el centro y todas las manos alrededor.</figcaption>
+        </figure>
+
+        <div class="essence__text">
+          <p class="lead" data-reveal="up">En Cuor di Pizza creemos que una buena pizza es la mejor excusa para reunirse: sentarse sin prisa, pasarse la última porción y alargar la sobremesa.</p>
+          <p data-reveal="up" style="--d:1">Nos gusta lo sencillo. Buenos ingredientes, recetas hechas con cariño y una mesa en la que todo el mundo se sienta como en casa.</p>
+
+          <div class="essence__aside" data-speed="-0.08">
+            <div class="mask mask--side" data-reveal="mask">
+              <img src="assets/img/porcion-700.webp" srcset="assets/img/porcion-700.webp 700w, assets/img/porcion-1200.webp 1200w"
+                   sizes="(min-width: 960px) 22vw, 60vw" width="700" height="980" loading="lazy" decoding="async"
+                   alt="Porción de pizza humeante con el queso fundido estirándose">
+            </div>
+          </div>
+
+          <ol class="values">
+            <li class="values__item" data-reveal="up">
+              <span class="rule" data-reveal="rule"></span>
+              <span class="values__num">01</span>
+              <h3 class="values__title">Compartir</h3>
+              <p>La pizza sabe mejor en el centro de la mesa.</p>
+            </li>
+            <li class="values__item" data-reveal="up" style="--d:1">
+              <span class="rule" data-reveal="rule"></span>
+              <span class="values__num">02</span>
+              <h3 class="values__title">Lo sencillo</h3>
+              <p>Pocas cosas, bien hechas.</p>
+            </li>
+            <li class="values__item" data-reveal="up" style="--d:2">
+              <span class="rule" data-reveal="rule"></span>
+              <span class="values__num">03</span>
+              <h3 class="values__title">Con cariño</h3>
+              <p>Cada pizza, como si fuera para casa.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ ELABORACIÓN ============================ -->
+  <section class="process" id="elaboracion" aria-labelledby="process-title">
+    <div class="process__sticky">
+      <div class="process__track">
+        <header class="process__intro">
+          <p class="eyebrow" data-reveal="up">El oficio</p>
+          <h2 class="h2" id="process-title" data-reveal="lines">
+            <span class="line"><span>Una buena pizza</span></span>
+            <span class="line"><span>no tiene <em>prisa.</em></span></span>
+          </h2>
+          <p class="process__lede" data-reveal="up" style="--d:2">Tres momentos, una misma idea: hacer las cosas con calma y con cariño.</p>
+        </header>
+
+        <article class="step" aria-labelledby="step-1">
+          <figure class="step__media">
+            <div class="mask" data-reveal="mask">
+              <img class="step__img" src="assets/img/masa-1600.webp" srcset="assets/img/masa-800.webp 800w, assets/img/masa-1600.webp 1600w"
+                   sizes="(min-width: 1024px) 40vw, 92vw" width="1600" height="1067" loading="lazy" decoding="async"
+                   alt="Manos amasando una bola de masa sobre una mesa enharinada">
+            </div>
+          </figure>
+          <div class="step__body">
+            <span class="step__num" aria-hidden="true">01</span>
+            <h3 class="step__title" id="step-1" data-reveal="up">La masa</h3>
+            <p class="step__kicker" data-reveal="up" style="--d:1">Tiempo, paciencia y una buena base.</p>
+            <p data-reveal="up" style="--d:2">Todo empieza aquí: harina, agua y el tiempo que haga falta. Lo que se cuida al principio se nota en cada bocado.</p>
+          </div>
+        </article>
+
+        <article class="step step--alt" aria-labelledby="step-2">
+          <figure class="step__media">
+            <div class="mask" data-reveal="mask">
+              <img class="step__img" src="assets/img/ingredientes-1200.webp" srcset="assets/img/ingredientes-700.webp 700w, assets/img/ingredientes-1200.webp 1200w"
+                   sizes="(min-width: 1024px) 30vw, 92vw" width="1200" height="1727" loading="lazy" decoding="async"
+                   alt="Tomates en rama brillantes sobre una superficie oscura">
+            </div>
+          </figure>
+          <div class="step__body">
+            <span class="step__num" aria-hidden="true">02</span>
+            <h3 class="step__title" id="step-2" data-reveal="up">Los ingredientes</h3>
+            <p class="step__kicker" data-reveal="up" style="--d:1">Sabor y frescura, sin complicaciones.</p>
+            <p data-reveal="up" style="--d:2">Tomate, queso, albahaca, un buen aceite. Productos que aportan sabor y frescura para que cada pizza sepa a lo que tiene que saber.</p>
+          </div>
+        </article>
+
+        <article class="step step--fire" aria-labelledby="step-3">
+          <figure class="step__media">
+            <div class="mask" data-reveal="mask">
+              <img class="step__img" src="assets/img/horno-1600.webp" srcset="assets/img/horno-800.webp 800w, assets/img/horno-1600.webp 1600w"
+                   sizes="(min-width: 1024px) 40vw, 92vw" width="1600" height="1068" loading="lazy" decoding="async"
+                   alt="Pizza recién horneada delante de la boca de un horno con el fuego encendido">
+            </div>
+          </figure>
+          <div class="step__body">
+            <span class="step__num" aria-hidden="true">03</span>
+            <h3 class="step__title" id="step-3" data-reveal="up">El horno</h3>
+            <p class="step__kicker" data-reveal="up" style="--d:1">El momento en el que todo cobra vida.</p>
+            <p data-reveal="up" style="--d:2">Unos minutos de calor y ocurre la magia: el borde se dora, el queso se funde y el aroma llena la sala.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="process__progress" aria-hidden="true">
+        <span>La masa</span><span>Los ingredientes</span><span>El horno</span>
+        <i class="process__bar"><b></b></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PIZZAS ============================ -->
+  <section class="featured section" id="carta" aria-labelledby="featured-title">
+    <div class="container">
+      <header class="featured__head">
+        <div>
+          <p class="eyebrow" data-reveal="up">La carta</p>
+          <h2 class="h2" id="featured-title" data-reveal="lines">
+            <span class="line"><span>Una pizza siempre</span></span>
+            <span class="line"><span>es una <em>buena idea.</em></span></span>
+          </h2>
+        </div>
+        <div class="featured__intro" data-reveal="up" style="--d:2">
+          <p>Algunas de nuestras favoritas. Pídelas para compartir… o no.</p>
+          <a class="link" href="carta.html" data-link="menu">Ver la carta completa</a>
+          <p class="demo-note" data-demo-note hidden>Contenido de ejemplo: nombres y precios provisionales.</p>
+        </div>
+      </header>
+
+      <!-- Se rellena desde assets/js/config.js (featured) -->
+      <ul class="pizzas" id="pizzas"></ul>
+    </div>
+  </section>
+
+  <!-- ============================ INMERSIVA ============================ -->
+  <section class="immersive" aria-labelledby="immersive-title">
+    <div class="immersive__sticky">
+      <figure class="immersive__frame">
+        <img class="immersive__img" src="assets/img/panoramica-2200.webp"
+             srcset="assets/img/panoramica-1100.webp 1100w, assets/img/panoramica-2200.webp 2200w"
+             sizes="100vw" width="2200" height="1467" loading="lazy" decoding="async"
+             alt="Pizza recién horneada cortada en porciones sobre una mesa de madera, con tomates cherry y romero">
+      </figure>
+      <div class="immersive__content container">
+        <p class="eyebrow eyebrow--light" data-reveal="up">Un pedacito de Italia</p>
+        <h2 class="display immersive__title" id="immersive-title" lang="it" data-reveal="lines">
+          <span class="line"><span>Il gusto di</span></span>
+          <span class="line"><span><em>sentirsi a casa.</em></span></span>
+        </h2>
+        <p class="immersive__translation" data-reveal="up" style="--d:3">El gusto de sentirse en casa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ EXPERIENCIA ============================ -->
+  <section class="experience section" id="experiencia" aria-labelledby="experience-title">
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Famiglia</span><i>✦</i><span><em>Amici</em></span><i>✦</i><span>Forno</span><i>✦</i><span><em>Sobremesa</em></span><i>✦</i><span>Pomodoro</span><i>✦</i><span><em>Basilico</em></span><i>✦</i>
+        <span>Famiglia</span><i>✦</i><span><em>Amici</em></span><i>✦</i><span>Forno</span><i>✦</i><span><em>Sobremesa</em></span><i>✦</i><span>Pomodoro</span><i>✦</i><span><em>Basilico</em></span><i>✦</i>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="experience__grid">
+        <div class="experience__quote">
+          <p class="eyebrow" data-reveal="up">La experiencia</p>
+          <h2 class="h2 experience__title" id="experience-title" data-reveal="lines">
+            <span class="line"><span>Las mejores</span></span>
+            <span class="line"><span>conversaciones</span></span>
+            <span class="line"><span>empiezan alrededor</span></span>
+            <span class="line"><span>de una <em>mesa.</em></span></span>
+          </h2>
+        </div>
+
+        <figure class="experience__photo experience__photo--a" data-speed="0.05">
+          <div class="mask" data-reveal="mask">
+            <img src="assets/img/compartir-1200.webp" srcset="assets/img/compartir-700.webp 700w, assets/img/compartir-1200.webp 1200w"
+                 sizes="(min-width: 960px) 30vw, 70vw" width="1200" height="1800" loading="lazy" decoding="async"
+                 alt="Vista cenital de una mesa con una pizza en el centro y una mano tomando una porción">
+          </div>
+        </figure>
+        <figure class="experience__photo experience__photo--b" data-speed="-0.1">
+          <div class="mask" data-reveal="mask">
+            <img src="assets/img/servir-700.webp" srcset="assets/img/servir-700.webp 700w, assets/img/servir-1200.webp 1200w"
+                 sizes="(min-width: 960px) 20vw, 50vw" width="700" height="1050" loading="lazy" decoding="async"
+                 alt="Una pala de servir levanta una porción de pizza con el queso fundido">
+          </div>
+        </figure>
+      </div>
+
+      <ul class="moments">
+        <li class="moments__item" data-reveal="up">
+          <span class="vrule" data-reveal="rule" aria-hidden="true"></span>
+          <h3>Sin prisa.</h3>
+          <p>Aquí la sobremesa también forma parte del menú.</p>
+        </li>
+        <li class="moments__item" data-reveal="up" style="--d:1">
+          <span class="vrule" data-reveal="rule" aria-hidden="true"></span>
+          <h3>Para compartir.</h3>
+          <p>Una pizza al centro y la conversación alrededor.</p>
+        </li>
+        <li class="moments__item" data-reveal="up" style="--d:2">
+          <span class="vrule" data-reveal="rule" aria-hidden="true"></span>
+          <h3>Como en casa.</h3>
+          <p>Que entres con hambre y salgas con ganas de volver.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================ CTA FINAL ============================ -->
+  <section class="cta" id="visitanos" aria-labelledby="cta-title">
+    <div class="cta__panel">
+    <div class="cta__inner container">
+      <div class="cta__text">
+        <p class="eyebrow eyebrow--light" lang="it" data-reveal="up">Ti aspettiamo</p>
+        <h2 class="display cta__title" id="cta-title" data-reveal="lines">
+          <span class="line"><span>La próxima pizza</span></span>
+          <span class="line"><span>te <em>espera.</em></span></span>
+        </h2>
+        <p class="cta__lead" data-reveal="up" style="--d:2">Encuentra tu favorita y disfruta de un buen momento en Cuor di Pizza.</p>
+        <!-- Los botones de reservar/pedir solo aparecen si hay enlace en config.js -->
+        <div class="cta__actions" id="cta-actions" data-reveal="up" style="--d:3">
+          <a class="btn btn--cream" href="carta.html" data-link="menu"><span class="btn__label" data-text="Ver la carta">Ver la carta</span></a>
+          <a class="btn btn--outline-light" href="#contacto" data-link="maps" target="_blank" rel="noopener"><span class="btn__label" data-text="Cómo llegar">Cómo llegar</span></a>
+        </div>
+      </div>
+      <figure class="cta__media" data-speed="-0.07">
+        <div class="arch cta__arch mask" data-reveal="mask">
+          <img src="assets/img/porcion-1200.webp" srcset="assets/img/porcion-700.webp 700w, assets/img/porcion-1200.webp 1200w"
+               sizes="(min-width: 960px) 30vw, 80vw" width="1200" height="1680" loading="lazy" decoding="async"
+               alt="Porción de pizza recién salida del horno, todavía humeante">
+        </div>
+      </figure>
+      <svg class="heart-line cta__heart" viewBox="0 0 240 110" aria-hidden="true" data-reveal="draw">
+        <path pathLength="1" d="M4 100C60 100 100 99 120 92 90 70 76 52 80 34 84 16 108 12 120 32 132 12 156 16 160 34 164 52 150 70 120 92 140 99 180 100 236 100"/>
+      </svg>
+    </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer" id="contacto" aria-labelledby="footer-title">
+  <div class="container">
+    <h2 class="footer__wordmark" id="footer-title" data-reveal="lines">
+      <span class="line"><span>Cuor <em>di</em> Pizza</span></span>
+    </h2>
+
+    <div class="footer__grid">
+      <div class="footer__col" data-reveal="up">
+        <h3>Visítanos</h3>
+        <address data-fill="address"></address>
+        <a class="link link--light" data-link="maps" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+      <div class="footer__col" data-reveal="up" style="--d:1">
+        <h3>Horario</h3>
+        <dl class="hours" data-fill="hours"></dl>
+      </div>
+      <div class="footer__col" data-reveal="up" style="--d:2">
+        <h3>Contacto</h3>
+        <ul class="plain" data-fill="contact"></ul>
+      </div>
+      <div class="footer__col" data-reveal="up" style="--d:3">
+        <h3>Síguenos</h3>
+        <ul class="plain" data-fill="social"></ul>
+        <h3 class="footer__sub">La carta</h3>
+        <ul class="plain">
+          <li><a class="link link--light" href="carta.html" data-link="menu">Ver la carta completa</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© <span data-fill="year"></span> Cuor di Pizza · Un local del Grupo 5mentarios</p>
+      <ul class="footer__legal" data-fill="legal"></ul>
+      <p class="footer__credit">Fotografías provisionales: Unsplash</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
