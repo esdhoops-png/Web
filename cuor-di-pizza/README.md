@@ -1,6 +1,6 @@
 # Cuor di Pizza · web
 
-Landing page y carta de Cuor di Pizza, pizzería del Grupo 5mentarios (Gran Canaria).
+Landing page y carta de Cuor di Pizza, pizzeria & focacceria del Grupo 5mentarios en Arucas (Gran Canaria).
 
 Es una web estática (HTML, CSS y JavaScript sin dependencias ni compilación), como el resto
 de proyectos de este repositorio. Se publica tal cual en `/cuor-di-pizza/`.
@@ -30,7 +30,7 @@ discreto («Dirección por confirmar», «enlace pendiente»…) o no muestra el
 
 | Dato | Campo | Qué pasa si está vacío |
 | --- | --- | --- |
-| Dirección | `contact.address` | «Dirección por confirmar» |
+| Dirección (calle y CP; Arucas ya está) | `contact.address` | «Dirección por confirmar» |
 | Horario | `hours` | «Horario por confirmar» |
 | Teléfono, email, WhatsApp | `contact` | Aviso / se ocultan «Llamar» y «WhatsApp» |
 | Redes sociales | `social[].url` | «enlace pendiente» |
@@ -46,6 +46,13 @@ Cuando estén los platos y precios reales, sustitúyelos y pon `demoMenu: false`
 
 Los textos de las secciones (filosofía, los tres momentos, frases de la experiencia) están en
 `index.html` y son provisionales: no afirman procesos ni ingredientes concretos del local.
+
+## Logo
+
+`assets/img/logo-full-600.webp` (logo completo) y `assets/img/logo-mark-256.webp` (solo el corazón)
+son recortes con fondo transparente del logo oficial; también generan `favicon-64.png`,
+`apple-touch-icon.png` y la imagen para compartir `og-cuor-di-pizza.jpg`. La paleta de la web toma
+su rojo y su verde, y la tipografía romana Cinzel para el nombre.
 
 ## Cambiar fotos
 

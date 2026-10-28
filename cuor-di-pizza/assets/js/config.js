@@ -15,6 +15,8 @@ window.CUOR = {
   name: 'Cuor di Pizza',
   // Confirmado: el local pertenece al Grupo 5mentarios (Gran Canaria).
   group: 'Grupo 5mentarios',
+  // Confirmado por el logo: «Pizzeria & Focacceria», en Arucas.
+  tagline: 'Pizzeria & Focacceria',
   region: 'Gran Canaria',
   url: '', // URL pública definitiva, p. ej. 'https://cuordipizza.com/' (para SEO)
 
@@ -26,7 +28,7 @@ window.CUOR = {
     address: {
       street: '',      // p. ej. 'Calle Ejemplo, 12'
       postalCode: '',  // p. ej. '35400'
-      locality: '',    // p. ej. 'Arucas'
+      locality: 'Arucas',
       region: 'Gran Canaria',
       country: 'ES',
     },
