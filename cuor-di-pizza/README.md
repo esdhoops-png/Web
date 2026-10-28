@@ -52,19 +52,30 @@ Los textos de las secciones (filosofía, los tres momentos, frases de la experie
 Sustituye los archivos de `assets/img` manteniendo el nombre (`masa-800.webp`, `masa-1600.webp`, etc.).
 Si una foto cambia mucho, actualiza también su `alt` en `index.html` (o en `config.js` para las pizzas).
 
-Para las pizzas basta con indicar la ruta base en `config.js` (`image: 'assets/img/margherita'`) y
-crear `margherita-700.webp` y `margherita-1200.webp`.
+Las pizzas destacadas se muestran en círculo: usan fotos cuadradas. Indica la ruta base en
+`config.js` (`image: 'assets/img/sq-margherita'`) y crea `sq-margherita-500.webp` y `sq-margherita-900.webp`.
+
+La pizza giratoria del hero (`pizza-cut-*.webp`) y la del CTA (`pizza-cta-*.webp`) son recortes
+circulares con fondo transparente: lo ideal es una foto cenital de una pizza real del local.
+
+## Dirección visual
+
+Trattoria pop contemporánea: rojo tomate, verde albahaca y amarillo mostaza sobre crema;
+Fraunces (gruesa y redonda) en titulares, Caveat para las notas manuscritas y DM Sans en el texto.
+Detalles de marca: corazón en el logotipo, sello giratorio «Fatta con il cuore», cinta inclinada,
+mantel de cuadros, polaroids con cinta adhesiva y precios en pegatina.
 
 ## Sistema de movimiento
 
 - **Curvas y duraciones únicas** (`--ease`, `--ease-io`, `--t-fast/mid/slow`, escalonado de 110 ms).
 - **Revelado** con `data-reveal`: `up` (desplazamiento), `lines` (titulares por líneas), `mask`
-  (foto que se descubre con recorte), `draw` (corazón dibujado), `rule` (líneas). Se activan una
+  (foto que se descubre con recorte), `draw` (trazos a mano), `drop` (polaroids y pegatinas que caen
+  en su sitio con un pequeño rebote). Se activan una
   sola vez con IntersectionObserver; nada desaparece al salir de pantalla.
 - **Efectos ligados al scroll** en un único `requestAnimationFrame`: parallax sutil (`data-speed`),
   recorrido horizontal de la elaboración (solo escritorio, con `position: sticky`, sin bloquear el
-  scroll nativo), apertura de la imagen inmersiva, CTA que se ensancha y marquesina que solo se
-  mueve al hacer scroll.
+  scroll nativo), pizzas y sello que giran con el scroll (`data-spin`), cinta que se desplaza con el
+  scroll (`data-marquee`), apertura de la imagen inmersiva y CTA que se ensancha.
 - **Móvil:** sin parallax y con la elaboración en vertical.
 - **`prefers-reduced-motion`:** todo el contenido visible desde el principio, sin desplazamientos,
   desenfoques ni recorrido horizontal.

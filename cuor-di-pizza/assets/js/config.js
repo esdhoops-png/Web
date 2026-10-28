@@ -9,10 +9,9 @@
      discreto del tipo «Dirección por confirmar» o directamente oculta el
      botón (por ejemplo, «Reservar mesa» solo aparece si hay enlace).
    - Los precios son números (10.5 = 10,50 €). Pon null para no mostrarlo.
-   - Las imágenes se cambian sustituyendo los archivos de assets/img
-     (mismo nombre) o cambiando aquí la ruta base, sin la extensión ni el
-     tamaño: 'assets/img/margherita' → usa margherita-700.webp y
-     margherita-1200.webp.
+   - Las fotos de las pizzas destacadas son cuadradas (se muestran en
+     círculo). Ruta base sin tamaño ni extensión: 'assets/img/sq-margherita'
+     → usa sq-margherita-500.webp y sq-margherita-900.webp.
    ========================================================================== */
 
 window.CUOR = {
@@ -71,7 +70,7 @@ window.CUOR = {
       description: 'La de siempre, la que nunca falla.',
       ingredients: ['Tomate', 'Mozzarella', 'Albahaca', 'Aceite de oliva'],
       price: 10.5,
-      image: 'assets/img/margherita',
+      image: 'assets/img/sq-margherita',
       alt: 'Pizza margherita con tomate, mozzarella fundida y hojas de albahaca',
     },
     {
@@ -80,7 +79,7 @@ window.CUOR = {
       description: 'Para quienes buscan un punto de picante.',
       ingredients: ['Tomate', 'Mozzarella', 'Salami picante', 'Aceitunas negras', 'Albahaca'],
       price: 12.5,
-      image: 'assets/img/diavola',
+      image: 'assets/img/sq-diavola',
       alt: 'Pizza cortada en porciones con salami, tomate, aceitunas y albahaca sobre madera',
     },
     {
@@ -89,7 +88,7 @@ window.CUOR = {
       description: 'Verde, cremosa y sorprendentemente ligera.',
       ingredients: ['Tomate', 'Espinacas', 'Ricotta', 'Mozzarella'],
       price: 13,
-      image: 'assets/img/verde',
+      image: 'assets/img/sq-verde',
       alt: 'Pizza con espinacas frescas y montoncitos de ricotta',
     },
     {
@@ -98,7 +97,7 @@ window.CUOR = {
       description: 'Sin tomate y con mucho carácter.',
       ingredients: ['Mozzarella', 'Cebolla morada', 'Hojas verdes', 'Aceite de oliva'],
       price: 13.5,
-      image: 'assets/img/bianca',
+      image: 'assets/img/sq-bianca',
       alt: 'Porciones de pizza blanca con cebolla morada y hojas verdes sobre una mesa de madera',
     },
   ],

@@ -62,30 +62,29 @@
     }
   }
 
-  const imgSet = (base, alt, sizes, eager) =>
-    `<img src="${esc(base)}-1200.webp" srcset="${esc(base)}-700.webp 700w, ${esc(base)}-1200.webp 1200w" sizes="${sizes}" alt="${esc(alt)}" ${eager ? '' : 'loading="lazy"'} decoding="async" width="1200" height="1500">`;
+  // Las pizzas destacadas usan recortes cuadrados (base-500.webp / base-900.webp).
+  const imgSet = (base, alt, sizes) =>
+    `<img class="pcard__img" src="${esc(base)}-900.webp" srcset="${esc(base)}-500.webp 500w, ${esc(base)}-900.webp 900w" sizes="${sizes}" alt="${esc(alt)}" loading="lazy" decoding="async" width="900" height="900">`;
 
   function renderFeatured() {
     const list = $('#pizzas');
     if (!list || !Array.isArray(C.featured)) return;
     list.innerHTML = C.featured.map((p, i) => {
-      const ing = (p.ingredients || []).join(' · ');
+      const price = formatPrice(p.price);
       return `
-      <li class="pizza" data-reveal="up" style="--d:${i % 2}">
-        <a class="pizza__link" href="${esc(menuUrl)}#${esc(p.id)}">
-          <div class="pizza__media mask" data-reveal="mask">
-            ${imgSet(p.image, p.alt || p.name, '(min-width: 1180px) 530px, (min-width: 641px) 45vw, 92vw')}
-            ${ing ? `<div class="pizza__over" aria-hidden="true"><strong>Ingredientes</strong>${esc(ing)}</div>` : ''}
+      <li class="pcard" data-reveal="up" style="--d:${i % 2}">
+        <a class="pcard__link" href="${esc(menuUrl)}#${esc(p.id)}">
+          <span class="pcard__num">N.º ${String(i + 1).padStart(2, '0')}</span>
+          ${price ? `<span class="pcard__price">${price}</span>` : ''}
+          <div class="pcard__plate">
+            <div class="pcard__spin" data-spin="${i % 2 ? -0.04 : 0.04}">
+              ${imgSet(p.image, p.alt || p.name, '(min-width: 960px) 30vw, 70vw')}
+            </div>
           </div>
-          <div class="pizza__meta">
-            <span class="pizza__num">N.º ${String(i + 1).padStart(2, '0')}</span>
-            <h3 class="pizza__name">${esc(p.name)}</h3>
-            <span class="pizza__leader" aria-hidden="true"></span>
-            ${formatPrice(p.price) ? `<span class="pizza__price">${formatPrice(p.price)}</span>` : ''}
-          </div>
-          <p class="pizza__desc">${esc(p.description)}</p>
-          ${ing ? `<p class="pizza__ing">${esc(ing)}</p>` : ''}
-          <span class="pizza__more">Descúbrela en la carta</span>
+          <h3 class="pcard__name">${esc(p.name)}</h3>
+          <p class="pcard__desc">${esc(p.description)}</p>
+          ${(p.ingredients || []).length ? `<ul class="pcard__ing" aria-label="Ingredientes">${p.ingredients.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+          <span class="pcard__more">Descúbrela en la carta</span>
         </a>
       </li>`;
     }).join('');
@@ -108,8 +107,8 @@
             <li class="menu-item" id="${esc(it.id || slug(it.name))}" data-reveal="up" style="--d:${Math.min(i, 3)}">
               <div class="menu-item__row">
                 <h3 class="menu-item__name">${esc(it.name)}</h3>
-                <span class="pizza__leader" aria-hidden="true"></span>
-                ${formatPrice(it.price) ? `<span class="pizza__price">${formatPrice(it.price)}</span>` : ''}
+                <span class="menu-item__leader" aria-hidden="true"></span>
+                ${formatPrice(it.price) ? `<span class="menu-item__price">${formatPrice(it.price)}</span>` : ''}
               </div>
               ${it.description ? `<p class="menu-item__desc">${esc(it.description)}</p>` : ''}
             </li>`).join('')}
@@ -364,8 +363,8 @@
     const steps = $$('.step', section);
     const labels = $$('.process__progress span', section);
     const bar = $('.process__bar', section);
-    const from = [236, 225, 205]; // --flour
-    const to = [31, 24, 20];      // --espresso
+    const from = [30, 74, 44];    // --basil
+    const to = [26, 14, 9];       // --oven
     let dist = 0, data = [];
 
     const horizontal = () => motionOK() && mqDesktop.matches;
@@ -467,17 +466,33 @@
     });
   }
 
-  // Marquesina que solo se mueve con el scroll (nunca sola).
+  // Cintas que solo se mueven con el scroll (nunca solas): [data-marquee="k"].
   function initMarquee() {
-    const track = $('.marquee__track');
-    if (!track) return;
-    addEffect(track.parentElement, {
-      enabled: motionOK,
-      update(r, vh) {
-        const x = (r.top - vh) * 0.28 - track.scrollWidth * 0.04;
-        track.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
-      },
-      reset() { track.style.transform = ''; },
+    $$('[data-marquee]').forEach((track) => {
+      const k = parseFloat(track.dataset.marquee) || 0.3;
+      addEffect(track.parentElement, {
+        enabled: motionOK,
+        update(r, vh) {
+          const x = (r.top - vh) * -k - track.scrollWidth * 0.08;
+          track.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
+        },
+        reset() { track.style.transform = ''; },
+      });
+    });
+  }
+
+  // Giro ligado al scroll: pizzas y sello. [data-spin="grados por píxel"].
+  function initSpin() {
+    $$('[data-spin]').forEach((el) => {
+      const k = parseFloat(el.dataset.spin) || 0;
+      addEffect(el, {
+        enabled: motionOK,
+        update(r, vh) {
+          const deg = (vh / 2 - (r.top + r.height / 2)) * k;
+          el.style.transform = `rotate(${deg.toFixed(2)}deg)`;
+        },
+        reset() { el.style.transform = ''; },
+      });
     });
   }
 
@@ -498,6 +513,7 @@
   initImmersive();
   initCta();
   initMarquee();
+  initSpin();
 
   addEventListener('scroll', requestFrame, { passive: true });
   addEventListener('resize', requestFrame);
