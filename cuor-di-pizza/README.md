@@ -32,7 +32,7 @@ discreto («Dirección por confirmar», «enlace pendiente»…) o no muestra el
 | --- | --- | --- |
 | Dirección | `contact.address` | «Dirección por confirmar» |
 | Horario | `hours` | «Horario por confirmar» |
-| Teléfono, email, WhatsApp | `contact` | Aviso / se oculta WhatsApp |
+| Teléfono, email, WhatsApp | `contact` | Aviso / se ocultan «Llamar» y «WhatsApp» |
 | Redes sociales | `social[].url` | «enlace pendiente» |
 | Cómo llegar | `links.maps` | Busca «Cuor di Pizza Gran Canaria» en Google Maps |
 | Reservas | `links.reservation` | No aparece el botón «Reservar mesa» |
@@ -41,7 +41,7 @@ discreto («Dirección por confirmar», «enlace pendiente»…) o no muestra el
 | Textos legales | `links.legalNotice`, `privacy`, `cookies` | «(pendiente)» |
 | URL definitiva | `url` | Se omite en los datos estructurados |
 
-**Carta y pizzas destacadas:** `featured` (portada) y `menu` (carta.html) son **contenido de ejemplo**.
+**Carta:** `menu` (portada y carta.html) es **contenido de ejemplo**.
 Cuando estén los platos y precios reales, sustitúyelos y pon `demoMenu: false` para quitar los avisos.
 
 Los textos de las secciones (filosofía, los tres momentos, frases de la experiencia) están en
@@ -49,36 +49,29 @@ Los textos de las secciones (filosofía, los tres momentos, frases de la experie
 
 ## Cambiar fotos
 
-Sustituye los archivos de `assets/img` manteniendo el nombre (`masa-800.webp`, `masa-1600.webp`, etc.).
-Si una foto cambia mucho, actualiza también su `alt` en `index.html` (o en `config.js` para las pizzas).
+Sustituye los archivos de `assets/img` manteniendo el nombre. Si una foto cambia mucho, actualiza
+también su `alt` en `index.html`.
 
-Las pizzas destacadas se muestran en círculo: usan fotos cuadradas. Indica la ruta base en
-`config.js` (`image: 'assets/img/sq-margherita'`) y crea `sq-margherita-500.webp` y `sq-margherita-900.webp`.
+La pizza giratoria del hero (`pizza-cut-*.webp`) es un recorte circular con fondo transparente:
+lo ideal es una foto cenital de una pizza real del local.
 
-La pizza giratoria del hero (`pizza-cut-*.webp`) y la del CTA (`pizza-cta-*.webp`) son recortes
-circulares con fondo transparente: lo ideal es una foto cenital de una pizza real del local.
+## Estilo y experiencia
 
-## Dirección visual
+Misma familia visual que la web de Volcán (Grupo 5mentarios): fondo oscuro de horno, titulares Anton,
+mucho movimiento. Identidad propia con el rojo tomate, la albahaca y la cursiva italiana (Fraunces).
 
-Trattoria pop contemporánea: rojo tomate, verde albahaca y amarillo mostaza sobre crema;
-Fraunces (gruesa y redonda) en titulares, Caveat para las notas manuscritas y DM Sans en el texto.
-Detalles de marca: corazón en el logotipo, sello giratorio «Fatta con il cuore», cinta inclinada,
-mantel de cuadros, polaroids con cinta adhesiva y precios en pegatina.
+1. **Entrada:** fachada ilustrada de Cuor di Pizza de noche (neón, toldo, ventanales). Al hacer
+   scroll la cámara se acerca, se abre la puerta y se entra en la web.
+2. **Hero:** pizza real que se inclina en 3D con el ratón y gira con el scroll, ingredientes flotando,
+   vapor, brasas animadas (canvas) y sello giratorio.
+3. **Anatomía:** pizza ilustrada que se separa en 5 capas con el scroll y se «hornea» al final.
+4. **Carta:** pestañas por categoría, una ilustración generada para cada plato (según `art` o `dish`
+   en `config.js`) y botón «Añadir».
+5. **Tu mesa:** lista de lo elegido con total orientativo. No es un pedido online: ofrece llamar,
+   WhatsApp o pedir a domicilio solo si esos datos existen en `config.js`; si no, «Cómo llegar».
+6. El oficio, sección inmersiva, galería, dónde estamos, CTA con brasas y footer.
 
-## Sistema de movimiento
-
-- **Curvas y duraciones únicas** (`--ease`, `--ease-io`, `--t-fast/mid/slow`, escalonado de 110 ms).
-- **Revelado** con `data-reveal`: `up` (desplazamiento), `lines` (titulares por líneas), `mask`
-  (foto que se descubre con recorte), `draw` (trazos a mano), `drop` (polaroids y pegatinas que caen
-  en su sitio con un pequeño rebote). Se activan una
-  sola vez con IntersectionObserver; nada desaparece al salir de pantalla.
-- **Efectos ligados al scroll** en un único `requestAnimationFrame`: parallax sutil (`data-speed`),
-  recorrido horizontal de la elaboración (solo escritorio, con `position: sticky`, sin bloquear el
-  scroll nativo), pizzas y sello que giran con el scroll (`data-spin`), cinta que se desplaza con el
-  scroll (`data-marquee`), apertura de la imagen inmersiva y CTA que se ensancha.
-- **Móvil:** sin parallax y con la elaboración en vertical.
-- **`prefers-reduced-motion`:** todo el contenido visible desde el principio, sin desplazamientos,
-  desenfoques ni recorrido horizontal.
+Con `prefers-reduced-motion` no hay brasas, vapor, zoom ni inclinaciones, y todo el contenido es visible.
 
 ## Fotografías provisionales (Unsplash)
 
