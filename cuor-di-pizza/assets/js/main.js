@@ -33,8 +33,13 @@
   const menuUrl = links.menu || 'carta.html';
   const mapsUrl = links.maps || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([C.name || 'Cuor di Pizza', addr.street, addr.locality, addr.region || C.region].filter(Boolean).join(' '))}`;
   const MENU = Array.isArray(C.menu) ? C.menu : [];
+  // Cada tamaño (Mediana / Familiar) es un artículo propio de «Tu mesa».
+  const optionsOf = (it) => (Array.isArray(it.prices) && it.prices.length ? it.prices : [{ label: '', price: it.price }])
+    .map((o) => ({ ...o, id: o.label ? `${it.id}--${o.label.toLowerCase()}` : it.id }));
   const byId = {};
-  MENU.forEach((cat) => (cat.items || []).forEach((it) => { byId[it.id] = { ...it, cat: cat.title }; }));
+  MENU.forEach((cat) => (cat.items || []).forEach((it) => {
+    optionsOf(it).forEach((o) => { byId[o.id] = { ...it, cat: cat.title, id: o.id, name: o.label ? `${it.name} · ${o.label}` : it.name, price: o.price }; });
+  }));
 
   $$('[data-link="menu"]').forEach((a) => { a.href = menuUrl; });
   $$('[data-link="maps"]').forEach((a) => { a.href = mapsUrl; a.target = '_blank'; a.rel = 'noopener'; });
@@ -72,7 +77,38 @@
     ham: (p) => `<path d="M${p.x - 10} ${p.y - 4}c6-6 18-4 20 2s-6 10-12 9-12-5-8-11Z" fill="#E8A3A0" stroke="#C97C78" stroke-width="1" transform="rotate(${p.a} ${p.x} ${p.y})"/>`,
     artichoke: (p) => `<path d="M${p.x} ${p.y - 9}l7 14H${p.x - 7}Z" fill="#9DB35A" stroke="#6E8436" stroke-width="1.2" stroke-linejoin="round" transform="rotate(${p.a} ${p.x} ${p.y})"/>`,
   };
-  const COUNT = { cheese: 7, basil: 5, spinach: 7, salami: 7, olive: 8, ricotta: 5, onion: 7, mushroom: 6, ham: 6, artichoke: 5 };
+  const rot = (p) => `transform="rotate(${p.a} ${p.x} ${p.y})"`;
+  Object.assign(TOPPING, {
+    caper: (p) => `<circle cx="${p.x}" cy="${p.y}" r="3.2" fill="#6F8F3A" stroke="#4F6A28" stroke-width="1"/>`,
+    anchovy: (p) => `<ellipse cx="${p.x}" cy="${p.y}" rx="11" ry="2.8" fill="#8A6A55" stroke="#D2C2B2" stroke-width="1" ${rot(p)}/>`,
+    oregano: (p) => `<g fill="#3F6B2A"><circle cx="${p.x}" cy="${p.y}" r="1.3"/><circle cx="${p.x + 4}" cy="${p.y + 2}" r="1"/><circle cx="${p.x - 3}" cy="${p.y + 3}" r="1.1"/></g>`,
+    garlic: (p) => `<ellipse cx="${p.x}" cy="${p.y}" rx="2.4" ry="1.6" fill="#FFF6DD" ${rot(p)}/>`,
+    rosemary: (p) => `<g stroke="#3F7A2E" stroke-width="1.6" stroke-linecap="round" ${rot(p)}><path d="M${p.x - 8} ${p.y}h16M${p.x - 5} ${p.y}l-2-4M${p.x} ${p.y}l-1-4M${p.x + 5} ${p.y}l0-4M${p.x - 3} ${p.y}l2 4M${p.x + 3} ${p.y}l2 4"/></g>`,
+    pesto: (p) => `<ellipse cx="${p.x}" cy="${p.y}" rx="${12 + (p.a % 5)}" ry="${8 + (p.a % 4)}" fill="#4E8A2E" opacity=".8" ${rot(p)}/>`,
+    cherry: (p) => `<g><circle cx="${p.x}" cy="${p.y}" r="6.5" fill="#D9302A"/><circle cx="${p.x}" cy="${p.y}" r="4" fill="#F0664A"/><circle cx="${p.x - 2}" cy="${p.y - 2}" r="1.4" fill="#FFD3C0"/></g>`,
+    walnut: (p) => `<path d="M${p.x - 6} ${p.y}c0-6 12-6 12 0s-12 6-12 0Z" fill="#8B5A2B" stroke="#5E3A18" stroke-width="1" ${rot(p)}/>`,
+    bacon: (p) => `<g ${rot(p)}><rect x="${p.x - 10}" y="${p.y - 3}" width="20" height="6" rx="2" fill="#C8604A"/><rect x="${p.x - 10}" y="${p.y - 1}" width="20" height="2" fill="#F3C9B6"/></g>`,
+    egg: (p) => `<g><path d="M${p.x - 10} ${p.y}c0-7 6-10 11-9s10 4 9 10-7 8-12 7-8-3-8-8Z" fill="#FFFBF2"/><circle cx="${p.x + 1}" cy="${p.y}" r="4.6" fill="#F5B82E"/></g>`,
+    grana: (p) => `<path d="M${p.x - 6} ${p.y - 2}l9-3 4 5-8 3Z" fill="#F3E3B5" stroke="#DCC58A" stroke-width=".8" ${rot(p)}/>`,
+    porcini: (p) => `<path d="M${p.x - 9} ${p.y + 1}c0-8 18-8 18 0h-6v7h-6v-7Z" fill="#A87444" stroke="#6E4824" stroke-width="1.2" ${rot(p)}/>`,
+    prawn: (p) => `<path d="M${p.x - 7} ${p.y + 4}c-2-9 10-13 14-5" fill="none" stroke="#F08A4B" stroke-width="4.5" stroke-linecap="round" ${rot(p)}/>`,
+    bresaola: (p) => `<ellipse cx="${p.x}" cy="${p.y}" rx="11" ry="7.5" fill="#8E2A2A" stroke="#B9504A" stroke-width="1.2" ${rot(p)}/>`,
+    arugula: (p) => `<path d="M${p.x - 10} ${p.y}l3-3 2 2 3-4 2 3 3-3 2 3 3-1-3 4-3 1-2-1-3 2-2-2-3 1Z" fill="#4F9A3A" ${rot(p)}/>`,
+    zucchini: (p) => `<circle cx="${p.x}" cy="${p.y}" r="7" fill="#EAF2C8" stroke="#3E7A2A" stroke-width="2.4"/>`,
+    pepper: (p) => `<path d="M${p.x - 9} ${p.y}a9 5 0 0 1 18 0" fill="none" stroke="${p.a % 2 ? '#3DA040' : '#E2452B'}" stroke-width="3.6" stroke-linecap="round" ${rot(p)}/>`,
+    meat: (p) => `<g fill="#6B3A22"><circle cx="${p.x}" cy="${p.y}" r="3.6"/><circle cx="${p.x + 5}" cy="${p.y + 2}" r="2.8"/><circle cx="${p.x - 4}" cy="${p.y + 3}" r="2.6"/></g>`,
+    pineapple: (p) => `<path d="M${p.x - 7} ${p.y + 5}l3-10h8l3 10Z" fill="#F6CF4A" stroke="#D9A62A" stroke-width="1.2" stroke-linejoin="round" ${rot(p)}/>`,
+    chili: (p) => `<path d="M${p.x - 6} ${p.y}c4-4 8-2 12 2" fill="none" stroke="#C81E1E" stroke-width="2.6" stroke-linecap="round" ${rot(p)}/>`,
+    chorizo: (p) => `<g><circle cx="${p.x}" cy="${p.y}" r="8.5" fill="#B4321A"/><circle cx="${p.x}" cy="${p.y}" r="7" fill="#C8461F"/><circle cx="${p.x - 2}" cy="${p.y - 2}" r="1.3" fill="#F2C09A"/><circle cx="${p.x + 3}" cy="${p.y + 2}" r="1.1" fill="#F2C09A"/></g>`,
+    tuna: (p) => `<path d="M${p.x - 7} ${p.y - 3}c5-4 12-1 13 3s-6 6-10 4-6-4-3-7Z" fill="#C9A48A" stroke="#A58067" stroke-width=".8" ${rot(p)}/>`,
+    sausage: (p) => `<g><circle cx="${p.x}" cy="${p.y}" r="6.5" fill="#C98068"/><circle cx="${p.x}" cy="${p.y}" r="4.8" fill="#E5AC95"/></g>`,
+    serrano: (p) => `<path d="M${p.x - 11} ${p.y}c4-5 7 3 11-1s7 3 11 0l-1 4c-4 3-7-4-11 0s-7-3-10 1Z" fill="#B8435A" stroke="#E9A6B0" stroke-width="1" ${rot(p)}/>`,
+    crab: (p) => `<rect x="${p.x - 8}" y="${p.y - 2.5}" width="16" height="5" rx="2" fill="#FFF8F0" stroke="#E8603A" stroke-width="1.6" ${rot(p)}/>`,
+    potato: (p) => `<ellipse cx="${p.x}" cy="${p.y}" rx="7.5" ry="6" fill="#F2DC95" stroke="#D6B663" stroke-width="1.2" ${rot(p)}/>`,
+  });
+  const COUNT = { cheese: 7, basil: 5, spinach: 7, salami: 7, olive: 8, ricotta: 5, onion: 7, mushroom: 6, ham: 6, artichoke: 5,
+    caper: 10, anchovy: 6, oregano: 12, garlic: 10, rosemary: 6, pesto: 6, cherry: 7, walnut: 6, bacon: 6, egg: 3, grana: 9, porcini: 6,
+    prawn: 6, bresaola: 6, arugula: 9, zucchini: 7, pepper: 8, meat: 9, pineapple: 7, chili: 7, chorizo: 7, tuna: 7, sausage: 7, serrano: 6, crab: 7, potato: 7 };
 
   function pizzaSVG(seed, art = {}) {
     const r = rng(String(seed));
@@ -125,7 +161,50 @@
       <circle cx="132" cy="134" r="6" fill="#8E1530"/><circle cx="70" cy="136" r="5" fill="#C81E3A"/></svg>`,
   };
 
-  const visualFor = (it) => (it.dish && DISH[it.dish]) || pizzaSVG(it.id || it.name, it.art || { sauce: 'tomato', toppings: ['cheese', 'basil'] });
+  const crimp = (cx, cy, r, from, to, n) => Array.from({ length: n }, (_, i) => {
+    const a = from + (to - from) * (i / (n - 1));
+    return `<circle cx="${(cx + Math.cos(a) * r).toFixed(1)}" cy="${(cy + Math.sin(a) * r).toFixed(1)}" r="5" fill="#D9A35C"/>`;
+  }).join('');
+  Object.assign(DISH, {
+    calzone: `<svg viewBox="0 0 200 200" aria-hidden="true" class="is-dish"><ellipse cx="100" cy="150" rx="84" ry="14" fill="#000" opacity=".3"/>
+      <path d="M22 140A78 78 0 0 1 178 140Z" fill="url(#g-dough)"/>${crimp(100, 140, 78, Math.PI, Math.PI * 2, 17)}
+      <path d="M22 140h156" stroke="#C98A3E" stroke-width="7" stroke-linecap="round"/>
+      <g fill="#5A2C12" opacity=".5"><ellipse cx="70" cy="96" rx="5" ry="2.5"/><ellipse cx="118" cy="82" rx="6" ry="3"/><ellipse cx="146" cy="112" rx="5" ry="2.5"/></g>
+      <g fill="#fff" opacity=".2"><ellipse cx="78" cy="88" rx="26" ry="8" transform="rotate(-20 78 88)"/></g>
+      <path d="M150 140c6 6 4 12-2 14" stroke="#D63D22" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`,
+    rellena: `<svg viewBox="0 0 200 200" aria-hidden="true" class="is-dish"><circle cx="100" cy="103" r="92" fill="#000" opacity=".25"/>
+      <circle cx="100" cy="100" r="90" fill="url(#g-dough)"/>${crimp(100, 100, 86, 0, Math.PI * 2, 30)}
+      <circle cx="100" cy="100" r="72" fill="#E9B972"/>
+      <g stroke="#B9783A" stroke-width="5" stroke-linecap="round"><path d="M76 74l18 10M110 70l14 14M70 112l16 4M112 116l18-4M96 136l8-12"/></g>
+      <g fill="#5A2C12" opacity=".45"><ellipse cx="60" cy="90" rx="5" ry="3"/><ellipse cx="136" cy="96" rx="6" ry="3"/><ellipse cx="100" cy="150" rx="5" ry="2.5"/></g>
+      <ellipse cx="74" cy="66" rx="30" ry="10" transform="rotate(-30 74 66)" fill="#fff" opacity=".12"/></svg>`,
+    water: `<svg viewBox="0 0 200 200" aria-hidden="true" class="is-dish"><ellipse cx="100" cy="176" rx="40" ry="8" fill="#000" opacity=".3"/>
+      <rect x="88" y="20" width="24" height="16" rx="3" fill="#2E7DD1"/><path d="M84 36h32v14c14 8 18 20 18 34v80a10 10 0 0 1-10 10H76a10 10 0 0 1-10-10V84c0-14 4-26 18-34Z" fill="#CFE7F7" opacity=".85" stroke="#9CC8E6" stroke-width="2"/>
+      <rect x="66" y="96" width="68" height="40" fill="#2E7DD1"/><path d="M76 116h48" stroke="#CFE7F7" stroke-width="3" stroke-linecap="round"/>
+      <path d="M80 60c-4 10-4 22-4 30" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"/></svg>`,
+  });
+  const canSVG = (color = '#E2452B') => `<svg viewBox="0 0 200 200" aria-hidden="true" class="is-dish"><ellipse cx="100" cy="174" rx="40" ry="8" fill="#000" opacity=".3"/>
+      <path d="M66 40h68l6 10v108l-6 10H66l-6-10V50Z" fill="${esc(color)}"/>
+      <path d="M60 50h80v12H60zM60 146h80v12H60z" fill="#000" opacity=".12"/>
+      <ellipse cx="100" cy="40" rx="34" ry="7" fill="#D7D7D7"/><ellipse cx="100" cy="40" rx="26" ry="4.5" fill="#B5B5B5"/>
+      <path d="M72 58v96" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".3"/>
+      <rect x="74" y="92" width="52" height="26" rx="6" fill="#fff" opacity=".9"/><path d="M84 105h32" stroke="${esc(color)}" stroke-width="5" stroke-linecap="round"/></svg>`;
+  function leonSVG(it) {
+    // Medio calzone, media pizza
+    const half = pizzaSVG(it.id, { toppings: ['cheese', 'ham', 'mushroom', 'basil'] }).replace('<svg viewBox="0 0 200 200" aria-hidden="true">', '');
+    return `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><clipPath id="half-${esc(it.id)}"><rect x="0" y="0" width="100" height="200"/></clipPath></defs>
+      <g clip-path="url(#half-${esc(it.id)})">${half.replace('</svg>', '')}</g>
+      <path d="M100 8A92 92 0 0 1 100 192C126 170 140 138 140 100S126 30 100 8Z" fill="#C98A3E"/>
+      <path d="M100 6A94 94 0 0 1 100 194Z" fill="url(#g-dough)"/>
+      ${crimp(100, 100, 94, -Math.PI / 2, Math.PI / 2, 15)}
+      <g fill="#5A2C12" opacity=".45"><ellipse cx="146" cy="70" rx="5" ry="3"/><ellipse cx="160" cy="118" rx="6" ry="3"/><ellipse cx="128" cy="156" rx="5" ry="2.5"/></g></svg>`;
+  }
+  const visualFor = (it) => {
+    if (it.dish === 'can') return canSVG(it.color);
+    if (it.dish === 'leon') return leonSVG(it);
+    if (it.dish && DISH[it.dish]) return DISH[it.dish];
+    return pizzaSVG(it.id || it.name, it.art || { sauce: 'tomato', toppings: ['cheese', 'basil'] });
+  };
 
   /* ---------------------------------------------------------
      3. PRELOADER, BRASAS, CABECERA Y HERO
@@ -464,9 +543,12 @@
           </div>
           <div class="card__body">
             ${it.tag ? `<p class="card__tag">${esc(it.tag)}</p>` : ''}
-            <div class="card__top"><h3>${esc(it.name)}</h3>${euro(it.price) ? `<span class="price">${euro(it.price)}</span>` : ''}</div>
+            <div class="card__top"><h3>${esc(it.name)}</h3></div>
             <p>${esc(it.description)}</p>
-            <div class="card__foot"><button class="add-btn" type="button" data-add="${esc(it.id)}" aria-label="Añadir ${esc(it.name)} a tu mesa">${plus}<span>Añadir</span></button></div>
+            <div class="card__foot">${optionsOf(it).map((o) => {
+              const label = o.label || 'Añadir';
+              return `<button class="add-btn" type="button" data-add="${esc(o.id)}" data-label="${esc(label)}" aria-label="Añadir ${esc(byId[o.id].name)} a tu mesa">${plus}<span>${esc(label)}</span><b class="price">${euro(o.price)}</b></button>`;
+            }).join('')}</div>
           </div>
         </article>`).join('');
     };
@@ -547,7 +629,8 @@
       if (whatsapp) actions.push(`<a class="btn btn--outline btn--block" target="_blank" rel="noopener" href="https://wa.me/${whatsapp}?text=${encodeURIComponent('¡Hola! Me gustaría pedir:\n' + summary())}">Enviar por WhatsApp</a>`);
       if (links.delivery) actions.push(`<a class="btn btn--outline btn--block" target="_blank" rel="noopener" href="${esc(links.delivery)}">Pedir a domicilio</a>`);
       if (!actions.length) actions.push(`<a class="btn btn--fire btn--block" target="_blank" rel="noopener" href="${esc(mapsUrl)}">Cómo llegar al local</a>`);
-      $('#cartActions').innerHTML = actions.join('');
+      // La primera acción disponible es la principal
+      $('#cartActions').innerHTML = actions.map((h, i) => (i ? h.replace('btn--fire', 'btn--outline') : h.replace('btn--outline', 'btn--fire'))).join('');
     }
 
     const openCart = () => {
@@ -569,7 +652,7 @@
         cart.add(add.dataset.add);
         add.classList.add('added');
         const label = $('span', add); if (label) label.textContent = '¡Dentro!';
-        setTimeout(() => { add.classList.remove('added'); if (label) label.textContent = 'Añadir'; }, 1200);
+        setTimeout(() => { add.classList.remove('added'); if (label) label.textContent = add.dataset.label || 'Añadir'; }, 1200);
       }
       if (e.target.closest('[data-open-cart]')) { e.preventDefault(); openCart(); }
       const q = e.target.closest('[data-qty]');
@@ -605,6 +688,11 @@
   fill('address', [addr.street ? esc(addr.street) : placeholder('Dirección por confirmar'), [addr.postalCode, addr.locality].filter(Boolean).map(esc).join(' '), esc(addr.region || C.region || '')].filter(Boolean).join('<br>'));
   const hours = Array.isArray(C.hours) ? C.hours : [];
   fill('hours', hours.length ? hours.map((h) => `<div><dt>${esc(h.days)}</dt><dd>${esc(h.time)}</dd></div>`).join('') : `<div><dt>${placeholder('Horario por confirmar')}</dt></div>`);
+  fill('hours-note', esc(C.hoursNote || ''));
+  const zones = Array.isArray(C.deliveryZones) ? C.deliveryZones : [];
+  fill('delivery', zones.length
+    ? `Reparto en ${esc(zones.join(' y '))}${links.delivery ? ` · <a href="${esc(links.delivery)}" target="_blank" rel="noopener">Pedir en Just Eat</a>` : ''}`
+    : placeholder('Por confirmar'));
   fill('contact', [
     phone ? `<li><a href="tel:${esc(phone.replace(/[^\d+]/g, ''))}">${esc(phone)}</a></li>` : `<li>${placeholder('Teléfono por confirmar')}</li>`,
     whatsapp ? `<li><a href="https://wa.me/${whatsapp}" target="_blank" rel="noopener">WhatsApp</a></li>` : '',
@@ -632,7 +720,7 @@
       <section class="menu-cat" id="${slug(cat.title)}" aria-labelledby="t-${slug(cat.title)}">
         <header class="reveal"><h2 class="menu-cat__title" id="t-${slug(cat.title)}" lang="it">${esc(cat.title)}</h2>${cat.note ? `<p class="menu-cat__note">${esc(cat.note)}</p>` : ''}</header>
         <ul class="menu-items">${(cat.items || []).map((it) => `
-          <li class="menu-item reveal" id="${esc(it.id)}"><div class="menu-item__row"><h3 class="menu-item__name">${esc(it.name)}</h3><span class="menu-item__leader" aria-hidden="true"></span>${euro(it.price) ? `<span class="menu-item__price">${euro(it.price)}</span>` : ''}</div>
+          <li class="menu-item reveal" id="${esc(it.id)}"><div class="menu-item__row"><h3 class="menu-item__name">${esc(it.name)}</h3><span class="menu-item__leader" aria-hidden="true"></span><span class="menu-item__prices">${optionsOf(it).map((o) => `<span class="menu-item__price">${o.label ? `<small>${esc(o.label)}</small>` : ''}${euro(o.price)}</span>`).join('')}</span></div>
           ${it.description ? `<p class="menu-item__desc">${esc(it.description)}</p>` : ''}</li>`).join('')}</ul>
       </section>`).join('');
     const pdf = $('#menu-pdf');
@@ -648,7 +736,7 @@
     telephone: phone || undefined, email: contact.email || undefined, url: C.url || undefined,
     parentOrganization: C.group ? { '@type': 'Organization', name: C.group } : undefined,
   };
-  const oh = hours.map((h) => h.schema).filter(Boolean); if (oh.length) data.openingHours = oh;
+  const oh = hours.flatMap((h) => [].concat(h.schema || [])); if (oh.length) data.openingHours = oh;
   const sameAs = (C.social || []).map((s) => s.url).filter(Boolean); if (sameAs.length) data.sameAs = sameAs;
   if (links.reservation) data.acceptsReservations = links.reservation;
   const ld = document.createElement('script'); ld.type = 'application/ld+json'; ld.textContent = JSON.stringify(data); document.head.appendChild(ld);

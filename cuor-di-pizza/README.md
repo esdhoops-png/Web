@@ -41,7 +41,9 @@ discreto («Dirección por confirmar», «enlace pendiente»…) o no muestra el
 | Textos legales | `links.legalNotice`, `privacy`, `cookies` | «(pendiente)» |
 | URL definitiva | `url` | Se omite en los datos estructurados |
 
-**Carta:** `menu` (portada y carta.html) es **contenido de ejemplo**.
+**Carta:** `menu` (portada y carta.html) es la **carta real** del local, tomada de su carta de Just Eat
+(cuordipizzaarucas.com): 37 pizzas en tamaño mediano y familiar, focaccia y bebidas. Cada plato lleva
+`prices` (un precio por tamaño); cada tamaño se añade por separado a «Tu mesa».
 Cuando estén los platos y precios reales, sustitúyelos y pon `demoMenu: false` para quitar los avisos.
 
 Los textos de las secciones (filosofía, los tres momentos, frases de la experiencia) están en
