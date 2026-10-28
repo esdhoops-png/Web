@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuor di Pizza · La felicidad cabe en una pizza</title>
+<meta name="description" content="Cuor di Pizza, pizzeria y focacceria italiana en Arucas (Gran Canaria). Pizza hecha con cariño para compartir alrededor de la mesa. Consulta la carta, el horario y cómo llegar.">
+<meta name="theme-color" content="#120C09">
+<link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<meta property="og:type" content="restaurant">
+<meta property="og:site_name" content="Cuor di Pizza">
+<meta property="og:title" content="Cuor di Pizza · La felicidad cabe en una pizza">
+<meta property="og:description" content="Hecha con cariño, compartida alrededor de la mesa. Benvenuti a Cuor di Pizza.">
+<meta property="og:image" content="assets/img/og-cuor-di-pizza.jpg">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@600;700&family=Fraunces:ital,opsz,wght@1,9..144,600..800&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="preload" as="image" href="assets/img/pizza-cut-1200.webp" imagesrcset="assets/img/pizza-cut-700.webp 700w, assets/img/pizza-cut-1200.webp 1200w" imagesizes="(min-width: 960px) 44vw, 86vw" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- ============ SPRITE: marca + capas de la pizza ============ -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="g-dough" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#F8E3B8"/><stop offset=".7" stop-color="#EDC88A"/><stop offset="1" stop-color="#D9A35C"/>
+    </radialGradient>
+    <linearGradient id="g-dough-side" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D9A35C"/><stop offset="1" stop-color="#9A5E26"/>
+    </linearGradient>
+    <radialGradient id="g-sauce" cx="45%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#F0603A"/><stop offset=".6" stop-color="#D63D22"/><stop offset="1" stop-color="#A72814"/>
+    </radialGradient>
+    <radialGradient id="g-mozz" cx="40%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#FFFDF5"/><stop offset=".7" stop-color="#FBEFD3"/><stop offset="1" stop-color="#EBD3A6"/>
+    </radialGradient>
+    <linearGradient id="g-leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8CCB5E"/><stop offset=".55" stop-color="#4E9A36"/><stop offset="1" stop-color="#2D6A22"/>
+    </linearGradient>
+    <linearGradient id="g-oil" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F9DB6D"/><stop offset=".5" stop-color="#E9B526"/><stop offset="1" stop-color="#F7D35A"/>
+    </linearGradient>
+  </defs>
+
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.2C6.2 17.4 2.6 13.9 2.6 9.4 2.6 6.2 5 3.8 8 3.8c1.7 0 3.1.8 4 2.1.9-1.3 2.3-2.1 4-2.1 3 0 5.4 2.4 5.4 5.6 0 4.5-3.6 8-9.4 11.8z"/></symbol>
+
+  <!-- Sello de la marca -->
+  <symbol id="stamp" viewBox="0 0 200 200">
+    <path id="stamp-path" d="M100 100m-74 0a74 74 0 1 1 148 0a74 74 0 1 1-148 0" fill="none"/>
+    <circle cx="100" cy="100" r="97" fill="#E2452B"/>
+    <circle cx="100" cy="100" r="88" fill="none" stroke="#F6EBDD" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+    <text font-family="Manrope, sans-serif" font-weight="800" font-size="15" letter-spacing="2" fill="#F6EBDD"><textPath href="#stamp-path" textLength="455" lengthAdjust="spacing">CUOR DI PIZZA ✦ PIZZERIA ITALIANA ✦ </textPath></text>
+    <circle cx="100" cy="100" r="44" fill="#F6EBDD"/>
+    <use href="#heart" x="74" y="74" width="52" height="52" fill="#E2452B"/>
+  </symbol>
+
+  <!-- Hoja de albahaca (sola) -->
+  <symbol id="leaf" viewBox="0 0 60 30">
+    <path d="M2 15C12 1 40-2 58 15 40 32 12 29 2 15Z" fill="url(#g-leaf)"/>
+    <path d="M4 15C20 13 40 13 56 15M18 14l8-6M30 14l8-6M18 16l8 6M30 16l8 6" stroke="#B8E08F" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".75"/>
+  </symbol>
+  <!-- Rodaja de tomate -->
+  <symbol id="tomato-slice" viewBox="0 0 60 60">
+    <circle cx="30" cy="30" r="28" fill="#D63D22"/><circle cx="30" cy="30" r="22" fill="#F0603A"/>
+    <g fill="#FBD7A0"><ellipse cx="30" cy="16" rx="4" ry="6"/><ellipse cx="43" cy="30" rx="6" ry="4"/><ellipse cx="30" cy="44" rx="4" ry="6"/><ellipse cx="17" cy="30" rx="6" ry="4"/></g>
+    <circle cx="30" cy="30" r="5" fill="#E9502F"/>
+  </symbol>
+
+  <!-- ===== Capas de la pizza (vista en perspectiva, 400×190) ===== -->
+  <symbol id="l-masa" viewBox="0 0 400 190">
+    <ellipse cx="200" cy="104" rx="182" ry="74" fill="url(#g-dough-side)"/>
+    <ellipse cx="200" cy="95" rx="182" ry="74" fill="url(#g-dough)"/>
+    <ellipse cx="200" cy="99" rx="154" ry="60" fill="#F6E2BC"/>
+    <ellipse cx="200" cy="99" rx="154" ry="60" fill="none" stroke="#E2B676" stroke-width="3" opacity=".6"/>
+    <g fill="#E8C690" opacity=".8"><ellipse cx="150" cy="90" rx="6" ry="2.5"/><ellipse cx="240" cy="110" rx="5" ry="2"/><ellipse cx="210" cy="78" rx="4" ry="2"/><ellipse cx="120" cy="115" rx="5" ry="2"/></g>
+    <!-- Tostado del horno (aparece al final) -->
+    <g class="char" fill="#4A2410">
+      <ellipse cx="62" cy="82" rx="7" ry="3.5"/><ellipse cx="92" cy="50" rx="6" ry="3"/><ellipse cx="150" cy="31" rx="7" ry="3"/>
+      <ellipse cx="228" cy="27" rx="6" ry="2.5"/><ellipse cx="300" cy="40" rx="7" ry="3"/><ellipse cx="350" cy="70" rx="6" ry="3"/>
+      <ellipse cx="362" cy="110" rx="7" ry="3"/><ellipse cx="330" cy="146" rx="6" ry="3"/><ellipse cx="262" cy="164" rx="7" ry="3"/>
+      <ellipse cx="180" cy="166" rx="6" ry="3"/><ellipse cx="105" cy="150" rx="7" ry="3"/><ellipse cx="44" cy="118" rx="6" ry="3"/>
+      <ellipse cx="122" cy="40" rx="3" ry="1.5"/><ellipse cx="272" cy="32" rx="3" ry="1.5"/><ellipse cx="350" cy="130" rx="3" ry="1.5"/><ellipse cx="60" cy="140" rx="3" ry="1.5"/>
+    </g>
+  </symbol>
+  <symbol id="l-tomate" viewBox="0 0 400 190">
+    <path d="M52 98c-2-26 30-48 66-54 26-6 50-10 82-10 34 0 58 4 84 10 38 8 66 28 64 54-2 26-30 46-66 54-26 6-50 9-82 9-34 0-58-3-84-9-38-8-62-28-64-54Z" fill="url(#g-sauce)"/>
+    <g fill="#B42A16" opacity=".55"><ellipse cx="140" cy="80" rx="18" ry="6"/><ellipse cx="250" cy="118" rx="22" ry="7"/><ellipse cx="300" cy="84" rx="12" ry="4"/><ellipse cx="110" cy="122" rx="14" ry="5"/></g>
+    <ellipse cx="170" cy="66" rx="60" ry="10" fill="#fff" opacity=".12"/>
+  </symbol>
+  <symbol id="l-mozzarella" viewBox="0 0 400 190">
+    <g fill="url(#g-mozz)" stroke="#E2C898" stroke-width="1.5">
+      <path d="M96 84c8-12 40-14 48-2s-6 22-24 22-30-8-24-20Z"/>
+      <path d="M176 58c10-10 40-8 44 4s-12 18-28 16-24-10-16-20Z"/>
+      <path d="M268 76c10-12 44-10 48 4s-14 20-30 18-28-10-18-22Z"/>
+      <path d="M150 116c10-12 46-10 50 4s-14 22-32 20-30-12-18-24Z"/>
+      <path d="M236 128c10-10 40-8 42 6s-14 18-28 16-24-10-14-22Z"/>
+      <path d="M318 112c6-8 28-6 30 4s-10 14-20 12-16-8-10-16Z"/>
+      <path d="M74 112c6-8 26-6 28 4s-10 14-20 12-14-8-8-16Z"/>
+      <path d="M200 92c6-8 26-6 28 4s-10 12-20 10-14-6-8-14Z"/>
+    </g>
+    <g fill="#fff" opacity=".7"><ellipse cx="114" cy="84" rx="8" ry="3"/><ellipse cx="194" cy="62" rx="8" ry="3"/><ellipse cx="288" cy="80" rx="8" ry="3"/><ellipse cx="170" cy="120" rx="8" ry="3"/><ellipse cx="252" cy="132" rx="7" ry="3"/></g>
+  </symbol>
+  <symbol id="l-aceite" viewBox="0 0 400 190">
+    <path d="M70 100c30-26 60 24 92 0s58-28 88 2 60 18 84-6" fill="none" stroke="url(#g-oil)" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+    <path d="M120 70c24-14 48 12 72-2s44-10 66 6" fill="none" stroke="url(#g-oil)" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+    <path d="M110 132c28 10 54-14 82-2s52 10 74-6" fill="none" stroke="url(#g-oil)" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+    <g fill="#F9DB6D"><circle cx="66" cy="102" r="4"/><circle cx="336" cy="92" r="4"/><circle cx="262" cy="64" r="3"/><circle cx="106" cy="130" r="3"/></g>
+    <g fill="#fff" opacity=".8"><circle cx="64" cy="100" r="1.4"/><circle cx="334" cy="90" r="1.4"/></g>
+  </symbol>
+  <symbol id="l-albahaca" viewBox="0 0 400 190">
+    <g transform="translate(120 78) rotate(-20) scale(1.25 .7)"><use href="#leaf" width="60" height="30" x="-30" y="-15"/></g>
+    <g transform="translate(210 64) rotate(15) scale(1.1 .62)"><use href="#leaf" width="60" height="30" x="-30" y="-15"/></g>
+    <g transform="translate(286 98) rotate(-35) scale(1.3 .72)"><use href="#leaf" width="60" height="30" x="-30" y="-15"/></g>
+    <g transform="translate(178 124) rotate(30) scale(1.2 .68)"><use href="#leaf" width="60" height="30" x="-30" y="-15"/></g>
+    <g transform="translate(250 136) rotate(-10) scale(1 .58)"><use href="#leaf" width="60" height="30" x="-30" y="-15"/></g>
+    <g transform="translate(96 120) rotate(40) scale(.9 .55)"><use href="#leaf" width="60" height="30" x="-30" y="-15"/></g>
+  </symbol>
+</svg>
+
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader__inner">
+    <img class="preloader__logo" src="assets/img/logo-full-600.webp" width="600" height="404" alt="">
+    <div class="preloader__bar"><span></span></div>
+    <p>Encendiendo el horno…</p>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a href="#inicio" class="brand" aria-label="Cuor di Pizza, inicio">
+      <img class="brand__mark" src="assets/img/logo-mark-256.webp" width="256" height="256" alt="">
+      <span class="brand__name"><span>CUOR DI <b>PIZZA</b></span><small>PIZZERIA &amp; FOCACCERIA</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#anatomia" data-nav>Anatomía</a>
+      <a href="#carta" data-nav>Carta</a>
+      <a href="#oficio" data-nav>El oficio</a>
+      <a href="#local" data-nav>Dónde estamos</a>
+    </nav>
+    <div class="header__actions">
+      <button class="btn btn--sm btn--fire" type="button" data-open-cart>
+        <span>Tu mesa</span><span class="cart-count" data-cart-count hidden>0</span>
+      </button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+  <nav class="menu__links" aria-label="Menú móvil">
+    <a href="#anatomia" style="--i:0"><span>01</span>Anatomía</a>
+    <a href="#carta" style="--i:1"><span>02</span>Carta</a>
+    <a href="#oficio" style="--i:2"><span>03</span>El oficio</a>
+    <a href="#local" style="--i:3"><span>04</span>Dónde estamos</a>
+  </nav>
+  <div class="menu__foot" style="--i:4">
+    <a class="btn btn--fire" href="#carta">Ver la carta</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ============ ENTRADA: la fachada (scroll = entrar en la pizzería) ============ -->
+  <section class="intro" id="entrada" aria-label="Fachada de Cuor di Pizza">
+    <div class="intro__sticky">
+      <div class="intro__scene" id="introScene">
+        <svg class="facade" id="facade" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Fachada ilustrada de la pizzería Cuor di Pizza de noche, con el letrero de neón encendido">
+          <defs>
+            <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0E0C22"/><stop offset=".5" stop-color="#33213F"/><stop offset=".8" stop-color="#7A3A3A"/><stop offset="1" stop-color="#B85E38"/>
+            </linearGradient>
+            <pattern id="bricks" width="60" height="30" patternUnits="userSpaceOnUse">
+              <rect width="60" height="30" fill="#6A2C21"/>
+              <rect x="1" y="1" width="27" height="12" fill="#77352A"/><rect x="31" y="1" width="28" height="12" fill="#6F3025"/>
+              <rect x="-14" y="16" width="27" height="12" fill="#713127"/><rect x="16" y="16" width="27" height="12" fill="#7B392D"/><rect x="46" y="16" width="27" height="12" fill="#6C2E23"/>
+            </pattern>
+            <linearGradient id="g-wallshade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset=".45" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".45"/>
+            </linearGradient>
+            <radialGradient id="g-window" cx="50%" cy="40%" r="75%">
+              <stop offset="0" stop-color="#FFE0A0"/><stop offset=".5" stop-color="#F2A456"/><stop offset="1" stop-color="#9A4220"/>
+            </radialGradient>
+            <radialGradient id="g-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#FFC877" stop-opacity=".75"/><stop offset="1" stop-color="#FFC877" stop-opacity="0"/>
+            </radialGradient>
+            <pattern id="check" width="14" height="14" patternUnits="userSpaceOnUse">
+              <rect width="14" height="14" fill="#F6EBDD"/><rect width="7" height="7" fill="#D63D22"/><rect x="7" y="7" width="7" height="7" fill="#D63D22"/>
+            </pattern>
+            <pattern id="stripes" width="104" height="10" patternUnits="userSpaceOnUse">
+              <rect width="52" height="10" fill="#D13A20"/><rect x="52" width="52" height="10" fill="#F6EBDD"/>
+            </pattern>
+            <filter id="neon" x="-20%" y="-60%" width="140%" height="220%">
+              <feGaussianBlur stdDeviation="7" result="b1"/><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b2"/>
+              <feMerge><feMergeNode in="b1"/><feMergeNode in="b1"/><feMergeNode in="b2"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <rect width="1600" height="1000" fill="url(#g-sky)"/>
+          <g fill="#FFF3D6" opacity=".7"><circle cx="120" cy="70" r="1.6"/><circle cx="420" cy="40" r="1.2"/><circle cx="1180" cy="60" r="1.6"/><circle cx="1480" cy="110" r="1.2"/><circle cx="1320" cy="30" r="1"/><circle cx="640" cy="24" r="1"/></g>
+          <circle cx="1460" cy="70" r="26" fill="#FBE7C2" opacity=".9"/>
+
+          <!-- edificios vecinos -->
+          <rect x="0" y="210" width="250" height="790" fill="#251B2A"/>
+          <rect x="1350" y="170" width="250" height="830" fill="#221829"/>
+          <g fill="#F2B36A" opacity=".55"><rect x="40" y="280" width="50" height="70" rx="4"/><rect x="140" y="280" width="50" height="70" rx="4"/><rect x="40" y="420" width="50" height="70" rx="4"/><rect x="1400" y="250" width="50" height="70" rx="4"/><rect x="1500" y="390" width="50" height="70" rx="4"/></g>
+
+          <!-- edificio principal -->
+          <rect x="230" y="110" width="1140" height="890" fill="url(#bricks)"/>
+          <rect x="230" y="110" width="1140" height="890" fill="url(#g-wallshade)"/>
+          <rect x="212" y="96" width="1176" height="30" rx="4" fill="#3A1A14"/>
+          <!-- ventanas del primer piso -->
+          <g>
+            <rect x="380" y="160" width="120" height="120" rx="6" fill="#2A1A14"/><rect x="390" y="170" width="100" height="100" fill="url(#g-window)" opacity=".75"/>
+            <path d="M440 170v100M390 220h100" stroke="#2A1A14" stroke-width="6"/>
+            <rect x="350" y="160" width="28" height="122" fill="#1E4A2C"/><rect x="502" y="160" width="28" height="122" fill="#1E4A2C"/>
+            <rect x="372" y="282" width="136" height="20" rx="4" fill="#5A2E1A"/><g fill="#E2452B"><circle cx="390" cy="280" r="9"/><circle cx="420" cy="276" r="8"/><circle cx="452" cy="280" r="9"/><circle cx="486" cy="277" r="8"/></g><g fill="#4E9A36"><circle cx="404" cy="284" r="7"/><circle cx="436" cy="284" r="7"/><circle cx="470" cy="284" r="7"/></g>
+            <rect x="1100" y="160" width="120" height="120" rx="6" fill="#2A1A14"/><rect x="1110" y="170" width="100" height="100" fill="url(#g-window)" opacity=".6"/>
+            <path d="M1160 170v100M1110 220h100" stroke="#2A1A14" stroke-width="6"/>
+            <rect x="1070" y="160" width="28" height="122" fill="#1E4A2C"/><rect x="1222" y="160" width="28" height="122" fill="#1E4A2C"/>
+            <rect x="1092" y="282" width="136" height="20" rx="4" fill="#5A2E1A"/><g fill="#F2B544"><circle cx="1110" cy="280" r="9"/><circle cx="1140" cy="276" r="8"/><circle cx="1172" cy="280" r="9"/><circle cx="1206" cy="277" r="8"/></g><g fill="#4E9A36"><circle cx="1124" cy="284" r="7"/><circle cx="1156" cy="284" r="7"/><circle cx="1190" cy="284" r="7"/></g>
+          </g>
+
+          <!-- letrero de neón (corazón tricolor del logo) -->
+          <g class="neon" filter="url(#neon)">
+            <g transform="translate(800 300) scale(1.55) translate(-800 -313)" fill="none" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M800 350c-26-17-42-31-42-50 0-14 11-24 23-24 8 0 15 4 19 11" stroke="#3DE070"/>
+              <path d="M800 287c4-7 11-11 19-11 12 0 23 10 23 24 0 19-16 33-42 50" stroke="#FF4A3A"/>
+              <path d="M800 350c-26-17-42-31-42-50 0-14 11-24 23-24 8 0 15 4 19 11" stroke="#E9FFEF" stroke-width="1.3"/>
+              <path d="M800 287c4-7 11-11 19-11 12 0 23 10 23 24 0 19-16 33-42 50" stroke="#FFE3DC" stroke-width="1.3"/>
+            </g>
+            <text x="800" y="436" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="84" letter-spacing="3" fill="none" stroke-width="3.6"><tspan stroke="#FFF1E6">CUOR DI </tspan><tspan stroke="#FF4A3A">PIZZA</tspan></text>
+            <text x="800" y="436" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="84" letter-spacing="3" fill="none" stroke="#FFFFFF" stroke-width="1"><tspan>CUOR DI </tspan><tspan stroke="#FFE3DC">PIZZA</tspan></text>
+          </g>
+
+          <!-- toldo -->
+          <path d="M300 450h1000l26 70H274Z" fill="url(#stripes)"/>
+          <path d="M300 450h1000l4 10H296Z" fill="#000" opacity=".25"/>
+          <g fill="url(#stripes)"><circle cx="300" cy="520" r="26"/><circle cx="352" cy="520" r="26"/><circle cx="404" cy="520" r="26"/><circle cx="456" cy="520" r="26"/><circle cx="508" cy="520" r="26"/><circle cx="560" cy="520" r="26"/><circle cx="612" cy="520" r="26"/><circle cx="664" cy="520" r="26"/><circle cx="716" cy="520" r="26"/><circle cx="768" cy="520" r="26"/><circle cx="820" cy="520" r="26"/><circle cx="872" cy="520" r="26"/><circle cx="924" cy="520" r="26"/><circle cx="976" cy="520" r="26"/><circle cx="1028" cy="520" r="26"/><circle cx="1080" cy="520" r="26"/><circle cx="1132" cy="520" r="26"/><circle cx="1184" cy="520" r="26"/><circle cx="1236" cy="520" r="26"/><circle cx="1288" cy="520" r="26"/></g>
+          <rect x="274" y="518" width="1052" height="4" fill="#000" opacity=".15"/>
+
+          <!-- escaparate -->
+          <rect x="300" y="560" width="1000" height="390" fill="#173823"/>
+          <rect x="300" y="560" width="1000" height="10" fill="#0F2617"/>
+          <!-- ventana izquierda: interior -->
+          <g>
+            <rect x="335" y="595" width="360" height="300" fill="url(#g-window)"/>
+            <rect x="335" y="595" width="360" height="120" fill="#B85A2A" opacity=".35"/>
+            <g stroke="#3A1A10" stroke-width="3"><path d="M420 595v40M610 595v40"/></g>
+            <g><path d="M396 652a24 18 0 0 1 48 0Z" fill="#2A1A10"/><path d="M586 652a24 18 0 0 1 48 0Z" fill="#2A1A10"/></g>
+            <circle cx="420" cy="660" r="40" fill="url(#g-glow)"/><circle cx="610" cy="660" r="40" fill="url(#g-glow)"/>
+            <g fill="#4A2010"><rect x="372" y="770" width="12" height="80" rx="3"/><rect x="380" y="768" width="40" height="10" rx="3"/><rect x="560" y="770" width="12" height="80" rx="3"/><rect x="548" y="768" width="40" height="10" rx="3"/></g>
+            <path d="M420 790h130l12 58H408Z" fill="url(#check)"/><rect x="420" y="784" width="130" height="10" fill="url(#check)"/>
+            <path d="M460 770c8-10 22-10 30 0Z" fill="#F2B544"/><rect x="474" y="756" width="4" height="16" fill="#F6EBDD"/><circle cx="476" cy="752" r="5" fill="#FFE0A0"/>
+            <text x="515" y="636" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="34" letter-spacing="10" fill="#F2B544" opacity=".9">PIZZERIA</text>
+            <path d="M335 895l140-300M420 895l130-300" stroke="#fff" stroke-width="10" opacity=".05"/>
+            <path d="M515 595v300M335 745h360" stroke="#173823" stroke-width="8"/>
+          </g>
+          <!-- ventana derecha: interior -->
+          <g>
+            <rect x="905" y="595" width="360" height="300" fill="url(#g-window)"/>
+            <rect x="905" y="595" width="360" height="120" fill="#B85A2A" opacity=".35"/>
+            <g stroke="#3A1A10" stroke-width="3"><path d="M990 595v40M1180 595v40"/></g>
+            <g><path d="M966 652a24 18 0 0 1 48 0Z" fill="#2A1A10"/><path d="M1156 652a24 18 0 0 1 48 0Z" fill="#2A1A10"/></g>
+            <circle cx="990" cy="660" r="40" fill="url(#g-glow)"/><circle cx="1180" cy="660" r="40" fill="url(#g-glow)"/>
+            <g fill="#4A2010"><rect x="950" y="770" width="12" height="80" rx="3"/><rect x="940" y="768" width="40" height="10" rx="3"/><rect x="1142" y="770" width="12" height="80" rx="3"/><rect x="1132" y="768" width="40" height="10" rx="3"/></g>
+            <path d="M990 790h130l12 58H978Z" fill="url(#check)"/><rect x="990" y="784" width="130" height="10" fill="url(#check)"/>
+            <ellipse cx="1055" cy="780" rx="34" ry="8" fill="#E9B26A"/><ellipse cx="1055" cy="778" rx="28" ry="6" fill="#D63D22"/>
+            <text x="1085" y="636" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="34" letter-spacing="6" fill="#F2B544" opacity=".9">FOCACCERIA</text>
+            <path d="M905 895l140-300M990 895l130-300" stroke="#fff" stroke-width="10" opacity=".05"/>
+            <path d="M1085 595v300M905 745h360" stroke="#173823" stroke-width="8"/>
+          </g>
+
+          <!-- puerta -->
+          <rect x="722" y="580" width="156" height="370" fill="#0F2617"/>
+          <rect x="732" y="590" width="136" height="350" fill="#FFD9A0"/>
+          <rect x="732" y="590" width="136" height="350" fill="url(#g-glow)"/>
+          <g class="door" id="door">
+            <rect x="732" y="590" width="136" height="350" rx="3" fill="#24502F"/>
+            <rect x="748" y="606" width="104" height="170" rx="4" fill="url(#g-window)"/>
+            <path d="M800 606v170" stroke="#24502F" stroke-width="5"/>
+            <rect x="748" y="796" width="104" height="122" rx="4" fill="#1D4227"/>
+            <rect x="760" y="808" width="80" height="98" rx="3" fill="none" stroke="#2E6239" stroke-width="3"/>
+            <circle cx="852" cy="790" r="6" fill="#F2B544"/>
+            <g class="aperto" filter="url(#neon)"><text x="800" y="700" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="30" letter-spacing="3" fill="none" stroke="#7CFF8A" stroke-width="2">APERTO</text></g>
+          </g>
+          <!-- apliques -->
+          <g><rect x="690" y="610" width="14" height="30" rx="4" fill="#2A1A14"/><circle cx="697" cy="646" r="8" fill="#FFE0A0"/><circle cx="697" cy="646" r="46" fill="url(#g-glow)"/>
+             <rect x="896" y="610" width="14" height="30" rx="4" fill="#2A1A14"/><circle cx="903" cy="646" r="8" fill="#FFE0A0"/><circle cx="903" cy="646" r="46" fill="url(#g-glow)"/></g>
+
+          <!-- acera, escalón y macetas -->
+          <rect x="0" y="950" width="1600" height="50" fill="#1E1715"/>
+          <rect x="0" y="948" width="1600" height="6" fill="#3A2C26"/>
+          <rect x="700" y="940" width="200" height="14" rx="3" fill="#4A3A33"/>
+          <ellipse cx="515" cy="962" rx="230" ry="14" fill="#FFB86B" opacity=".18"/><ellipse cx="1085" cy="962" rx="230" ry="14" fill="#FFB86B" opacity=".18"/>
+          <g><path d="M250 880h80l-10 70h-60Z" fill="#9A4E2A"/><g fill="#3F8A2E"><circle cx="270" cy="868" r="22"/><circle cx="300" cy="852" r="24"/><circle cx="318" cy="872" r="20"/><circle cx="288" cy="878" r="18" fill="#56A83E"/></g>
+             <path d="M1270 880h80l-10 70h-60Z" fill="#9A4E2A"/><g fill="#3F8A2E"><circle cx="1290" cy="868" r="22"/><circle cx="1320" cy="852" r="24"/><circle cx="1338" cy="872" r="20"/><circle cx="1308" cy="878" r="18" fill="#56A83E"/></g></g>
+          <!-- pizarra -->
+          <g transform="rotate(-3 1170 880)">
+            <path d="M1110 820h120l18 130h-12l-16-118h-100l-16 118h-12Z" fill="#5A3420"/>
+            <rect x="1118" y="828" width="104" height="96" rx="4" fill="#232622"/>
+            <text x="1170" y="866" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="700" font-size="22" fill="#F6EBDD">Benvenuti!</text>
+            <path d="M1170 904c-9-6-14-10-14-16 0-5 4-8 8-8 3 0 5 1 6 4 1-3 3-4 6-4 4 0 8 3 8 8 0 6-5 10-14 16Z" fill="#E2452B"/>
+          </g>
+        </svg>
+      </div>
+      <div class="intro__flash" id="introFlash" aria-hidden="true"></div>
+      <div class="intro__hint" id="introHint">
+        <p class="kicker">Pizzeria &amp; Focacceria · Arucas</p>
+        <p class="intro__cta">Desliza para entrar</p>
+        <span class="mouse" aria-hidden="true"><i></i></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <canvas class="embers" id="heroEmbers" aria-hidden="true"></canvas>
+    <div class="hero__glow" aria-hidden="true"></div>
+
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow rh" style="--d:.1s"><span class="dot"></span> Pizzeria &amp; Focacceria · Arucas</p>
+        <h1 class="hero__title" id="hero-title">
+          <span class="line"><span class="rh" style="--d:.2s">LA FELICIDAD</span></span>
+          <span class="line"><span class="rh" style="--d:.32s">CABE EN UNA</span></span>
+          <span class="line"><span class="rh" style="--d:.44s"><em class="sauce-text">pizza.</em></span></span>
+        </h1>
+        <p class="hero__text rh" style="--d:.65s">Hecha con cariño, compartida alrededor de la mesa. <span lang="it">Benvenuti</span> a Cuor di Pizza.</p>
+        <div class="hero__cta rh" style="--d:.8s">
+          <a class="btn btn--fire" href="#carta">Descubre la carta
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--outline" href="#anatomia">Nuestra historia</a>
+        </div>
+        <ul class="hero__badges rh" style="--d:.95s">
+          <li><strong>Hecha</strong>con cariño</li>
+          <li><strong>Pizzeria</strong>&amp; focacceria</li>
+          <li><strong>Arucas</strong>Gran Canaria</li>
+        </ul>
+      </div>
+
+      <div class="hero__visual" id="heroVisual">
+        <div class="steam" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="hero__tilt" id="heroTilt">
+          <div class="hero__plate"></div>
+          <img class="hero__pizza" id="heroPizza" src="assets/img/pizza-cut-1200.webp"
+               srcset="assets/img/pizza-cut-700.webp 700w, assets/img/pizza-cut-1200.webp 1200w"
+               sizes="(min-width: 960px) 44vw, 86vw" width="1200" height="1200" fetchpriority="high" decoding="async"
+               alt="Pizza vista desde arriba con espinacas frescas y ricotta">
+        </div>
+        <!-- Ingredientes flotando (profundidad con el ratón) -->
+        <svg class="floater f1" data-depth="1.6" aria-hidden="true"><use href="#leaf"/></svg>
+        <svg class="floater f2" data-depth="-1.2" aria-hidden="true"><use href="#tomato-slice"/></svg>
+        <svg class="floater f3" data-depth="2.2" aria-hidden="true"><use href="#leaf"/></svg>
+        <svg class="floater f4" data-depth="-2" aria-hidden="true"><use href="#tomato-slice"/></svg>
+        <svg class="floater f5" data-depth="1" aria-hidden="true"><use href="#leaf"/></svg>
+        <div class="hero__sticker" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs>
+            <text><textPath href="#circ" textLength="272" lengthAdjust="spacing">FATTA CON IL CUORE · FATTA CON IL CUORE · </textPath></text></svg>
+          <span><svg><use href="#heart"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <a href="#anatomia" class="scroll-cue" aria-label="Bajar a la anatomía de la pizza"><span>Scroll</span><i></i></a>
+  </section>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span>PIZZA</span><b>✦</b><span><em>Amore</em></span><b>✦</b><span>MOZZARELLA</span><b>✦</b><span><em>Basilico</em></span><b>✦</b><span>FORNO</span><b>✦</b><span><em>Famiglia</em></span><b>✦</b>
+      <span>PIZZA</span><b>✦</b><span><em>Amore</em></span><b>✦</b><span>MOZZARELLA</span><b>✦</b><span><em>Basilico</em></span><b>✦</b><span>FORNO</span><b>✦</b><span><em>Famiglia</em></span><b>✦</b>
+    </div>
+  </div>
+
+  <!-- ============ ANATOMÍA (scroll interactivo) ============ -->
+  <section class="build" id="anatomia" aria-labelledby="build-title">
+    <div class="build__sticky">
+      <div class="container build__grid">
+        <div class="build__copy">
+          <p class="kicker">Anatomía de una pizza</p>
+          <h2 class="build__title" id="build-title">5 CAPAS.<br><em class="sauce-text">Cero prisa.</em></h2>
+          <div class="build__panel" aria-live="polite">
+            <span class="build__index" id="buildIndex">00 / 05</span>
+            <h3 class="build__name" id="buildName">Haz scroll</h3>
+            <p class="build__desc" id="buildDesc">Desmonta la pizza capa a capa y descubre qué hay dentro de cada porción.</p>
+            <p class="build__meta" id="buildMeta"></p>
+          </div>
+          <ol class="build__steps" id="buildSteps"></ol>
+        </div>
+        <div class="build__stage" id="buildStage">
+          <div class="build__halo" aria-hidden="true"></div>
+          <div class="steam steam--build" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="pizza3d" id="pizza3d" role="img" aria-label="Pizza ilustrada que se separa en capas al hacer scroll"></div>
+          <div class="build__done" id="buildDone">¡AL<br><em class="sauce-text">horno!</em></div>
+        </div>
+      </div>
+      <div class="build__progress" aria-hidden="true"><span id="buildBar"></span></div>
+    </div>
+  </section>
+
+  <!-- ============ CARTA ============ -->
+  <section class="section carta" id="carta" aria-labelledby="carta-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">La carta</p>
+        <h2 class="section-title" id="carta-title">Una pizza siempre es una <em class="sauce-text">buena idea</em></h2>
+        <p class="section-lead">Pizzas para compartir, algo para empezar y un dulce para terminar. Añade lo que te apetezca a <strong>tu mesa</strong> y llévala preparada.</p>
+        <p class="demo-note" data-demo-note hidden>Carta de demostración: nombres y precios provisionales.</p>
+      </div>
+      <div class="tabs reveal" role="tablist" aria-label="Categorías de la carta" id="tabs"></div>
+      <div class="cards" id="cards" role="tabpanel"></div>
+      <p class="carta__note reveal">¿Quieres verla entera de un vistazo? <a class="link" href="carta.html" data-link="menu">Carta completa</a></p>
+    </div>
+  </section>
+
+  <!-- ============ EL OFICIO ============ -->
+  <section class="section oficio" id="oficio" aria-labelledby="oficio-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">El oficio</p>
+        <h2 class="section-title" id="oficio-title">Amasar. Montar. <em class="sauce-text">Hornear.</em></h2>
+      </div>
+      <ol class="steps">
+        <li class="step reveal">
+          <div class="step__img"><img src="assets/img/masa-800.webp" srcset="assets/img/masa-800.webp 800w, assets/img/masa-1600.webp 1600w" sizes="(min-width: 900px) 30vw, 90vw" width="800" height="533" loading="lazy" decoding="async" alt="Manos amasando una bola de masa sobre una mesa enharinada"></div>
+          <span class="step__num">01</span>
+          <h3>La masa</h3>
+          <p>Harina, agua y el tiempo que haga falta. Lo que se cuida al principio se nota en cada bocado.</p>
+        </li>
+        <li class="step reveal" style="--rd:.1s">
+          <div class="step__img"><img src="assets/img/ingredientes-700.webp" srcset="assets/img/ingredientes-700.webp 700w, assets/img/ingredientes-1200.webp 1200w" sizes="(min-width: 900px) 30vw, 90vw" width="700" height="1007" loading="lazy" decoding="async" alt="Tomates en rama brillantes sobre una superficie oscura"></div>
+          <span class="step__num">02</span>
+          <h3>Los ingredientes</h3>
+          <p>Tomate, queso, albahaca, un buen aceite. Sabor y frescura, sin complicaciones.</p>
+        </li>
+        <li class="step reveal" style="--rd:.2s">
+          <div class="step__img"><img src="assets/img/horno-800.webp" srcset="assets/img/horno-800.webp 800w, assets/img/horno-1600.webp 1600w" sizes="(min-width: 900px) 30vw, 90vw" width="800" height="534" loading="lazy" decoding="async" alt="Pizza recién horneada delante de la boca de un horno con el fuego encendido"></div>
+          <span class="step__num">03</span>
+          <h3>El horno</h3>
+          <p>Unos minutos de calor y ocurre la magia: el borde se dora, el queso se funde y el aroma llena la sala.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ INMERSIVA ============ -->
+  <section class="immersive" aria-labelledby="immersive-title">
+    <div class="immersive__sticky">
+      <figure class="immersive__frame">
+        <img class="immersive__img" src="assets/img/panoramica-2200.webp" srcset="assets/img/panoramica-1100.webp 1100w, assets/img/panoramica-2200.webp 2200w" sizes="100vw" width="2200" height="1467" loading="lazy" decoding="async"
+             alt="Pizza recién horneada cortada en porciones sobre una mesa de madera, con tomates cherry y romero">
+      </figure>
+      <div class="immersive__content container">
+        <p class="kicker reveal">Un pedacito de Italia</p>
+        <h2 class="immersive__title reveal" id="immersive-title" lang="it">IL GUSTO DI<br><em class="sauce-text">sentirsi a casa.</em></h2>
+        <p class="immersive__sub reveal" style="--rd:.15s">El gusto de sentirse en casa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GALERÍA ============ -->
+  <section class="section gallery-sec" aria-labelledby="gallery-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">La experiencia</p>
+        <h2 class="section-title" id="gallery-title">Hecha para <em class="sauce-text">compartir</em></h2>
+        <p class="section-lead">Las mejores conversaciones empiezan alrededor de una mesa. Y siguen con la última porción.</p>
+      </div>
+      <div class="gallery">
+        <figure class="reveal"><img src="assets/img/mesa-700.webp" width="700" height="1050" loading="lazy" decoding="async" alt="Varias manos alrededor de una mesa compartiendo porciones de pizza"><figcaption>#ParaCompartir</figcaption></figure>
+        <figure class="reveal" style="--rd:.06s"><img src="assets/img/sq-margherita-500.webp" width="500" height="500" loading="lazy" decoding="async" alt="Pizza margherita con hojas de albahaca"><figcaption>#Margherita</figcaption></figure>
+        <figure class="reveal" style="--rd:.12s"><img src="assets/img/porcion-700.webp" width="700" height="980" loading="lazy" decoding="async" alt="Porción de pizza humeante con el queso fundido estirándose"><figcaption>#RecienHecha</figcaption></figure>
+        <figure class="reveal" style="--rd:.18s"><img src="assets/img/sq-diavola-500.webp" width="500" height="500" loading="lazy" decoding="async" alt="Pizza con salami, tomate, aceitunas y albahaca cortada en porciones"><figcaption>#Diavola</figcaption></figure>
+        <figure class="reveal" style="--rd:.24s"><img src="assets/img/compartir-700.webp" width="700" height="1050" loading="lazy" decoding="async" alt="Vista cenital de una mesa con una pizza en el centro y una mano tomando una porción"><figcaption>#Sobremesa</figcaption></figure>
+        <figure class="reveal" style="--rd:.3s"><img src="assets/img/servir-700.webp" width="700" height="1050" loading="lazy" decoding="async" alt="Una pala de servir levanta una porción de pizza con el queso fundido"><figcaption>#LaPrimera</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOCAL ============ -->
+  <section class="section place" id="local" aria-labelledby="place-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="kicker">Dónde estamos</p>
+        <h2 class="section-title" id="place-title">Te esperamos en <em class="sauce-text">Arucas</em></h2>
+      </div>
+      <div class="place__card reveal">
+        <div class="place__info">
+          <span class="place__city" data-fill="city">Arucas · Gran Canaria</span>
+          <h3>Cuor di Pizza</h3>
+          <dl class="place__data">
+            <div><dt>Dirección</dt><dd><address data-fill="address"></address></dd></div>
+            <div><dt>Horario</dt><dd><dl class="hours" data-fill="hours"></dl></dd></div>
+            <div><dt>Contacto</dt><dd><ul class="plain" data-fill="contact"></ul></dd></div>
+          </dl>
+          <div class="place__actions" id="place-actions">
+            <a class="btn btn--fire" data-link="maps" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+          </div>
+        </div>
+        <div class="place__art"><img src="assets/img/compartir-1200.webp" width="1200" height="1800" loading="lazy" decoding="async" alt="Mesa con una pizza para compartir"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA FINAL ============ -->
+  <section class="section club" id="visitanos" aria-labelledby="club-title">
+    <div class="club__bg" aria-hidden="true"><img src="assets/img/horno-1600.webp" alt="" width="1600" height="1068" loading="lazy" decoding="async"></div>
+    <canvas class="embers" id="clubEmbers" aria-hidden="true"></canvas>
+    <div class="container club__inner reveal">
+      <img class="club__logo" src="assets/img/logo-mark-256.webp" width="256" height="256" alt="">
+      <p class="kicker" lang="it">Ti aspettiamo</p>
+      <h2 class="club__title" id="club-title">LA PRÓXIMA PIZZA<br>TE <em class="sauce-text">espera.</em></h2>
+      <p class="section-lead">Encuentra tu favorita y disfruta de un buen momento en Cuor di Pizza.</p>
+      <div class="club__actions" id="cta-actions">
+        <a class="btn btn--fire" href="#carta">Ver la carta</a>
+        <a class="btn btn--outline" data-link="maps" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" id="contacto">
+  <div class="container">
+    <div class="footer__top">
+      <a href="#inicio" class="footer__logo" aria-label="Cuor di Pizza, volver arriba"><img src="assets/img/logo-full-600.webp" width="600" height="404" alt="Cuor di Pizza · Pizzeria &amp; Focacceria · Arucas" loading="lazy"></a>
+      <nav class="footer__nav" aria-label="Pie de página">
+        <a href="#carta">Carta</a>
+        <a href="#local">Dónde estamos</a>
+        <a href="carta.html" data-link="menu">Carta completa</a>
+        <a href="#" data-open-cart>Tu mesa</a>
+      </nav>
+      <ul class="footer__social" data-fill="social"></ul>
+    </div>
+    <p class="footer__giant" aria-hidden="true">CUOR<em>di</em>PIZZA</p>
+    <div class="footer__bottom">
+      <span>© <span data-fill="year"></span> Cuor di Pizza · Un local del Grupo 5mentarios · Fotografías provisionales: Unsplash</span>
+      <ul class="footer__legal" data-fill="legal"></ul>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ TU MESA (selección) ============ -->
+<button class="cart-fab" data-open-cart type="button" aria-label="Abrir tu mesa" hidden>
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><use href="#heart"/></svg>
+  <span class="cart-count" data-cart-count>0</span>
+</button>
+<div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+<aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
+  <div class="drawer__head">
+    <h2 id="cartTitle">Tu mesa</h2>
+    <button class="icon-btn" id="cartClose" aria-label="Cerrar tu mesa" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer__body" id="cartBody"></div>
+  <div class="drawer__foot" id="cartFoot">
+    <dl class="totals"><div class="total"><dt>Total orientativo</dt><dd id="cartTotal">0,00 €</dd></div></dl>
+    <div class="drawer__actions" id="cartActions"></div>
+    <p class="drawer__note">Esto no es un pedido online: es tu lista para pedir en el local o por teléfono.</p>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
