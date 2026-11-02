@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Captación Gran Canaria</title>
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --panel2:#f0f2f5; --text:#16181d; --muted:#626a77; --border:#dde1e7;
+  --accent:#2563eb; --accent-text:#fff;
+  --easy:#15803d; --easy-bg:#dcfce7; --mid:#b45309; --mid-bg:#fef3c7; --hard:#b91c1c; --hard-bg:#fee2e2;
+  --wa:#16a34a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1115; --panel:#171a21; --panel2:#1f232c; --text:#e8eaee; --muted:#9aa2af; --border:#2a2f3a;
+    --accent:#3b82f6; --easy:#4ade80; --easy-bg:#14301f; --mid:#fbbf24; --mid-bg:#352a10; --hard:#f87171; --hard-bg:#3a1717;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --panel:#171a21; --panel2:#1f232c; --text:#e8eaee; --muted:#9aa2af; --border:#2a2f3a;
+  --accent:#3b82f6; --easy:#4ade80; --easy-bg:#14301f; --mid:#fbbf24; --mid-bg:#352a10; --hard:#f87171; --hard-bg:#3a1717;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+.wrap{max-width:1200px;margin:0 auto;padding:16px}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+h1{font-size:22px;margin:0}
+h1 small{display:block;font-size:13px;font-weight:400;color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.panel h2{font-size:16px;margin:0 0 10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.grid-f{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+label.lbl{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+input,select,textarea,button{font:inherit;color:inherit}
+input[type=text],input[type=search],input[type=password],select,textarea{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:7px 9px;width:100%}
+textarea{resize:vertical;min-height:54px}
+button,.btn{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:var(--text)}
+button:hover,.btn:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-text);font-weight:600}
+button:disabled{opacity:.55;cursor:wait}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer}
+.stat b{display:block;font-size:22px}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.easy b{color:var(--easy)} .stat.mid b{color:var(--mid)} .stat.hard b{color:var(--hard)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+@media (max-width:420px){.list{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.st-cerrado{border-color:var(--easy)}
+.card.st-descartado,.card.st-tiene_web{opacity:.6}
+.card-h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.card-h h3{margin:0;font-size:16px;overflow-wrap:anywhere}
+.meta{font-size:13px;color:var(--muted)}
+.badge{font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.badge.easy{background:var(--easy-bg);color:var(--easy)}
+.badge.mid{background:var(--mid-bg);color:var(--mid)}
+.badge.hard{background:var(--hard-bg);color:var(--hard)}
+.bar{height:6px;border-radius:3px;background:var(--panel2);overflow:hidden}
+.bar i{display:block;height:100%}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:11px;padding:2px 7px;border-radius:999px;background:var(--panel2);border:1px solid var(--border)}
+details summary{cursor:pointer;font-size:13px;color:var(--muted)}
+ul.reasons{margin:6px 0 0;padding-left:18px;font-size:13px}
+ul.reasons li.plus{color:var(--hard)} ul.reasons li.minus{color:var(--easy)}
+.pitch{font-size:13px;background:var(--panel2);border-radius:8px;padding:8px}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+.actions .btn,.actions button{padding:5px 9px;font-size:13px}
+.progress{font-size:13px;color:var(--muted);margin-top:8px;min-height:1.2em}
+.hidden{display:none!important}
+.empty{text-align:center;padding:40px 16px;color:var(--muted)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:2px 10px;max-height:220px;overflow:auto;padding:6px;border:1px solid var(--border);border-radius:8px;background:var(--panel2)}
+.checks label{font-size:13px;display:flex;gap:6px;align-items:center}
+.note{font-size:13px;background:var(--mid-bg);color:var(--text);border-radius:8px;padding:8px 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Captación de clientes · Gran Canaria<small>Negocios sin página web, con teléfono y dificultad estimada de cierre</small></h1>
+    <div class="row">
+      <button id="btnTheme" title="Cambiar tema">◐ Tema</button>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="buscar" aria-selected="true">1 · Buscar negocios</button>
+    <button role="tab" data-tab="ajustes" aria-selected="false">Ajustes y copia de seguridad</button>
+  </div>
+
+  <!-- BUSCAR -->
+  <section id="tab-buscar" class="panel">
+    <h2>Fuente de datos</h2>
+    <div class="row" style="margin-bottom:10px">
+      <label class="small"><input type="radio" name="src" value="osm" checked> OpenStreetMap (gratis, sin clave)</label>
+      <label class="small"><input type="radio" name="src" value="google"> Google Maps (más completo, requiere clave de API)</label>
+    </div>
+
+    <div id="srcOsm">
+      <p class="small muted" style="margin-top:0">Descarga de una vez todos los negocios de la isla que tienen teléfono y <b>no</b> tienen web registrada en OpenStreetMap. Es gratis, pero OSM no tiene todos los negocios y a veces le falta la web aunque exista: usa el botón «Comprobar en Google» antes de llamar.</p>
+      <div class="row">
+        <label class="small"><input type="checkbox" id="osmPhoneOnly" checked> Solo con teléfono</label>
+        <button class="primary" id="btnOsm">Buscar en toda Gran Canaria</button>
+      </div>
+    </div>
+
+    <div id="srcGoogle" class="hidden">
+      <p class="small muted" style="margin-top:0">Usa la API de Google Places (New). Google indica si el negocio tiene web, así que el resultado es mucho más fiable. Cada búsqueda cuesta dinero (hay un cupo gratis al mes): revisa la estimación antes de lanzar. La clave se guarda solo en este navegador.</p>
+      <div class="grid-f" style="margin-bottom:8px">
+        <label class="lbl" style="grid-column:1/-1">Clave de API de Google
+          <input type="password" id="gKey" placeholder="AIza..." autocomplete="off">
+        </label>
+      </div>
+      <div class="grid-f" style="grid-template-columns:1fr 1fr">
+        <div><div class="lbl">Sectores <a href="#" data-all="gCats" class="small">todos</a> · <a href="#" data-none="gCats" class="small">ninguno</a></div><div class="checks" id="gCats"></div></div>
+        <div><div class="lbl">Municipios <a href="#" data-all="gMunis" class="small">todos</a> · <a href="#" data-none="gMunis" class="small">ninguno</a></div><div class="checks" id="gMunis"></div></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label class="small">Páginas por búsqueda (20 resultados c/u)
+          <select id="gPages" style="width:auto"><option>1</option><option selected>2</option><option>3</option></select>
+        </label>
+        <span class="small muted" id="gEstimate"></span>
+        <button class="primary" id="btnGoogle">Buscar en Google</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button id="btnStop" class="hidden">Detener</button>
+    </div>
+    <div class="progress" id="progress"></div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section id="tab-ajustes" class="panel hidden">
+    <h2>Tus datos para los mensajes</h2>
+    <div class="grid-f">
+      <label class="lbl">Tu nombre<input type="text" id="sName" placeholder="Ej: Eduardo"></label>
+      <label class="lbl">Tu empresa / marca<input type="text" id="sBrand" placeholder="Ej: ESD Webs"></label>
+      <label class="lbl">Tu web o portfolio<input type="text" id="sUrl" placeholder="https://..."></label>
+    </div>
+    <label class="lbl" style="margin-top:8px">Plantilla de WhatsApp — variables: {negocio} {municipio} {argumento} {yo} {empresa} {web}
+      <textarea id="sTpl" rows="5"></textarea>
+    </label>
+    <h2 style="margin-top:18px">Copia de seguridad</h2>
+    <p class="small muted" style="margin-top:0">Los estados y notas se guardan en este navegador. Descarga una copia de vez en cuando o para pasarla a otro dispositivo.</p>
+    <div class="row">
+      <button id="btnBackup">Descargar copia (.json)</button>
+      <label class="btn">Restaurar copia<input type="file" id="fileRestore" accept="application/json" class="hidden"></label>
+      <button id="btnClear">Borrar resultados descargados</button>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <div class="stats" id="stats"></div>
+
+  <section class="panel" id="filters">
+    <div class="grid-f">
+      <label class="lbl">Buscar<input type="search" id="fText" placeholder="Nombre, calle, sector…"></label>
+      <label class="lbl">Municipio<select id="fMuni"></select></label>
+      <label class="lbl">Sector<select id="fGroup"></select></label>
+      <label class="lbl">Dificultad<select id="fDiff">
+        <option value="">Todas</option><option value="easy">Fácil</option><option value="mid">Media</option><option value="hard">Difícil</option></select></label>
+      <label class="lbl">Estado<select id="fStatus"></select></label>
+      <label class="lbl">Ordenar por<select id="fSort">
+        <option value="score">Más fácil primero</option><option value="-score">Más difícil primero</option>
+        <option value="name">Nombre</option><option value="muni">Municipio</option></select></label>
+    </div>
+    <div class="row" style="margin-top:8px;justify-content:space-between">
+      <div class="row">
+        <label class="small"><input type="checkbox" id="fMobile"> Solo móvil (WhatsApp)</label>
+        <label class="small"><input type="checkbox" id="fChains" checked> Ocultar cadenas/franquicias</label>
+        <label class="small"><input type="checkbox" id="fHideDone"> Ocultar descartados / ya tienen web</label>
+      </div>
+      <div class="row">
+        <span class="small muted" id="count"></span>
+        <button id="btnCsv">Exportar CSV</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="list" id="list"></div>
+  <div class="row" style="justify-content:center;margin:16px 0"><button id="btnMore" class="hidden">Ver más</button></div>
+</div>
+
+<script>
+'use strict';
+/* =========================================================
+   CONFIGURACIÓN
+   ========================================================= */
+const BBOX = {s:27.72, w:-15.85, n:28.20, e:-15.34}; // Solo Gran Canaria
+const OVERPASS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+];
+const K = {data:'gc.data.v1', crm:'gc.crm.v1', set:'gc.settings.v1', theme:'gc.theme'};
+const PAGE = 60;
+
+const STATUSES = [
+  ['nuevo','Nuevo'],['contactado','Contactado'],['interesado','Interesado'],['presupuesto','Presupuesto enviado'],
+  ['cerrado','Cerrado ✅'],['no_interesa','No le interesa'],['tiene_web','Ya tiene web'],['descartado','Descartado']
+];
+
+// Municipios y núcleos de referencia (para asignar municipio por cercanía)
+const PLACES = [
+  ['Las Palmas de Gran Canaria',[[28.1235,-15.4363],[28.0997,-15.4134],[28.1400,-15.4300],[28.1650,-15.4150],[28.0980,-15.4680],[28.0730,-15.4520],[28.1150,-15.4500]]],
+  ['Telde',[[27.9925,-15.4192],[28.0350,-15.4150],[27.9870,-15.3730],[28.0080,-15.3720],[27.9550,-15.3800],[27.9750,-15.4300]]],
+  ['Ingenio',[[27.9203,-15.4339],[27.9120,-15.4050]]],
+  ['Agüimes',[[27.9054,-15.4458],[27.8550,-15.3950],[27.8750,-15.4180]]],
+  ['Santa Lucía de Tirajana',[[27.9118,-15.5409],[27.8450,-15.4300],[27.8350,-15.4370],[27.8540,-15.4380],[27.8650,-15.4600]]],
+  ['San Bartolomé de Tirajana',[[27.9256,-15.5728],[27.7600,-15.5860],[27.7580,-15.5730],[27.7700,-15.5800],[27.7700,-15.6000],[27.7750,-15.5450],[27.7850,-15.5200],[27.7450,-15.6000],[27.8100,-15.4830]]],
+  ['Mogán',[[27.8836,-15.7244],[27.8160,-15.7630],[27.7580,-15.6800],[27.7880,-15.7100],[27.7950,-15.7250]]],
+  ['La Aldea de San Nicolás',[[27.9860,-15.7800]]],
+  ['Agaete',[[28.1000,-15.7000],[28.0980,-15.7120]]],
+  ['Gáldar',[[28.1470,-15.6500],[28.1550,-15.6950]]],
+  ['Santa María de Guía',[[28.1390,-15.6330]]],
+  ['Moya',[[28.1110,-15.5830]]],
+  ['Firgas',[[28.1070,-15.5620]]],
+  ['Arucas',[[28.1190,-15.5230],[28.1450,-15.5300]]],
+  ['Teror',[[28.0600,-15.5480]]],
+  ['Valleseco',[[28.0450,-15.5750]]],
+  ['Artenara',[[28.0200,-15.6460]]],
+  ['Tejeda',[[27.9950,-15.6150]]],
+  ['Vega de San Mateo',[[28.0100,-15.5330]]],
+  ['Santa Brígida',[[28.0320,-15.5000]]],
+  ['Valsequillo de Gran Canaria',[[27.9860,-15.4980]]]
+];
+const MUNIS = PLACES.map(p=>p[0]);
+const TOURIST = new Set(['Mogán','San Bartolomé de Tirajana']);
+const RURAL = new Set(['Artenara','Tejeda','Valleseco','Firgas','La Aldea de San Nicolás']);
+
+// Sectores: peso en la dificultad (negativo = más fácil) + argumento de venta
+const GROUPS = {
+  hosteleria:{label:'Hostelería', w:-10, why:'Hostelería: carta, reservas y Google Maps son un argumento muy claro',
+    pitch:'Carta digital con QR, reservas online y aparecer bien en Google Maps con fotos. Los turistas eligen dónde comer desde el móvil: sin web se los lleva el de al lado.'},
+  belleza:{label:'Belleza y estética', w:-12, why:'Belleza: viven de citas, la reserva online se vende sola',
+    pitch:'Reserva de citas online 24 h y galería de tus trabajos. Menos tiempo al teléfono y la agenda más llena.'},
+  oficios:{label:'Oficios y reformas', w:-8, why:'Oficios: sus clientes buscan «… cerca de mí» en Google',
+    pitch:'Cuando alguien busca «{sector} en {municipio}» hoy le sale tu competencia. Una web sencilla con fotos de trabajos y botón de llamada te trae encargos nuevos.'},
+  motor:{label:'Motor', w:-6, why:'Motor: cita y presupuesto online generan confianza',
+    pitch:'Pedir cita y presupuesto online, con tus servicios y reseñas visibles. La gente compara talleres antes de llamar.'},
+  alojamiento:{label:'Alojamiento', w:-5, why:'Alojamiento: reservas directas sin comisión de Booking',
+    pitch:'Reservas directas desde tu propia web: te ahorras el 15-20 % de comisión de Booking/Airbnb en cada reserva.'},
+  profesional:{label:'Despachos y profesionales', w:-5, why:'Profesional: la credibilidad depende de tener web',
+    pitch:'Un cliente que no te encuentra online desconfía. Web profesional con tus servicios, experiencia y contacto directo.'},
+  formacion:{label:'Academias y formación', w:-8, why:'Formación: horarios e inscripciones online captan alumnos',
+    pitch:'Horarios, precios e inscripción online. Los padres y alumnos buscan academia en Google antes de llamar.'},
+  deporte:{label:'Deporte y ocio', w:-8, why:'Deporte/ocio: horarios, tarifas y reservas online',
+    pitch:'Horarios, tarifas y reservas online para captar socios y clientes nuevos, también turistas.'},
+  servicios:{label:'Servicios', w:-6, why:'Servicios: formulario de presupuesto y búsquedas locales',
+    pitch:'Formulario de presupuesto y aparecer en las búsquedas locales de Google.'},
+  comercio:{label:'Comercio', w:0, why:'Comercio: necesitan catálogo, pero dependen del paso de clientes',
+    pitch:'Catálogo online y pedidos por WhatsApp, y que te encuentren en Google Maps con horarios y fotos.'},
+  salud:{label:'Salud', w:5, why:'Salud: decisión más lenta y publicidad sanitaria regulada (pero buen presupuesto)',
+    pitch:'Los pacientes comparan antes de pedir cita: web con tus tratamientos, equipo y cita online transmite confianza.'},
+  basico:{label:'Comercio básico', w:14, why:'Comercio básico (súper, estanco, kiosco): ven poco valor en una web',
+    pitch:'Horarios, ubicación y pedidos por WhatsApp para los vecinos de la zona.'},
+  farmacia:{label:'Farmacias', w:18, why:'Farmacia: sector muy conservador y regulado',
+    pitch:'Horario, guardias, servicios (análisis, nutrición, ortopedia) y reserva de productos por WhatsApp.'},
+  otros:{label:'Otros', w:0, why:'Sector sin datos específicos', pitch:'Que te encuentren en Google con tus servicios, horarios y contacto directo.'}
+};
+
+// Etiquetas OSM -> [grupo, nombre en español]
+const MAP_AMENITY = {restaurant:['hosteleria','Restaurante'],cafe:['hosteleria','Cafetería'],bar:['hosteleria','Bar'],pub:['hosteleria','Pub'],
+  fast_food:['hosteleria','Comida rápida'],ice_cream:['hosteleria','Heladería'],nightclub:['hosteleria','Discoteca'],biergarten:['hosteleria','Cervecería'],
+  pharmacy:['farmacia','Farmacia'],dentist:['salud','Clínica dental'],doctors:['salud','Consulta médica'],clinic:['salud','Clínica'],veterinary:['salud','Veterinario'],
+  driving_school:['formacion','Autoescuela'],language_school:['formacion','Academia de idiomas'],music_school:['formacion','Escuela de música'],
+  dancing_school:['formacion','Escuela de baile'],childcare:['formacion','Guardería'],kindergarten:['formacion','Escuela infantil'],prep_school:['formacion','Academia'],
+  car_rental:['motor','Alquiler de coches'],car_wash:['motor','Lavado de coches'],bicycle_rental:['deporte','Alquiler de bicis'],boat_rental:['deporte','Alquiler de barcos'],
+  fuel:['basico','Gasolinera'],taxi:['basico','Taxi'],marketplace:['basico','Mercado']};
+const MAP_SHOP = {hairdresser:['belleza','Peluquería'],beauty:['belleza','Centro de estética'],cosmetics:['belleza','Cosmética'],tattoo:['belleza','Tatuajes'],
+  massage:['belleza','Masajes'],perfumery:['belleza','Perfumería'],
+  supermarket:['basico','Supermercado'],convenience:['basico','Tienda de alimentación'],kiosk:['basico','Kiosco'],tobacco:['basico','Estanco'],
+  lottery:['basico','Lotería'],newsagent:['basico','Prensa'],'e-cigarette':['basico','Vapeo'],variety_store:['basico','Bazar'],
+  car_repair:['motor','Taller mecánico'],car:['motor','Concesionario'],car_parts:['motor','Recambios'],tyres:['motor','Neumáticos'],motorcycle:['motor','Motos'],
+  travel_agency:['profesional','Agencia de viajes'],laundry:['servicios','Lavandería'],dry_cleaning:['servicios','Tintorería'],copyshop:['servicios','Copistería'],
+  funeral_directors:['servicios','Funeraria'],optician:['salud','Óptica'],hearing_aids:['salud','Audífonos'],medical_supply:['salud','Ortopedia'],
+  bakery:['comercio','Panadería'],pastry:['comercio','Pastelería'],confectionery:['comercio','Dulcería'],butcher:['comercio','Carnicería'],seafood:['comercio','Pescadería'],
+  greengrocer:['comercio','Frutería'],deli:['comercio','Charcutería'],wine:['comercio','Vinoteca'],alcohol:['comercio','Licorería'],florist:['comercio','Floristería'],
+  clothes:['comercio','Tienda de ropa'],shoes:['comercio','Zapatería'],jewelry:['comercio','Joyería'],gift:['comercio','Regalos'],books:['comercio','Librería'],
+  stationery:['comercio','Papelería'],furniture:['comercio','Muebles'],hardware:['comercio','Ferretería'],doityourself:['comercio','Bricolaje'],paint:['comercio','Pinturas'],
+  mobile_phone:['comercio','Telefonía'],computer:['comercio','Informática'],electronics:['comercio','Electrónica'],pet:['comercio','Tienda de mascotas'],
+  sports:['comercio','Deportes'],bicycle:['comercio','Bicicletas'],toys:['comercio','Juguetería'],garden_centre:['comercio','Vivero'],
+  interior_decoration:['comercio','Decoración'],kitchen:['comercio','Cocinas'],bathroom_furnishing:['comercio','Baños'],photo:['comercio','Fotografía'],
+  bag:['comercio','Bolsos'],boutique:['comercio','Boutique'],second_hand:['comercio','Segunda mano'],music:['comercio','Música'],herbalist:['comercio','Herbolario'],
+  nutrition_supplements:['comercio','Nutrición'],chemist:['comercio','Droguería'],frame:['comercio','Marcos'],fabric:['comercio','Tejidos'],tailor:['oficios','Sastre'],
+  locksmith:['oficios','Cerrajería']};
+const MAP_CRAFT = {plumber:'Fontanero',electrician:'Electricista',carpenter:'Carpintería',painter:'Pintor',locksmith:'Cerrajero',builder:'Construcción',
+  glaziery:'Cristalería',metal_construction:'Carpintería metálica',upholsterer:'Tapicería',shoemaker:'Zapatero',tailor:'Sastre',hvac:'Climatización',
+  roofer:'Tejados',gardener:'Jardinería',photographer:'Fotógrafo',key_cutter:'Copia de llaves',window_construction:'Ventanas',stonemason:'Cantería',
+  winery:'Bodega',brewery:'Cervecera artesanal',confectionery:'Repostería',electronics_repair:'Reparación electrónica',tiler:'Alicatados',
+  plasterer:'Escayolista',floorer:'Suelos',sculptor:'Escultor',jeweller:'Joyero',dressmaker:'Modista',caterer:'Catering',cleaning:'Limpieza'};
+const MAP_OFFICE = {lawyer:'Abogado',accountant:'Asesoría contable',tax_advisor:'Asesoría fiscal',estate_agent:'Inmobiliaria',insurance:'Seguros',
+  architect:'Arquitecto',notary:'Notaría',travel_agent:'Agencia de viajes',employment_agency:'Agencia de empleo',consulting:'Consultoría',it:'Informática',
+  financial:'Asesoría financiera',company:'Empresa',therapist:'Terapeuta',physician:'Médico',surveyor:'Topógrafo',graphic_design:'Diseño gráfico',
+  advertising_agency:'Agencia de publicidad',photographer:'Fotógrafo',interior_design:'Interiorismo',coworking:'Coworking',property_management:'Administración de fincas',
+  engineer:'Ingeniería',logistics:'Logística',moving_company:'Mudanzas',educational_institution:'Centro de formación'};
+const MAP_TOURISM = {hotel:'Hotel',guest_house:'Casa rural / pensión',apartment:'Apartamentos',hostel:'Albergue',motel:'Motel',chalet:'Villa',camp_site:'Camping'};
+const MAP_HEALTH = {physiotherapist:'Fisioterapia',psychotherapist:'Psicología',podiatrist:'Podología',dentist:'Clínica dental',doctor:'Consulta médica',
+  optometrist:'Óptica',alternative:'Terapias alternativas',audiologist:'Audiología',speech_therapist:'Logopedia',nutrition_counselling:'Nutrición',
+  occupational_therapist:'Terapia ocupacional',laboratory:'Laboratorio',clinic:'Clínica',psychiatrist:'Psiquiatría'};
+const MAP_LEISURE = {fitness_centre:['deporte','Gimnasio'],sports_centre:['deporte','Centro deportivo'],dance:['formacion','Escuela de baile'],
+  escape_game:['deporte','Escape room'],horse_riding:['deporte','Hípica'],sauna:['belleza','Sauna / spa'],tanning_salon:['belleza','Solárium'],
+  amusement_arcade:['deporte','Salón recreativo'],bowling_alley:['deporte','Bolera'],water_park:['deporte','Parque acuático'],miniature_golf:['deporte','Minigolf']};
+
+// Cadenas conocidas (la web la decide la central)
+const CHAIN_RE = /\b(mercadona|hiperdino|superdino|spar|lidl|aldi|dia|carrefour|alcampo|eroski|mcdonald|burger king|kfc|telepizza|domino|pans|100 montaditos|starbucks|tagliatella|foster|vips|ginos|zara|mango|primark|decathlon|leroy merlin|bricomart|media ?markt|worten|phone ?house|movistar|vodafone|orange|yoigo|santander|bbva|caixa|sabadell|bankinter|cajamar|correos|seur|mrw|repsol|cepsa|disa|shell|bp|galp|tirma|kiko|primor|druni|douglas|sephora|mapfre|mutua|línea directa|specsavers|general optica|multiópticas|federopticos|alain afflelou|vitaldent|dentix|sanitas|adeslas|basic[- ]?fit|mcfit|holiday inn|riu|lopesan|seaside|hd hotels|bull hotels|dunas|nh |meliá|melia|barceló|barcelo|iberostar|h10|eurostars|tui|halcón|halcon|viajes el corte|el corte inglés|el corte ingles|norauto|midas|feu vert|euromaster|first stop|mr\. ?wonderful|tiger|flying tiger|ikea|jysk|conforama|kiwoko|tiendanimal)\b/i;
+
+const GOOGLE_CATS = [
+  ['restaurantes','hosteleria'],['cafeterías','hosteleria'],['bares','hosteleria'],['peluquerías','belleza'],['barberías','belleza'],
+  ['centros de estética','belleza'],['uñas y manicura','belleza'],['tatuajes','belleza'],['fontaneros','oficios'],['electricistas','oficios'],
+  ['carpinterías','oficios'],['cerrajeros','oficios'],['empresas de reformas','oficios'],['jardinería','oficios'],['talleres mecánicos','motor'],
+  ['clínicas dentales','salud'],['fisioterapeutas','salud'],['veterinarios','salud'],['psicólogos','salud'],['gimnasios','deporte'],
+  ['autoescuelas','formacion'],['academias','formacion'],['abogados','profesional'],['gestorías y asesorías','profesional'],
+  ['inmobiliarias','profesional'],['fotógrafos','profesional'],['tiendas de ropa','comercio'],['floristerías','comercio'],
+  ['panaderías y pastelerías','comercio'],['apartamentos vacacionales','alojamiento'],['casas rurales','alojamiento'],['empresas de limpieza','servicios']
+];
+
+/* =========================================================
+   ESTADO Y ALMACENAMIENTO
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+};
+let data = store.get(K.data, {items:[], source:'', updated:null});
+let crm = store.get(K.crm, {});
+let settings = Object.assign({
+  name:'', brand:'', url:'', gKey:'',
+  tpl:'Hola, buenas. Soy {yo} de {empresa}. He visto {negocio} en {municipio} y no he encontrado vuestra página web. {argumento}\n\n¿Os puedo enseñar sin compromiso un ejemplo de cómo podría quedar? {web}'
+}, store.get(K.set, {}));
+let shown = PAGE;
+let abortCtl = null;
+
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+const norm = s => (s||'').toString().normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+const esc = s => (s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1).replace(/_/g,' ') : '';
+
+function parsePhones(...vals){
+  const out = [], seen = new Set();
+  vals.filter(Boolean).join(';').split(/[;,\/]|\s{2,}|\bo\b/).forEach(raw=>{
+    let d = raw.replace(/[^\d+]/g,'');
+    if(!d) return;
+    if(d.startsWith('00')) d = '+'+d.slice(2);
+    if(!d.startsWith('+')){
+      if(d.length===9) d = '+34'+d;
+      else if(d.length===11 && d.startsWith('34')) d = '+'+d;
+      else return;
+    }
+    if(seen.has(d)) return; seen.add(d);
+    const local = d.startsWith('+34') ? d.slice(3) : d;
+    const mobile = d.startsWith('+34') && /^[67]/.test(local);
+    const pretty = d.startsWith('+34') && local.length===9 ? local.replace(/(\d{3})(\d{2})(\d{2})(\d{2})/,'$1 $2 $3 $4') : d;
+    out.push({e164:d, pretty, mobile});
+  });
+  return out;
+}
+
+function nearestMuni(lat, lon){
+  if(lat==null || lon==null) return '';
+  let best = '', bd = Infinity;
+  for(const [m, pts] of PLACES) for(const [a,b] of pts){
+    const d = (a-lat)**2 + ((b-lon)*0.88)**2;
+    if(d<bd){ bd=d; best=m; }
+  }
+  return best;
+}
+function muniFromText(txt){
+  const t = norm(txt);
+  if(!t) return '';
+  // los nombres más largos primero (evita "Telde" dentro de otro, etc.)
+  const sorted = [...MUNIS].sort((a,b)=>b.length-a.length);
+  for(const m of sorted){
+    const nm = norm(m);
+    if(t.includes(nm)) return m;
+  }
+  const alias = {'las palmas':'Las Palmas de Gran Canaria','san mateo':'Vega de San Mateo','valsequillo':'Valsequillo de Gran Canaria',
+    'guia':'Santa María de Guía','santa lucia':'Santa Lucía de Tirajana','vecindario':'Santa Lucía de Tirajana','san bartolome':'San Bartolomé de Tirajana',
+    'maspalomas':'San Bartolomé de Tirajana','playa del ingles':'San Bartolomé de Tirajana','arguineguin':'Mogán','puerto rico':'Mogán',
+    'la aldea':'La Aldea de San Nicolás','san nicolas':'La Aldea de San Nicolás','arinaga':'Agüimes','jinamar':'Telde','carrizal':'Ingenio','tafira':'Las Palmas de Gran Canaria'};
+  for(const k in alias) if(t.includes(k)) return alias[k];
+  return '';
+}
+
+/* =========================================================
+   DIFICULTAD DE CIERRE
+   score 0-100: cuanto más alto, más difícil cerrar
+   ========================================================= */
+function scoreBiz(b){
+  const r = []; // [puntos, motivo]
+  const g = GROUPS[b.group] || GROUPS.otros;
+  if(g.w) r.push([g.w, g.why]);
+  if(b.chain) r.push([30, 'Cadena o franquicia: la web la decide la central']);
+  const hasMobile = b.phones.some(p=>p.mobile);
+  if(hasMobile) r.push([-8, 'Tiene móvil: probablemente hablas directamente con el dueño (y puedes usar WhatsApp)']);
+  else if(b.phones.length) r.push([4, 'Solo fijo: puede atender un empleado, cuesta más llegar a quien decide']);
+  else r.push([12, 'Sin teléfono: habrá que ir en persona']);
+  if(b.email) r.push([-3, 'Tiene email: otro canal para mandar propuesta']);
+  if(b.social) r.push([-6, 'Usa redes sociales: ya entiende el valor de estar online']);
+  if(TOURIST.has(b.muni)) r.push([-6, 'Zona turística: sus clientes buscan por internet antes de ir']);
+  if(RURAL.has(b.muni)) r.push([5, 'Municipio rural/pequeño: menos presupuesto y menos competencia que le presione']);
+  if(b.reviews!=null){
+    if(b.reviews>=100) r.push([-6, `${b.reviews} reseñas en Google sin web: tiene clientela y mucho que ganar`]);
+    else if(b.reviews<5) r.push([6, 'Muy pocas reseñas: negocio poco activo o con poco presupuesto']);
+    if(b.rating!=null && b.rating<3.8 && b.reviews>=10) r.push([-4, `Nota ${b.rating}★: le interesa controlar su imagen online`]);
+    if(b.rating>=4.6 && b.reviews>=30) r.push([-3, `Nota ${b.rating}★: buena reputación que lucir en una web`]);
+  }
+  let s = 50 + r.reduce((a,[p])=>a+p,0);
+  s = Math.max(5, Math.min(95, s));
+  b.score = s;
+  b.diff = s<40 ? 'easy' : s<62 ? 'mid' : 'hard';
+  b.reasons = r;
+  return b;
+}
+const DIFF_LABEL = {easy:'Fácil', mid:'Media', hard:'Difícil'};
+const DIFF_COLOR = {easy:'var(--easy)', mid:'var(--mid)', hard:'var(--hard)'};
+
+/* =========================================================
+   FUENTE 1: OPENSTREETMAP (Overpass)
+   ========================================================= */
+function overpassQuery(phoneOnly){
+  const bb = `${BBOX.s},${BBOX.w},${BBOX.n},${BBOX.e}`;
+  const ph = phoneOnly ? '[~"^(phone|contact:phone|mobile|contact:mobile)$"~"."]' : '';
+  const nw = '[!"website"][!"contact:website"][!"url"]';
+  const f = ph + nw + `(${bb})`;
+  const re = o => '^(' + Object.keys(o).join('|') + ')$';
+  return `[out:json][timeout:180];
+(
+  nwr["name"]["shop"]${f};
+  nwr["name"]["amenity"~"${re(MAP_AMENITY)}"]${f};
+  nwr["name"]["craft"]${f};
+  nwr["name"]["office"~"${re(MAP_OFFICE)}"]${f};
+  nwr["name"]["tourism"~"${re(MAP_TOURISM)}"]${f};
+  nwr["name"]["healthcare"]["amenity"!~"hospital"]${f};
+  nwr["name"]["leisure"~"${re(MAP_LEISURE)}"]${f};
+);
+out center tags;`;
+}
+
+function classifyOSM(t){
+  if(t.amenity && MAP_AMENITY[t.amenity]) return MAP_AMENITY[t.amenity];
+  if(t.shop){
+    if(t.shop==='beauty' && t.beauty==='nails') return ['belleza','Uñas'];
+    return MAP_SHOP[t.shop] || ['comercio', 'Tienda: '+cap(t.shop)];
+  }
+  if(t.craft) return ['oficios', MAP_CRAFT[t.craft] || cap(t.craft)];
+  if(t.office) return [t.office==='notary'?'basico':'profesional', MAP_OFFICE[t.office] || cap(t.office)];
+  if(t.tourism) return ['alojamiento', MAP_TOURISM[t.tourism] || cap(t.tourism)];
+  if(t.healthcare) return ['salud', MAP_HEALTH[t.healthcare] || cap(t.healthcare)];
+  if(t.leisure && MAP_LEISURE[t.leisure]) return MAP_LEISURE[t.leisure];
+  return ['otros','Negocio'];
+}
+
+function fromOSM(el){
+  const t = el.tags || {};
+  const lat = el.lat ?? el.center?.lat, lon = el.lon ?? el.center?.lon;
+  const [group, cat] = classifyOSM(t);
+  const muni = muniFromText(t['addr:municipality'] || t['addr:city'] || '') || nearestMuni(lat, lon);
+  const street = [t['addr:street'], t['addr:housenumber']].filter(Boolean).join(', ');
+  const addr = [street, t['addr:postcode'], t['addr:place'] || t['addr:suburb'] || ''].filter(Boolean).join(' · ');
+  const fb = t['contact:facebook'] || t.facebook, ig = t['contact:instagram'] || t.instagram;
+  const b = {
+    id:'osm:'+el.type+'/'+el.id, src:'OSM', name:t.name, group, cat, muni, addr, lat, lon,
+    phones: parsePhones(t.phone, t['contact:phone'], t.mobile, t['contact:mobile']),
+    email: t.email || t['contact:email'] || '',
+    fb: fb ? (fb.startsWith('http') ? fb : 'https://facebook.com/'+fb) : '',
+    ig: ig ? (ig.startsWith('http') ? ig : 'https://instagram.com/'+ig.replace(/^@/,'')) : '',
+    hours: t.opening_hours || '',
+    chain: !!(t.brand || t['brand:wikidata']) || CHAIN_RE.test(t.name||''),
+    rating:null, reviews:null,
+    maps: lat!=null ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.name+' '+(muni||'Gran Canaria'))}` : ''
+  };
+  b.social = !!(b.fb || b.ig);
+  return b;
+}
+
+async function runOSM(){
+  const q = overpassQuery($('#osmPhoneOnly').checked);
+  setBusy(true);
+  abortCtl = new AbortController();
+  let json = null, lastErr = '';
+  for(const url of OVERPASS){
+    progress(`Consultando ${new URL(url).host}… (puede tardar 30-90 segundos)`);
+    try{
+      const res = await fetch(url, {method:'POST', body:'data='+encodeURIComponent(q),
+        headers:{'Content-Type':'application/x-www-form-urlencoded'}, signal:abortCtl.signal});
+      if(!res.ok){ lastErr = 'HTTP '+res.status; continue; }
+      json = await res.json();
+      break;
+    }catch(e){
+      if(e.name==='AbortError'){ progress('Búsqueda detenida.'); setBusy(false); return; }
+      lastErr = e.message;
+    }
+  }
+  setBusy(false);
+  if(!json){ progress('No se pudo conectar con OpenStreetMap ('+lastErr+'). Inténtalo de nuevo en unos minutos.'); return; }
+  const seen = new Set(), items = [];
+  for(const el of json.elements||[]){
+    const b = fromOSM(el);
+    if(!b.name) continue;
+    const key = norm(b.name)+'|'+(b.phones[0]?.e164||b.id);
+    if(seen.has(key)) continue; seen.add(key);
+    items.push(scoreBiz(b));
+  }
+  mergeData(items, 'OpenStreetMap');
+  progress(`Listo: ${items.length} negocios sin web encontrados en OpenStreetMap.`);
+}
+
+/* =========================================================
+   FUENTE 2: GOOGLE PLACES (New) — Text Search
+   ========================================================= */
+const G_FIELDS = ['places.id','places.displayName','places.formattedAddress','places.nationalPhoneNumber','places.internationalPhoneNumber',
+  'places.websiteUri','places.location','places.primaryTypeDisplayName','places.rating','places.userRatingCount','places.businessStatus',
+  'places.googleMapsUri','nextPageToken'].join(',');
+
+function fromGoogle(p, group, catLabel){
+  const lat = p.location?.latitude, lon = p.location?.longitude;
+  const name = p.displayName?.text || '';
+  const muni = muniFromText(p.formattedAddress) || nearestMuni(lat, lon);
+  const b = {
+    id:'g:'+p.id, src:'Google', name, group, cat: p.primaryTypeDisplayName?.text || catLabel, muni,
+    addr: (p.formattedAddress||'').replace(/, España$/,''), lat, lon,
+    phones: parsePhones(p.internationalPhoneNumber || p.nationalPhoneNumber),
+    email:'', fb:'', ig:'', social:false, hours:'',
+    chain: CHAIN_RE.test(name), rating: p.rating ?? null, reviews: p.userRatingCount ?? 0,
+    maps: p.googleMapsUri || ''
+  };
+  return scoreBiz(b);
+}
+
+async function runGoogle(){
+  const key = $('#gKey').value.trim();
+  if(!key){ progress('Pon tu clave de API de Google primero.'); return; }
+  settings.gKey = key; store.set(K.set, settings);
+  const cats = [...document.querySelectorAll('#gCats input:checked')].map(i=>GOOGLE_CATS[+i.value]);
+  const munis = [...document.querySelectorAll('#gMunis input:checked')].map(i=>i.value);
+  const pages = +$('#gPages').value;
+  if(!cats.length || !munis.length){ progress('Elige al menos un sector y un municipio.'); return; }
+  setBusy(true);
+  abortCtl = new AbortController();
+  const found = new Map(); let reqs = 0, total = cats.length*munis.length, done = 0, withWeb = 0;
+  try{
+    for(const m of munis) for(const [cq, group] of cats){
+      done++;
+      let token = '';
+      for(let pg=0; pg<pages; pg++){
+        progress(`Google: «${cq}» en ${m} (${done}/${total}) · ${found.size} sin web · ${withWeb} con web descartados · ${reqs} peticiones`);
+        const body = {textQuery:`${cq} en ${m}, Gran Canaria`, languageCode:'es', regionCode:'ES', pageSize:20,
+          locationRestriction:{rectangle:{low:{latitude:BBOX.s,longitude:BBOX.w},high:{latitude:BBOX.n,longitude:BBOX.e}}}};
+        if(token) body.pageToken = token;
+        const res = await fetch('https://places.googleapis.com/v1/places:searchText', {method:'POST', signal:abortCtl.signal,
+          headers:{'Content-Type':'application/json','X-Goog-Api-Key':key,'X-Goog-FieldMask':G_FIELDS}, body:JSON.stringify(body)});
+        reqs++;
+        const j = await res.json();
+        if(!res.ok) throw new Error(j.error?.message || ('HTTP '+res.status));
+        for(const p of j.places||[]){
+          if(p.businessStatus && p.businessStatus!=='OPERATIONAL') continue;
+          if(p.websiteUri){ withWeb++; continue; }
+          if(!found.has(p.id)) found.set(p.id, fromGoogle(p, group, cap(cq)));
+        }
+        token = j.nextPageToken;
+        if(!token) break;
+      }
+    }
+  }catch(e){
+    if(e.name==='AbortError') progress('Búsqueda detenida. Se guardan los resultados obtenidos.');
+    else progress('Error de Google: '+e.message+' — revisa que la clave tenga activada «Places API (New)» y permita este dominio.');
+    setBusy(false);
+    if(found.size) mergeData([...found.values()], 'Google Maps');
+    return;
+  }
+  setBusy(false);
+  const items = [...found.values()];
+  mergeData(items, 'Google Maps');
+  progress(`Listo: ${items.length} negocios sin web (${withWeb} con web descartados) en ${reqs} peticiones a Google.`);
+}
+
+function updateEstimate(){
+  const c = document.querySelectorAll('#gCats input:checked').length;
+  const m = document.querySelectorAll('#gMunis input:checked').length;
+  const p = +$('#gPages').value;
+  $('#gEstimate').textContent = `${c*m} búsquedas · hasta ${c*m*p} peticiones (≈ ${c*m*p*20} negocios revisados)`;
+}
+
+/* =========================================================
+   DATOS / CRM
+   ========================================================= */
+function mergeData(items, source){
+  const byId = new Map(data.items.map(b=>[b.id,b]));
+  // evitar duplicados entre OSM y Google por teléfono
+  const byPhone = new Map();
+  data.items.forEach(b=>b.phones.forEach(p=>byPhone.set(p.e164,b.id)));
+  for(const b of items){
+    const dupId = b.phones.map(p=>byPhone.get(p.e164)).find(Boolean);
+    if(dupId && dupId!==b.id){
+      // Google es más fiable: sustituye a OSM
+      if(b.src==='Google'){ const old = byId.get(dupId); byId.delete(dupId); if(crm[dupId] && !crm[b.id]) crm[b.id]=crm[dupId];
+        if(old){ b.email ||= old.email; b.fb ||= old.fb; b.ig ||= old.ig; b.social = !!(b.fb||b.ig); scoreBiz(b); } }
+      else continue;
+    }
+    byId.set(b.id, b);
+    b.phones.forEach(p=>byPhone.set(p.e164,b.id));
+  }
+  data.items = [...byId.values()];
+  data.source = [...new Set([...(data.source?data.source.split(' + '):[]), source])].join(' + ');
+  data.updated = new Date().toISOString();
+  if(!store.set(K.data, data)) progress('Aviso: no se pudieron guardar los resultados en el navegador (espacio lleno o modo privado).');
+  store.set(K.crm, crm);
+  shown = PAGE;
+  buildFilterOptions(); render();
+}
+
+function getCrm(id){ return crm[id] || {status:'nuevo', notes:''}; }
+function setCrm(id, patch){
+  crm[id] = Object.assign(getCrm(id), patch, {updated:new Date().toISOString()});
+  store.set(K.crm, crm);
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+function buildFilterOptions(){
+  const keep = id => $(id).value;
+  const munis = [...new Set(data.items.map(b=>b.muni).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+  const cnt = (k,v) => data.items.filter(b=>b[k]===v).length;
+  const vm = keep('#fMuni'), vg = keep('#fGroup'), vs = keep('#fStatus');
+  $('#fMuni').innerHTML = '<option value="">Todos</option>' + munis.map(m=>`<option value="${esc(m)}">${esc(m)} (${cnt('muni',m)})</option>`).join('');
+  const groups = Object.keys(GROUPS).filter(g=>cnt('group',g));
+  $('#fGroup').innerHTML = '<option value="">Todos</option>' + groups.map(g=>`<option value="${g}">${GROUPS[g].label} (${cnt('group',g)})</option>`).join('');
+  $('#fStatus').innerHTML = '<option value="">Todos</option><option value="pendiente">Pendientes de contactar</option><option value="seguimiento">En seguimiento</option>' + STATUSES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  $('#fMuni').value = vm; $('#fGroup').value = vg; $('#fStatus').value = vs;
+}
+
+function filtered(){
+  const q = norm($('#fText').value), m = $('#fMuni').value, g = $('#fGroup').value, d = $('#fDiff').value, st = $('#fStatus').value;
+  const mob = $('#fMobile').checked, noChain = $('#fChains').checked, hideDone = $('#fHideDone').checked;
+  let out = data.items.filter(b=>{
+    const s = getCrm(b.id).status;
+    if(m && b.muni!==m) return false;
+    if(g && b.group!==g) return false;
+    if(d && b.diff!==d) return false;
+    if(mob && !b.phones.some(p=>p.mobile)) return false;
+    if(noChain && b.chain) return false;
+    if(hideDone && ['descartado','tiene_web','no_interesa'].includes(s)) return false;
+    if(st==='pendiente' && s!=='nuevo') return false;
+    if(st==='seguimiento' && !['contactado','interesado','presupuesto'].includes(s)) return false;
+    if(st && !['pendiente','seguimiento'].includes(st) && s!==st) return false;
+    if(q && !norm(b.name+' '+b.cat+' '+b.addr+' '+b.muni).includes(q)) return false;
+    return true;
+  });
+  const so = $('#fSort').value;
+  const cmp = {score:(a,b)=>a.score-b.score||a.name.localeCompare(b.name,'es'), '-score':(a,b)=>b.score-a.score,
+    name:(a,b)=>a.name.localeCompare(b.name,'es'), muni:(a,b)=>(a.muni||'').localeCompare(b.muni||'','es')||a.score-b.score}[so];
+  return out.sort(cmp);
+}
+
+function renderStats(){
+  const it = data.items.filter(b=>!($('#fChains').checked && b.chain));
+  const c = k => it.filter(b=>b.diff===k).length;
+  const s = k => it.filter(b=>getCrm(b.id).status===k).length;
+  const seg = it.filter(b=>['contactado','interesado','presupuesto'].includes(getCrm(b.id).status)).length;
+  const cards = [
+    ['', it.length, 'Negocios sin web', ()=>{$('#fDiff').value='';$('#fStatus').value='';}],
+    ['easy', c('easy'), 'Fáciles de cerrar', ()=>{$('#fDiff').value='easy';}],
+    ['mid', c('mid'), 'Dificultad media', ()=>{$('#fDiff').value='mid';}],
+    ['hard', c('hard'), 'Difíciles', ()=>{$('#fDiff').value='hard';}],
+    ['', seg, 'En seguimiento', ()=>{$('#fStatus').value='seguimiento';}],
+    ['easy', s('cerrado'), 'Cerrados ✅', ()=>{$('#fStatus').value='cerrado';}]
+  ];
+  const el = $('#stats'); el.innerHTML = '';
+  cards.forEach(([cls,n,l,fn])=>{
+    const d = document.createElement('div'); d.className = 'stat '+cls;
+    d.innerHTML = `<b>${n}</b><span>${l}</span>`;
+    d.onclick = ()=>{ fn(); shown=PAGE; render(); };
+    el.appendChild(d);
+  });
+}
+
+function waMessage(b){
+  const g = GROUPS[b.group] || GROUPS.otros;
+  const arg = g.pitch.replace('{sector}', b.cat.toLowerCase()).replace('{municipio}', b.muni||'Gran Canaria');
+  return settings.tpl
+    .replaceAll('{negocio}', b.name).replaceAll('{municipio}', b.muni||'Gran Canaria').replaceAll('{argumento}', arg)
+    .replaceAll('{yo}', settings.name||'').replaceAll('{empresa}', settings.brand||'').replaceAll('{web}', settings.url||'')
+    .replace(/ de \./g,'.').replace(/Soy\s*\.\s*/g,'').replace(/[ \t]+\n/g,'\n').trim();
+}
+
+function cardHTML(b){
+  const c = getCrm(b.id);
+  const g = GROUPS[b.group] || GROUPS.otros;
+  const pitch = g.pitch.replace('{sector}', b.cat.toLowerCase()).replace('{municipio}', b.muni||'Gran Canaria');
+  const phones = b.phones.map(p=>`<a class="btn" href="tel:${p.e164}">📞 ${esc(p.pretty)}${p.mobile?'':' (fijo)'}</a>`).join('');
+  const mob = b.phones.find(p=>p.mobile);
+  const wa = mob ? `<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${mob.e164.replace('+','')}?text=${encodeURIComponent(waMessage(b))}">WhatsApp</a>` : '';
+  const verify = `https://www.google.com/search?q=${encodeURIComponent('"'+b.name+'" '+(b.muni||'Gran Canaria'))}`;
+  const reasons = b.reasons.slice().sort((x,y)=>x[0]-y[0]).map(([p,t])=>`<li class="${p>0?'plus':'minus'}">${p>0?'+':''}${p} · ${esc(t)}</li>`).join('');
+  const chips = [b.src, b.chain?'Cadena':'', b.rating!=null?`${b.rating}★ (${b.reviews})`:'', b.social?'Redes sociales':''].filter(Boolean)
+    .map(x=>`<span class="chip">${esc(x)}</span>`).join('');
+  return `<article class="card st-${c.status}" data-id="${esc(b.id)}">
+    <div class="card-h">
+      <div><h3>${esc(b.name)}</h3><div class="meta">${esc(b.cat)} · ${esc(b.muni||'—')}</div></div>
+      <span class="badge ${b.diff}" title="Puntuación de dificultad: ${b.score}/100">${DIFF_LABEL[b.diff]} · ${b.score}</span>
+    </div>
+    <div class="bar" aria-hidden="true"><i style="width:${b.score}%;background:${DIFF_COLOR[b.diff]}"></i></div>
+    ${b.addr?`<div class="meta">📍 ${esc(b.addr)}</div>`:''}
+    <div class="chips">${chips}</div>
+    <div class="actions">${phones}${wa}
+      ${b.email?`<a class="btn" href="mailto:${esc(b.email)}">✉️ Email</a>`:''}
+      ${b.fb?`<a class="btn" target="_blank" rel="noopener" href="${esc(b.fb)}">Facebook</a>`:''}
+      ${b.ig?`<a class="btn" target="_blank" rel="noopener" href="${esc(b.ig)}">Instagram</a>`:''}
+      ${b.maps?`<a class="btn" target="_blank" rel="noopener" href="${esc(b.maps)}">🗺️ Mapa</a>`:''}
+      <a class="btn" target="_blank" rel="noopener" href="${verify}" title="Comprueba que de verdad no tienen web">🔎 Comprobar en Google</a>
+    </div>
+    <details><summary>¿Por qué ${DIFF_LABEL[b.diff].toLowerCase()}? · Argumento de venta</summary>
+      <ul class="reasons">${reasons}</ul>
+      <div class="pitch" style="margin-top:6px"><b>Argumento:</b> ${esc(pitch)}</div>
+    </details>
+    <div class="grid-f" style="grid-template-columns:1fr">
+      <select data-act="status" aria-label="Estado">${STATUSES.map(([v,l])=>`<option value="${v}"${v===c.status?' selected':''}>${l}</option>`).join('')}</select>
+      <textarea data-act="notes" placeholder="Notas: con quién hablaste, cuándo volver a llamar, precio…">${esc(c.notes)}</textarea>
+    </div>
+  </article>`;
+}
+
+function render(){
+  renderStats();
+  const list = filtered();
+  $('#count').textContent = `${list.length} resultados` + (data.updated ? ` · datos de ${data.source} (${new Date(data.updated).toLocaleDateString('es-ES')})` : '');
+  const el = $('#list');
+  if(!data.items.length){
+    el.innerHTML = `<div class="empty" style="grid-column:1/-1">Todavía no hay negocios. Pulsa <b>«Buscar en toda Gran Canaria»</b> arriba para empezar.</div>`;
+    $('#btnMore').classList.add('hidden'); return;
+  }
+  if(!list.length){ el.innerHTML = '<div class="empty" style="grid-column:1/-1">Ningún negocio coincide con los filtros.</div>'; $('#btnMore').classList.add('hidden'); return; }
+  el.innerHTML = list.slice(0, shown).map(cardHTML).join('');
+  $('#btnMore').classList.toggle('hidden', list.length<=shown);
+  $('#btnMore').textContent = `Ver más (${list.length-shown} restantes)`;
+}
+
+/* =========================================================
+   EXPORTAR / COPIAS
+   ========================================================= */
+function download(name, content, type){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type}));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+function exportCsv(){
+  const rows = [['Nombre','Sector','Categoría','Municipio','Dirección','Teléfono','Móvil','Email','Facebook','Instagram','Dificultad','Puntuación','Estado','Notas','Valoración','Reseñas','Fuente','Mapa']];
+  for(const b of filtered()){
+    const c = getCrm(b.id);
+    rows.push([b.name,(GROUPS[b.group]||GROUPS.otros).label,b.cat,b.muni,b.addr,b.phones.map(p=>p.pretty).join(' / '),
+      b.phones.some(p=>p.mobile)?'Sí':'No',b.email,b.fb,b.ig,DIFF_LABEL[b.diff],b.score,
+      (STATUSES.find(s=>s[0]===c.status)||[])[1]||'',c.notes,b.rating??'',b.reviews??'',b.src,b.maps]);
+  }
+  const csv = '﻿' + rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  download('negocios-sin-web-gran-canaria.csv', csv, 'text/csv;charset=utf-8');
+}
+
+/* =========================================================
+   UI
+   ========================================================= */
+function progress(t){ $('#progress').textContent = t; }
+function setBusy(on){
+  ['#btnOsm','#btnGoogle'].forEach(s=>$(s).disabled = on);
+  $('#btnStop').classList.toggle('hidden', !on);
+}
+
+function init(){
+  // tema
+  const th = store.get(K.theme, null); if(th) document.documentElement.dataset.theme = th;
+  $('#btnTheme').onclick = ()=>{
+    const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const nx = cur==='dark'?'light':'dark'; document.documentElement.dataset.theme = nx; store.set(K.theme, nx);
+  };
+  // pestañas
+  document.querySelectorAll('[role=tab]').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('[role=tab]').forEach(x=>x.setAttribute('aria-selected', x===t));
+    $('#tab-buscar').classList.toggle('hidden', t.dataset.tab!=='buscar');
+    $('#tab-ajustes').classList.toggle('hidden', t.dataset.tab!=='ajustes');
+  });
+  // fuente
+  document.querySelectorAll('input[name=src]').forEach(r=>r.onchange=()=>{
+    $('#srcOsm').classList.toggle('hidden', r.value!=='osm' || !r.checked);
+    $('#srcGoogle').classList.toggle('hidden', r.value!=='google' || !r.checked);
+  });
+  $('#gCats').innerHTML = GOOGLE_CATS.map(([c],i)=>`<label><input type="checkbox" value="${i}" ${i<6?'checked':''}> ${esc(cap(c))}</label>`).join('');
+  $('#gMunis').innerHTML = MUNIS.map(m=>`<label><input type="checkbox" value="${esc(m)}" ${['Telde','Las Palmas de Gran Canaria'].includes(m)?'checked':''}> ${esc(m)}</label>`).join('');
+  document.querySelectorAll('[data-all],[data-none]').forEach(a=>a.onclick=e=>{
+    e.preventDefault(); const id = a.dataset.all||a.dataset.none;
+    document.querySelectorAll('#'+id+' input').forEach(i=>i.checked=!!a.dataset.all); updateEstimate();
+  });
+  $('#srcGoogle').addEventListener('change', updateEstimate);
+  updateEstimate();
+  $('#gKey').value = settings.gKey || '';
+  $('#btnOsm').onclick = runOSM;
+  $('#btnGoogle').onclick = runGoogle;
+  $('#btnStop').onclick = ()=>abortCtl && abortCtl.abort();
+
+  // ajustes
+  const bind = (id, key) => { $(id).value = settings[key]||''; $(id).oninput = ()=>{ settings[key] = $(id).value; store.set(K.set, settings); }; };
+  bind('#sName','name'); bind('#sBrand','brand'); bind('#sUrl','url'); bind('#sTpl','tpl');
+  $('#btnBackup').onclick = ()=>download(`captacion-copia-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify({data, crm, settings:{...settings, gKey:''}}), 'application/json');
+  $('#fileRestore').onchange = async e=>{
+    const f = e.target.files[0]; if(!f) return;
+    try{
+      const j = JSON.parse(await f.text());
+      if(j.data?.items) { data = j.data; store.set(K.data, data); }
+      if(j.crm) { crm = Object.assign(crm, j.crm); store.set(K.crm, crm); }
+      if(j.settings) { const k = settings.gKey; settings = Object.assign(settings, j.settings, {gKey:k}); store.set(K.set, settings); }
+      alert('Copia restaurada.'); location.reload();
+    }catch(err){ alert('El archivo no es una copia válida.'); }
+  };
+  $('#btnClear').onclick = ()=>{
+    if(!confirm('¿Borrar los negocios descargados? Tus estados y notas se conservan.')) return;
+    data = {items:[], source:'', updated:null}; store.set(K.data, data); buildFilterOptions(); render();
+  };
+
+  // filtros
+  ['#fText','#fMuni','#fGroup','#fDiff','#fStatus','#fSort','#fMobile','#fChains','#fHideDone'].forEach(s=>{
+    $(s).addEventListener($(s).tagName==='INPUT' && $(s).type==='search' ? 'input' : 'change', ()=>{ shown = PAGE; render(); });
+  });
+  $('#btnMore').onclick = ()=>{ shown += PAGE; render(); };
+  $('#btnCsv').onclick = exportCsv;
+
+  // CRM en tarjetas (delegación)
+  let tmr;
+  $('#list').addEventListener('change', e=>{
+    const card = e.target.closest('.card'); if(!card) return;
+    if(e.target.dataset.act==='status'){ setCrm(card.dataset.id, {status:e.target.value}); card.className = 'card st-'+e.target.value; renderStats(); }
+  });
+  $('#list').addEventListener('input', e=>{
+    const card = e.target.closest('.card'); if(!card || e.target.dataset.act!=='notes') return;
+    clearTimeout(tmr); const id = card.dataset.id, v = e.target.value;
+    tmr = setTimeout(()=>setCrm(id, {notes:v}), 400);
+  });
+  // al pulsar WhatsApp o llamar, marcar como contactado si estaba nuevo
+  $('#list').addEventListener('click', e=>{
+    const a = e.target.closest('a.btn'); if(!a) return;
+    const card = a.closest('.card');
+    if((a.href.startsWith('tel:') || a.classList.contains('wa')) && getCrm(card.dataset.id).status==='nuevo'){
+      setCrm(card.dataset.id, {status:'contactado'});
+      card.querySelector('[data-act=status]').value = 'contactado'; card.className = 'card st-contactado'; renderStats();
+    }
+  });
+
+  buildFilterOptions(); render();
+}
+init();
+</script>
+</body>
+</html>
