@@ -1091,6 +1091,43 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .play-card span { font-size: 14px; color: #c9cde3; }
 @media (max-width: 460px) { .play-card { grid-template-columns: auto 1fr; } .play-card .btn { grid-column: 1 / -1; } }
 
+/* Callejero por zonas */
+.z-resumen { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: #171a28; color: #fff; border-radius: 12px; padding: 14px 16px; }
+.z-resumen b { font-family: var(--display); font-size: 40px; line-height: 1; display: block; }
+.z-resumen span { font-size: 13px; color: #c9cde3; }
+.z-bar { height: 10px; background: #343a55; border-radius: 5px; overflow: hidden; }
+.z-bar i { display: block; height: 100%; background: #34d27b; }
+@media (max-width: 520px) { .z-resumen { grid-template-columns: auto 1fr; } .z-resumen .btn { grid-column: 1 / -1; } }
+.z-lista { display: grid; gap: 8px; }
+.z-item { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; text-align: left; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.z-item:hover { border-color: var(--indigo-ink); }
+.z-item.hecha { border-color: var(--verde); background: var(--verde-soft); }
+.z-num { width: 36px; height: 36px; border-radius: 50%; background: var(--indigo); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 18px; }
+.z-item.hecha .z-num { background: var(--verde); }
+.z-txt { display: grid; gap: 3px; min-width: 0; }
+.z-txt b { font-family: var(--display); font-size: 20px; text-transform: uppercase; line-height: 1.1; }
+.z-txt > span { font-size: 13px; color: var(--muted); }
+.z-mini { height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; display: block; }
+.z-mini i { display: block; height: 100%; background: var(--verde); }
+.z-est { color: #e0a100; font-size: 18px; letter-spacing: 1px; white-space: nowrap; }
+.z-est em { font-style: normal; color: var(--line); }
+.z-head { display: flex; align-items: center; gap: 12px; }
+.z-head b { font-family: var(--display); font-size: 24px; text-transform: uppercase; display: block; line-height: 1.1; }
+.z-head span { font-size: 13px; color: var(--muted); }
+.z-pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.z-pasos button { border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 10px 6px; font-family: var(--display); font-weight: 700; font-size: 16px; text-transform: uppercase; color: var(--indigo-ink); }
+.z-pasos button.on { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+#zmapa { height: min(52vh, 460px); min-height: 300px; background: #eef0f4; }
+.z-panel { display: grid; }
+.z-card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
+.z-cont { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.z-nombre { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 7vw, 40px); line-height: 1.05; text-transform: uppercase; color: var(--ink); }
+.z-det { font-size: 15px; color: var(--muted); }
+.z-det b { color: var(--ink); font-weight: 600; }
+.z-preg { font-size: 19px; font-weight: 600; }
+.z-preg .rojo { color: #c8202f; }
+.z-nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -2174,7 +2211,7 @@ async function cargarCalles() {
     const j = await pedirOverpass(QUERY, 75000);
     const c = procesar(j);
     if (c.calles.length < 50) throw new Error("pocas calles");
-    CAL = c; GR = null; guardarCache(CAL);
+    CAL = c; GR = null; ZON = null; guardarCache(CAL);
   } catch (e) { calState.error = (e && e.errors ? "servidor ocupado" : String(e && e.message || e)); }
   calState.loading = false;
   if (tab === "calles" && !calState.q && CAL && !CAL._viejo) renderCallejero(); else refrescarEstado();
@@ -2554,12 +2591,237 @@ function resumenZona() {
     <span>En esta zona dominas <b>${p}%</b> · ${dom} dominadas · ${med} a medias · ${fal} falladas · ${sin} sin practicar</span>`;
 }
 
+
+// ---------- Callejero fácil: aprender Telde por zonas ----------
+let ZON = null;                  // { zonas: [{id, n, calles:[idx]}], cruces: Map idx -> Set(idx) }
+let zs = { vista: "lista", z: null, paso: "aprender", i: 0, q: null };  // estado de la pantalla
+let zmapa = null, zcapaFondo = null, zcapaZona = null, zcapaFoco = null;
+const CASCO = /^(san juan|san francisco|san gregorio)$/i;
+
+function construirZonas() {
+  if (ZON || !CAL) return ZON;
+  const calles = CAL.calles;
+  // cruces: calles que comparten algún punto
+  const porNodo = new Map();
+  calles.forEach((c, i) => c.segs.forEach(sg => sg.forEach(p => { const k = p[0] + "," + p[1]; let s = porNodo.get(k); if (!s) porNodo.set(k, s = new Set()); s.add(i); })));
+  const cruces = new Map(); calles.forEach((c, i) => cruces.set(i, new Set()));
+  porNodo.forEach(s => { if (s.size > 1) s.forEach(a => s.forEach(b => { if (a !== b) cruces.get(a).add(b); })); });
+  // zonas: cada calle al barrio más cercano
+  const places = (CAL.places || []).filter(p => p.n);
+  const grupos = new Map();
+  calles.forEach((c, i) => {
+    if (c.len < 40) return;
+    let best = null, bd = Infinity; places.forEach(p => { const d = distM(c.c, [p.lat, p.lon]); if (d < bd) { bd = d; best = p; } });
+    const key = best && bd < 3500 ? best.n : "Otras calles";
+    if (!grupos.has(key)) grupos.set(key, []); grupos.get(key).push(i);
+  });
+  const zonas = [];
+  // 1) principales
+  const princ = calles.map((c, i) => ({ c, i })).filter(x => /^(avenida|avda|carretera|rambla|paseo|autopista|autov[ií]a|circunvalaci[oó]n)/i.test(x.c.n) || x.c.len > 1500).sort((a, b) => b.c.len - a.c.len).slice(0, 14).map(x => x.i);
+  if (princ.length >= 4) zonas.push({ id: "principales", n: "Las calles principales", d: "Avenidas y carreteras que cruzan Telde", calles: princ });
+  // 2) barrios, el casco primero; los grandes se dividen en partes de 12
+  const orden = [...grupos.entries()].filter(([, v]) => v.length >= 4).sort((a, b) => (CASCO.test(b[0]) - CASCO.test(a[0])) || (a[0] === "Otras calles") - (b[0] === "Otras calles") || b[1].length - a[1].length);
+  orden.forEach(([n, idx]) => {
+    const ord = idx.slice().sort((a, b) => calles[b].len - calles[a].len);
+    const partes = Math.ceil(ord.length / 12);
+    for (let k = 0; k < partes; k++) {
+      const trozo = ord.slice(k * 12, k * 12 + 12); if (trozo.length < 3) { if (zonas.length) zonas[zonas.length - 1].calles.push(...trozo); continue; }
+      zonas.push({ id: "z:" + n + ":" + k, n: partes > 1 ? `${n} (${k + 1}/${partes})` : n, d: k === 0 ? (partes > 1 ? "Las calles más importantes de la zona" : "") : "Más calles de la zona", calles: trozo, casco: CASCO.test(n) });
+    }
+  });
+  ZON = { zonas, cruces }; return ZON;
+}
+function statCalle(n) { return state.cf[n] || null; }
+function dominada(n) { const s = statCalle(n); return !!(s && !s.p && (s.r || 0) >= 2); }
+function progresoZona(z) { const t = z.calles.length; const d = z.calles.filter(i => dominada(CAL.calles[i].n)).length; const ex = state.cf["_zona:" + z.id]; return { t, d, est: ex ? ex.r || 0 : 0, best: ex ? ex.best || 0 : 0 }; }
+function marcarCalle(n, ok) { const s = state.cf[n] || { v: 0, f: 0, p: false, r: 0 }; s.v++; if (ok) { s.r = (s.r || 0) + 1; if (s.p && s.r >= NEEDED) s.p = false; } else { s.f++; s.p = true; s.r = 0; } state.cf[n] = s; }
+
+// --- pantalla de lista de zonas ---
+function renderZonas() {
+  const Z = construirZonas();
+  if (!Z) { $("#app").innerHTML = `<section class="view"><div class="section-h"><h2>Aprende el callejero</h2></div><div class="cal-info"><b>${calState.loading ? "Descargando las calles de Telde…" : "Preparando el callejero…"}</b><span>La primera vez tarda hasta un minuto. Después queda guardado.</span></div>${calState.error && !calState.loading ? `<div class="row"><button class="btn" data-cal="reintentar">Reintentar</button></div>` : ""}</section>`; cargarCalles(); return; }
+  const tot = Z.zonas.reduce((a, z) => a + z.calles.length, 0), dom = Z.zonas.reduce((a, z) => a + progresoZona(z).d, 0);
+  const sig = Z.zonas.find(z => progresoZona(z).est < 2) || Z.zonas[0];
+  $("#app").innerHTML = `<section class="view">
+    <div class="section-h"><h2>Aprende el callejero</h2><button class="btn ghost sm" data-z="libre">Mapa libre y más tests</button></div>
+    <div class="z-resumen"><div><b class="num">${dom}</b><span>calles dominadas de ${tot}</span></div><div class="z-bar"><i style="width:${tot ? dom * 100 / tot : 0}%"></i></div>
+      <button class="btn red" data-z="abrir" data-id="${esc(sig.id)}">Seguir: ${esc(sig.n)}</button></div>
+    <p class="note">Telde dividido en zonas pequeñas. En cada zona: <b>1 · Aprender</b> las calles una a una, <b>2 · Practicar</b> hasta sabérselas y <b>3 · Examen</b> para ganar estrellas. Ve en orden: primero las principales y el casco.</p>
+    <div class="z-lista">${Z.zonas.map((z, k) => { const p = progresoZona(z); const pc = p.t ? Math.round(p.d * 100 / p.t) : 0;
+      return `<button class="z-item ${p.est >= 2 ? "hecha" : ""}" data-z="abrir" data-id="${esc(z.id)}">
+        <span class="z-num num">${k + 1}</span>
+        <span class="z-txt"><b>${esc(z.n)}</b><span>${z.calles.length} calles${z.d ? " · " + esc(z.d) : ""}</span><span class="z-mini"><i style="width:${pc}%"></i></span></span>
+        <span class="z-est">${"★".repeat(p.est)}<em>${"★".repeat(3 - p.est)}</em></span></button>`; }).join("")}</div>
+  </section>`;
+}
+
+// --- mapa de una zona ---
+function iniciarZmapa(z) {
+  const el = document.getElementById("zmapa"); if (!el) return;
+  if (zmapa) { zmapa.remove(); zmapa = null; }
+  zmapa = L.map(el, { zoomControl: true, preferCanvas: true, attributionControl: true, minZoom: 12, maxZoom: 19 });
+  const f = FONDOS.gris; L.tileLayer(f.url, f.o).addTo(zmapa);
+  const rend = L.canvas({ padding: .3 });
+  zcapaFondo = L.layerGroup().addTo(zmapa); zcapaZona = L.layerGroup().addTo(zmapa); zcapaFoco = L.layerGroup().addTo(zmapa);
+  const pts = z.calles.flatMap(i => CAL.calles[i].segs.flat());
+  const b = L.latLngBounds(pts).pad(.15);
+  CAL.calles.forEach((c, i) => { if (c.bb[0] > b.getNorth() || c.bb[2] < b.getSouth() || c.bb[1] > b.getEast() || c.bb[3] < b.getWest()) return;
+    L.polyline(c.segs, { renderer: rend, color: "#b9bdcc", weight: 6, opacity: 1, interactive: false }).addTo(zcapaFondo);
+    L.polyline(c.segs, { renderer: rend, color: "#ffffff", weight: 3.5, opacity: 1, interactive: false }).addTo(zcapaFondo); });
+  z.calles.forEach(i => { const c = CAL.calles[i];
+    const pl = L.polyline(c.segs, { renderer: rend, color: "#5d6280", weight: 6, opacity: .9 }).addTo(zcapaZona);
+    pl.on("click", ev => { L.DomEvent.stopPropagation(ev); clicZonaCalle(i, ev); }); });
+  zmapa.on("click", ev => clicZonaMapa(ev));
+  zmapa.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: 17 });
+  setTimeout(() => zmapa && zmapa.invalidateSize(), 60);
+}
+function zFoco(i, color, fit) {
+  zcapaFoco.clearLayers(); if (i == null) return;
+  const c = CAL.calles[i];
+  L.polyline(c.segs, { color: "#fff", weight: 13, opacity: 1, interactive: false }).addTo(zcapaFoco);
+  L.polyline(c.segs, { color: color || "#c8202f", weight: 8, opacity: 1, interactive: false }).addTo(zcapaFoco);
+  if (fit) { const b = zmapa.getBounds(); const cb = L.latLngBounds(c.segs.flat()); if (!b.contains(cb)) zmapa.fitBounds(cb.pad(.6), { maxZoom: 17 }); }
+}
+function crucesDe(i, z) { const enZona = new Set(z.calles); return [...ZON.cruces.get(i)].map(j => CAL.calles[j].n).filter((n, k, a) => a.indexOf(n) === k && n !== CAL.calles[i].n).sort((a, b) => (enZona.has(CAL.calles.findIndex(c => c.n === b)) - enZona.has(CAL.calles.findIndex(c => c.n === a)))).slice(0, 5); }
+
+// --- pantalla de una zona ---
+function abrirZona(id, paso) {
+  const z = ZON.zonas.find(x => x.id === id); if (!z) return;
+  zs = { vista: "zona", z, paso: paso || "aprender", i: 0, q: null };
+  renderZona();
+}
+function renderZona() {
+  const z = zs.z; const p = progresoZona(z);
+  const pasos = [["aprender", "1 · Aprender"], ["practicar", "2 · Practicar"], ["examen", "3 · Examen"]];
+  $("#app").innerHTML = `<section class="view z-view">
+    <div class="z-head"><button class="btn ghost sm" data-z="lista">← Zonas</button><div><b>${esc(z.n)}</b><span>${p.d}/${p.t} dominadas · ${"★".repeat(p.est)}${"☆".repeat(3 - p.est)}</span></div></div>
+    <div class="z-pasos">${pasos.map(([k, t]) => `<button class="${zs.paso === k ? "on" : ""}" data-z="paso" data-paso="${k}">${t}</button>`).join("")}</div>
+    <div class="mapwrap"><div id="zmapa"></div></div>
+    <div id="z-panel" class="z-panel"></div>
+  </section>`;
+  iniciarZmapa(z);
+  if (zs.paso === "aprender") pasoAprender();
+  else if (zs.paso === "practicar") empezarPractica();
+  else empezarExamenZona();
+}
+// 1. aprender
+function pasoAprender() {
+  const z = zs.z; const n = z.calles.length; zs.i = Math.max(0, Math.min(zs.i, n - 1));
+  const idx = z.calles[zs.i]; const c = CAL.calles[idx]; zFoco(idx, "#c8202f", true);
+  const cr = crucesDe(idx, z);
+  $("#z-panel").innerHTML = `<div class="z-card">
+    <span class="z-cont num">Calle ${zs.i + 1} de ${n}</span>
+    <div class="z-nombre">${esc(c.n)}</div>
+    <span class="z-det">${fmtLen(c.len)} de largo${cr.length ? ` · Cruza con: <b>${cr.map(esc).join("</b>, <b>")}</b>` : ""}</span>
+    <div class="z-nav"><button class="btn ghost" data-z="ant" ${zs.i === 0 ? "disabled" : ""}>← Anterior</button>
+      ${zs.i < n - 1 ? `<button class="btn" data-z="sig">Siguiente →</button>` : `<button class="btn red" data-z="paso" data-paso="practicar">¡Hecho! Ir a practicar →</button>`}</div>
+    <p class="note">Consejo: fíjate en la forma de la calle y en con cuáles cruza. También puedes tocar en el mapa cualquier calle gris oscuro de la zona para verla.</p></div>`;
+}
+// 2. practicar (opción múltiple, se repiten las falladas hasta acertarlas todas)
+function empezarPractica() {
+  const z = zs.z; zs.q = { cola: shuffle(z.calles.slice()), ok: 0, hechas: 0, fallos: 0, resp: null, opts: [] };
+  siguientePractica();
+}
+function siguientePractica() {
+  const q = zs.q; q.resp = null;
+  if (!q.cola.length) { zFoco(null); (state.calles = state.calles || []).push({ d: Date.now(), m: "practica", n: q.hechas, ok: q.hechas - q.fallos, s: 0 }); save(); $("#z-panel").innerHTML = `<div class="z-card"><div class="z-nombre">¡Zona practicada!</div><span class="z-det">${q.hechas} respuestas · ${q.fallos} fallo${q.fallos === 1 ? "" : "s"}. Todas las calles acertadas al menos una vez.</span><div class="z-nav"><button class="btn ghost" data-z="paso" data-paso="practicar">Practicar otra vez</button><button class="btn red" data-z="paso" data-paso="examen">Hacer el examen →</button></div></div>`; return; }
+  const idx = q.cola[0]; const c = CAL.calles[idx];
+  const otras = shuffle(zs.z.calles.filter(j => CAL.calles[j].n !== c.n)).map(j => CAL.calles[j].n).filter((n, k, a) => a.indexOf(n) === k).slice(0, 3);
+  if (otras.length < 3) CAL.calles.map(x => ({ x, d: distM(c.c, x.c) })).sort((a, b) => a.d - b.d).forEach(o => { if (otras.length < 3 && o.x.n !== c.n && !otras.includes(o.x.n)) otras.push(o.x.n); });
+  q.opts = shuffle([c.n, ...otras]); q.cur = idx;
+  zFoco(idx, "#c8202f", true); pintarPractica();
+}
+function pintarPractica() {
+  const q = zs.q; const c = CAL.calles[q.cur]; const total = zs.z.calles.length; const quedan = new Set(q.cola).size;
+  $("#z-panel").innerHTML = `<div class="z-card">
+    <span class="z-cont num">Quedan ${quedan} de ${total} · ${q.fallos} fallo${q.fallos === 1 ? "" : "s"}</span>
+    <div class="z-preg">¿Cómo se llama la calle <span class="rojo">roja</span>?</div>
+    <div class="answers">${q.opts.map((o, i) => { let cls = ""; if (q.resp) { if (o === c.n) cls = "ok"; else if (o === q.resp) cls = "bad"; } return `<button class="ans ${cls}" data-z="opt" data-o="${esc(o)}" ${q.resp ? "disabled" : ""}><span class="k">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`; }).join("")}</div>
+    ${q.resp ? `<div class="feedback ${q.resp === c.n ? "" : "bad"}"><strong>${q.resp === c.n ? "¡Bien! " + esc(c.n) : "Es " + esc(c.n) + ". Te la volveré a preguntar."}</strong></div><div class="z-nav"><span></span><button class="btn" data-z="psig">Siguiente →</button></div>` : ""}
+  </div>`;
+}
+function responderPractica(o) {
+  const q = zs.q; if (q.resp) return; q.resp = o; q.hechas++;
+  const idx = q.cola.shift(); const ok = o === CAL.calles[idx].n;
+  marcarCalle(CAL.calles[idx].n, ok);
+  saveLocal();
+  if (ok) q.ok++; else { q.fallos++; q.cola.splice(Math.min(q.cola.length, 2 + Math.floor(Math.random() * 3)), 0, idx); }
+  zFoco(idx, ok ? "#12804a" : "#c8202f"); pintarPractica();
+}
+// 3. examen de zona (tocar en el mapa)
+function empezarExamenZona() {
+  zs.q = { items: shuffle(zs.z.calles.slice()).slice(0, 10), i: 0, ok: 0, resp: null, res: [] };
+  zFoco(null); pintarExamenZona();
+}
+function pintarExamenZona() {
+  const q = zs.q; const n = q.items.length;
+  if (q.i >= n) {
+    const pc = Math.round(q.ok * 100 / n); const est = pc >= 90 ? 3 : pc >= 70 ? 2 : pc >= 50 ? 1 : 0;
+    const k = "_zona:" + zs.z.id; const prev = state.cf[k] || { v: 0, f: 0, p: false, r: 0, best: 0 };
+    state.cf[k] = { v: prev.v + 1, f: prev.f, p: false, r: Math.max(prev.r || 0, est), best: Math.max(prev.best || 0, pc) };
+    (state.calles = state.calles || []).push({ d: Date.now(), m: "zona", n, ok: q.ok, s: 0 }); save();
+    const Z = ZON.zonas; const pos = Z.indexOf(zs.z); const sig = Z[pos + 1];
+    $("#z-panel").innerHTML = `<div class="z-card"><div class="z-nombre">${q.ok}/${n} · ${"★".repeat(est)}${"☆".repeat(3 - est)}</div>
+      <span class="z-det">${est >= 2 ? "¡Zona superada! Puedes pasar a la siguiente." : "Para superar la zona necesitas 2 estrellas (70 %). Repasa y vuelve a intentarlo."}</span>
+      <div class="cp-list">${q.res.map(r => `<span class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${esc(r.n)}</span>`).join("")}</div>
+      <div class="z-nav">${est >= 2 && sig ? `<button class="btn red" data-z="abrir" data-id="${esc(sig.id)}">Siguiente zona: ${esc(sig.n)} →</button>` : `<button class="btn" data-z="paso" data-paso="practicar">Repasar</button>`}<button class="btn ghost" data-z="paso" data-paso="examen">Repetir examen</button></div></div>`;
+    zFoco(null); return;
+  }
+  const c = CAL.calles[q.items[q.i]];
+  $("#z-panel").innerHTML = `<div class="z-card"><span class="z-cont num">Pregunta ${q.i + 1} de ${n} · ${q.ok} aciertos</span>
+    <div class="z-preg">Toca en el mapa:</div><div class="z-nombre">${esc(c.n)}</div>
+    ${q.resp ? `<div class="feedback ${q.resp.ok ? "" : "bad"}"><strong>${q.resp.ok ? "¡Correcto!" : "Era la marcada en verde."}</strong></div><div class="z-nav"><span></span><button class="btn" data-z="esig">Siguiente →</button></div>` : `<div class="z-nav"><span class="note">Toca sobre la calle (las calles de la zona están en gris oscuro).</span><button class="btn ghost sm" data-z="nose">No lo sé</button></div>`}</div>`;
+}
+function responderExamenZona(ok, tocada) {
+  const q = zs.q; if (q.resp || q.i >= q.items.length) return;
+  const idx = q.items[q.i]; const c = CAL.calles[idx];
+  q.resp = { ok }; if (ok) q.ok++; q.res.push({ n: c.n, ok }); marcarCalle(c.n, ok);
+  zFoco(idx, "#12804a", true);
+  if (!ok && tocada != null && tocada !== idx) { const t = CAL.calles[tocada]; L.polyline(t.segs, { color: "#c8202f", weight: 6, opacity: .9, interactive: false, dashArray: "6 6" }).addTo(zcapaFoco); }
+  pintarExamenZona();
+}
+function clicZonaCalle(i, ev) {
+  if (zs.paso === "examen" && zs.q && !zs.q.resp && zs.q.i < zs.q.items.length) { const objetivo = zs.q.items[zs.q.i]; responderExamenZona(CAL.calles[i].n === CAL.calles[objetivo].n, i); return; }
+  if (zs.paso === "aprender") { const k = zs.z.calles.indexOf(i); if (k >= 0) { zs.i = k; pasoAprender(); } }
+  else if (zs.paso === "practicar" && zs.q && zs.q.resp) { L.popup().setLatLng(ev.latlng).setContent(esc(CAL.calles[i].n)).openOn(zmapa); }
+}
+function clicZonaMapa(ev) {
+  if (zs.paso !== "examen" || !zs.q || zs.q.resp || zs.q.i >= zs.q.items.length) return;
+  const p = [ev.latlng.lat, ev.latlng.lng]; const objetivo = CAL.calles[zs.q.items[zs.q.i]];
+  const tol = Math.max(25, 14 * (156543 * Math.cos(rad(p[0])) / Math.pow(2, zmapa.getZoom())));
+  let cerca = null, cd = Infinity; zs.z.calles.forEach(i => { const d = distCalle(p, CAL.calles[i]); if (d < cd) { cd = d; cerca = i; } });
+  responderExamenZona(distCalle(p, objetivo) <= tol, cd <= tol ? cerca : null);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-z]"); if (!b) return;
+  const a = b.dataset.z;
+  if (a === "lista") { zs.vista = "lista"; renderZonas(); window.scrollTo({ top: 0 }); }
+  else if (a === "libre") { zs.vista = "libre"; renderCallejeroLibre(); }
+  else if (a === "volverzonas") { zs.vista = "lista"; renderZonas(); }
+  else if (a === "abrir") { abrirZona(b.dataset.id); window.scrollTo({ top: 0 }); }
+  else if (a === "paso") { zs.paso = b.dataset.paso; zs.i = 0; renderZona(); }
+  else if (a === "sig") { zs.i++; pasoAprender(); }
+  else if (a === "ant") { zs.i--; pasoAprender(); }
+  else if (a === "opt") responderPractica(b.dataset.o);
+  else if (a === "psig") siguientePractica();
+  else if (a === "esig") { zs.q.i++; zs.q.resp = null; zFoco(null); pintarExamenZona(); }
+  else if (a === "nose") responderExamenZona(false, null);
+});
+
 function renderCallejero() {
+  if (!window.L) { $("#app").innerHTML = `<section class="view"><div class="empty">El mapa no se puede cargar aquí. Ábrelo desde el link público de la app, con conexión a internet.</div></section>`; return; }
+  if (!CAL) CAL = cargarCache();
+  if (zs.vista === "libre") return renderCallejeroLibre();
+  if (zs.vista === "zona" && zs.z && CAL) return renderZona();
+  renderZonas();
+  if (CAL) cargarCalles();
+}
+function renderCallejeroLibre() {
   if (!window.L) { $("#app").innerHTML = `<section class="view"><div class="empty">El mapa no se puede cargar aquí. Ábrelo desde el link público de la app, con conexión a internet.</div></section>`; return; }
   if (!CAL) CAL = cargarCache();
   const barrios = CAL ? CAL.places || [] : [];
   $("#app").innerHTML = `<section class="view">
-    <div class="section-h"><h2>Callejero de Telde</h2><span class="note num">${CAL ? CAL.calles.length + " calles" : ""}</span></div>
+    <div class="section-h"><h2>Mapa libre</h2><button class="btn sm" data-z="volverzonas">← Aprender por zonas</button></div>
     <div class="cal-tools">
       <div class="search"><input id="cal-buscar" type="search" placeholder="Buscar calle o lugar…" autocomplete="off"><div id="cal-sug" class="sug" hidden></div></div>
       <select id="cal-barrio"><option value="">Ir a un barrio…</option>${barrios.map((b, i) => `<option value="${i}">${esc(b.n)}</option>`).join("")}</select>
