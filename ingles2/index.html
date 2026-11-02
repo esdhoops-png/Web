@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Monster House</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Bubblegum+Sans&display=swap">
+<style>
+/* Layout: una casa de muñecas donde viven monstruitos; cada habitación es un juego */
+:root {
+  --bg: #f1ecff;
+  --ink: #2d2350;
+  --ink-soft: #6b6390;
+  --card: #ffffff;
+  --purple: #7b5cd6;
+  --purple-dark: #5539a8;
+  --green: #2fa86b;
+  --red: #e2453c;
+  --pink: #ff7aa8;
+  --yellow: #ffd23f;
+  --roof: #e2453c;
+  --wall: #fbe7c6;
+  --wall-dark: #8a5a3b;
+  --grass: #6cc070;
+  --display: "Bubblegum Sans", "Comic Sans MS", system-ui, sans-serif;
+  --body: "Andika", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 10% 8%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 80% 14%, #fff 0 2px, transparent 3px),
+    radial-gradient(circle at 60% 4%, #fff 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 30%, #fff 0 3px, transparent 4px),
+    var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap {
+  max-width: 540px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 40px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.05; letter-spacing: .02em; text-wrap: balance; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; }
+button:focus-visible, input:focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
+.top { display: flex; align-items: center; gap: 10px; }
+.top .spacer { flex: 1; }
+.pill { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border-radius: 999px; padding: 5px 14px; font-family: var(--display); font-size: 21px; box-shadow: 0 3px 0 rgba(45, 35, 80, .15); font-variant-numeric: tabular-nums; }
+.iconbtn { width: 46px; height: 46px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-size: 20px; line-height: 1; box-shadow: 0 3px 0 rgba(45, 35, 80, .15); }
+
+.mascot { display: flex; align-items: center; gap: 10px; }
+.mascot svg { width: 70px; height: 70px; flex: none; }
+.bubble { flex: 1; min-width: 0; background: var(--card); border-radius: 22px 22px 22px 6px; padding: 10px 16px; font-size: 18px; box-shadow: 0 3px 0 rgba(45, 35, 80, .12); }
+.bubble b { color: var(--purple); }
+.bubble i { font-style: normal; color: var(--pink); font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .hop { animation: hop .5s ease; }
+  @keyframes hop { 30% { transform: translateY(-12px) scale(1.05, .95); } 60% { transform: translateY(0) scale(.95, 1.05); } }
+  .jelly { animation: jelly 2.4s ease-in-out infinite; transform-origin: 50% 100%; }
+  @keyframes jelly { 50% { transform: scale(1.05, .94); } }
+  .peek { animation: peek .5s ease-out; }
+  @keyframes peek { from { transform: translateY(30px) scale(.4); opacity: 0; } }
+  .floaty { animation: floaty 3s ease-in-out infinite; }
+  @keyframes floaty { 50% { transform: translateY(-10px); } }
+  .pop { animation: pop .4s ease-out forwards; }
+  @keyframes pop { 60% { transform: scale(1.3); opacity: .8; } 100% { transform: scale(1.6); opacity: 0; } }
+}
+
+/* portada */
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 8px 10px; align-items: center; }
+.hero > div:first-child { min-width: 0; }
+.hero .eyebrow { font-family: var(--display); font-size: 17px; color: var(--purple); letter-spacing: .06em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(42px, 12vw, 60px); color: var(--purple-dark); }
+.hero p { margin: 4px 0 0; color: var(--ink-soft); }
+.hero svg { width: 108px; height: 108px; display: block; }
+.hero .bubble { grid-column: 1 / -1; }
+.namebox { display: flex; gap: 10px; align-items: center; background: var(--card); border-radius: 16px; padding: 8px 8px 8px 16px; }
+.namebox label { font-size: 16px; color: var(--ink-soft); white-space: nowrap; }
+.namebox input { flex: 1; min-width: 0; font: inherit; color: var(--ink); border: 0; border-radius: 10px; padding: 6px 10px; background: var(--bg); }
+.section-label { font-family: var(--display); font-size: 26px; color: var(--purple-dark); }
+.section-label small { display: block; font-family: var(--body); font-size: 15px; color: var(--ink-soft); }
+
+/* la casa */
+.house { display: flex; flex-direction: column; width: 100%; }
+.roof { position: relative; height: 64px; margin: 0 -6px; background: var(--roof); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.roof::after { content: ""; position: absolute; left: 50%; top: 30px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: var(--yellow); box-shadow: inset 0 0 0 4px #c98a1a; }
+.floors { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; background: var(--wall-dark); padding: 6px; border-radius: 0 0 10px 10px; }
+.room { position: relative; grid-column: span 2; background: var(--wp, var(--wall)); border-radius: 8px; min-height: 104px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 6px 4px; text-align: center; overflow: hidden; }
+.room.w3 { grid-column: span 3; }
+.room.garden { grid-column: 1 / -1; background: linear-gradient(180deg, #bfe6ff 0 45%, var(--grass) 45%); min-height: 96px; }
+.room .ri { width: 54px; height: 54px; }
+.room .rn { font-family: var(--display); font-size: 17px; line-height: 1.05; background: rgba(255, 255, 255, .85); border-radius: 8px; padding: 1px 7px; }
+.room .rs { font-size: 12px; color: #c98a1a; letter-spacing: 1px; min-height: 14px; }
+.room .who { position: absolute; right: 2px; bottom: 0; width: 58px; height: 58px; }
+.room.right { box-shadow: inset 0 0 0 5px var(--green); }
+.room.wrong { box-shadow: inset 0 0 0 5px var(--red); }
+button.room:active:not(:disabled) { filter: brightness(.94); }
+.ground { height: 10px; background: var(--grass); border-radius: 0 0 10px 10px; margin: 0 -6px; }
+
+.friends { background: var(--card); border-radius: 22px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.monsters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.monsters div { background: var(--bg); border-radius: 16px; padding: 6px 4px 4px; display: flex; flex-direction: column; align-items: center; font-family: var(--display); font-size: 15px; }
+.monsters svg { width: 100%; max-width: 64px; height: auto; }
+.monsters div.off { color: var(--ink-soft); }
+.monsters div.off svg { filter: grayscale(1) brightness(1.6); opacity: .5; }
+
+/* juego */
+.dots { display: flex; gap: 6px; flex-wrap: wrap; }
+.dots i { width: 22px; height: 22px; border-radius: 50%; background: var(--card); box-shadow: inset 0 0 0 3px #d9d0f5; }
+.dots i.ok { background: var(--green); box-shadow: none; }
+.dots i.ko { background: var(--red); box-shadow: none; }
+.dots i.now { background: var(--yellow); box-shadow: none; }
+.tag { font-family: var(--display); font-size: 18px; color: #fff; background: var(--tc); border-radius: 10px; padding: 2px 12px; align-self: flex-start; }
+.board { background: var(--card); border-radius: 26px; padding: 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; box-shadow: 0 5px 0 rgba(45, 35, 80, .1); }
+.q { font-size: 22px; font-weight: 700; margin: 0; text-wrap: balance; }
+.q .en { color: var(--purple); }
+.q small { display: block; font-size: 16px; font-weight: 400; color: var(--ink-soft); }
+.listen { background: var(--bg); border-radius: 999px; padding: 6px 16px; font-size: 16px; color: var(--ink); }
+.choices { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+.choice { min-height: 60px; border-radius: 16px; background: var(--bg); font-weight: 700; font-size: 21px; padding: 8px 12px; box-shadow: 0 4px 0 #d9d0f5; text-align: left; }
+.choice:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #d9d0f5; }
+.choice.right { background: var(--green); color: #fff; box-shadow: 0 4px 0 #1d7048; }
+.choice.wrong { background: var(--red); color: #fff; box-shadow: 0 4px 0 #94261f; }
+.choice:disabled { cursor: default; }
+@media (prefers-reduced-motion: no-preference) { .shake { animation: shake .4s; } @keyframes shake { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } } }
+
+/* burbujas */
+.word { font-family: var(--display); font-size: 48px; line-height: 1; color: var(--purple-dark); margin: 0; letter-spacing: .02em; }
+.bubbles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; padding: 8px; }
+.bub { aspect-ratio: 1; max-width: 100%; border-radius: 50%; padding: 18%; background: radial-gradient(circle at 30% 28%, #fff 0 10%, rgba(255, 255, 255, .2) 11%), radial-gradient(circle, #e9fbff 55%, #b8e8ff 100%); box-shadow: inset 0 0 0 3px rgba(80, 160, 220, .5); }
+.bub:nth-child(2) { animation-delay: -.8s; }
+.bub:nth-child(3) { animation-delay: -1.6s; }
+.bub:nth-child(4) { animation-delay: -2.3s; }
+.bub svg { width: 100%; height: 100%; display: block; }
+.bub.wrong { box-shadow: inset 0 0 0 5px var(--red); }
+
+/* monster says */
+.stage { position: relative; width: min(300px, 100%); aspect-ratio: 6 / 5; max-width: 100%; }
+.stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.zone { position: absolute; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 4px dashed var(--purple); background: rgba(123, 92, 214, .12); }
+.zone:active { background: rgba(123, 92, 214, .3); }
+.zone.wrong { border-color: var(--red); background: rgba(226, 69, 60, .25); }
+.zone.right { border-color: var(--green); background: rgba(47, 168, 107, .25); }
+
+/* deletrear */
+.pic { width: 130px; height: 130px; }
+.pic svg { width: 100%; height: 100%; }
+.slots { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+.slots span { width: 36px; height: 46px; border-bottom: 4px solid var(--purple); display: grid; place-items: center; font-family: var(--display); font-size: 34px; color: var(--purple-dark); }
+.slots span.f { color: var(--green); }
+.tiles { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.tile { width: 48px; height: 52px; border-radius: 12px; background: var(--yellow); font-family: var(--display); font-size: 30px; box-shadow: 0 4px 0 #c98a1a; }
+.tile:disabled { opacity: .2; }
+.tile.wrong { background: var(--red); color: #fff; }
+
+/* memoria */
+.memory { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+.card { aspect-ratio: 4 / 5; max-width: 100%; border-radius: 16px; background: var(--purple); box-shadow: 0 4px 0 var(--purple-dark); display: grid; place-items: center; padding: 8px; font-family: var(--display); font-size: 22px; color: #fff; }
+.card .back { font-size: 34px; }
+.card.up { background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 3px #d9d0f5, 0 4px 0 #d9d0f5; }
+.card.up svg { width: 100%; height: 100%; }
+.card.done { background: #e3f6ec; box-shadow: inset 0 0 0 3px var(--green); }
+.moves { font-family: var(--display); font-size: 22px; color: var(--ink-soft); }
+
+.go { width: 100%; min-height: 58px; border-radius: 18px; background: var(--purple); color: #fff; font-family: var(--display); font-size: 26px; box-shadow: 0 5px 0 var(--purple-dark); }
+.go.alt { background: var(--bg); color: var(--ink); box-shadow: 0 5px 0 #d9d0f5; }
+.go:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--purple-dark); }
+.btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.explain { background: #fdeceb; border-radius: 16px; padding: 12px 16px; text-align: left; width: 100%; font-size: 19px; }
+.explain .en { color: var(--purple); font-weight: 700; }
+.result { text-align: center; align-items: center; }
+.result .score { font-family: var(--display); font-size: 76px; line-height: 1; color: var(--purple-dark); font-variant-numeric: tabular-nums; }
+.result .stars { font-size: 50px; letter-spacing: 6px; color: var(--yellow); -webkit-text-stroke: 2px #c98a1a; }
+.result .stars .dim { color: #ece6ff; -webkit-text-stroke: 2px #d9d0f5; }
+.result .newfriend svg { width: 140px; height: 140px; }
+#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 50; width: 100%; height: 100%; }
+.parents { font-size: 14px; color: var(--ink-soft); text-align: center; margin: 0; }
+</style>
+</head>
+<body>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<main class="wrap" id="app">
+  <div class="board">
+    <h2>Monster House</h2>
+    <p class="q">Si solo ves este mensaje, el juego no se ha podido abrir aquí.</p>
+    <p>Ábrelo con el navegador <b>Chrome</b> o <b>Safari</b>, no con la vista previa de WhatsApp o del correo.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const sample = (a, n) => shuffle(a).slice(0, n);
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+  // ---------- guardado ----------
+  const KEY = "ingles-monster-v1";
+  let save = { name: "", stars: 0, best: {}, friends: [], sound: true };
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (s) save = Object.assign(save, s);
+    else for (const k of ["ingles-viaje-v1", "lengua-pirata-v1", "mates-dino-v1", "lengua-fresi-v1", "mates-bruno-v1"]) { const m = JSON.parse(localStorage.getItem(k) || "null"); if (m && m.name) { save.name = m.name; break; } }
+  } catch (e) {}
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+
+  // ---------- sonido y voz ----------
+  let actx = null;
+  function tone(freq, start, dur, type) {
+    if (!save.sound) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, actx.currentTime + start);
+      g.gain.exponentialRampToValueAtTime(0.25, actx.currentTime + start + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + start + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(actx.currentTime + start); o.stop(actx.currentTime + start + dur + 0.05);
+    } catch (e) {}
+  }
+  const sndOk = () => { tone(600, 0, .1); tone(900, .08, .12); tone(1200, .16, .2); };
+  const sndKo = () => { tone(300, 0, .15, "triangle"); tone(220, .12, .25, "triangle"); };
+  const sndPop = () => { tone(1400, 0, .05, "square"); tone(700, .03, .08); };
+  const sndTap = () => tone(500, 0, .05, "triangle");
+  const sndWin = () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i * .13, .2));
+  const canSpeak = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function";
+  function speak(text, lang) {
+    try {
+      if (!canSpeak) return;
+      lang = lang || "en-GB";
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang; u.rate = .8;
+      const vs = speechSynthesis.getVoices(), base = lang.slice(0, 2);
+      const v = vs.find(v => v.lang.replace("_", "-").toLowerCase() === lang.toLowerCase()) || vs.find(v => v.lang.toLowerCase().startsWith(base));
+      if (v) u.voice = v;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  // ---------- confeti ----------
+  const cv = document.getElementById("confetti"), cx = cv.getContext("2d");
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let parts = [], raf = 0;
+  function confetti(n) {
+    if (reduce) return;
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ["#7b5cd6", "#ff7aa8", "#ffd23f", "#2fa86b", "#4fb3ff", "#ff8a3d"];
+    for (let i = 0; i < n; i++) parts.push({ x: innerWidth / 2 + rnd(-60, 60), y: innerHeight * .45, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4, r: rnd(5, 9), c: pick(cols), a: Math.random() * 6, life: 70 + rnd(0, 30) });
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+  function step() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    parts = parts.filter(p => p.life-- > 0);
+    for (const p of parts) { p.vy += .45; p.x += p.vx; p.y += p.vy; p.a += .2; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.a); cx.fillStyle = p.c; cx.beginPath(); cx.arc(0, 0, p.r / 2, 0, Math.PI * 2); cx.fill(); cx.restore(); }
+    raf = parts.length ? requestAnimationFrame(step) : 0;
+    if (!raf) cx.clearRect(0, 0, cv.width, cv.height);
+  }
+
+  // ---------- dibujos de la casa (los mismos de las fichas) ----------
+  const ST = 'stroke="#26324a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"';
+  const ICONS = {
+    bathroom: '<circle cx="40" cy="46" r="6" fill="#bfe6ff"/><circle cx="53" cy="43" r="7" fill="#bfe6ff"/><circle cx="66" cy="46" r="6" fill="#bfe6ff"/><path d="M28 52V26a9 9 0 0 1 18 0" fill="none" ' + ST + '/><circle cx="46" cy="34" r="3" fill="#5aa9f2"/><circle cx="43" cy="42" r="2.5" fill="#5aa9f2"/><rect x="10" y="50" width="80" height="10" rx="4" fill="#e8eef5" ' + ST + '/><path d="M14 60h72v6a14 14 0 0 1-14 14H28a14 14 0 0 1-14-14z" fill="#fff" ' + ST + '/><path d="M26 80l-4 8M74 80l4 8" ' + ST + '/>',
+    bedroom: '<rect x="10" y="30" width="16" height="56" rx="3" fill="#e9963f" ' + ST + '/><rect x="76" y="48" width="14" height="38" rx="3" fill="#e9963f" ' + ST + '/><rect x="26" y="52" width="50" height="18" rx="3" fill="#fff" ' + ST + '/><rect x="30" y="42" width="20" height="12" rx="5" fill="#fff" ' + ST + '/><path d="M48 52h28v18H48z" fill="#f7b267" ' + ST + '/><path d="M26 78h50" ' + ST + '/>',
+    kitchen: '<path d="M44 12c-3 4 3 6 0 10M56 12c-3 4 3 6 0 10" fill="none" stroke="#9aa7b8" stroke-width="3" stroke-linecap="round"/><path d="M36 24h28v12H36z" fill="#9aa7b8" ' + ST + '/><path d="M32 24h36" ' + ST + '/><rect x="16" y="36" width="68" height="52" rx="4" fill="#fff" ' + ST + '/><path d="M16 48h68" ' + ST + '/><circle cx="28" cy="42" r="2.5" fill="#26324a"/><circle cx="38" cy="42" r="2.5" fill="#26324a"/><rect x="26" y="56" width="48" height="24" rx="3" fill="#bfe0ff" ' + ST + '/><path d="M34 62h32" ' + ST + '/>',
+    "living room": '<rect x="68" y="12" width="4" height="40" fill="#26324a"/><path d="M60 12h20l-4-8H64z" fill="#fde2a6" ' + ST + '/><rect x="18" y="40" width="64" height="24" rx="8" fill="#e98a4a" ' + ST + '/><rect x="8" y="52" width="16" height="28" rx="6" fill="#f2a65a" ' + ST + '/><rect x="76" y="52" width="16" height="28" rx="6" fill="#f2a65a" ' + ST + '/><rect x="24" y="62" width="52" height="18" rx="4" fill="#f2a65a" ' + ST + '/><path d="M22 80v6M78 80v6" ' + ST + '/>',
+    hall: '<rect x="10" y="10" width="80" height="80" fill="#f4f1ea" ' + ST + '/><path d="M38 66h24l28 24H10z" fill="#f5a623" ' + ST + '/><rect x="38" y="34" width="24" height="32" fill="#9aa3ad" ' + ST + '/><rect x="44" y="42" width="12" height="24" fill="#ffd23f" ' + ST + '/><path d="M10 10l28 24M90 10L62 34" ' + ST + '/><path d="M16 26l12 10v30l-12 10z" fill="#ffd23f" ' + ST + '/><path d="M84 26l-12 10v30l12 10z" fill="#ffd23f" ' + ST + '/><ellipse cx="50" cy="20" rx="7" ry="4" fill="#ffd23f" ' + ST + '/>',
+    garden: '<circle cx="80" cy="20" r="9" fill="#ffd23f" ' + ST + '/><path d="M30 86V52M50 86V42M70 86V56" ' + ST + '/><circle cx="30" cy="46" r="9" fill="#ff7aa2" ' + ST + '/><circle cx="50" cy="36" r="9" fill="#b98cf0" ' + ST + '/><circle cx="70" cy="50" r="9" fill="#ff7aa2" ' + ST + '/><path d="M12 86c3-12 8-18 14-20M88 86c-3-12-8-18-14-20M40 86c1-8 4-12 8-14M60 86c-1-8-4-12-8-14" fill="none" stroke="#3fb56d" stroke-width="5" stroke-linecap="round"/><path d="M8 88h84" ' + ST + '/>',
+    bookcase: '<rect x="20" y="10" width="60" height="78" rx="4" fill="#c98a4b" ' + ST + '/><rect x="25" y="15" width="50" height="68" fill="#f2c590"/><rect x="28" y="20" width="7" height="16" fill="#e2453c"/><rect x="36" y="18" width="7" height="18" fill="#2a64d6"/><rect x="52" y="26" width="18" height="10" fill="#3fb56d"/><rect x="30" y="46" width="16" height="14" fill="#ffd23f"/><rect x="56" y="42" width="7" height="18" fill="#e2453c"/><rect x="64" y="44" width="7" height="16" fill="#7b5cd6"/><rect x="28" y="68" width="7" height="16" fill="#2a64d6"/><rect x="48" y="72" width="22" height="12" fill="#e2453c"/><path d="M20 37h60M20 61h60" ' + ST + '/><rect x="20" y="10" width="60" height="78" rx="4" fill="none" ' + ST + '/><path d="M26 88v4M74 88v4" ' + ST + '/>',
+    chair: '<rect x="30" y="10" width="40" height="34" rx="9" fill="#f3d34a" ' + ST + '/><path d="M36 44v8M64 44v8" ' + ST + '/><rect x="22" y="50" width="56" height="13" rx="6" fill="#e9b93a" ' + ST + '/><path d="M30 63l-4 25M70 63l4 25M33 76h34" ' + ST + '/>',
+    cupboard: '<rect x="18" y="10" width="64" height="76" rx="4" fill="#d9674a" ' + ST + '/><path d="M50 10v76" ' + ST + '/><path d="M44 42v14M56 42v14" ' + ST + '/><path d="M24 86v6M76 86v6" ' + ST + '/>',
+    door: '<rect x="26" y="8" width="48" height="84" rx="3" fill="#d9783f" ' + ST + '/><rect x="34" y="18" width="32" height="28" rx="2" fill="#eb9a5f" ' + ST + '/><rect x="34" y="54" width="32" height="28" rx="2" fill="#eb9a5f" ' + ST + '/><circle cx="67" cy="50" r="3.5" fill="#26324a"/>',
+    plant: '<path d="M50 60C40 40 42 24 50 10c8 14 10 30 0 50zM50 60C34 52 24 40 22 26c14 2 24 14 28 34zM50 60c16-8 26-20 28-34-14 2-24 14-28 34z" fill="#6cc070" ' + ST + '/><path d="M31 62h38l-6 26H37z" fill="#f2a65a" ' + ST + '/><rect x="27" y="56" width="46" height="9" rx="3" fill="#e98a4a" ' + ST + '/>',
+    rug: '<path d="M28 14V5M36 14V5M44 14V5M52 14V5M60 14V5M68 14V5M28 86v9M36 86v9M44 86v9M52 86v9M60 86v9M68 86v9" stroke="#26324a" stroke-width="3" stroke-linecap="round"/><rect x="22" y="14" width="56" height="72" rx="3" fill="#f6b7b0" ' + ST + '/><path d="M50 24l17 26-17 26-17-26z" fill="#f5d38a" ' + ST + '/><path d="M50 40l7 10-7 10-7-10z" fill="#e2453c"/>',
+    table: '<ellipse cx="50" cy="38" rx="40" ry="9" fill="#c9b8a8" ' + ST + '/><path d="M50 47v40M36 46l-14 40M64 46l14 40" ' + ST + '/>',
+    window: '<rect x="18" y="10" width="64" height="72" rx="3" fill="#ffd23f" ' + ST + '/><rect x="25" y="17" width="50" height="58" fill="#5aa9f2" ' + ST + '/><path d="M50 17v58M25 46h50" ' + ST + '/><path d="M31 28l8-6M31 35l13-10" stroke="#fff" stroke-width="3" stroke-linecap="round"/><rect x="12" y="80" width="76" height="9" rx="3" fill="#ffd23f" ' + ST + '/>'
+  };
+  const icon = w => '<svg viewBox="0 0 100 100" aria-hidden="true">' + ICONS[w] + "</svg>";
+
+  // escena para in / on / under / behind
+  function itemSVG(kind, x, y) {
+    if (kind === "cat") return '<path d="M' + (x - 12) + " " + (y - 4) + "l2-14 9 8zM" + (x + 12) + " " + (y - 4) + 'l-2-14-9 8z" fill="#f39a3d" ' + ST + '/><circle cx="' + x + '" cy="' + y + '" r="13" fill="#f7a94a" ' + ST + '/><circle cx="' + (x - 5) + '" cy="' + (y - 2) + '" r="2.2" fill="#26324a"/><circle cx="' + (x + 5) + '" cy="' + (y - 2) + '" r="2.2" fill="#26324a"/><path d="M' + (x - 3) + " " + (y + 5) + "q3 3 6 0" + '" fill="none" stroke="#26324a" stroke-width="2.5" stroke-linecap="round"/>';
+    return '<circle cx="' + x + '" cy="' + y + '" r="12" fill="#e2453c" ' + ST + '/><path d="M' + (x - 6) + " " + (y - 3) + "a7 7 0 0 1 6-5" + '" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>';
+  }
+  const OBJ = {
+    box: { svg: '<rect x="30" y="50" width="60" height="40" fill="#e8c48f" ' + ST + '/><path d="M52 50v14h16V50" fill="none" stroke="#c99b5e" stroke-width="3"/>', pos: { in: [60, 50], on: [60, 37], behind: [92, 46] }, name: "box", es: "la caja" },
+    table: { svg: '<rect x="16" y="40" width="88" height="9" rx="3" fill="#c9b8a8" ' + ST + '/><path d="M24 49v41M96 49v41" ' + ST + '/>', pos: { on: [60, 27], under: [60, 77] }, name: "table", es: "la mesa" },
+    chair: { svg: '<rect x="72" y="8" width="10" height="42" rx="4" fill="#f3d34a" ' + ST + '/><rect x="34" y="44" width="50" height="9" rx="4" fill="#e9b93a" ' + ST + '/><path d="M40 53v37M78 53v37" ' + ST + '/>', pos: { on: [55, 31], under: [59, 76] }, name: "chair", es: "la silla" }
+  };
+  const PREPS = { in: "dentro de", on: "encima de", under: "debajo de", behind: "detrás de" };
+  const objsFor = p => Object.keys(OBJ).filter(k => OBJ[k].pos[p]);
+  function scene(prep, obj, item) {
+    const o = OBJ[obj], [x, y] = o.pos[prep], it = itemSVG(item, x, y);
+    const back = prep === "in" || prep === "behind";
+    const flaps = obj === "box" && prep === "in" ? '<path d="M30 50l-12-12M90 50l12-12" ' + ST + "/>" : "";
+    return '<svg viewBox="0 0 120 100" aria-hidden="true"><path d="M6 91h108" stroke="#c9d3e0" stroke-width="3" stroke-linecap="round"/>' + flaps + (back ? it + o.svg : o.svg + it) + "</svg>";
+  }
+
+  // ---------- monstruitos ----------
+  function monster(m) {
+    const s = 'stroke="#2d2350" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+    let top = "";
+    if (m.h === "horns") top = '<path d="M30 30l-4-18 14 10zM70 30l4-18-14 10z" fill="#fff3c4" ' + s + "/>";
+    if (m.h === "ant") top = '<path d="M40 24L34 8M60 24l6-16" ' + s + '/><circle cx="34" cy="8" r="5" fill="' + m.a + '" ' + s + '/><circle cx="66" cy="8" r="5" fill="' + m.a + '" ' + s + "/>";
+    if (m.h === "tuft") top = '<path d="M42 22c-2-10 6-14 8-6 2-8 12-6 8 6" fill="' + m.a + '" ' + s + "/>";
+    const eye = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#fff" ' + s + '/><circle cx="' + (x + r * .2) + '" cy="' + (y + r * .15) + '" r="' + r * .45 + '" fill="#2d2350"/><circle cx="' + (x + r * .35) + '" cy="' + (y - r * .1) + '" r="' + r * .15 + '" fill="#fff"/>';
+    const eyes = m.e === 1 ? eye(50, 46, 13) : m.e === 2 ? eye(37, 46, 9) + eye(63, 46, 9) : eye(33, 50, 7) + eye(50, 40, 8) + eye(67, 50, 7);
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">' + top +
+      '<path d="M18 90C8 60 16 24 50 22c34 2 42 38 32 68-5-6-10-6-14 0-5-6-11-6-18 0-6-6-12-6-17 0-5-6-10-6-15 0z" fill="' + m.c + '" ' + s + "/>" +
+      '<ellipse cx="50" cy="74" rx="18" ry="10" fill="' + m.a + '" opacity=".45"/>' + eyes +
+      '<path d="M38 64q12 10 24 0" fill="#fff" ' + s + '/><path d="M44 66l3 5 3-5" fill="#fff" stroke="#2d2350" stroke-width="2"/>' +
+      '<circle cx="24" cy="60" r="4" fill="#ff9ec1" opacity=".8"/><circle cx="76" cy="60" r="4" fill="#ff9ec1" opacity=".8"/></svg>';
+  }
+  const BLOB = { n: "Blob", c: "#9b7cf0", a: "#ffd23f", e: 1, h: "ant" };
+  const FRIENDS = [
+    { n: "Zig", c: "#5cd6a0", a: "#2a8f63", e: 2, h: "horns" }, { n: "Pom", c: "#ff8fb8", a: "#e0507f", e: 3, h: "tuft" }, { n: "Lulu", c: "#ffd23f", a: "#e09b12", e: 1, h: "horns" },
+    { n: "Tito", c: "#6fb7ff", a: "#2f6fc0", e: 2, h: "ant" }, { n: "Kiki", c: "#ff8a3d", a: "#c2461a", e: 3, h: "ant" }, { n: "Moko", c: "#a6d94a", a: "#5f8f1f", e: 1, h: "tuft" },
+    { n: "Fizz", c: "#4fd6e0", a: "#1f8f99", e: 2, h: "tuft" }, { n: "Nuni", c: "#e0a6ff", a: "#9b4fd6", e: 3, h: "horns" }, { n: "Bobo", c: "#ff6b6b", a: "#b52f2f", e: 2, h: "horns" },
+    { n: "Gogo", c: "#c9a36b", a: "#8a5a2b", e: 1, h: "ant" }, { n: "Pipa", c: "#ffb3d1", a: "#ff7aa8", e: 2, h: "ant" }, { n: "Tuti", c: "#8ee08e", a: "#3fa83f", e: 3, h: "tuft" }
+  ];
+
+  // ---------- datos de la unidad ----------
+  const ROOMS = ["bathroom", "bedroom", "kitchen", "hall", "living room", "garden"];
+  const ROOM_WP = { bathroom: "#d6efff", bedroom: "#ffe1ec", kitchen: "#fff2c2", hall: "#f2e6d6", "living room": "#e3f5d9" };
+  const THINGS = ["bookcase", "chair", "cupboard", "door", "plant", "rug", "table", "window"];
+  const ALL = ROOMS.concat(THINGS);
+  const SPELL = ["door", "rug", "hall", "chair", "table", "plant", "window", "garden", "kitchen", "bedroom", "bathroom", "bookcase", "cupboard"];
+  const ES = { bathroom: "el baño", bedroom: "el dormitorio", garden: "el jardín", hall: "el recibidor", kitchen: "la cocina", "living room": "el salón", bookcase: "la estantería", chair: "la silla", cupboard: "el armario", door: "la puerta", plant: "la planta", rug: "la alfombra", table: "la mesa", window: "la ventana" };
+  const ZONES = { box: { in: [60, 62], on: [60, 30], behind: [100, 40] }, table: { on: [60, 26], under: [60, 72] }, chair: { on: [55, 30], under: [59, 74] } };
+
+  // ---------- juegos (cada habitación de la casa es uno) ----------
+  const GAMES = {
+    hide:   { name: "Hide and seek", es: "El escondite", room: "bedroom", color: "#e0507f", n: 8 },
+    bubbles:{ name: "Bubble pop", es: "Explota burbujas", room: "bathroom", color: "#2f8fd6", n: 8 },
+    says:   { name: "Monster says", es: "¿Dónde lo pongo?", room: "living room", color: "#2fa86b", n: 8 },
+    spell:  { name: "Spelling", es: "Deletrea", room: "kitchen", color: "#d68a12", n: 6 },
+    memory: { name: "Memory", es: "Parejas", room: "hall", color: "#7b5cd6", n: 1 }
+  };
+  const TEST = { name: "Big monster test", es: "El gran examen de los monstruos", color: "#e2453c" };
+
+  const GEN = {
+    hide() {
+      const who = pick(FRIENDS.concat([BLOB])), room = pick(ROOMS);
+      if (Math.random() < .55) return { kind: "house", who, room, html: '<p class="q"><span class="en">' + who.n + " is in the " + room + '.</span><small>Toca la habitación donde se esconde</small></p>', say: who.n + " is in the " + room + ".",
+        explain: '<span class="en">' + room + "</span> es " + ES[room] + "." };
+      const opts = [room].concat(sample(ROOMS.filter(r => r !== room), 2));
+      return { kind: "found", who, room, html: '<p class="q"><span class="en">Where is ' + who.n + '?</span><small>¿Dónde está? Elige la frase</small></p>', say: "Where is " + who.n + "?",
+        options: shuffle(opts).map(r => ({ label: who.n + " is in the " + r + ".", value: r })), answer: room,
+        explain: '<span class="en">' + who.n + " is in the " + room + ".</span> Está en " + ES[room] + "." };
+    },
+    bubbles() {
+      const w = pick(ALL), opts = shuffle([w].concat(sample(ALL.filter(x => x !== w), 3)));
+      return { kind: "bubbles", w, opts, html: '<p class="q"><span class="en">Pop the bubble!</span><small>Explota la burbuja con el dibujo de…</small></p><p class="word">' + w + "</p>", say: w,
+        explain: '<span class="en">' + w + "</span> es " + ES[w] + "." };
+    },
+    says() {
+      const obj = pick(["box", "box", "box", "table", "chair"]), prep = pick(Object.keys(ZONES[obj])), item = pick(["ball", "cat"]);
+      const iname = item === "cat" ? "cat" : "ball";
+      return { kind: "says", obj, prep, item, html: '<p class="q"><span class="en">Put the ' + iname + " " + prep + " the " + obj + '.</span><small>Toca el sitio donde va</small></p>', say: "Put the " + iname + " " + prep + " the " + obj + ".",
+        explain: '<span class="en">' + prep + "</span> significa «" + PREPS[prep] + "»." };
+    },
+    spell() {
+      const w = pick(SPELL), abc = "abcdefghiklmnoprstuw".split("").filter(c => !w.includes(c));
+      return { kind: "spell", w, letters: shuffle(w.split("").concat(sample(abc, 2))), html: '<p class="q"><span class="en">Spell it!</span><small>Toca las letras en orden</small></p><div class="pic">' + icon(w) + "</div>", say: w,
+        explain: 'Se escribe <span class="en">' + w.split("").join("-") + "</span>." };
+    }
+  };
+
+  // ---------- pantalla ----------
+  let game = null;
+  const app = document.getElementById("app");
+  function mascotHTML(msg) { return '<div class="mascot"><div id="pet">' + monster(BLOB) + '</div><div class="bubble" id="bubble" aria-live="polite">' + msg + "</div></div>"; }
+  function say(msg) { const b = document.getElementById("bubble"); if (b) b.innerHTML = msg; const o = document.getElementById("pet"); if (o) { o.classList.remove("hop"); void o.offsetWidth; o.classList.add("hop"); } }
+  const nm = () => save.name ? ", " + esc(save.name) : "";
+  function starsFor(s, t) { const p = s / t; return p >= .9 ? 3 : p >= .7 ? 2 : p >= .4 ? 1 : 0; }
+  const starRow = n => "★".repeat(n) + "☆".repeat(3 - n);
+
+  // la casa: como menú o como tablero del escondite
+  function houseHTML(mode) {
+    const rooms = [["bathroom", 3], ["bedroom", 3], ["kitchen", 2], ["hall", 2], ["living room", 2], ["garden", 6]];
+    const byRoom = {}; Object.keys(GAMES).forEach(k => byRoom[GAMES[k].room] = k);
+    return '<div class="house"><div class="roof"></div><div class="floors">' + rooms.map(([r, span]) => {
+      const cls = "room" + (span === 3 ? " w3" : "") + (r === "garden" ? " garden" : "");
+      const style = r === "garden" ? "" : ' style="--wp:' + ROOM_WP[r] + '"';
+      if (mode === "menu") {
+        const k = r === "garden" ? "test" : byRoom[r], g = k === "test" ? TEST : GAMES[k], b = save.best[k] || 0;
+        return '<button class="' + cls + '"' + style + ' data-go="' + k + '"><span class="ri">' + icon(r) + '</span><span class="rn">' + g.name + '</span><span class="rs">' + (b ? starRow(b) : "") + "</span></button>";
+      }
+      return '<button class="' + cls + '"' + style + ' data-room="' + r + '" aria-label="' + r + '"><span class="ri">' + icon(r) + "</span></button>";
+    }).join("") + '</div><div class="ground"></div></div>';
+  }
+
+  function home() {
+    game = null;
+    app.innerHTML =
+      '<div class="top"><span class="pill">⭐ ' + save.stars + '</span><span class="spacer"></span><button class="iconbtn" id="snd" aria-label="Sonido">' + (save.sound ? "🔊" : "🔇") + "</button></div>" +
+      '<div class="hero"><div><span class="eyebrow">English · Our house</span><h1>Monster House</h1><p>En esta casa viven monstruitos que solo hablan inglés.</p></div><div class="jelly">' + monster(BLOB) + "</div>" +
+      '<div class="bubble" id="bubble">' + (save.name ? "<i>Hello" + nm() + "!</i> I'm <b>Blob</b>. ¿Jugamos en mi casa?" : "<i>Hello!</i> I'm <b>Blob</b>. Soy un monstruo simpático. ¿Cómo te llamas?") + "</div></div>" +
+      '<div class="namebox"><label for="name">Tu nombre</label><input id="name" maxlength="16" autocomplete="off" placeholder="Escribe tu nombre" value="' + esc(save.name) + '"></div>' +
+      '<div class="section-label">Toca una habitación<small>Cada habitación es un juego. El jardín es el gran examen.</small></div>' +
+      houseHTML("menu") +
+      '<div class="friends"><div class="section-label">My monster friends<small>Un amigo nuevo viene a vivir a la casa cuando lo haces genial.</small></div><div class="monsters">' +
+      FRIENDS.map(f => save.friends.includes(f.n) ? "<div>" + monster(f) + f.n + "</div>" : '<div class="off">' + monster(f) + "???</div>").join("") + "</div></div>" +
+      '<p class="parents">Para mamá y papá: vocabulario y gramática de la Unit 1 «Our house» (rooms, furniture, in/on/under/behind). Con 🔊 se oye la pronunciación. El progreso se guarda solo en este dispositivo.</p>';
+    app.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => start(b.dataset.go)));
+    document.getElementById("snd").addEventListener("click", e => { save.sound = !save.sound; persist(); e.currentTarget.textContent = save.sound ? "🔊" : "🔇"; });
+    const inp = document.getElementById("name");
+    inp.addEventListener("change", () => { save.name = inp.value.trim().slice(0, 16); persist(); home(); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") inp.blur(); });
+    window.scrollTo(0, 0);
+  }
+
+  function start(key) {
+    if (key === "memory") return startMemory();
+    let qs = [];
+    if (key === "test") { ["hide", "bubbles", "says", "spell"].forEach(k => { for (let i = 0; i < 3; i++) qs.push(Object.assign(GEN[k](), { topic: k })); }); qs = shuffle(qs); }
+    else for (let i = 0; i < GAMES[key].n; i++) qs.push(Object.assign(GEN[key](), { topic: key }));
+    game = { key, qs, i: 0, score: 0, marks: [] };
+    question();
+  }
+
+  function frame(tp, inner, msg) {
+    return '<div class="top"><button class="iconbtn" id="back" aria-label="Volver a la casa">←</button><span class="pill">' + (game.qs ? (game.i + 1) + " / " + game.qs.length : "Memory") + '</span><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
+      (game.qs ? '<div class="dots">' + game.qs.map((_, i) => '<i class="' + (game.marks[i] === true ? "ok" : game.marks[i] === false ? "ko" : i === game.i ? "now" : "") + '"></i>').join("") + "</div>" : "") +
+      '<span class="tag" style="--tc:' + tp.color + '">' + tp.name + " · " + tp.es + "</span>" + inner + mascotHTML(msg);
+  }
+
+  function question() {
+    const q = game.qs[game.i], tp = GAMES[q.topic];
+    app.innerHTML = frame(tp, '<div class="board">' + q.html + '<button class="listen" id="listen">🔊 Listen</button><div id="area" style="width:100%;display:flex;flex-direction:column;gap:14px;align-items:center"></div></div>',
+      game.i === 0 ? "<i>Let's play" + nm() + "!</i>" : pick(["<i>You can do it!</i>", "<i>Look carefully!</i> Mira bien.", "<i>Next one!</i>", "<i>Listen!</i> Escucha si lo necesitas."]));
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("listen").addEventListener("click", () => speak(q.say));
+    const area = document.getElementById("area");
+    ({ house: renderHouse, found: renderFound, bubbles: renderBubbles, says: renderSays, spell: renderSpell })[q.kind](q, area);
+    window.scrollTo(0, 0);
+  }
+
+  function renderHouse(q, area) {
+    area.innerHTML = houseHTML("play");
+    area.querySelectorAll("[data-room]").forEach(b => b.addEventListener("click", () => {
+      const ok = b.dataset.room === q.room;
+      area.querySelectorAll("[data-room]").forEach(x => x.disabled = true);
+      const target = area.querySelector('[data-room="' + q.room + '"]');
+      target.classList.add("right");
+      target.insertAdjacentHTML("beforeend", '<span class="who peek">' + monster(q.who) + "</span>");
+      if (!ok) b.classList.add("wrong", "shake");
+      speak(q.say);
+      finish(ok, area);
+    }));
+  }
+
+  function renderFound(q, area) {
+    area.innerHTML = houseHTML("play");
+    const target = area.querySelector('[data-room="' + q.room + '"]');
+    target.insertAdjacentHTML("beforeend", '<span class="who peek">' + monster(q.who) + "</span>");
+    area.querySelectorAll("[data-room]").forEach(x => x.disabled = true);
+    const box = document.createElement("div"); box.className = "choices";
+    q.options.forEach(o => {
+      const b = document.createElement("button"); b.className = "choice"; b.textContent = o.label;
+      b.addEventListener("click", () => {
+        const ok = o.value === q.answer;
+        box.querySelectorAll("button").forEach((x, i) => { x.disabled = true; if (q.options[i].value === q.answer) x.classList.add("right"); });
+        if (!ok) b.classList.add("wrong", "shake");
+        speak(q.options.find(x => x.value === q.answer).label);
+        finish(ok, area);
+      });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+
+  function renderBubbles(q, area) {
+    const box = document.createElement("div"); box.className = "bubbles";
+    let missed = false;
+    q.opts.forEach(w => {
+      const b = document.createElement("button"); b.className = "bub floaty"; b.innerHTML = icon(w); b.setAttribute("aria-label", "burbuja");
+      b.addEventListener("click", () => {
+        if (b.disabled) return;
+        if (w === q.w) {
+          sndPop(); speak(w); b.classList.remove("floaty"); b.classList.add("pop");
+          box.querySelectorAll("button").forEach(x => x.disabled = true);
+          finish(!missed, area);
+        } else {
+          missed = true; sndKo(); b.classList.add("wrong", "shake"); b.disabled = true;
+          say("<i>Oops!</i> Eso es <b>" + w + "</b>. ¡Prueba otra!");
+        }
+      });
+      box.appendChild(b);
+    });
+    area.appendChild(box);
+  }
+
+  function renderSays(q, area) {
+    const st = document.createElement("div"); st.className = "stage";
+    const draw = done => '<svg viewBox="0 0 120 100" aria-hidden="true">' + (done ? scene(q.prep, q.obj, q.item).replace(/^<svg[^>]*>|<\/svg>$/g, "") : '<path d="M6 91h108" stroke="#c9d3e0" stroke-width="3" stroke-linecap="round"/>' + (q.obj === "box" ? '<path d="M30 50l-12-12M90 50l12-12" ' + ST + "/>" : "") + OBJ[q.obj].svg) + "</svg>";
+    st.innerHTML = draw(false);
+    const zones = ZONES[q.obj];
+    Object.keys(zones).forEach(p => {
+      const [x, y] = zones[p], z = document.createElement("button");
+      z.className = "zone"; z.style.left = (x / 120 * 100) + "%"; z.style.top = (y / 100 * 100) + "%"; z.setAttribute("aria-label", p);
+      z.addEventListener("click", () => {
+        const ok = p === q.prep;
+        st.querySelectorAll(".zone").forEach(x => x.disabled = true);
+        if (!ok) z.classList.add("wrong", "shake");
+        setTimeout(() => { st.querySelectorAll(".zone").forEach(x => x.remove()); st.querySelector("svg").outerHTML = draw(true); }, ok ? 0 : 700);
+        speak(q.say);
+        finish(ok, area);
+      });
+      st.appendChild(z);
+    });
+    area.appendChild(st);
+  }
+
+  function renderSpell(q, area) {
+    const slots = document.createElement("div"); slots.className = "slots";
+    slots.innerHTML = q.w.split("").map(() => "<span></span>").join("");
+    const tiles = document.createElement("div"); tiles.className = "tiles";
+    let pos = 0, errors = 0;
+    q.letters.forEach(l => {
+      const t = document.createElement("button"); t.className = "tile"; t.textContent = l;
+      t.addEventListener("click", () => {
+        if (pos >= q.w.length) return;
+        if (l === q.w[pos]) {
+          sndTap(); t.disabled = true;
+          const s = slots.children[pos]; s.textContent = l; s.classList.add("f"); pos++;
+          if (pos === q.w.length) { tiles.querySelectorAll("button").forEach(x => x.disabled = true); speak(q.w); finish(errors === 0, area); }
+        } else {
+          errors++; sndKo(); t.classList.add("wrong", "shake"); setTimeout(() => t.classList.remove("wrong", "shake"), 500);
+          say("<i>Not that one!</i> Busca la letra que va ahora.");
+        }
+      });
+      tiles.appendChild(t);
+    });
+    area.appendChild(slots); area.appendChild(tiles);
+  }
+
+  // ---------- memoria (parejas dibujo + palabra) ----------
+  function startMemory() {
+    const words = sample(ALL, 6);
+    const cards = shuffle(words.map(w => ({ w, pic: true })).concat(words.map(w => ({ w, pic: false }))));
+    game = { key: "memory", moves: 0 };
+    app.innerHTML = frame(GAMES.memory, '<div class="board"><p class="q"><span class="en">Find the pairs!</span><small>Une cada dibujo con su palabra en inglés</small></p><div class="moves" id="moves">Moves: 0</div><div class="memory" id="mem"></div></div>', "<i>Good luck" + nm() + "!</i> Recuerda dónde está cada carta.");
+    document.getElementById("back").addEventListener("click", home);
+    const mem = document.getElementById("mem"), mv = document.getElementById("moves");
+    let open = [], found = 0, lock = false;
+    cards.forEach((c, i) => {
+      const b = document.createElement("button"); b.className = "card"; b.innerHTML = '<span class="back">?</span>'; b.dataset.i = i;
+      b.addEventListener("click", () => {
+        if (lock || b.classList.contains("up")) return;
+        sndTap();
+        b.classList.add("up"); b.innerHTML = c.pic ? icon(c.w) : c.w;
+        if (!c.pic) speak(c.w);
+        open.push([b, c]);
+        if (open.length === 2) {
+          game.moves++; mv.textContent = "Moves: " + game.moves;
+          const [[b1, c1], [b2, c2]] = open; open = [];
+          if (c1.w === c2.w) {
+            found++; sndOk(); b1.classList.add("done"); b2.classList.add("done"); speak(c1.w); say("<i>Great!</i> <b>" + c1.w + "</b> es " + ES[c1.w] + ".");
+            if (found === 6) setTimeout(memoryResult, 900);
+          } else {
+            lock = true;
+            setTimeout(() => { [b1, b2].forEach(x => { x.classList.remove("up"); x.innerHTML = '<span class="back">?</span>'; }); lock = false; }, 1000);
+          }
+        }
+      });
+      mem.appendChild(b);
+    });
+    window.scrollTo(0, 0);
+  }
+  function memoryResult() {
+    const m = game.moves, st = m <= 9 ? 3 : m <= 13 ? 2 : 1;
+    save.stars += st; reward("memory", st, st === 3, "Lo has hecho en <b>" + m + "</b> jugadas.", m + " moves");
+  }
+
+  // ---------- respuestas y resultados ----------
+  function finish(ok, area) {
+    game.marks[game.i] = ok;
+    const d = document.querySelectorAll(".dots i")[game.i]; if (d) d.className = ok ? "ok" : "ko";
+    if (ok) {
+      game.score++; save.stars++; persist(); sndOk(); confetti(40);
+      say(pick(["<i>Well done" + nm() + "!</i>", "<i>Great job!</i>", "<i>Super!</i> ¡Muy bien!", "<i>Excellent!</i>", "<i>Yes! Monster high five!</i>"]));
+      setTimeout(next, 1700);
+    } else {
+      sndKo();
+      say(pick(["<i>Oops!</i> ¡Casi!", "<i>Don't worry!</i> Así se aprende.", "<i>Look!</i> Fíjate bien."]));
+      const ex = document.createElement("div"); ex.className = "explain"; ex.innerHTML = game.qs[game.i].explain;
+      const b = document.createElement("button"); b.className = "go"; b.textContent = "Next →"; b.addEventListener("click", next);
+      area.appendChild(ex); area.appendChild(b);
+    }
+  }
+  function next() { if (!game || !game.qs) return; game.i++; if (game.i < game.qs.length) question(); else results(); }
+  function results() {
+    const t = game.qs.length, s = game.score, st = starsFor(s, t), need = Math.ceil(t * .8);
+    reward(game.key, st, s >= need, s >= need ? "" : "Con " + need + " aciertos viene un monstruo nuevo a vivir a la casa.", s + " / " + t);
+  }
+  function reward(key, st, earns, note, scoreText) {
+    let friend = null;
+    if (earns) { const left = FRIENDS.filter(f => !save.friends.includes(f.n)); friend = left.length ? pick(left) : pick(FRIENDS); if (left.length) save.friends.push(friend.n); }
+    save.best[key] = Math.max(save.best[key] || 0, st); persist();
+    if (st >= 2) { sndWin(); confetti(140); }
+    const msg = st === 3 ? "<i>Amazing" + nm() + "!</i> ¡Eres una campeona del inglés!" : st === 2 ? "<i>Very good!</i> Un poquito más y lo bordas." : "<i>Good try!</i> ¿Jugamos otra vez?";
+    const title = key === "test" ? TEST.name : GAMES[key].name;
+    app.innerHTML =
+      '<div class="top"><button class="iconbtn" id="back" aria-label="Volver a la casa">←</button><span class="spacer"></span><span class="pill">⭐ ' + save.stars + "</span></div>" +
+      '<div class="board result"><h2>' + title + '</h2><div class="score">' + scoreText + '</div><div class="stars">' + "★".repeat(st) + '<span class="dim">' + "★".repeat(3 - st) + "</span></div>" +
+      (friend ? '<div class="newfriend peek">' + monster(friend) + '</div><p class="q"><b>' + friend.n + "</b> se muda a tu casa. <i>Welcome, " + friend.n + "!</i></p>" : "") +
+      (note ? '<p class="q" style="font-weight:400">' + note + "</p>" : "") +
+      '<div class="btnrow"><button class="go alt" id="home">Casa</button><button class="go" id="again">Otra vez</button></div></div>' + mascotHTML(msg);
+    if (friend) speak("Welcome, " + friend.n + "!");
+    document.getElementById("back").addEventListener("click", home);
+    document.getElementById("home").addEventListener("click", home);
+    document.getElementById("again").addEventListener("click", () => start(key));
+    window.scrollTo(0, 0);
+  }
+
+  home();
+})();
+</script>
+</body>
+</html>
