@@ -223,6 +223,10 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { .vz-big, .vz-t, .vz-tag { animation: none; } }
 
 /* Plan */
+.animo { display: flex; gap: 12px; align-items: flex-start; background: linear-gradient(135deg, #eef0fb, #fdeef0); border: 1px solid var(--line); border-left: 4px solid var(--indigo); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.animo .an-ico { font-size: 26px; line-height: 1; }
+.animo b { display: block; font-family: var(--display); font-size: 19px; color: var(--indigo); letter-spacing: .02em; }
+.animo p { margin: 4px 0 0; font-size: 16px; line-height: 1.45; color: var(--ink); }
 .countdown { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; background: #0d0f18; color: #fff; border-radius: 12px; padding: 16px 20px; }
 .cd-num { font-family: var(--mono); font-size: clamp(48px, 13vw, 72px); line-height: 1; color: #ff3b4a; text-shadow: 0 0 14px rgba(255,59,74,.45); }
 .cd-txt { display: grid; gap: 2px; min-width: 0; }
@@ -3755,6 +3759,51 @@ document.addEventListener("click", async e => {
   }
 });
 
+
+// ---------- Mensaje de ánimo diario para Cristina ----------
+const ANIMO = [
+  "Cristina, confío en ti muchísimo más de lo que imaginas. Vas a llegar a ese examen lista y lo vas a sacar.",
+  "Cada pregunta que haces hoy es un paso más hacia tu licencia. Qué orgullo verte tan constante.",
+  "Eres de las personas más capaces que conozco. Si te lo propones, lo consigues. Siempre ha sido así.",
+  "No tienes que ser perfecta, solo seguir. Y tú sigues, día tras día. Eso es lo que hace a la gente increíble.",
+  "Hoy también puedes con esto. Respira, haz tu test y recuerda que yo creo en ti al cien por cien.",
+  "Lo que estás haciendo tiene muchísimo mérito: estudiar, organizarte y no rendirte. Eres una crack.",
+  "Cuando dudes de ti, mírate desde mis ojos: eres lista, valiente y no hay examen que pueda contigo.",
+  "Cada fallo de hoy es un acierto el día del examen. Así se aprende, y tú estás aprendiendo un montón.",
+  "Me encanta verte luchar por lo que quieres. Esa fuerza tuya es lo que te va a llevar a aprobar.",
+  "Paso a paso, calle a calle, artículo a artículo. Ya sabes muchísimo más que cuando empezaste.",
+  "Eres increíble, Cristina. No lo digo por decir: lo demuestras cada día que te sientas a estudiar.",
+  "Sé que te va a salir bien. Lo sé porque te conozco y sé todo lo que estás poniendo en esto.",
+  "Hoy toca un ratito más. Y mañana otro. Y el 19 te vas a sentir orgullosísima de todo este esfuerzo.",
+  "Tienes una cabeza que vale oro. Confía en ella: lo que has estudiado está ahí y saldrá cuando lo necesites.",
+  "Ojalá pudieras verte como te veo yo: fuerte, trabajadora y preparada para lo que venga.",
+  "No hay prisa ni presión: solo tú haciéndolo cada día un poco mejor. Y lo estás haciendo genial.",
+  "Pase lo que pase, ya has ganado: has tenido la valentía de ir a por ello. Y vas a aprobar, ya verás.",
+  "Si hoy te cuesta, no pasa nada. Los días difíciles también cuentan, y tú sigues adelante. Eso es enorme.",
+  "Qué orgullo me das. Tu esfuerzo se nota, y el examen lo va a notar también.",
+  "Imagínate con tu licencia, conduciendo por Telde. Ese momento está cada día más cerca. Vamos, Cristina.",
+  "Eres mucho más fuerte que cualquier nervio. Cuando llegue el día, tú vas a estar tranquila y segura.",
+  "Lo bonito de todo esto es verte crecer. Cada día sabes más y cada día brillas un poco más.",
+  "Hoy es un buen día para demostrarte lo que vales. Aunque yo ya lo sé de sobra: vales muchísimo.",
+  "Confío en ti, en tu memoria y en tus ganas. Con eso tienes más que suficiente para aprobar.",
+  "Estás haciendo algo muy grande. No lo olvides: cada minuto de estudio es una victoria.",
+  "Eres increíble, preciosa por dentro y por fuera, y lista como nadie. Ese examen no sabe lo que le espera.",
+  "Un test más, un paso más. Y yo a tu lado, animándote siempre. Vas a ser una taxista estupenda.",
+  "Recuerda lo lejos que has llegado. La Cristina del primer día estaría alucinando con todo lo que sabes ya.",
+  "Hay gente que habla y gente que lo hace. Tú eres de las que lo hacen. Y eso te va a llevar al aprobado.",
+  "Gracias por esforzarte tanto. Me inspiras. Y sé, sin ninguna duda, que te va a salir genial.",
+];
+const ANIMO_VISPERA = "Mañana es tu día, Cristina. Ya has hecho todo el trabajo: hoy repasa suave, descansa y duerme bien. Confío en ti con los ojos cerrados. Vas a estar increíble.";
+const ANIMO_EXAMEN = "Hoy es el día. Entra tranquila, lee cada pregunta con calma y confía en todo lo que has estudiado. Eres increíble y lo vas a conseguir. ¡A por ello, Cristina! Qué orgullo me das.";
+const ANIMO_DESPUES = "Pase lo que pase, has demostrado lo increíble que eres. Qué orgullo tan grande me das, Cristina.";
+function animoDeHoy(quedan) {
+  if (quedan === 0) return ANIMO_EXAMEN;
+  if (quedan === 1) return ANIMO_VISPERA;
+  if (quedan < 0) return ANIMO_DESPUES;
+  const d = new Date(); const n = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(2026, 9, 23)) / 86400000);
+  return ANIMO[((n % ANIMO.length) + ANIMO.length) % ANIMO.length];
+}
+
 function renderPlan() {
   const hoy = midnight(new Date());
   const quedan = diasHasta(hoy, EXAMEN);
@@ -3783,6 +3832,7 @@ function renderPlan() {
     ${cardInstalar()}
     ${cardNube()}
     ${!state.hist.length && !nubeActiva() ? `<div class="cal-info"><b>¿Ya estudiabas en otro móvil u ordenador?</b><span>Pasa aquí tu progreso desde la pestaña Progreso → «Pasar el progreso a otro dispositivo».</span><div class="row" style="margin-top:6px"><button class="btn sm" data-plan="tab" data-id="progreso">Pasar mi progreso</button></div></div>` : ""}
+    <div class="animo"><span class="an-ico">💙</span><div><b>Para ti, Cristina</b><p>${esc(animoDeHoy(quedan))}</p></div></div>
     <div class="countdown">
       <div class="cd-num num">${quedan > 0 ? quedan : quedan === 0 ? "HOY" : "✓"}</div>
       <div class="cd-txt"><b>${quedan > 1 ? "días para el examen" : quedan === 1 ? "día para el examen: mañana" : quedan === 0 ? "es el examen. ¡Mucha suerte!" : "El examen ya pasó"}</b>
