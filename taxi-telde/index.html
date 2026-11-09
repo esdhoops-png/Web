@@ -227,6 +227,17 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 .animo .an-ico { font-size: 26px; line-height: 1; }
 .animo b { display: block; font-family: var(--display); font-size: 19px; color: var(--indigo); letter-spacing: .02em; }
 .animo p { margin: 4px 0 0; font-size: 16px; line-height: 1.45; color: var(--ink); }
+.dia-card { background: var(--paper); border: 2px solid var(--indigo); border-radius: 14px; padding: 16px; margin: 6px 0 18px; display: grid; gap: 12px; }
+.dia-top { display: flex; gap: 12px; align-items: center; }
+.dia-ico { font-size: 34px; line-height: 1; }
+.dia-top b { display: block; font-family: var(--display); font-size: 24px; color: var(--indigo); letter-spacing: .02em; }
+.dia-top span { color: var(--muted); font-size: 15px; }
+.dia-card .btn.big { font-size: 19px; padding: 14px; width: 100%; }
+.dia-prog span { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
+.d-pista { margin-top: 8px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+.d-lug { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; font: 700 11px/1 system-ui, sans-serif; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+.leaflet-tooltip.d-lugtip { font-size: 11px; padding: 2px 6px; background: rgba(255,255,255,.92); border: 0; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.leaflet-tooltip.d-tip { font: 700 14px/1.2 system-ui, sans-serif; color: #c8202f; background: #fff; border: 2px solid #c8202f; }
 .countdown { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; background: #0d0f18; color: #fff; border-radius: 12px; padding: 16px 20px; }
 .cd-num { font-family: var(--mono); font-size: clamp(48px, 13vw, 72px); line-height: 1; color: #ff3b4a; text-shadow: 0 0 14px rgba(255,59,74,.45); }
 .cd-txt { display: grid; gap: 2px; min-width: 0; }
@@ -1120,7 +1131,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .z-pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .z-pasos button { border: 1px solid var(--line); background: var(--paper); border-radius: 10px; padding: 10px 6px; font-family: var(--display); font-weight: 700; font-size: 16px; text-transform: uppercase; color: var(--indigo-ink); }
 .z-pasos button.on { background: var(--indigo); border-color: var(--indigo); color: #fff; }
-#zmapa { height: min(52vh, 460px); min-height: 300px; background: #eef0f4; }
+#zmapa, #dmapa { height: min(52vh, 460px); min-height: 300px; background: #eef0f4; }
 .z-panel { display: grid; }
 .z-card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
 .z-cont { font-family: var(--mono); font-size: 12px; color: var(--muted); }
@@ -2419,7 +2430,7 @@ const FASES = [
   { n: "Afinar", desde: 21, hasta: 26, c: "Simulacro un día sí y otro no; dejar las falladas a cero. El último día, repaso suave." },
 ];
 function faseDe(i) { return FASES.find(f => i >= f.desde && i <= f.hasta) || null; }
-function tareasDe(i) { const t = tareasBase(i); if (t.length && i < 26) t.push({ k: "calles", txt: "Callejero: una ronda de calles (10 calles)" }); return t; }
+function tareasDe(i) { const t = tareasBase(i); if (t.length && i < 26) t.push({ k: "calles", txt: "Mis calles de hoy (pestaña Calles)" }); return t; }
 function tareasBase(i) {
   if (i < 0 || i > 26) return [];
   if (i < LECCIONES.length) { const L = LECCIONES[i]; return [
@@ -2984,6 +2995,8 @@ function renderZonas() {
   const sig = Z.zonas.find(z => progresoZona(z).est < 2) || Z.zonas[0];
   $("#app").innerHTML = `<section class="view">
     <div class="section-h"><h2>Aprende el callejero</h2><button class="btn ghost sm" data-z="libre">Mapa libre y más tests</button></div>
+    ${tarjetaDia()}
+    <div class="section-h"><h2>O por zonas</h2></div>
     <div class="z-resumen"><div><b class="num">${dom}</b><span>calles dominadas de ${tot}</span></div><div class="z-bar"><i style="width:${tot ? dom * 100 / tot : 0}%"></i></div>
       <button class="btn red" data-z="abrir" data-id="${esc(sig.id)}">Seguir: ${esc(sig.n)}</button></div>
     <p class="note">Telde dividido en zonas pequeñas. En cada zona: <b>1 · Aprender</b> las calles una a una, <b>2 · Practicar</b> hasta sabérselas y <b>3 · Examen</b> para ganar estrellas. Ve en orden: primero las principales y el casco.</p>
@@ -3148,10 +3161,192 @@ document.addEventListener("click", e => {
   else if (a === "nose") responderExamenZona(false, null);
 });
 
+
+// ---------- Calles del día: aprender unas pocas calles cada día y repasarlas justo cuando toca ----------
+const DIA_NUEVAS = 8;                       // calles nuevas por sesión
+const DIA_INTERVALO = [0, 1, 2, 4, 7, 12];  // días hasta el siguiente repaso según la caja
+let dm = null;                              // estado de la sesión
+let dmapa = null, dcapaFoco = null, dcapaLug = null;
+const DIA_MS = 86400000;
+function finDeHoy() { const d = new Date(); d.setHours(23, 59, 59, 999); return +d; }
+function ordenCalles() {
+  const Z = construirZonas(); if (!Z) return [];
+  const vistos = new Set(), out = [];
+  const add = i => { const c = CAL.calles[i]; if (!c || c.len < 120 || vistos.has(c.n)) return; vistos.add(c.n); out.push(i); };
+  const pz = Z.zonas.find(z => z.id === "principales"); if (pz) pz.calles.forEach(add);
+  Z.zonas.filter(z => z.casco).forEach(z => z.calles.slice().sort((a, b) => CAL.calles[b].len - CAL.calles[a].len).forEach(add));
+  CAL.calles.map((c, i) => i).sort((a, b) => CAL.calles[b].len - CAL.calles[a].len).forEach(add);
+  return out;
+}
+function infoDia() {
+  const orden = ordenCalles(); const fin = finDeHoy();
+  const rep = orden.filter(i => { const s = state.cf[CAL.calles[i].n]; return s && s.box && (s.due || 0) <= fin; });
+  const nuevas = orden.filter(i => { const s = state.cf[CAL.calles[i].n]; return !s || !s.box; });
+  const aprendidas = orden.filter(i => { const s = state.cf[CAL.calles[i].n]; return s && s.box >= 3; }).length;
+  const empezadas = orden.length - nuevas.length;
+  return { orden, rep, nuevas, aprendidas, empezadas };
+}
+function hechoDiaHoy() { const k = new Date().toDateString(); return (state.calles || []).some(h => h.m === "dia" && new Date(h.d).toDateString() === k); }
+function tarjetaDia() {
+  if (!CAL) return "";
+  const I = infoDia(); if (!I.orden.length) return "";
+  const nRep = Math.min(I.rep.length, 30), nNue = I.rep.length >= 20 ? 0 : Math.min(DIA_NUEVAS, I.nuevas.length);
+  const hecho = hechoDiaHoy();
+  return `<div class="dia-card">
+    <div class="dia-top"><span class="dia-ico">🚕</span><div><b>Mis calles de hoy</b>
+      <span>${hecho && !nRep ? "¡Hoy ya has hecho tus calles! Si quieres, aprende unas pocas más." : `${nRep ? `${nRep} para repasar` : "Nada que repasar"}${nNue ? ` · ${nNue} nuevas` : ""} · unos ${Math.max(3, Math.round((nRep + nNue * 2) * 0.4))} minutos`}</span></div></div>
+    <button class="btn red big" data-d="empezar">${hecho && !nRep ? "Aprender más calles" : "Empezar"}</button>
+    <div class="dia-prog"><div class="z-bar"><i style="width:${I.orden.length ? I.aprendidas * 100 / I.orden.length : 0}%"></i></div>
+      <span>${I.aprendidas} calles bien aprendidas · ${I.empezadas} empezadas de ${I.orden.length}. Empieza por las principales y el casco.</span></div>
+    <p class="note">Es la forma más fácil: cada día unas pocas calles nuevas y repasas las anteriores justo cuando se te empiezan a olvidar. Funciona sin internet una vez cargadas las calles.</p>
+  </div>`;
+}
+// datos de apoyo para memorizar una calle
+function extremosCalle(c) {
+  const pts = c.segs.flat(); let p1 = pts[0], d1 = -1; pts.forEach(p => { const d = distM(p, c.c); if (d > d1) { d1 = d; p1 = p; } });
+  let p2 = pts[0], d2 = -1; pts.forEach(p => { const d = distM(p, p1); if (d > d2) { d2 = d; p2 = p; } });
+  return [p1, p2];
+}
+function pistaCalle(i) {
+  const c = CAL.calles[i]; if (c._pista) return c._pista;
+  const cr = [...(ZON.cruces.get(i) || [])].filter(j => CAL.calles[j].n !== c.n);
+  const [p1, p2] = extremosCalle(c);
+  const masCerca = (p, excl) => { let b = null, bd = 90; cr.forEach(j => { const n = CAL.calles[j].n; if (n === excl) return; const d = distCalle(p, CAL.calles[j]); if (d < bd) { bd = d; b = n; } }); return b; };
+  const a = masCerca(p1, null), b = masCerca(p2, a);
+  let barrio = null, bd = 2500; (CAL.places || []).forEach(p => { const d = distM(c.c, [p.lat, p.lon]); if (d < bd) { bd = d; barrio = p.n; } });
+  const lug = (CAL.lugares || []).filter(l => { const ti = LUGTIPO[l.t]; return ti && l.n !== "Sin nombre" && (ti[2] || ti[3] === "emblematico"); })
+    .map(l => ({ l, d: distCalle([l.lat, l.lon], c) })).filter(x => x.d < 220).sort((x, y) => x.d - y.d).slice(0, 3).map(x => x.l);
+  const cruza = cr.map(j => CAL.calles[j]).filter((x, k, arr) => arr.findIndex(y => y.n === x.n) === k && x.n !== a && x.n !== b).sort((x, y) => y.len - x.len).slice(0, 3).map(x => x.n);
+  return c._pista = { desde: a, hasta: b, barrio, lug, cruza };
+}
+function textoPista(p, c) {
+  const t = [];
+  if (p.desde && p.hasta) t.push(`Va desde <b>${esc(p.desde)}</b> hasta <b>${esc(p.hasta)}</b>.`);
+  else if (p.desde || p.hasta) t.push(`Empieza en <b>${esc(p.desde || p.hasta)}</b>.`);
+  if (p.cruza.length) t.push(`Por el camino cruza ${p.cruza.map(n => `<b>${esc(n)}</b>`).join(", ")}.`);
+  if (p.lug.length) t.push(`Cerca: ${p.lug.map(l => `${esc(l.n)}`).join(" · ")}.`);
+  t.push(`${p.barrio ? `Zona de <b>${esc(p.barrio)}</b> · ` : ""}${fmtLen(c.len)} de largo.`);
+  return t.join("<br>");
+}
+// mapa de la sesión
+function iniciarDmapa() {
+  const el = document.getElementById("dmapa"); if (!el) return;
+  if (dmapa) { dmapa.remove(); dmapa = null; }
+  dmapa = L.map(el, { zoomControl: true, preferCanvas: true, attributionControl: true, minZoom: 12, maxZoom: 19 });
+  const f = FONDOS.gris; L.tileLayer(f.url, f.o).addTo(dmapa);
+  const rend = L.canvas({ padding: .4 });
+  const fondo = L.layerGroup().addTo(dmapa);
+  CAL.calles.forEach(c => { L.polyline(c.segs, { renderer: rend, color: "#b9bdcc", weight: 6, opacity: 1, interactive: false }).addTo(fondo);
+    L.polyline(c.segs, { renderer: rend, color: "#ffffff", weight: 3.5, opacity: 1, interactive: false }).addTo(fondo); });
+  dcapaLug = L.layerGroup().addTo(dmapa); dcapaFoco = L.layerGroup().addTo(dmapa);
+  setTimeout(() => dmapa && dmapa.invalidateSize(), 60);
+}
+function dFoco(i, color, conNombre) {
+  if (!dmapa) return; dcapaFoco.clearLayers(); dcapaLug.clearLayers();
+  const c = CAL.calles[i]; const p = pistaCalle(i);
+  L.polyline(c.segs, { color: "#fff", weight: 14, opacity: 1, interactive: false }).addTo(dcapaFoco);
+  const pl = L.polyline(c.segs, { color: color || "#c8202f", weight: 8, opacity: 1, interactive: false }).addTo(dcapaFoco);
+  if (conNombre) pl.bindTooltip(esc(c.n), { permanent: true, direction: "top", offset: [0, -12], className: "d-tip" });
+  p.lug.forEach(l => { const ti = LUGTIPO[l.t];
+    L.marker([l.lat, l.lon], { interactive: false, icon: L.divIcon({ className: "", html: `<span class="d-lug" style="background:${ti[1]}">${esc(ti[4])}</span>`, iconSize: [26, 26], iconAnchor: [13, 13] }) })
+      .bindTooltip(esc(l.n), { permanent: true, direction: "top", offset: [0, -12], className: "d-lugtip" }).addTo(dcapaLug); });
+  dmapa.fitBounds(L.latLngBounds(c.segs.flat()).pad(.35), { maxZoom: 17, animate: false });
+}
+// sesión
+function empezarDia() {
+  if (!CAL || !construirZonas()) return;
+  const I = infoDia();
+  const rep = I.rep.slice().sort((a, b) => (state.cf[CAL.calles[a].n].due || 0) - (state.cf[CAL.calles[b].n].due || 0)).slice(0, 30);
+  let nNue = rep.length >= 20 ? 0 : Math.min(DIA_NUEVAS, I.nuevas.length);
+  if (!rep.length && !nNue) nNue = Math.min(DIA_NUEVAS, I.nuevas.length);
+  if (!rep.length && hechoDiaHoy()) nNue = Math.min(DIA_NUEVAS, I.nuevas.length);
+  const nuevas = I.nuevas.slice(0, nNue);
+  dm = { fase: nuevas.length ? "conocer" : "preguntar", nuevas, i: 0, cola: shuffle([...rep, ...nuevas]), fallo: new Set(), resp: null, hechas: 0, aciertos: 0, total: rep.length + nuevas.length };
+  zs.vista = "dia"; renderDia();
+}
+function renderDia() {
+  if (!dm || !CAL) { zs.vista = "lista"; return renderZonas(); }
+  $("#app").innerHTML = `<section class="view z-view">
+    <div class="z-head"><button class="btn ghost sm" data-d="salir">← Salir</button><div><b>Mis calles de hoy</b><span id="d-sub"></span></div></div>
+    <div class="mapwrap"><div id="dmapa"></div></div>
+    <div id="d-panel" class="z-panel"></div></section>`;
+  iniciarDmapa(); pintarDia();
+}
+function pintarDia() {
+  const sub = document.getElementById("d-sub"); const panel = document.getElementById("d-panel"); if (!panel) return;
+  if (dm.fase === "conocer") {
+    const i = dm.nuevas[dm.i]; const c = CAL.calles[i];
+    sub.textContent = `Paso 1 · Conoce las calles nuevas (${dm.i + 1} de ${dm.nuevas.length})`;
+    dFoco(i, "#c8202f", true);
+    panel.innerHTML = `<div class="z-card"><span class="z-cont num">Calle nueva ${dm.i + 1} de ${dm.nuevas.length}</span>
+      <div class="z-nombre">${esc(c.n)}</div><div class="d-pista">${textoPista(pistaCalle(i), c)}</div>
+      <p class="note">Mírala en el mapa y dite en voz alta: «${esc(c.n)} va desde… hasta…». Ayuda mucho.</p>
+      <div class="z-nav"><button class="btn ghost" data-d="ant" ${dm.i === 0 ? "disabled" : ""}>← Anterior</button>
+      <button class="btn ${dm.i === dm.nuevas.length - 1 ? "red" : ""}" data-d="sig">${dm.i === dm.nuevas.length - 1 ? "¡Ya las he visto! A practicar →" : "Siguiente →"}</button></div></div>`;
+    return;
+  }
+  if (dm.fase === "fin") { pintarFinDia(); return; }
+  if (dm.fase === "fin_ok") { dm = null; zs.vista = "lista"; renderZonas(); return; }
+  if (!dm.resp) dm.cur = dm.cola[0];
+  const i = dm.cur; const c = CAL.calles[i];
+  const pend = new Set(dm.cola).size + (dm.resp ? 0 : 0);
+  sub.textContent = `Paso 2 · ¿Cómo se llama? Quedan ${pend}`;
+  if (!dm.resp) {
+    const cerca = CAL.calles.map((x, k) => ({ x, d: distM(c.c, x.c) })).filter(o => o.x.n !== c.n && o.x.len >= 80).sort((a, b) => a.d - b.d).slice(0, 12).map(o => o.x.n);
+    const otras = shuffle([...new Set(cerca)]).slice(0, 3);
+    dm.opts = shuffle([c.n, ...otras]); dFoco(i, "#c8202f", false);
+  }
+  const p = pistaCalle(i);
+  panel.innerHTML = `<div class="z-card"><span class="z-cont num">Pregunta ${dm.hechas + (dm.resp ? 0 : 1)} · ${dm.aciertos} aciertos</span>
+    <div class="z-preg">¿Cómo se llama la calle <span class="rojo">roja</span>?</div>
+    ${!dm.resp && (p.desde || p.lug.length) ? `<button class="btn ghost sm" data-d="pista">💡 Pista</button><div id="d-pistatxt" class="d-pista" hidden>${p.desde ? `Empieza en <b>${esc(p.desde)}</b>.` : ""} ${p.lug.length ? `Cerca: ${esc(p.lug[0].n)}.` : ""}</div>` : ""}
+    <div class="answers">${dm.opts.map((o, k) => { let cls = ""; if (dm.resp) { if (o === c.n) cls = "ok"; else if (o === dm.resp) cls = "bad"; } return `<button class="ans ${cls}" data-d="opt" data-o="${esc(o)}" ${dm.resp ? "disabled" : ""}><span class="k">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`; }).join("")}</div>
+    ${dm.resp ? `<div class="feedback ${dm.resp === c.n ? "" : "bad"}"><strong>${dm.resp === c.n ? "¡Muy bien! " : "Es "}${esc(c.n)}${dm.resp === c.n ? "" : ". Te la vuelvo a preguntar en un momento."}</strong><div class="d-pista">${textoPista(p, c)}</div></div>
+      <div class="z-nav"><span></span><button class="btn" data-d="psig">Siguiente →</button></div>` : ""}</div>`;
+}
+function responderDia(o) {
+  if (dm.resp) return; dm.resp = o; dm.hechas++;
+  const i = dm.cur; const c = CAL.calles[i]; const ok = o === c.n;
+  marcarCalle(c.n, ok); const s = state.cf[c.n];
+  if (ok) {
+    dm.aciertos++; dm.cola.shift();
+    if (!dm.cola.includes(i)) { // última vez que sale hoy: se programa el siguiente repaso
+      const b = dm.fallo.has(i) ? 1 : Math.min(5, (s.box || 0) + 1);
+      s.box = b; s.due = +new Date(new Date().setHours(4, 0, 0, 0)) + DIA_INTERVALO[b] * DIA_MS;
+    }
+  } else {
+    dm.fallo.add(i); s.box = 1; dm.cola.shift(); dm.cola.splice(Math.min(dm.cola.length, 2 + Math.floor(Math.random() * 2)), 0, i);
+  }
+  saveLocal(); dFoco(i, ok ? "#12804a" : "#c8202f", true); pintarDia();
+}
+function pintarFinDia() {
+  (state.calles = state.calles || []).push({ d: Date.now(), m: "dia", n: dm.hechas, ok: dm.aciertos, s: 0 }); save();
+  dcapaFoco && dcapaFoco.clearLayers(); dcapaLug && dcapaLug.clearLayers();
+  const manana = infoDia().orden.filter(i => { const s = state.cf[CAL.calles[i].n]; return s && s.box && (s.due || 0) <= finDeHoy() + DIA_MS; }).length;
+  document.getElementById("d-sub").textContent = "¡Sesión terminada!";
+  document.getElementById("d-panel").innerHTML = `<div class="z-card"><div class="z-nombre">¡Hecho! 🎉</div>
+    <span class="z-det">${dm.total} calles trabajadas · ${dm.aciertos} aciertos de ${dm.hechas} respuestas.</span>
+    <p class="note">Mañana te tocarán unas ${manana} para repasar y algunas nuevas. Las que fallaste hoy volverán antes. Poco a poco se quedan para siempre.</p>
+    <div class="z-nav"><button class="btn ghost" data-d="salir">Volver</button><button class="btn" data-d="mas">Aprender ${DIA_NUEVAS} más</button></div></div>`;
+  dm.fase = "fin_ok";
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-d]"); if (!b) return;
+  const a = b.dataset.d;
+  if (a === "empezar" || a === "mas") { empezarDia(); window.scrollTo({ top: 0 }); }
+  else if (a === "salir") { dm = null; zs.vista = "lista"; if (dmapa) { dmapa.remove(); dmapa = null; } renderZonas(); window.scrollTo({ top: 0 }); }
+  else if (a === "sig") { if (dm.i < dm.nuevas.length - 1) dm.i++; else dm.fase = "preguntar"; pintarDia(); }
+  else if (a === "ant") { dm.i = Math.max(0, dm.i - 1); pintarDia(); }
+  else if (a === "opt") responderDia(b.dataset.o);
+  else if (a === "pista") { const t = document.getElementById("d-pistatxt"); if (t) t.hidden = false; b.remove(); }
+  else if (a === "psig") { dm.resp = null; if (!dm.cola.length) dm.fase = "fin"; pintarDia(); }
+});
+
 function renderCallejero() {
   if (!window.L) { $("#app").innerHTML = `<section class="view"><div class="empty">El mapa no se puede cargar aquí. Ábrelo desde el link público de la app, con conexión a internet.</div></section>`; return; }
   if (!CAL) CAL = cargarCache();
   if (zs.vista === "libre") return renderCallejeroLibre();
+  if (zs.vista === "dia" && dm && CAL && construirZonas()) return renderDia();
   if (zs.vista === "zona" && zs.z && CAL) return renderZona();
   renderZonas();
   if (CAL) cargarCalles();
