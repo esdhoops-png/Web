@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>ESD Hoops × KGM</title>
+<meta name="description" content="Propuesta de colaboración entre ESD Hoops y KGM.">
+<meta name="theme-color" content="#0d1e2c">
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#142a3d; --navy-2:#1c3a54; --navy-deep:#0a1722;
+  --tan:#d9c4b0; --tan-light:#f2e9df; --cream:#faf6f1; --clay:#c8834f; --clay-2:#e09a63;
+  --white:#fff; --muted:rgba(242,233,223,.66); --line:rgba(217,196,176,.18);
+  --head:'Anton','Arial Narrow',Impact,sans-serif;
+  --body:'Inter',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --pad:clamp(16px,5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--navy-deep);color:var(--tan-light);font-family:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(120% 90% at 80% 0%,#1c3a54 0%,#0f2233 45%,#0a1722 100%)}
+a{color:inherit}
+strong{color:var(--white)}
+
+/* ---------- Animated background ---------- */
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.bg-court{position:absolute;width:150vmax;height:150vmax;left:50%;top:50%;transform:translate(-50%,-50%) rotate(var(--rot,-8deg)) scale(var(--sc,1));transition:transform 1.4s var(--ease);opacity:.09}
+.bg-court circle,.bg-court path,.bg-court rect,.bg-court line{fill:none;stroke:var(--tan);stroke-width:2}
+.bg-glow{position:absolute;width:60vmax;height:60vmax;border-radius:50%;background:radial-gradient(circle,rgba(200,131,79,.28),transparent 65%);left:var(--gx,70%);top:var(--gy,20%);transform:translate(-50%,-50%);transition:left 1.4s var(--ease),top 1.4s var(--ease);filter:blur(10px)}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- Deck ---------- */
+.deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:calc(var(--pad) * .9) var(--pad) 110px;visibility:hidden;opacity:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;transition:opacity .6s var(--ease),visibility 0s linear .6s}
+.slide.is-active{visibility:visible;opacity:1;transition:opacity .6s var(--ease),visibility 0s}
+.slide-inner{width:100%;max-width:1240px;margin:auto}
+
+/* Wipe transition */
+.wipe{position:fixed;inset:0;pointer-events:none;z-index:50;display:flex}
+.wipe span{flex:1;background:var(--clay);transform:scaleY(0);transform-origin:bottom}
+.wipe span:nth-child(2){background:var(--navy-2)}
+.wipe span:nth-child(3){background:var(--tan)}
+.wipe.run span{animation:wipe .9s var(--ease) both}
+.wipe.run span:nth-child(2){animation-delay:.05s}
+.wipe.run span:nth-child(3){animation-delay:.1s}
+.wipe.back span{transform-origin:top}
+@keyframes wipe{0%{transform:scaleY(0)}45%,55%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:inherit}}
+.wipe.run span{animation-name:wipe-up}
+.wipe.run.back span{animation-name:wipe-down}
+@keyframes wipe-up{0%{transform:scaleY(0);transform-origin:bottom}45%{transform:scaleY(1);transform-origin:bottom}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(0);transform-origin:top}}
+@keyframes wipe-down{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* Element entrance animations */
+.a{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease),transform .9s var(--ease),clip-path 1s var(--ease);transition-delay:0s}
+.a-left{transform:translateX(-60px)}
+.a-right{transform:translateX(60px)}
+.a-scale{transform:scale(.85)}
+.a-clip{transform:none;clip-path:inset(0 100% 0 0)}
+.a-rise{transform:translateY(110%)}
+.is-active .a{opacity:1;transform:none;clip-path:inset(0 0 0 0);transition-delay:calc(var(--d,0) * 110ms + 380ms)}
+.slide.settled .a{transition-delay:0s}
+.mask{display:block;overflow:hidden;padding-bottom:.06em}
+
+/* ---------- Type ---------- */
+.eyebrow{font-weight:800;font-size:clamp(.72rem,1.1vw,.85rem);letter-spacing:.28em;text-transform:uppercase;color:var(--clay-2);display:flex;align-items:center;gap:12px;margin-bottom:clamp(14px,2vh,24px)}
+.eyebrow::before{content:"";width:34px;height:2px;background:currentColor}
+h1,h2,h3{font-family:var(--head);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.01em;color:var(--white)}
+h2{font-size:clamp(2.3rem,6.2vw,5.6rem)}
+h3{font-size:clamp(1.25rem,1.9vw,1.7rem);line-height:1.05}
+.lead{font-size:clamp(1rem,1.55vw,1.3rem);line-height:1.55;color:var(--muted);max-width:60ch;margin-top:clamp(16px,2.6vh,30px)}
+.accent{color:var(--clay-2)}
+.outline{-webkit-text-stroke:2px var(--tan);color:transparent}
+
+/* ---------- Cover ---------- */
+.cover .slide-inner{display:grid;grid-template-columns:1.25fr 1fr;gap:4vw;align-items:center}
+.logos{display:flex;align-items:center;gap:clamp(14px,2vw,26px);margin-bottom:clamp(20px,4vh,40px)}
+.logos img{width:clamp(46px,5vw,70px)}
+.logos .x{font-family:var(--head);font-size:clamp(1.4rem,2.4vw,2rem);color:var(--clay-2)}
+.kgm-word{font-family:var(--body);font-weight:800;font-size:clamp(1.6rem,3vw,2.6rem);letter-spacing:.14em;color:var(--white)}
+.cover h1{font-size:clamp(3.2rem,10.5vw,9.8rem)}
+.cover h1 .row{display:block}
+.cover .meta{margin-top:clamp(20px,4vh,40px);display:flex;gap:28px;flex-wrap:wrap;font-size:.85rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.cover .meta b{color:var(--tan);font-weight:800}
+.hero-art{position:relative;aspect-ratio:1;width:100%;max-width:520px;justify-self:end}
+.hero-art svg.court{position:absolute;inset:0;width:100%;height:100%}
+.court .ln{fill:none;stroke:var(--tan);stroke-width:2.5;stroke-dasharray:1200;stroke-dashoffset:1200}
+.is-active .court .ln{animation:draw 2.4s var(--ease) forwards;animation-delay:calc(var(--i,0) * .15s + .5s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.ball-wrap{position:absolute;left:50%;top:6%;width:30%;transform:translateX(-50%);animation:bounce 1.6s cubic-bezier(.5,0,.5,1) infinite alternate}
+.ball-wrap svg{width:100%;animation:spin 6s linear infinite}
+.shadow{position:absolute;left:50%;bottom:10%;width:26%;height:4%;border-radius:50%;background:rgba(0,0,0,.45);filter:blur(6px);transform:translateX(-50%);animation:shadow 1.6s cubic-bezier(.5,0,.5,1) infinite alternate}
+@keyframes bounce{0%{top:4%}100%{top:56%}}
+@keyframes shadow{0%{transform:translateX(-50%) scale(.45);opacity:.35}100%{transform:translateX(-50%) scale(1);opacity:.9}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- Ticker ---------- */
+.ticker{position:absolute;left:0;right:0;bottom:72px;overflow:hidden;border-block:1px solid var(--line);padding:10px 0;font-family:var(--head);letter-spacing:.08em;font-size:clamp(.9rem,1.4vw,1.15rem);color:var(--tan);white-space:nowrap}
+.ticker-track{display:inline-flex;gap:28px;animation:tick 30s linear infinite}
+.ticker-track i{color:var(--clay-2);font-style:normal}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- Statement ---------- */
+.statement h2{font-size:clamp(2.6rem,8vw,7.4rem)}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,24px);margin-top:clamp(28px,5vh,56px)}
+.pillar{border-top:2px solid var(--clay);padding-top:18px}
+.pillar span{font-family:var(--head);font-size:clamp(2rem,3.4vw,3rem);color:var(--clay-2)}
+.pillar p{color:var(--muted);margin-top:6px;font-size:clamp(.92rem,1.2vw,1.05rem);line-height:1.5}
+
+/* ---------- Programs ---------- */
+.two{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(24px,5vw,72px);align-items:center}
+.prog-list{list-style:none;display:grid;gap:10px}
+.prog{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:clamp(12px,1.8vh,18px) 20px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03);transition:background .3s,border-color .3s,transform .3s var(--ease)}
+.prog:hover{background:rgba(200,131,79,.12);border-color:var(--clay);transform:translateX(6px)}
+.prog .n{font-family:var(--head);color:var(--clay-2);font-size:1.3rem}
+.prog h3{font-size:clamp(1.1rem,1.6vw,1.45rem)}
+.prog p{grid-column:2;color:var(--muted);font-size:.92rem;line-height:1.45;margin-top:2px}
+.prog .tag{grid-row:1;grid-column:3;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);border:1px solid var(--line);padding:4px 10px;border-radius:99px;white-space:nowrap}
+
+/* ---------- Match / fit ---------- */
+.fit{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(16px,3vw,40px);align-items:stretch;margin-top:clamp(28px,5vh,52px)}
+.fit-card{padding:clamp(20px,3vw,36px);border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.fit-card.k{background:linear-gradient(160deg,rgba(200,131,79,.22),rgba(200,131,79,.04));border-color:rgba(200,131,79,.5)}
+.fit-card .who{font-family:var(--head);font-size:clamp(1.6rem,2.6vw,2.4rem);color:var(--white);margin-bottom:14px;letter-spacing:.04em}
+.fit-card ul{list-style:none;display:grid;gap:10px}
+.fit-card li{padding-left:22px;position:relative;color:var(--tan-light);line-height:1.45}
+.fit-card li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--clay-2)}
+.fit-plus{align-self:center;width:clamp(56px,6vw,84px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--clay);font-family:var(--body);font-weight:800;font-size:clamp(2rem,3.4vw,3rem);line-height:1;color:var(--navy-deep);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,131,79,.55)}50%{box-shadow:0 0 0 18px rgba(200,131,79,0)}}
+.insight{margin-top:clamp(20px,4vh,40px);font-family:var(--head);text-transform:uppercase;font-size:clamp(1.3rem,2.6vw,2.2rem);line-height:1.1;color:var(--white);max-width:28ch}
+
+/* ---------- Season timeline ---------- */
+.season{position:relative;margin-top:clamp(30px,6vh,64px)}
+.road{position:absolute;left:0;right:0;top:34px;height:6px;border-radius:6px;background:repeating-linear-gradient(90deg,var(--tan) 0 22px,transparent 22px 40px);opacity:.35}
+.road-fill{position:absolute;left:0;top:34px;height:6px;border-radius:6px;background:var(--clay-2);width:0;transition:width 2.2s var(--ease) .6s}
+.is-active .road-fill{width:100%}
+.car{position:absolute;top:12px;left:0;width:56px;transition:left 2.2s var(--ease) .6s}
+.is-active .car{left:calc(100% - 56px)}
+.stops{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding-top:72px}
+.stop{position:relative}
+.stop::before{content:"";position:absolute;top:-44px;left:0;width:16px;height:16px;border-radius:50%;background:var(--navy-deep);border:3px solid var(--clay-2)}
+.stop .when{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--clay-2);font-weight:800}
+.stop h3{margin:8px 0 6px}
+.stop p{color:var(--muted);font-size:.9rem;line-height:1.45}
+.note{margin-top:28px;font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+
+/* ---------- Activations grid ---------- */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,20px);margin-top:clamp(24px,4.5vh,48px)}
+.card{position:relative;padding:clamp(18px,2.2vw,28px);border-radius:18px;background:rgba(255,255,255,.035);border:1px solid var(--line);overflow:hidden;transition:transform .4s var(--ease),border-color .3s}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,transparent 40%,rgba(224,154,99,.16));opacity:0;transition:opacity .4s}
+.card:hover{transform:translateY(-6px);border-color:rgba(200,131,79,.6)}
+.card:hover::after{opacity:1}
+.card .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(200,131,79,.18);color:var(--clay-2);margin-bottom:16px}
+.card .ic svg{width:24px;height:24px}
+.card p{color:var(--muted);font-size:.93rem;line-height:1.5;margin-top:8px}
+
+/* ---------- Assets / visibility ---------- */
+.jersey-wrap{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,72px);align-items:center;margin-top:clamp(20px,4vh,40px)}
+.jersey{width:clamp(180px,24vw,320px)}
+.jersey .j-body{fill:var(--navy-2);stroke:var(--tan);stroke-width:3}
+.jersey .j-num{font-family:var(--head);fill:var(--tan)}
+.jersey .j-spons{fill:var(--clay-2);transform-origin:150px 128px;transform:scale(0);transition:transform .8s cubic-bezier(.3,1.6,.5,1) 1s}
+.is-active .jersey .j-spons{transform:scale(1)}
+.assets{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 32px}
+.assets li{display:flex;gap:14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);font-size:clamp(.95rem,1.25vw,1.08rem)}
+.assets li b{font-family:var(--head);font-weight:400;color:var(--clay-2);min-width:2ch}
+
+/* ---------- Tiers ---------- */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,22px);margin-top:clamp(24px,4.5vh,48px);align-items:stretch}
+.tier{display:flex;flex-direction:column;padding:clamp(20px,2.4vw,32px);border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.tier.top{background:linear-gradient(170deg,var(--clay) 0%,#9c5f37 100%);border-color:transparent;color:var(--navy-deep);transform:translateY(-10px);box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.is-active .tier.top.a{transform:translateY(-10px)}
+.tier .lvl{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--clay-2)}
+.tier.top .lvl{color:var(--navy-deep)}
+.tier h3{font-size:clamp(1.6rem,2.6vw,2.4rem);margin:10px 0 16px}
+.tier.top h3{color:var(--navy-deep)}
+.tier ul{list-style:none;display:grid;gap:9px;font-size:.93rem;line-height:1.4;flex:1}
+.tier li{padding-left:20px;position:relative;color:var(--tan-light)}
+.tier.top li{color:var(--navy-deep);font-weight:500}
+.tier li::before{content:"✓";position:absolute;left:0;color:var(--clay-2);font-weight:800}
+.tier.top li::before{color:var(--navy-deep)}
+.tier .foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tier.top .foot{border-color:rgba(10,23,34,.25);color:rgba(10,23,34,.75)}
+
+/* ---------- KPIs ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px);margin-top:clamp(24px,4.5vh,48px)}
+.kpi{padding:22px;border-left:3px solid var(--clay)}
+.kpi .big{font-family:var(--head);font-size:clamp(2.6rem,5vw,4.4rem);color:var(--white);line-height:1}
+.kpi .lbl{margin-top:8px;color:var(--muted);font-size:.92rem;line-height:1.45}
+.measure{margin-top:clamp(22px,4vh,40px);display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:9px 16px;border-radius:99px;border:1px solid var(--line);font-size:.88rem;color:var(--tan-light);background:rgba(255,255,255,.03)}
+
+/* ---------- Steps ---------- */
+.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px);margin-top:clamp(24px,4.5vh,48px);counter-reset:s}
+.steps li{counter-increment:s;padding:24px 20px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid var(--line);position:relative}
+.steps li::before{content:"0" counter(s);font-family:var(--head);font-size:2.6rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--clay-2);display:block;margin-bottom:14px}
+.steps p{color:var(--muted);font-size:.92rem;line-height:1.45;margin-top:8px}
+
+/* ---------- Closing ---------- */
+.closing{text-align:center}
+.closing .slide-inner{display:flex;flex-direction:column;align-items:center}
+.closing h2{font-size:clamp(3.2rem,11vw,10rem)}
+.closing .logos{justify-content:center;margin:0 0 clamp(20px,4vh,36px)}
+.closing .lead{margin-inline:auto;text-align:center}
+.cta{display:inline-flex;align-items:center;gap:12px;margin-top:clamp(24px,4vh,40px);padding:16px 28px;border-radius:99px;background:var(--clay);color:var(--navy-deep);font-weight:800;text-decoration:none;letter-spacing:.04em;transition:transform .3s var(--ease),background .3s}
+.cta:hover{transform:translateY(-3px);background:var(--clay-2)}
+.cta svg{width:20px;height:20px}
+
+/* ---------- UI chrome ---------- */
+.ui{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:14px;padding:14px var(--pad) calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(10,23,34,.92),rgba(10,23,34,0))}
+.brandmini{display:flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700;white-space:nowrap}
+.brandmini img{width:20px}
+.progress{flex:1;height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--clay-2);transition:width .8s var(--ease)}
+.count{font-family:var(--head);font-size:1rem;letter-spacing:.08em;color:var(--tan);min-width:5ch;text-align:right}
+.btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--tan-light);display:grid;place-items:center;cursor:pointer;transition:background .25s,border-color .25s}
+.btn:hover{background:var(--clay);border-color:var(--clay);color:var(--navy-deep)}
+.btn:focus-visible,.cta:focus-visible{outline:2px solid var(--clay-2);outline-offset:3px}
+.btn svg{width:18px;height:18px}
+.hint{position:fixed;top:18px;right:var(--pad);z-index:60;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);transition:opacity .6s}
+.hint.hide{opacity:0}
+.slide-label{position:fixed;top:18px;left:var(--pad);z-index:60;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .cover .slide-inner,.two,.jersey-wrap{grid-template-columns:1fr}
+  .hero-art{max-width:260px;justify-self:center;order:-1;margin-bottom:-10px}
+  .fit{grid-template-columns:1fr}
+  .fit-plus{justify-self:center}
+  .grid3,.tiers{grid-template-columns:1fr}
+  .tier.top,.is-active .tier.top.a{transform:none}
+  .tier.top{order:-1}
+  .kpis,.steps{grid-template-columns:1fr 1fr}
+  .stops{grid-template-columns:1fr;gap:22px;padding-top:0;padding-left:34px;border-left:3px dashed rgba(217,196,176,.35)}
+  .stop::before{top:4px;left:-44px}
+  .road,.road-fill,.car{display:none}
+  .assets{grid-template-columns:1fr}
+  .jersey{justify-self:center}
+  .ticker{display:none}
+  .brandmini span{display:none}
+  .hint{display:none}
+}
+@media (max-width:560px){
+  .pillars,.kpis,.steps{grid-template-columns:1fr}
+  .prog{grid-template-columns:auto 1fr}
+  .prog .tag{display:none}
+  .slide{justify-content:flex-start;padding-top:56px}
+  .slide-inner{margin:0 auto}
+}
+@media (max-height:720px) and (min-width:901px){
+  .slide{padding-top:48px}
+  .ticker{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
+  .wipe{display:none}
+}
+@media print{
+  html,body{overflow:visible;height:auto}
+  .ui,.hint,.wipe,.slide-label,.bg,.grain{display:none}
+  .deck{position:static}
+  .slide{position:relative;visibility:visible;opacity:1;min-height:100vh;page-break-after:always}
+  .a{opacity:1;transform:none;clip-path:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-glow" id="glow"></div>
+  <svg class="bg-court" id="court" viewBox="0 0 940 500">
+    <rect x="10" y="10" width="920" height="480"/>
+    <line x1="470" y1="10" x2="470" y2="490"/>
+    <circle cx="470" cy="250" r="60"/>
+    <rect x="10" y="170" width="190" height="160"/><circle cx="200" cy="250" r="60"/>
+    <rect x="740" y="170" width="190" height="160"/><circle cx="740" cy="250" r="60"/>
+    <path d="M10 40 H140 A220 220 0 0 1 140 460 H10"/><path d="M930 40 H800 A220 220 0 0 0 800 460 H930"/>
+  </svg>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="wipe" id="wipe" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<div class="slide-label" id="label" aria-hidden="true"></div>
+<div class="hint" id="hint" aria-hidden="true">← → para navegar · F pantalla completa</div>
+
+<main class="deck" id="deck" aria-live="polite">
+
+  <!-- 01 COVER -->
+  <section class="slide cover" data-title="Portada" data-rot="-8deg" data-sc="1" data-gx="72%" data-gy="22%">
+    <div class="slide-inner">
+      <div>
+        <div class="logos a a-left" style="--d:0">
+          <img src="../assets/img/logo-light.svg" alt="ESD Hoops">
+          <span class="x">×</span>
+          <span class="kgm-word">KGM</span>
+        </div>
+        <h1>
+          <span class="mask"><span class="row a a-rise" style="--d:1">Juntos</span></span>
+          <span class="mask"><span class="row a a-rise accent" style="--d:2">llegamos</span></span>
+          <span class="mask"><span class="row a a-rise outline" style="--d:3">más lejos</span></span>
+        </h1>
+        <div class="meta a" style="--d:5">
+          <span><b>Propuesta de colaboración</b></span>
+          <span>Temporada 2026 / 27</span>
+        </div>
+      </div>
+      <div class="hero-art a a-scale" style="--d:2" aria-hidden="true">
+        <svg class="court" viewBox="0 0 400 400">
+          <circle class="ln" style="--i:0" cx="200" cy="200" r="180"/>
+          <path class="ln" style="--i:1" d="M20 200 H380"/>
+          <circle class="ln" style="--i:2" cx="200" cy="200" r="60"/>
+          <path class="ln" style="--i:3" d="M120 20 V100 A80 80 0 0 0 280 100 V20"/>
+          <path class="ln" style="--i:4" d="M120 380 V300 A80 80 0 0 1 280 300 V380"/>
+        </svg>
+        <div class="shadow"></div>
+        <div class="ball-wrap">
+          <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#c8834f"/><g fill="none" stroke="#0a1722" stroke-width="3.5"><circle cx="50" cy="50" r="46"/><path d="M50 4v92M4 50h92M18 17c14 14 14 52 0 66M82 17c-14 14-14 52 0 66"/></g></svg>
+        </div>
+      </div>
+    </div>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>ESD HOOPS</span><i>×</i><span>KGM</span><i>•</i><span>TORNEOS 3X3</span><i>•</i><span>LIGA 5X5</span><i>•</i><span>CAMPS</span><i>•</i><span>COMBINES</span><i>•</i><span>SHOWCASES</span><i>•</i>
+        <span>ESD HOOPS</span><i>×</i><span>KGM</span><i>•</i><span>TORNEOS 3X3</span><i>•</i><span>LIGA 5X5</span><i>•</i><span>CAMPS</span><i>•</i><span>COMBINES</span><i>•</i><span>SHOWCASES</span><i>•</i>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 STATEMENT -->
+  <section class="slide statement" data-title="La idea" data-rot="4deg" data-sc="1.15" data-gx="20%" data-gy="80%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">La idea</p>
+      <h2>
+        <span class="mask"><span class="a a-rise" style="--d:1;display:block">Dos marcas.</span></span>
+        <span class="mask"><span class="a a-rise accent" style="--d:2;display:block">Un mismo carácter.</span></span>
+      </h2>
+      <p class="lead a" style="--d:3">El baloncesto de ESD Hoops y los vehículos de KGM hablan el mismo idioma: fuerza, resistencia y espíritu de equipo. Proponemos una alianza que lleve ese carácter a la cancha, a las familias y a la comunidad.</p>
+      <div class="pillars">
+        <div class="pillar a" style="--d:4"><span>Fuerza</span><p>Competición intensa, formatos serios y jugadores que no se rinden.</p></div>
+        <div class="pillar a" style="--d:5"><span>Ruta</span><p>Cada fin de semana, familias enteras en camino a la cancha.</p></div>
+        <div class="pillar a" style="--d:6"><span>Equipo</span><p>Una comunidad que crece evento a evento, durante todo el año.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 ESD HOOPS -->
+  <section class="slide" data-title="ESD Hoops" data-rot="-14deg" data-sc="1.3" data-gx="85%" data-gy="70%">
+    <div class="slide-inner two">
+      <div>
+        <p class="eyebrow a" style="--d:0">Quiénes somos</p>
+        <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">ESD</span></span><span class="mask"><span class="a a-rise accent" style="--d:2;display:block">Hoops</span></span></h2>
+        <p class="lead a" style="--d:3">Empresa de eventos deportivos dedicada al baloncesto. Diseñamos torneos, ligas y campamentos que retan a los jugadores dentro de la cancha y los preparan para el siguiente nivel fuera de ella.</p>
+      </div>
+      <ul class="prog-list">
+        <li class="prog a a-right" style="--d:2"><span class="n">01</span><h3>Torneos 3x3</h3><span class="tag">Street Series</span><p>Competición rápida e intensa con formato FIBA 3x3.</p></li>
+        <li class="prog a a-right" style="--d:3"><span class="n">02</span><h3>Liga 5x5 estilo AAU</h3><span class="tag">Temporada</span><p>Temporada regular por equipos inspirada en el modelo americano.</p></li>
+        <li class="prog a a-right" style="--d:4"><span class="n">03</span><h3>Basketball Camps</h3><span class="tag">Profesionales</span><p>Campus con jugadores profesionales, como el Camp con Maite Cazorla.</p></li>
+        <li class="prog a a-right" style="--d:5"><span class="n">04</span><h3>Combines</h3><span class="tag">Métricas</span><p>Evaluaciones físicas y técnicas a lo largo del año.</p></li>
+        <li class="prog a a-right" style="--d:6"><span class="n">05</span><h3>Showcase Camps</h3><span class="tag">Visibilidad</span><p>Escaparate ante equipos, programas y entrenadores.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 FIT -->
+  <section class="slide" data-title="Por qué juntos" data-rot="10deg" data-sc="1.05" data-gx="50%" data-gy="10%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Por qué juntos</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">El encaje <span class="accent">perfecto</span></span></span></h2>
+      <div class="fit">
+        <div class="fit-card a a-left" style="--d:2">
+          <div class="who">ESD HOOPS aporta</div>
+          <ul>
+            <li>Eventos con público joven, familias y comunidad local</li>
+            <li>Calendario activo durante toda la temporada</li>
+            <li>Contenido deportivo auténtico para redes</li>
+            <li>Espacios físicos para activar la marca</li>
+          </ul>
+        </div>
+        <div class="fit-plus a a-scale" style="--d:3">+</div>
+        <div class="fit-card k a a-right" style="--d:4">
+          <div class="who">KGM aporta</div>
+          <ul>
+            <li>Una gama SUV y pick-up pensada para la familia y la aventura</li>
+            <li>Movilidad para jugadores, staff y eventos</li>
+            <li>Una marca con energía para crecer en la comunidad</li>
+            <li>Experiencias de producto en la propia cancha</li>
+          </ul>
+        </div>
+      </div>
+      <p class="insight a" style="--d:6">La familia que lleva a sus hijos a la cancha <span class="accent">es la familia que elige su próximo coche.</span></p>
+    </div>
+  </section>
+
+  <!-- 05 SEASON -->
+  <section class="slide" data-title="La temporada" data-rot="-4deg" data-sc="1.4" data-gx="15%" data-gy="30%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Una temporada en ruta</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">KGM, presente <span class="accent">todo el año</span></span></span></h2>
+      <div class="season a" style="--d:2">
+        <div class="road"></div><div class="road-fill"></div>
+        <svg class="car" viewBox="0 0 64 32" aria-hidden="true"><path d="M6 22v-6l6-2 8-8h22l10 8 8 2v6z" fill="#e09a63"/><path d="M22 8h8v7H15zM33 8h8l7 7H33z" fill="#0a1722" opacity=".6"/><circle cx="17" cy="23" r="5" fill="#0a1722" stroke="#d9c4b0" stroke-width="2"/><circle cx="49" cy="23" r="5" fill="#0a1722" stroke="#d9c4b0" stroke-width="2"/></svg>
+        <div class="stops">
+          <div class="stop a" style="--d:3"><span class="when">Otoño</span><h3>Street Series 3x3</h3><p>Arranque de temporada en la calle, con la marca en el centro de la pista.</p></div>
+          <div class="stop a" style="--d:4"><span class="when">Oct — May</span><h3>Liga 5x5</h3><p>Presencia semanal en jornadas, con equipos y familias.</p></div>
+          <div class="stop a" style="--d:5"><span class="when">Vacaciones</span><h3>Camps</h3><p>Campus con profesionales: Navidad, Semana Santa y verano.</p></div>
+          <div class="stop a" style="--d:6"><span class="when">Todo el año</span><h3>Combines</h3><p>Mediciones de rendimiento con la firma de KGM.</p></div>
+          <div class="stop a" style="--d:7"><span class="when">Fin de temporada</span><h3>Showcase</h3><p>El gran evento final ante entrenadores y programas.</p></div>
+        </div>
+      </div>
+      <p class="note a" style="--d:8">* Calendario orientativo, a concretar entre ambas partes.</p>
+    </div>
+  </section>
+
+  <!-- 06 ACTIVATIONS -->
+  <section class="slide" data-title="Activaciones" data-rot="16deg" data-sc="1.2" data-gx="80%" data-gy="85%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Activaciones</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">Ideas que <span class="accent">se viven</span></span></span></h2>
+      <div class="grid3">
+        <article class="card a" style="--d:2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-6h6v6"/></svg></div><h3>Naming de evento</h3><p>«ESD Street Series by KGM»: el nombre de la marca ligado a la competición.</p></article>
+        <article class="card a" style="--d:3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16v-4l3-1 4-5h7l4 5v5z"/><circle cx="7.5" cy="16.5" r="2"/><circle cx="17" cy="16.5" r="2"/></svg></div><h3>Vehículo oficial</h3><p>KGM como movilidad oficial de ESD Hoops: staff, profesionales invitados y logística.</p></article>
+        <article class="card a" style="--d:4"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Test drive en cancha</h3><p>Zona de exposición y pruebas de conducción en los eventos con más afluencia.</p></article>
+        <article class="card a" style="--d:5"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></div><h3>MVP KGM</h3><p>Premio al jugador más valioso de cada torneo y jornada, entregado por KGM.</p></article>
+        <article class="card a" style="--d:6"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 15l4-5 3 3 5-7"/></svg></div><h3>KGM Combine Stats</h3><p>Las métricas de rendimiento de los combines, presentadas por KGM.</p></article>
+        <article class="card a" style="--d:7"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></div><h3>Contenido «En ruta»</h3><p>Serie para redes: viajes a la cancha, previas y highlights a bordo de un KGM.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 VISIBILITY -->
+  <section class="slide" data-title="Visibilidad" data-rot="-20deg" data-sc="1.1" data-gx="30%" data-gy="60%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Visibilidad de marca</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">Dentro y fuera <span class="accent">de la pista</span></span></span></h2>
+      <div class="jersey-wrap">
+        <svg class="jersey a a-scale" style="--d:2" viewBox="0 0 300 340" aria-hidden="true">
+          <path class="j-body" d="M95 20 Q150 60 205 20 L260 45 L245 120 L230 115 L230 320 L70 320 L70 115 L55 120 L40 45 Z"/>
+          <path d="M95 20 Q150 60 205 20" fill="none" stroke="#c8834f" stroke-width="6"/>
+          <g class="j-spons"><rect x="100" y="110" width="100" height="36" rx="6"/><text x="150" y="137" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="22" letter-spacing="4" fill="#0a1722">KGM</text></g>
+          <text class="j-num" x="150" y="250" text-anchor="middle" font-size="96">23</text>
+        </svg>
+        <ul class="assets">
+          <li class="a" style="--d:3"><b>01</b>Logo en equipaciones y dorsales</li>
+          <li class="a" style="--d:4"><b>02</b>Branding en pista, lonas y photocall</li>
+          <li class="a" style="--d:5"><b>03</b>Presencia en redes sociales de ESD Hoops</li>
+          <li class="a" style="--d:6"><b>04</b>Logo en web, inscripciones y cartelería</li>
+          <li class="a" style="--d:7"><b>05</b>Menciones por megafonía en eventos</li>
+          <li class="a" style="--d:8"><b>06</b>Trofeos y premios con la marca KGM</li>
+          <li class="a" style="--d:9"><b>07</b>Zona de exposición de vehículos</li>
+          <li class="a" style="--d:10"><b>08</b>Contenido audiovisual de temporada</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 TIERS -->
+  <section class="slide" data-title="Modelos de colaboración" data-rot="6deg" data-sc="1.35" data-gx="60%" data-gy="15%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Modelos de colaboración</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">Elige <span class="accent">tu nivel</span></span></span></h2>
+      <div class="tiers">
+        <div class="tier a" style="--d:2">
+          <span class="lvl">Nivel 3</span><h3>Event Partner</h3>
+          <ul><li>Patrocinio de un evento o torneo concreto</li><li>Branding en pista y photocall</li><li>Menciones en redes del evento</li><li>Zona de exposición puntual</li></ul>
+          <div class="foot">Un evento</div>
+        </div>
+        <div class="tier top a" style="--d:3">
+          <span class="lvl">Nivel 1 · Recomendado</span><h3>Title Partner</h3>
+          <ul><li>Naming de la temporada o de las Street Series</li><li>Vehículo oficial de ESD Hoops</li><li>Logo en equipaciones de todos los programas</li><li>Test drives en los eventos principales</li><li>Serie de contenido «En ruta»</li><li>Exclusividad en el sector automoción</li></ul>
+          <div class="foot">Temporada completa</div>
+        </div>
+        <div class="tier a" style="--d:4">
+          <span class="lvl">Nivel 2</span><h3>Official Partner</h3>
+          <ul><li>Presencia en todos los programas</li><li>Premio MVP KGM</li><li>Branding en pista y web</li><li>Activación en camps y combines</li></ul>
+          <div class="foot">Temporada completa</div>
+        </div>
+      </div>
+      <p class="note a" style="--d:6">* Contenidos y condiciones de cada nivel a definir conjuntamente.</p>
+    </div>
+  </section>
+
+  <!-- 09 KPIs -->
+  <section class="slide" data-title="Resultados" data-rot="-10deg" data-sc="1" data-gx="85%" data-gy="40%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Lo que medimos</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">Resultados <span class="accent">medibles</span></span></span></h2>
+      <div class="kpis">
+        <div class="kpi a" style="--d:2"><div class="big" data-count="5">0</div><p class="lbl">Programas donde KGM puede estar presente</p></div>
+        <div class="kpi a" style="--d:3"><div class="big" data-count="12">0</div><p class="lbl">Meses de presencia de marca en la temporada</p></div>
+        <div class="kpi a" style="--d:4"><div class="big" data-count="8">0</div><p class="lbl">Soportes de visibilidad dentro y fuera de la pista</p></div>
+        <div class="kpi a" style="--d:5"><div class="big" data-count="1">0</div><p class="lbl">Informe de resultados al cierre de cada evento</p></div>
+      </div>
+      <div class="measure">
+        <span class="chip a" style="--d:6">Asistentes por evento</span>
+        <span class="chip a" style="--d:7">Alcance e interacción en redes</span>
+        <span class="chip a" style="--d:8">Leads y test drives generados</span>
+        <span class="chip a" style="--d:9">Visualizaciones de contenido</span>
+        <span class="chip a" style="--d:10">Impactos de marca en pista</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 NEXT STEPS -->
+  <section class="slide" data-title="Próximos pasos" data-rot="12deg" data-sc="1.25" data-gx="25%" data-gy="25%">
+    <div class="slide-inner">
+      <p class="eyebrow a" style="--d:0">Próximos pasos</p>
+      <h2><span class="mask"><span class="a a-rise" style="--d:1;display:block">Del saque <span class="accent">a la canasta</span></span></span></h2>
+      <ol class="steps">
+        <li class="a" style="--d:2"><h3>Reunión</h3><p>Conocer los objetivos de KGM para la temporada.</p></li>
+        <li class="a" style="--d:3"><h3>Propuesta a medida</h3><p>Elegir nivel y activaciones que mejor encajen.</p></li>
+        <li class="a" style="--d:4"><h3>Acuerdo</h3><p>Cerrar condiciones, calendario y entregables.</p></li>
+        <li class="a" style="--d:5"><h3>¡Salto inicial!</h3><p>Lanzamiento conjunto en el primer evento.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 11 CLOSING -->
+  <section class="slide closing" data-title="Gracias" data-rot="-8deg" data-sc=".9" data-gx="50%" data-gy="50%">
+    <div class="slide-inner">
+      <div class="logos a a-scale" style="--d:0">
+        <img src="../assets/img/logo-light.svg" alt="ESD Hoops">
+        <span class="x">×</span>
+        <span class="kgm-word">KGM</span>
+      </div>
+      <h2>
+        <span class="mask"><span class="a a-rise" style="--d:1;display:block">Juguemos</span></span>
+        <span class="mask"><span class="a a-rise accent" style="--d:2;display:block">juntos</span></span>
+      </h2>
+      <p class="lead a" style="--d:3">Gracias por vuestro tiempo. Estamos listos para llevar esta alianza a la cancha.</p>
+      <a class="cta a" style="--d:4" href="mailto:info@esdhoops.com?subject=ESD%20Hoops%20%C3%97%20KGM">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        info@esdhoops.com
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<nav class="ui" aria-label="Controles de la presentación">
+  <span class="brandmini"><img src="../assets/img/logo-light.svg" alt=""><span>ESD Hoops × KGM</span></span>
+  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+  <span class="count" id="count">01 / 11</span>
+  <button class="btn" id="prev" aria-label="Diapositiva anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="btn" id="next" aria-label="Diapositiva siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="btn" id="fs" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</nav>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var wipe = document.getElementById('wipe');
+  var bar = document.getElementById('bar');
+  var count = document.getElementById('count');
+  var label = document.getElementById('label');
+  var court = document.getElementById('court');
+  var glow = document.getElementById('glow');
+  var hint = document.getElementById('hint');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = -1, busy = false;
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  function countUp(slide){
+    slide.querySelectorAll('[data-count]').forEach(function(el){
+      var target = +el.getAttribute('data-count');
+      if (reduce) { el.textContent = target; return; }
+      var start = null, dur = 1400, delay = 700;
+      el.textContent = '0';
+      function step(t){
+        if (!start) start = t;
+        var p = Math.min(1, Math.max(0, (t - start - delay) / dur));
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * e);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  function show(i){
+    var s = slides[i];
+    clearTimeout(show.t);
+    slides.forEach(function(el, k){ el.classList.remove('settled'); el.classList.toggle('is-active', k === i); el.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+    s.scrollTop = 0;
+    current = i;
+    bar.style.width = ((i + 1) / total * 100) + '%';
+    count.textContent = pad(i + 1) + ' / ' + pad(total);
+    label.textContent = s.getAttribute('data-title') || '';
+    court.style.setProperty('--rot', s.getAttribute('data-rot') || '0deg');
+    court.style.setProperty('--sc', s.getAttribute('data-sc') || '1');
+    glow.style.setProperty('--gx', s.getAttribute('data-gx') || '50%');
+    glow.style.setProperty('--gy', s.getAttribute('data-gy') || '50%');
+    countUp(s);
+    show.t = setTimeout(function(){ s.classList.add('settled'); }, 2600);
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+
+  function go(i){
+    if (i < 0 || i >= total || i === current || busy) return;
+    var back = i < current;
+    if (current === -1 || reduce) { show(i); return; }
+    busy = true;
+    // Restart content animations by removing active state first
+    slides[current].classList.remove('is-active');
+    wipe.classList.remove('run', 'back');
+    void wipe.offsetWidth;
+    wipe.classList.add('run');
+    if (back) wipe.classList.add('back');
+    setTimeout(function(){ show(i); }, 430);
+    setTimeout(function(){ busy = false; wipe.classList.remove('run', 'back'); }, 950);
+    if (hint) hint.classList.add('hide');
+  }
+
+  function next(){ go(current + 1); }
+  function prev(){ go(current - 1); }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+  document.getElementById('fs').addEventListener('click', toggleFs);
+
+  function toggleFs(){
+    var d = document, el = d.documentElement;
+    if (!d.fullscreenElement && !d.webkitFullscreenElement) {
+      (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+    } else {
+      (d.exitFullscreen || d.webkitExitFullscreen || function(){}).call(d);
+    }
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !e.shiftKey) || k === 'Enter' && e.target === document.body) { e.preventDefault(); next(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || (k === ' ' && e.shiftKey)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(total - 1); }
+    else if (k === 'f' || k === 'F') { toggleFs(); }
+  });
+
+  // Wheel: only change slide when the current slide can't scroll further
+  var wheelLock = false;
+  window.addEventListener('wheel', function(e){
+    if (wheelLock || Math.abs(e.deltaY) < 25) return;
+    var s = slides[current];
+    var atTop = s.scrollTop <= 0, atBottom = s.scrollTop + s.clientHeight >= s.scrollHeight - 2;
+    if (e.deltaY > 0 && atBottom) { wheelLock = true; next(); }
+    else if (e.deltaY < 0 && atTop) { wheelLock = true; prev(); }
+    if (wheelLock) setTimeout(function(){ wheelLock = false; }, 1100);
+  }, { passive: true });
+
+  // Touch swipe (horizontal)
+  var sx = 0, sy = 0;
+  window.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) { dx < 0 ? next() : prev(); }
+  }, { passive: true });
+
+  window.addEventListener('hashchange', function(){
+    var n = parseInt(location.hash.slice(1), 10);
+    if (n >= 1 && n <= total && n - 1 !== current) go(n - 1);
+  });
+
+  var startAt = parseInt(location.hash.slice(1), 10);
+  show(startAt >= 1 && startAt <= total ? startAt - 1 : 0);
+  setTimeout(function(){ if (hint) hint.classList.add('hide'); }, 6000);
+})();
+</script>
+</body>
+</html>
