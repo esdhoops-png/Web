@@ -79,6 +79,16 @@ ul.reasons li.plus{color:var(--hard)} ul.reasons li.minus{color:var(--easy)}
 .checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:2px 10px;max-height:220px;overflow:auto;padding:6px;border:1px solid var(--border);border-radius:8px;background:var(--panel2)}
 .checks label{font-size:13px;display:flex;gap:6px;align-items:center}
 .note{font-size:13px;background:var(--mid-bg);color:var(--text);border-radius:8px;padding:8px 10px}
+.btn.ig{background:#c13584;border-color:#c13584;color:#fff}
+.btn.big,button.big{padding:12px 18px;font-size:16px;font-weight:600}
+#quick{border:2px solid var(--accent)}
+#quick .card{border:none;padding:0}
+#quick .card .actions .btn{padding:10px 14px;font-size:15px}
+.quick-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.goal{height:8px;border-radius:4px;background:var(--panel2);overflow:hidden;min-width:160px;flex:1}
+.goal i{display:block;height:100%;background:var(--easy)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:20;max-width:calc(100% - 32px);text-align:center}
+kbd{font:12px ui-monospace,monospace;border:1px solid var(--border);border-radius:4px;padding:1px 5px;background:var(--panel2)}
 </style>
 </head>
 <body>
@@ -147,6 +157,13 @@ ul.reasons li.plus{color:var(--hard)} ul.reasons li.minus{color:var(--easy)}
     <label class="lbl" style="margin-top:8px">Plantilla de WhatsApp — variables: {negocio} {municipio} {argumento} {yo} {empresa} {web}
       <textarea id="sTpl" rows="5"></textarea>
     </label>
+    <label class="lbl" style="margin-top:8px">Plantilla de Instagram (se copia sola al pulsar el botón; mismas variables)
+      <textarea id="sIgTpl" rows="4"></textarea>
+    </label>
+    <label class="lbl" style="margin-top:8px;max-width:220px">Objetivo de contactos al día
+      <input type="text" id="sGoal" inputmode="numeric">
+    </label>
+    <p class="small muted">Consejo: no pases de 20-30 mensajes de Instagram al día y cambia algo la plantilla de vez en cuando; si no, Instagram puede marcarte como spam.</p>
     <h2 style="margin-top:18px">Copia de seguridad</h2>
     <p class="small muted" style="margin-top:0">Los estados y notas se guardan en este navegador. Descarga una copia de vez en cuando o para pasarla a otro dispositivo.</p>
     <div class="row">
@@ -154,6 +171,27 @@ ul.reasons li.plus{color:var(--hard)} ul.reasons li.minus{color:var(--easy)}
       <label class="btn">Restaurar copia<input type="file" id="fileRestore" accept="application/json" class="hidden"></label>
       <button id="btnClear">Borrar resultados descargados</button>
     </div>
+  </section>
+
+  <!-- MODO RÁPIDO -->
+  <section class="panel hidden" id="quick" aria-live="polite">
+    <div class="quick-top">
+      <div><b>⚡ Modo rápido</b> <span class="small muted" id="qPos"></span></div>
+      <div class="row" style="flex:1;max-width:420px"><span class="small" id="qGoalTxt"></span><div class="goal"><i id="qGoal"></i></div></div>
+      <button id="qClose">Salir</button>
+    </div>
+    <div id="qCard"></div>
+    <div class="row" style="margin-top:12px;justify-content:space-between">
+      <div class="row">
+        <button id="qWeb" title="Comprobado: ya tiene página web">Ya tiene web</button>
+        <button id="qDiscard">Descartar</button>
+      </div>
+      <div class="row">
+        <button id="qPrev">← Anterior</button>
+        <button class="primary big" id="qNext">Siguiente →</button>
+      </div>
+    </div>
+    <p class="small muted" style="margin-bottom:0">Pulsa WhatsApp o Instagram: el mensaje sale ya escrito (en Instagram se copia solo, pega con <kbd>⌘ V</kbd>). Al volver a esta pestaña pasa solo al siguiente negocio. Atajos: <kbd>→</kbd> siguiente, <kbd>←</kbd> anterior.</p>
   </section>
 
   <!-- RESULTADOS -->
@@ -176,8 +214,10 @@ ul.reasons li.plus{color:var(--hard)} ul.reasons li.minus{color:var(--easy)}
         <label class="small"><input type="checkbox" id="fMobile"> Solo móvil (WhatsApp)</label>
         <label class="small"><input type="checkbox" id="fChains" checked> Ocultar cadenas/franquicias</label>
         <label class="small"><input type="checkbox" id="fHideDone"> Ocultar descartados / ya tienen web</label>
+        <label class="small"><input type="checkbox" id="fIg"> Solo con Instagram</label>
       </div>
       <div class="row">
+        <button class="primary" id="btnQuick" title="Te enseña los negocios pendientes uno a uno, del más fácil al más difícil">⚡ Modo rápido</button>
         <span class="small muted" id="count"></span>
         <button id="btnCsv">Exportar CSV</button>
       </div>
@@ -334,7 +374,9 @@ let data = store.get(K.data, {items:[], source:'', updated:null});
 let crm = store.get(K.crm, {});
 let settings = Object.assign({
   name:'', brand:'', url:'', gKey:'',
-  tpl:'Hola, buenas. Soy {yo} de {empresa}. He visto {negocio} en {municipio} y no he encontrado vuestra página web. {argumento}\n\n¿Os puedo enseñar sin compromiso un ejemplo de cómo podría quedar? {web}'
+  tpl:'Hola, buenas. Soy {yo} de {empresa}. He visto {negocio} en {municipio} y no he encontrado vuestra página web. {argumento}\n\n¿Os puedo enseñar sin compromiso un ejemplo de cómo podría quedar? {web}',
+  igTpl:'¡Hola {negocio}! 👋 Soy {yo} de {empresa}, hago páginas web aquí en Gran Canaria. He visto que no tenéis web. {argumento}\n\n¿Os enseño sin compromiso un ejemplo de cómo podría quedar la vuestra? {web}',
+  goal:'25'
 }, store.get(K.set, {}));
 let shown = PAGE;
 let abortCtl = null;
@@ -622,8 +664,27 @@ function mergeData(items, source){
 
 function getCrm(id){ return crm[id] || {status:'nuevo', notes:''}; }
 function setCrm(id, patch){
-  crm[id] = Object.assign(getCrm(id), patch, {updated:new Date().toISOString()});
+  const now = new Date().toISOString();
+  if(patch.status==='contactado' && !getCrm(id).contactedAt) patch.contactedAt = now;
+  crm[id] = Object.assign(getCrm(id), patch, {updated:now});
   store.set(K.crm, crm);
+}
+const today = () => new Date().toDateString();
+const contactedToday = () => Object.values(crm).filter(c=>c.contactedAt && new Date(c.contactedAt).toDateString()===today()).length;
+function igUrl(b){
+  return b.ig || `https://www.google.com/search?q=${encodeURIComponent('site:instagram.com "'+b.name+'" '+(b.muni||'Gran Canaria'))}`;
+}
+function toast(t){
+  const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; d.setAttribute('role','status');
+  document.body.appendChild(d); setTimeout(()=>d.remove(), 3500);
+}
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); let ok=false; try{ ok = document.execCommand('copy'); }catch(_){}
+    ta.remove(); return ok;
+  }
 }
 
 /* =========================================================
@@ -643,9 +704,10 @@ function buildFilterOptions(){
 
 function filtered(){
   const q = norm($('#fText').value), m = $('#fMuni').value, g = $('#fGroup').value, d = $('#fDiff').value, st = $('#fStatus').value;
-  const mob = $('#fMobile').checked, noChain = $('#fChains').checked, hideDone = $('#fHideDone').checked;
+  const mob = $('#fMobile').checked, noChain = $('#fChains').checked, hideDone = $('#fHideDone').checked, igOnly = $('#fIg').checked;
   let out = data.items.filter(b=>{
     const s = getCrm(b.id).status;
+    if(igOnly && !b.ig) return false;
     if(m && b.muni!==m) return false;
     if(g && b.group!==g) return false;
     if(d && b.diff!==d) return false;
@@ -674,6 +736,7 @@ function renderStats(){
     ['easy', c('easy'), 'Fáciles de cerrar', ()=>{$('#fDiff').value='easy';}],
     ['mid', c('mid'), 'Dificultad media', ()=>{$('#fDiff').value='mid';}],
     ['hard', c('hard'), 'Difíciles', ()=>{$('#fDiff').value='hard';}],
+    ['', `${contactedToday()}/${+settings.goal||25}`, 'Contactados hoy', ()=>{$('#fStatus').value='contactado';}],
     ['', seg, 'En seguimiento', ()=>{$('#fStatus').value='seguimiento';}],
     ['easy', s('cerrado'), 'Cerrados ✅', ()=>{$('#fStatus').value='cerrado';}]
   ];
@@ -686,13 +749,13 @@ function renderStats(){
   });
 }
 
-function waMessage(b){
+function waMessage(b, tpl){
   const g = GROUPS[b.group] || GROUPS.otros;
   const arg = g.pitch.replace('{sector}', b.cat.toLowerCase()).replace('{municipio}', b.muni||'Gran Canaria');
-  return settings.tpl
+  return (tpl || settings.tpl)
     .replaceAll('{negocio}', b.name).replaceAll('{municipio}', b.muni||'Gran Canaria').replaceAll('{argumento}', arg)
     .replaceAll('{yo}', settings.name||'').replaceAll('{empresa}', settings.brand||'').replaceAll('{web}', settings.url||'')
-    .replace(/ de \./g,'.').replace(/Soy\s*\.\s*/g,'').replace(/[ \t]+\n/g,'\n').trim();
+    .replace(/ de ([,.])/g,'$1').replace(/Soy\s*[,.]\s*/g,'').replace(/[ \t]+\n/g,'\n').trim();
 }
 
 function cardHTML(b){
@@ -702,6 +765,7 @@ function cardHTML(b){
   const phones = b.phones.map(p=>`<a class="btn" href="tel:${p.e164}">📞 ${esc(p.pretty)}${p.mobile?'':' (fijo)'}</a>`).join('');
   const mob = b.phones.find(p=>p.mobile);
   const wa = mob ? `<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${mob.e164.replace('+','')}?text=${encodeURIComponent(waMessage(b))}">WhatsApp</a>` : '';
+  const ig = `<a class="btn ig" target="_blank" rel="noopener" data-ig="1" href="${esc(igUrl(b))}" title="Copia el mensaje y abre ${b.ig?'su perfil':'la búsqueda de su perfil'} de Instagram">Instagram${b.ig?'':' (buscar)'}</a>`;
   const verify = `https://www.google.com/search?q=${encodeURIComponent('"'+b.name+'" '+(b.muni||'Gran Canaria'))}`;
   const reasons = b.reasons.slice().sort((x,y)=>x[0]-y[0]).map(([p,t])=>`<li class="${p>0?'plus':'minus'}">${p>0?'+':''}${p} · ${esc(t)}</li>`).join('');
   const chips = [b.src, b.chain?'Cadena':'', b.rating!=null?`${b.rating}★ (${b.reviews})`:'', b.social?'Redes sociales':''].filter(Boolean)
@@ -714,10 +778,9 @@ function cardHTML(b){
     <div class="bar" aria-hidden="true"><i style="width:${b.score}%;background:${DIFF_COLOR[b.diff]}"></i></div>
     ${b.addr?`<div class="meta">📍 ${esc(b.addr)}</div>`:''}
     <div class="chips">${chips}</div>
-    <div class="actions">${phones}${wa}
+    <div class="actions">${wa}${ig}${phones}
       ${b.email?`<a class="btn" href="mailto:${esc(b.email)}">✉️ Email</a>`:''}
       ${b.fb?`<a class="btn" target="_blank" rel="noopener" href="${esc(b.fb)}">Facebook</a>`:''}
-      ${b.ig?`<a class="btn" target="_blank" rel="noopener" href="${esc(b.ig)}">Instagram</a>`:''}
       ${b.maps?`<a class="btn" target="_blank" rel="noopener" href="${esc(b.maps)}">🗺️ Mapa</a>`:''}
       <a class="btn" target="_blank" rel="noopener" href="${verify}" title="Comprueba que de verdad no tienen web">🔎 Comprobar en Google</a>
     </div>
@@ -810,7 +873,7 @@ function init(){
 
   // ajustes
   const bind = (id, key) => { $(id).value = settings[key]||''; $(id).oninput = ()=>{ settings[key] = $(id).value; store.set(K.set, settings); }; };
-  bind('#sName','name'); bind('#sBrand','brand'); bind('#sUrl','url'); bind('#sTpl','tpl');
+  bind('#sName','name'); bind('#sBrand','brand'); bind('#sUrl','url'); bind('#sTpl','tpl'); bind('#sIgTpl','igTpl'); bind('#sGoal','goal');
   $('#btnBackup').onclick = ()=>download(`captacion-copia-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify({data, crm, settings:{...settings, gKey:''}}), 'application/json');
   $('#fileRestore').onchange = async e=>{
     const f = e.target.files[0]; if(!f) return;
@@ -828,34 +891,101 @@ function init(){
   };
 
   // filtros
-  ['#fText','#fMuni','#fGroup','#fDiff','#fStatus','#fSort','#fMobile','#fChains','#fHideDone'].forEach(s=>{
+  ['#fText','#fMuni','#fGroup','#fDiff','#fStatus','#fSort','#fMobile','#fChains','#fHideDone','#fIg'].forEach(s=>{
     $(s).addEventListener($(s).tagName==='INPUT' && $(s).type==='search' ? 'input' : 'change', ()=>{ shown = PAGE; render(); });
   });
   $('#btnMore').onclick = ()=>{ shown += PAGE; render(); };
   $('#btnCsv').onclick = exportCsv;
 
-  // CRM en tarjetas (delegación)
+  // CRM en tarjetas (delegación, para la lista y el modo rápido)
   let tmr;
-  $('#list').addEventListener('change', e=>{
-    const card = e.target.closest('.card'); if(!card) return;
-    if(e.target.dataset.act==='status'){ setCrm(card.dataset.id, {status:e.target.value}); card.className = 'card st-'+e.target.value; renderStats(); }
-  });
-  $('#list').addEventListener('input', e=>{
-    const card = e.target.closest('.card'); if(!card || e.target.dataset.act!=='notes') return;
-    clearTimeout(tmr); const id = card.dataset.id, v = e.target.value;
-    tmr = setTimeout(()=>setCrm(id, {notes:v}), 400);
-  });
-  // al pulsar WhatsApp o llamar, marcar como contactado si estaba nuevo
-  $('#list').addEventListener('click', e=>{
-    const a = e.target.closest('a.btn'); if(!a) return;
-    const card = a.closest('.card');
-    if((a.href.startsWith('tel:') || a.classList.contains('wa')) && getCrm(card.dataset.id).status==='nuevo'){
-      setCrm(card.dataset.id, {status:'contactado'});
-      card.querySelector('[data-act=status]').value = 'contactado'; card.className = 'card st-contactado'; renderStats();
-    }
+  ['#list','#qCard'].forEach(sel=>{
+    const root = $(sel);
+    root.addEventListener('change', e=>{
+      const card = e.target.closest('.card'); if(!card) return;
+      if(e.target.dataset.act==='status'){ setCrm(card.dataset.id, {status:e.target.value}); card.className = 'card st-'+e.target.value; renderStats(); }
+    });
+    root.addEventListener('input', e=>{
+      const card = e.target.closest('.card'); if(!card || e.target.dataset.act!=='notes') return;
+      clearTimeout(tmr); const id = card.dataset.id, v = e.target.value;
+      tmr = setTimeout(()=>setCrm(id, {notes:v}), 400);
+    });
+    // WhatsApp, Instagram o llamar: copiar mensaje si hace falta y marcar como contactado
+    root.addEventListener('click', e=>{
+      const a = e.target.closest('a.btn'); if(!a) return;
+      const card = a.closest('.card'); const id = card.dataset.id;
+      const b = data.items.find(x=>x.id===id); if(!b) return;
+      const contact = a.href.startsWith('tel:') || a.classList.contains('wa') || a.dataset.ig;
+      if(a.dataset.ig){
+        copyText(waMessage(b, settings.igTpl)).then(ok=>toast(ok
+          ? (b.ig ? 'Mensaje copiado. En Instagram pulsa «Enviar mensaje» y pega con ⌘ V.' : 'Mensaje copiado. Abre su perfil en los resultados, pulsa «Enviar mensaje» y pega con ⌘ V.')
+          : 'No se pudo copiar el mensaje: cópialo desde Ajustes.'));
+      }
+      if(contact && getCrm(id).status==='nuevo'){
+        setCrm(id, {status:'contactado'});
+        card.querySelector('[data-act=status]').value = 'contactado'; card.className = 'card st-contactado'; renderStats();
+      }
+      if(contact && sel==='#qCard'){ quick.pendingNext = !a.href.startsWith('tel:'); updateQuickHeader(); }
+    });
   });
 
+  // modo rápido
+  $('#btnQuick').onclick = openQuick;
+  $('#qClose').onclick = closeQuick;
+  $('#qNext').onclick = ()=>moveQuick(1);
+  $('#qPrev').onclick = ()=>moveQuick(-1);
+  $('#qWeb').onclick = ()=>{ const b = quick.list[quick.i]; if(b){ setCrm(b.id,{status:'tiene_web'}); moveQuick(1); } };
+  $('#qDiscard').onclick = ()=>{ const b = quick.list[quick.i]; if(b){ setCrm(b.id,{status:'descartado'}); moveQuick(1); } };
+  document.addEventListener('keydown', e=>{
+    if($('#quick').classList.contains('hidden') || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+    if(e.key==='ArrowRight') moveQuick(1);
+    if(e.key==='ArrowLeft') moveQuick(-1);
+  });
+  // al volver de WhatsApp/Instagram, pasar solo al siguiente
+  const back = ()=>{ if(quick.pendingNext && document.visibilityState==='visible'){ quick.pendingNext = false; setTimeout(()=>moveQuick(1), 300); } };
+  window.addEventListener('focus', back);
+  document.addEventListener('visibilitychange', back);
+
   buildFilterOptions(); render();
+}
+
+/* =========================================================
+   MODO RÁPIDO: un negocio cada vez, del más fácil al más difícil
+   ========================================================= */
+const quick = {list:[], i:0, pendingNext:false};
+function openQuick(){
+  // usa los filtros actuales, pero solo pendientes y ordenados por facilidad
+  quick.list = filtered().filter(b=>getCrm(b.id).status==='nuevo' && !b.chain).sort((a,b)=>a.score-b.score);
+  quick.i = 0; quick.pendingNext = false;
+  if(!settings.name) toast('Pon tu nombre y tu marca en «Ajustes» para que salgan en los mensajes.');
+  $('#quick').classList.remove('hidden');
+  renderQuick();
+  $('#quick').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function closeQuick(){ $('#quick').classList.add('hidden'); render(); }
+function moveQuick(d){
+  quick.pendingNext = false;
+  quick.i = Math.max(0, Math.min(quick.list.length, quick.i + d));
+  renderQuick();
+}
+function updateQuickHeader(){
+  const goal = +settings.goal || 25, n = contactedToday();
+  $('#qGoalTxt').textContent = `Hoy: ${n}/${goal}`;
+  $('#qGoal').style.width = Math.min(100, n/goal*100)+'%';
+  $('#qPos').textContent = quick.list.length ? `${Math.min(quick.i+1, quick.list.length)} de ${quick.list.length} pendientes` : '';
+}
+function renderQuick(){
+  updateQuickHeader(); renderStats();
+  const b = quick.list[quick.i];
+  if(!quick.list.length){
+    $('#qCard').innerHTML = `<div class="empty">No hay negocios pendientes con estos filtros. ${data.items.length?'Quita algún filtro o busca más negocios.':'Primero pulsa «Buscar en toda Gran Canaria».'}</div>`;
+  } else if(!b){
+    $('#qCard').innerHTML = `<div class="empty">🎉 Has terminado la lista. Hoy llevas <b>${contactedToday()}</b> contactos.</div>`;
+  } else {
+    $('#qCard').innerHTML = cardHTML(b);
+    const det = $('#qCard details'); if(det) det.open = true;
+  }
+  $('#qPrev').disabled = quick.i<=0; $('#qNext').disabled = !b;
 }
 init();
 </script>
