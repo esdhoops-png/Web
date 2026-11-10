@@ -37,7 +37,7 @@ export function KgmWordmark({ className, title = "KGM" }: LogoProps) {
 export function Lockup({ size = 44, className = "" }: { size?: number; className?: string }) {
   return (
     <div className={`flex items-center ${className}`} style={{ gap: size * 0.42 }}>
-      <span className="block shrink-0" style={{ height: size, width: size * 0.675 }}>
+      <span className="block shrink-0 text-tan" style={{ height: size, width: size * 0.675 }}>
         <EsdMark className="h-full w-full" />
       </span>
       <span aria-hidden className="font-serif text-silver" style={{ fontSize: size * 0.6, lineHeight: 1 }}>

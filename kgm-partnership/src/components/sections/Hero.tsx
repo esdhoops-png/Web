@@ -48,7 +48,7 @@ export function Hero() {
       </motion.div>
 
       {/* Grading layers */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,rgba(8,8,8,0.15)_0%,rgba(8,8,8,0.55)_55%,rgba(8,8,8,0.92)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,rgba(13,30,44,0.15)_0%,rgba(13,30,44,0.55)_55%,rgba(13,30,44,0.92)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink via-ink/70 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink/80 to-transparent" />
 

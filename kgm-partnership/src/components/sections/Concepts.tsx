@@ -22,9 +22,9 @@ function Shot({ img, className = "", sizes }: { img: Img; className?: string; si
 function EventPlan() {
   return (
     <svg viewBox="0 0 400 260" className="h-full w-full" role="img" aria-label="Concept plan of a 3x3 event: court, KGM vehicle display, experience zone and stands">
-      <g fill="none" stroke="#f3f1ec" strokeOpacity="0.7" strokeWidth="1">
+      <g fill="none" stroke="#f2e9df" strokeOpacity="0.7" strokeWidth="1">
         <rect x="140" y="60" width="150" height="140" />
-        <path d="M140 60 h150" stroke="#c92332" strokeWidth="2" />
+        <path d="M140 60 h150" stroke="#b97a4e" strokeWidth="2" />
         <path d="M185 60 v40 h60 v-40" />
         <path d="M170 60 a45 45 0 0 0 90 0" transform="translate(0 0)" />
         <path d="M150 60 v20 a65 65 0 0 0 130 0 v-20" />
@@ -33,14 +33,14 @@ function EventPlan() {
         <rect x="320" y="60" width="60" height="140" strokeDasharray="3 3" />
         <path d="M140 220 h150 M140 232 h150 M140 244 h150" strokeOpacity="0.35" />
       </g>
-      <g fill="#f3f1ec" style={{ fontFamily: "var(--font-sans)", fontSize: 7.5, letterSpacing: "0.18em" }}>
+      <g fill="#f2e9df" style={{ fontFamily: "var(--font-sans)", fontSize: 7.5, letterSpacing: "0.18em" }}>
         <text x="215" y="140" textAnchor="middle">3X3 COURT</text>
         <text x="65" y="98" textAnchor="middle">KGM DISPLAY</text>
         <text x="65" y="168" textAnchor="middle">EXPERIENCE ZONE</text>
         <text x="350" y="134" textAnchor="middle" transform="rotate(90 350 130)">ACTIVATION</text>
         <text x="215" y="256" textAnchor="middle" fillOpacity="0.6">STANDS</text>
       </g>
-      <circle cx="65" cy="110" r="3" fill="#c92332" />
+      <circle cx="65" cy="110" r="3" fill="#b97a4e" />
     </svg>
   );
 }

@@ -47,7 +47,7 @@ export function Nav() {
             className="col-start-2 flex items-center justify-center gap-3 text-bone"
             aria-label="Back to top"
           >
-            <span className="block h-7 w-[19px]"><EsdMark className="h-full w-full" /></span>
+            <span className="block h-7 w-[19px] text-tan"><EsdMark className="h-full w-full" /></span>
             <span className="font-serif text-silver">×</span>
             <span className="block h-[10px] w-[60px]"><KgmWordmark className="h-full w-full" /></span>
           </button>

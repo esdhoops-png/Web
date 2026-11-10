@@ -41,18 +41,18 @@ export function GlobalReach() {
           <svg viewBox={`0 0 ${world.width} ${world.height}`} className="w-full" role="img" aria-label="Map illustrating connections between North America, Europe and Asia">
             <defs>
               <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#c92332" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#c92332" stopOpacity="0" />
+                <stop offset="0%" stopColor="#b97a4e" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#b97a4e" stopOpacity="0" />
               </radialGradient>
               <linearGradient id="arcGrad" x1="0" x2="1">
-                <stop offset="0%" stopColor="#f3f1ec" stopOpacity="0.15" />
-                <stop offset="50%" stopColor="#f3f1ec" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#c92332" stopOpacity="0.9" />
+                <stop offset="0%" stopColor="#f2e9df" stopOpacity="0.15" />
+                <stop offset="50%" stopColor="#f2e9df" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#b97a4e" stopOpacity="0.9" />
               </linearGradient>
             </defs>
             <motion.path
               d={dotsPath}
-              stroke="#a5a5a5"
+              stroke="#c3b3a3"
               strokeWidth={3.2}
               strokeLinecap="round"
               initial={{ opacity: 0 }}
@@ -73,7 +73,7 @@ export function GlobalReach() {
                   transition={{ duration: 2.2, ease: EASE, delay: 0.6 + i * 0.4 }}
                 />
                 {/* travelling light */}
-                <circle r={2.6} fill="#f3f1ec">
+                <circle r={2.6} fill="#f2e9df">
                   <animateMotion dur={`${5 + i}s`} repeatCount="indefinite" path={d} begin={`${2 + i * 0.6}s`} />
                 </circle>
               </g>
@@ -83,13 +83,13 @@ export function GlobalReach() {
               return (
                 <g key={r.key}>
                   <circle cx={x} cy={y} r={46} fill="url(#glow)" />
-                  <circle cx={x} cy={y} r={5} fill="none" stroke="#c92332" strokeWidth={1} style={{ transformOrigin: `${x}px ${y}px`, animation: `pulse-ring 2.8s ease-out ${i * 0.7}s infinite` }} />
-                  <circle cx={x} cy={y} r={3.6} fill="#c92332" />
+                  <circle cx={x} cy={y} r={5} fill="none" stroke="#b97a4e" strokeWidth={1} style={{ transformOrigin: `${x}px ${y}px`, animation: `pulse-ring 2.8s ease-out ${i * 0.7}s infinite` }} />
+                  <circle cx={x} cy={y} r={3.6} fill="#b97a4e" />
                   <motion.text
                     x={x}
                     y={y + 26}
                     textAnchor="middle"
-                    fill="#f3f1ec"
+                    fill="#f2e9df"
                     style={{ fontSize: 14, letterSpacing: "0.28em", textTransform: "uppercase", fontFamily: "var(--font-sans)" }}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}

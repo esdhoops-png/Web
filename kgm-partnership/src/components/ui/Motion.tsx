@@ -144,9 +144,9 @@ export function LetterFill({ text, className = "" }: { text: string; className?:
 function Letter({ c, i, n, progress, reduced }: { c: string; i: number; n: number; progress: MotionValue<number>; reduced: boolean }) {
   const a = i / n;
   const b = (i + 1) / n;
-  const color = useTransform(progress, [a - 0.001, a, b, Math.min(1, b + 0.12)], ["#3a3a3a", "#c92332", "#c92332", "#f3f1ec"]);
+  const color = useTransform(progress, [a - 0.001, a, b, Math.min(1, b + 0.12)], ["#2b4a66", "#b97a4e", "#b97a4e", "#f2e9df"]);
   return (
-    <motion.span aria-hidden style={{ color: reduced ? "#f3f1ec" : color }}>
+    <motion.span aria-hidden style={{ color: reduced ? "#f2e9df" : color }}>
       {c}
     </motion.span>
   );
