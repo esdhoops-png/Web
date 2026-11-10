@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motio
 import { useState } from "react";
 import { whyKgm } from "@/content/site";
 import { FadeIn, SectionLabel, WordsReveal } from "@/components/ui/Motion";
+import { StageTile } from "@/components/ui/VehicleCutout";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -73,9 +74,15 @@ export function WhyKgm() {
                     ))}
                   </ul>
                 )}
-                <div className="relative mt-6 aspect-[16/9] overflow-hidden md:hidden">
-                  <Image src={r.image.src} alt={r.image.alt} fill sizes="100vw" className="cine-img object-cover" style={{ objectPosition: r.image.position }} />
-                </div>
+                {"vehicle" in r && r.vehicle ? (
+                  <StageTile vehicle={r.vehicle} className="mt-6 aspect-[16/9] md:hidden" sizes="100vw" />
+                ) : (
+                  "image" in r && r.image && (
+                    <div className="relative mt-6 aspect-[16/9] overflow-hidden md:hidden">
+                      <Image src={r.image.src} alt={r.image.alt} fill sizes="100vw" className="cine-img object-cover" style={{ objectPosition: r.image.position }} />
+                    </div>
+                  )
+                )}
               </div>
               <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden />
             </li>
@@ -98,18 +105,26 @@ export function WhyKgm() {
       {/* Cursor-following preview (desktop) */}
       <motion.div className="pointer-events-none fixed top-0 left-0 z-30 hidden md:block" style={{ x, y }} aria-hidden>
         <AnimatePresence>
-          {hover !== null && (
-            <motion.div
-              key={hover}
-              className="relative -mt-36 ml-8 h-56 w-80 overflow-hidden shadow-2xl"
-              initial={{ clipPath: "inset(100% 0% 0% 0%)", opacity: 1 }}
-              animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: EASE }}
-            >
-              <Image src={whyKgm.reasons[hover].image.src} alt="" fill sizes="320px" className="cine-img object-cover" style={{ objectPosition: whyKgm.reasons[hover].image.position }} />
-            </motion.div>
-          )}
+          {hover !== null &&
+            (() => {
+              const r = whyKgm.reasons[hover];
+              return (
+                <motion.div
+                  key={hover}
+                  className="relative -mt-36 ml-8 h-56 w-80 overflow-hidden shadow-2xl"
+                  initial={{ clipPath: "inset(100% 0% 0% 0%)", opacity: 1 }}
+                  animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6, ease: EASE }}
+                >
+                  {"vehicle" in r && r.vehicle ? (
+                    <StageTile vehicle={r.vehicle} className="h-full w-full" sizes="320px" />
+                  ) : (
+                    "image" in r && r.image && <Image src={r.image.src} alt="" fill sizes="320px" className="cine-img object-cover" style={{ objectPosition: r.image.position }} />
+                  )}
+                </motion.div>
+              );
+            })()}
         </AnimatePresence>
       </motion.div>
     </section>

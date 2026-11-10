@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "ESD HOOPS × KGM — Strategic Partnership Proposal",
     description: "Conectando movilidad, deporte y la nueva generación.",
     type: "website",
-    images: [{ url: "/images/kgm-torres-showroom-front.jpg", width: 1920, height: 1134 }],
+    images: [{ url: "/images/esd-podium.webp", width: 1616, height: 1080 }],
   },
   robots: allowIndexing ? { index: true, follow: true } : { index: false, follow: false },
 };

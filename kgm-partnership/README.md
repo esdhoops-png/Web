@@ -41,9 +41,12 @@ Genera `static-site/`: una copia autónoma con rutas relativas y fuentes incrust
 
 ## Imágenes
 
-- `public/images/esd-*.jpg`: fotos del último torneo 3x3 de ESD HOOPS, redimensionadas, con un etalonaje oscuro y **sin metadatos EXIF** (se elimina el GPS).
-- `public/images/kgm-*.jpg`: KGM Torres, de Wikimedia Commons, con licencia **CC BY-SA 4.0**. Los créditos aparecen en el pie de la web. Si KGM facilita imágenes oficiales de prensa, basta con sustituir los archivos o las rutas en `site.ts`.
-- `court-night`, `net-dark`, `ball-macro`, `training-*`: Unsplash (licencia Unsplash).
+Todas están en `public/images` en WebP (máx. 1800 px) para que la web cargue rápido.
+
+- `esd-*.webp`: fotos de torneos y entrenamientos de ESD HOOPS, con un etalonaje oscuro y **sin metadatos EXIF**.
+- `kgm-*.webp`: imágenes de estudio de KGM (Musso EV, Torres EVX, Actyon Hybrid) con fondo transparente. Se usan en la portada, The Fleet, los montajes y el cierre.
+- `court-night`, `net-dark`, `ball-macro`: Unsplash (licencia Unsplash).
+- **Fotos de KGM en exteriores:** añade los archivos a `public/images` y rellena `kgmLifestyle` en `src/content/site.ts`; la primera pasa a ser el fondo de la sección The Future.
 
 ## Accesibilidad y movimiento
 

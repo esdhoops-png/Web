@@ -2,7 +2,8 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { images, vision } from "@/content/site";
+import { images, vehicles, vision } from "@/content/site";
+import { StageTile } from "@/components/ui/VehicleCutout";
 import { useMotionPrefs } from "@/components/Providers";
 import { CineImage, FadeIn, ScrollFillText, SectionLabel, WordsReveal } from "@/components/ui/Motion";
 
@@ -32,7 +33,7 @@ export function Vision() {
           {/* Floating collage: automotive meets basketball */}
           <div className="relative h-[520px] md:col-span-5 md:h-auto md:min-h-[640px]" aria-hidden={false}>
             <motion.div style={{ y: reduced ? 0 : slow }} className="absolute top-0 right-0 w-[72%]">
-              <CineImage img={images.kgmShowroomRear} className="aspect-[4/5]" sizes="(min-width: 768px) 30vw, 70vw" reveal="up" />
+              <StageTile vehicle={vehicles.actyon} className="aspect-[5/4]" sizes="(min-width: 768px) 30vw, 70vw" />
               <span className="label mt-3 block text-[0.6rem]">Movilidad</span>
             </motion.div>
             <motion.div style={{ y: reduced ? 0 : fast }} className="absolute bottom-0 left-0 w-[55%]">

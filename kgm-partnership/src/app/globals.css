@@ -124,3 +124,13 @@ html[data-reduced-motion="true"] *::after {
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
+
+/* Opening curtain: logos on navy, lifted by CSS alone so it never depends on scripts. */
+@keyframes intro-out {
+  to { clip-path: inset(0 0 100% 0); visibility: hidden; }
+}
+@keyframes intro-logo {
+  0% { opacity: 0; transform: translateY(14px); }
+  35%, 80% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}

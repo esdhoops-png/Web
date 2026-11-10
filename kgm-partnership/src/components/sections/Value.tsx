@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { images, value } from "@/content/site";
-import { CineImage, FadeIn, SectionLabel, WordsReveal } from "@/components/ui/Motion";
+import { value, vehicles } from "@/content/site";
+import { StageTile } from "@/components/ui/VehicleCutout";
+import { FadeIn, SectionLabel, WordsReveal } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -15,7 +16,7 @@ export function Value() {
             <div className="md:sticky md:top-28">
               <SectionLabel>{value.label}</SectionLabel>
               <WordsReveal text={value.title} className="display mt-8 text-[clamp(3.2rem,8vw,7.5rem)] text-bone" />
-              <CineImage img={images.kgmInterior} className="mt-10 hidden aspect-[4/3] md:block" sizes="35vw" reveal="left" />
+              <StageTile vehicle={vehicles.mussoWhite} className="mt-10 hidden aspect-[4/3] md:block" sizes="35vw" />
               <FadeIn as="p" className="label mt-6 normal-case tracking-[0.12em] text-silver/70">
                 {value.note}
               </FadeIn>

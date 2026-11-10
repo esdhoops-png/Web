@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { synergy, type Img } from "@/content/site";
+import { synergy, type Img, type Vehicle } from "@/content/site";
 import { useMotionPrefs } from "@/components/Providers";
 import { FadeIn, SectionLabel, WordsReveal } from "@/components/ui/Motion";
 
-function Row({ word, img, dir, index }: { word: string; img?: Img; dir: 1 | -1; index: number }) {
+function Row({ word, img, dir, index }: { word: string; img?: Img | Vehicle; dir: 1 | -1; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { reduced } = useMotionPrefs();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -26,9 +26,17 @@ function Row({ word, img, dir, index }: { word: string; img?: Img; dir: 1 | -1; 
   );
 }
 
-function Pill({ img }: { img: Img }) {
+function Pill({ img }: { img: Img | Vehicle }) {
+  const box = "relative inline-block h-[clamp(2.6rem,8vw,8.5rem)] w-[clamp(5rem,18vw,19rem)] shrink-0 overflow-hidden rounded-full";
+  if ("img" in img) {
+    return (
+      <span className={`${box} bg-[radial-gradient(ellipse_at_50%_120%,#24506f_0%,#142a3d_60%)]`}>
+        <Image src={img.img.src} alt={img.img.alt} fill sizes="20vw" className="object-contain p-[6%]" />
+      </span>
+    );
+  }
   return (
-    <span className="relative inline-block h-[clamp(2.6rem,8vw,8.5rem)] w-[clamp(5rem,18vw,19rem)] shrink-0 overflow-hidden rounded-full">
+    <span className={box}>
       <Image src={img.src} alt={img.alt} fill sizes="20vw" className="cine-img object-cover" style={{ objectPosition: img.position }} />
     </span>
   );

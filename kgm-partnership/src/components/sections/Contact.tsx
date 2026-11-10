@@ -77,7 +77,9 @@ export function Contact() {
     error: { tone: "warn", text: "No se ha podido enviar el mensaje. Inténtalo de nuevo en unos minutos." },
     "not-configured": {
       tone: "warn",
-      text: "Este formulario aún no está conectado a un servicio de envío, así que tu mensaje no se ha enviado.",
+      text: contact.email
+        ? `Este formulario aún no está conectado, así que tu mensaje no se ha enviado. Escríbenos a ${contact.email}.`
+        : "Este formulario aún no está conectado a un servicio de envío, así que tu mensaje no se ha enviado.",
     },
   };
   const msg = messages[status];
