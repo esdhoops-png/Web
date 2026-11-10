@@ -36,13 +36,53 @@ export const images = {
   esdCrowd: { src: "/images/esd-738.jpg", alt: "Game action and spectators at an ESD HOOPS 3x3 tournament", position: "50% 55%" },
   esdCommunity: { src: "/images/esd-741.jpg", alt: "Players and spectators around the court at an ESD HOOPS 3x3 tournament", position: "50% 55%" },
 
-  // Basketball atmosphere — Unsplash (see credits), used where no ESD HOOPS photo exists (training, night court, details).
+  // ESD HOOPS — training sessions
+  esdCoach: { src: "/images/esd-train-254.jpg", alt: "ESD HOOPS coach encouraging players during a training session", position: "50% 30%" },
+  esdCoachLaugh: { src: "/images/esd-train-387.jpg", alt: "Coach sharing a laugh with young players at an ESD HOOPS training", position: "45% 40%" },
+  esdShirt: { src: "/images/esd-train-125.jpg", alt: "Player wearing an ESD HOOPS shirt at training", position: "50% 30%" },
+  esdCamp: { src: "/images/esd-train-400.jpg", alt: "Group photo of players and coaches at an ESD HOOPS training camp", position: "50% 60%" },
+  esdDribble: { src: "/images/esd-train-271.jpg", alt: "Young player dribbling during an ESD HOOPS training drill", position: "50% 50%" },
+
+  // Basketball atmosphere — Unsplash (see credits): night court and details.
   courtNight: { src: "/images/court-night.jpg", alt: "Urban basketball court at night under a bridge", position: "50% 60%" },
   netDark: { src: "/images/net-dark.jpg", alt: "Basketball dropping through the net against a dark background", position: "50% 40%" },
   ballMacro: { src: "/images/ball-macro.jpg", alt: "Close-up texture of a basketball", position: "50% 50%" },
-  trainingRopes: { src: "/images/training-ropes.jpg", alt: "Athlete training with battle ropes", position: "60% 50%" },
-  trainingPartner: { src: "/images/training-partner.jpg", alt: "Coach and athlete during a strength session", position: "50% 50%" },
 } satisfies Record<string, Img>;
+
+export type Vehicle = { id: string; name: string; img: Img; width: number; height: number; faces: "left" | "right" };
+
+/** Official KGM studio images (transparent background), supplied for this proposal. */
+export const vehicles = {
+  mussoGreen: { id: "musso-ev", name: "Musso EV", img: { src: "/images/kgm-musso-ev-green.webp", alt: "KGM Musso EV pick-up in green" }, width: 723, height: 384, faces: "left" },
+  mussoWhite: { id: "musso-ev-white", name: "Musso EV", img: { src: "/images/kgm-musso-ev-white.webp", alt: "KGM Musso EV pick-up in white" }, width: 725, height: 383, faces: "right" },
+  torresEvx: { id: "torres-evx", name: "Torres EVX", img: { src: "/images/kgm-torres-evx-white.webp", alt: "KGM Torres EVX SUV in white" }, width: 761, height: 396, faces: "right" },
+  torresEvxVx: { id: "torres-evx-vx", name: "Torres EVX", img: { src: "/images/kgm-torres-evx-vx-white.webp", alt: "KGM Torres EVX SUV in white with silver wheels" }, width: 772, height: 406, faces: "right" },
+  actyon: { id: "actyon-hybrid", name: "Actyon Hybrid", img: { src: "/images/kgm-actyon-hybrid-green.webp", alt: "KGM Actyon Hybrid SUV in green" }, width: 703, height: 396, faces: "left" },
+} satisfies Record<string, Vehicle>;
+
+export const fleet = {
+  label: "06 — The Fleet",
+  title: "The KGM range, on court.",
+  intro: "How KGM's line-up could take part in the partnership — from the event floor to player campaigns.",
+  disclaimer: "Proposed roles for discussion. Models and availability to be agreed with KGM.",
+  items: [
+    {
+      vehicle: vehicles.mussoGreen,
+      role: "Event logistics & courtside display",
+      body: "The pick-up that arrives with the court: moving equipment for 3x3 events and anchoring the KGM display zone next to the action.",
+    },
+    {
+      vehicle: vehicles.torresEvx,
+      role: "Experience zone & test drives",
+      body: "The centrepiece of the KGM experience zone at tournaments, where players and families discover the vehicle up close.",
+    },
+    {
+      vehicle: vehicles.actyon,
+      role: "Player campaigns",
+      body: "The hero vehicle for editorial campaigns with ESD HOOPS players, built around ambition, performance and determination.",
+    },
+  ],
+};
 
 export const contact = {
   /** Fill in with official ESD HOOPS details. Empty values are not rendered. */
@@ -61,6 +101,7 @@ export const nav = [
   { id: "global-reach", label: "Global Reach" },
   { id: "why-kgm", label: "Why KGM" },
   { id: "concepts", label: "Concepts" },
+  { id: "fleet", label: "The Fleet" },
   { id: "activation", label: "Activation" },
   { id: "synergy", label: "Shared Values" },
   { id: "value", label: "What KGM Gets" },
@@ -96,8 +137,8 @@ export const whoWeAre = {
       title: "Player Development",
       body: "Individual training and development for amateur and professional players.",
       points: ["Technical improvement", "Individual skill development", "Physical preparation", "Athletic performance", "Player growth and evolution"],
-      image: images.trainingPartner,
-      image2: images.esdShooterAlt,
+      image: images.esdCoach,
+      image2: images.esdCoachLaugh,
     },
     {
       n: "02",
@@ -144,7 +185,7 @@ export const whyKgm = {
       n: "01",
       title: "Connect with the next generation",
       body: "Basketball connects with young people, athletes, families and new generations of consumers. KGM can reach this audience through real experiences, sporting activities and communities built around shared interests.",
-      image: images.esdContest,
+      image: images.esdDribble,
     },
     {
       n: "02",
@@ -185,7 +226,8 @@ export const concepts = {
       kicker: "KGM × Basketball Lifestyle",
       message: "Driven by passion. Connected through basketball.",
       body: "A KGM SUV parked courtside at an urban court at golden hour. Players training, cinematic light, the language of an automotive campaign.",
-      images: [images.courtNight, images.kgmBlack, images.esdReleaseAlt],
+      images: [images.courtNight, images.esdCourt, images.esdReleaseAlt],
+      montage: { vehicle: vehicles.mussoGreen, on: 0 },
     },
     {
       n: "02",
@@ -200,20 +242,22 @@ export const concepts = {
       message: "Driven by ambition.",
       body: "Players posing alongside a KGM vehicle in dramatic, editorial light — ambassadors of shared values.",
       values: ["Ambition", "Performance", "Discipline", "Determination"],
-      images: [images.esdShooter, images.kgmNight, images.esdFocus],
+      images: [images.esdShooter, images.esdProfile, images.esdFocus],
+      montage: { vehicle: vehicles.actyon, on: 1 },
     },
     {
       n: "04",
       kicker: "KGM × Brand Experience",
       message: "Experience KGM beyond the road.",
       body: "A KGM showcase space inside a basketball event, where attendees discover the vehicles, interact with the brand and live the experience.",
-      images: [images.kgmShowroomFront, images.kgmInterior, images.esdFlight],
+      images: [images.esdCommunity, images.kgmInterior, images.esdFlight],
+      montage: { vehicle: vehicles.torresEvxVx, on: 0 },
     },
   ],
 };
 
 export const activation = {
-  label: "06 — Activation Strategy",
+  label: "07 — Activation Strategy",
   title: "Let's make it real.",
   intro: "Four lines of activation that turn ideas into concrete collaboration opportunities.",
   items: [
@@ -233,7 +277,7 @@ export const activation = {
       summary: "Integrating KGM into ESD HOOPS' training programmes and sporting activities.",
       options: ["KGM-branded training apparel", "Player campaigns", "Videos on discipline and self-improvement", "Special activities", "Experiences for players and families"],
       benefit: "Associating the brand with positive values and connecting with athletes and families.",
-      image: images.trainingRopes,
+      image: images.esdShirt,
     },
     {
       n: "03",
@@ -257,7 +301,7 @@ export const activation = {
 };
 
 export const synergy = {
-  label: "07 — Brand Synergy",
+  label: "08 — Brand Synergy",
   title: ["Different industries.", "Shared values."],
   values: ["Performance", "Ambition", "Innovation", "Movement", "Community", "Global Vision"],
   inline: [images.esdRelease, images.kgmInterior, images.netDark, images.kgmNight, images.esdCommunity, images.ballMacro],
@@ -268,7 +312,7 @@ export const synergy = {
 };
 
 export const value = {
-  label: "08 — The Value for KGM",
+  label: "09 — The Value for KGM",
   title: "What KGM gets.",
   note: "Potential opportunities and benefits — not guaranteed results.",
   items: [
@@ -282,7 +326,7 @@ export const value = {
 };
 
 export const future = {
-  label: "09 — The Future",
+  label: "10 — The Future",
   title: "This is just the beginning.",
   body: [
     "We believe the strongest partnerships are built through shared vision, meaningful experiences and long-term commitment.",
@@ -292,7 +336,7 @@ export const future = {
 };
 
 export const contactSection = {
-  label: "10 — Contact",
+  label: "11 — Contact",
   title: "Let's build something bigger.",
   subtitle: "ESD HOOPS × KGM — Strategic Partnership Proposal",
   cta: "Let's talk",
@@ -300,6 +344,7 @@ export const contactSection = {
 };
 
 export const credits = [
+  { label: "KGM Musso EV, Torres EVX and Actyon Hybrid (studio images)", author: "KGM", license: "Official KGM imagery", url: "" },
   { label: "KGM Torres (showroom, front & rear)", author: "Alexander-93", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:KGM_Torres_Auto_Zuerich_2023_1X7A1045.jpg" },
   { label: "KGM Torres (showroom, rear)", author: "Alexander-93", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:KGM_Torres_Auto_Zuerich_2023_1X7A1294.jpg" },
   { label: "KGM Torres (black)", author: "Alexander-93", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:SsangYong_Torres_Automesse_Ludwigsburg_2024_IMG_1442.jpg" },

@@ -3,17 +3,33 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { concepts, type Img } from "@/content/site";
+import { concepts, type Img, type Vehicle } from "@/content/site";
 import { useMotionPrefs } from "@/components/Providers";
 import { FadeIn, SectionLabel, WordsReveal } from "@/components/ui/Motion";
 import { KgmWordmark } from "@/components/ui/Logos";
+import { VehicleCutout } from "@/components/ui/VehicleCutout";
 
 type Concept = (typeof concepts.items)[number];
 
-function Shot({ img, className = "", sizes }: { img: Img; className?: string; sizes: string }) {
+function Shot({ img, className = "", sizes, vehicle }: { img: Img; className?: string; sizes: string; vehicle?: Vehicle }) {
   return (
     <div className={`relative overflow-hidden bg-charcoal ${className}`}>
       <Image src={img.src} alt={img.alt} fill sizes={sizes} className="cine-img object-cover transition-transform duration-[1.6s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" style={{ objectPosition: img.position }} />
+      {vehicle && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
+          <motion.div
+            className={`absolute bottom-[4%] w-[min(72%,560px)] ${vehicle.faces === "left" ? "right-[4%]" : "left-[4%]"}`}
+            initial={{ x: vehicle.faces === "left" ? "40%" : "-40%", opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "0px -10% 0px -10%" }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <VehicleCutout vehicle={vehicle} sizes="40vw" />
+          </motion.div>
+          <span className="label absolute top-3 right-3 bg-ink/70 px-2 py-1 text-[0.55rem] text-bone">Concept montage</span>
+        </>
+      )}
     </div>
   );
 }
@@ -47,24 +63,26 @@ function EventPlan() {
 
 function ConceptPanel({ c, index }: { c: Concept; index: number }) {
   const [a, b, d] = c.images;
+  const m = "montage" in c && c.montage ? c.montage : undefined;
+  const v = (i: number) => (m && m.on === i ? m.vehicle : undefined);
   return (
     <article className="group relative flex h-full w-full shrink-0 flex-col justify-between gap-6 md:w-[86vw] md:max-w-[1500px]" aria-labelledby={`concept-${c.n}`}>
       <div className="relative grid flex-1 grid-cols-12 grid-rows-6 gap-2 md:gap-3">
         {index === 1 ? (
           <>
-            <Shot img={a} className="col-span-12 row-span-4 md:col-span-5 md:row-span-6" sizes="(min-width: 768px) 40vw, 100vw" />
+            <Shot vehicle={v(0)} img={a} className="col-span-12 row-span-4 md:col-span-5 md:row-span-6" sizes="(min-width: 768px) 40vw, 100vw" />
             <div className="relative col-span-12 row-span-2 border hairline bg-ink/80 p-3 md:col-span-4 md:row-span-6 md:p-6">
               <span className="label absolute top-3 left-3 text-[0.55rem] md:top-5 md:left-5">Concept plan</span>
               <EventPlan />
             </div>
-            <Shot img={b} className="hidden md:col-span-3 md:row-span-3 md:block" sizes="25vw" />
-            <Shot img={d} className="hidden md:col-span-3 md:row-span-3 md:block" sizes="25vw" />
+            <Shot vehicle={v(1)} img={b} className="hidden md:col-span-3 md:row-span-3 md:block" sizes="25vw" />
+            <Shot vehicle={v(2)} img={d} className="hidden md:col-span-3 md:row-span-3 md:block" sizes="25vw" />
           </>
         ) : index === 2 ? (
           <>
-            <Shot img={a} className="col-span-7 row-span-6 md:col-span-4" sizes="(min-width: 768px) 30vw, 60vw" />
-            <Shot img={b} className="col-span-5 row-span-4 md:col-span-6 md:row-span-6" sizes="(min-width: 768px) 45vw, 40vw" />
-            <Shot img={d} className="col-span-5 row-span-2 md:col-span-2 md:row-span-3" sizes="(min-width: 768px) 15vw, 40vw" />
+            <Shot vehicle={v(0)} img={a} className="col-span-7 row-span-6 md:col-span-4" sizes="(min-width: 768px) 30vw, 60vw" />
+            <Shot vehicle={v(1)} img={b} className="col-span-5 row-span-4 md:col-span-6 md:row-span-6" sizes="(min-width: 768px) 45vw, 40vw" />
+            <Shot vehicle={v(2)} img={d} className="col-span-5 row-span-2 md:col-span-2 md:row-span-3" sizes="(min-width: 768px) 15vw, 40vw" />
             {"values" in c && c.values && (
               <ul className="hidden flex-col justify-end gap-1 md:col-span-2 md:row-span-3 md:flex">
                 {c.values.map((v) => (
@@ -75,9 +93,9 @@ function ConceptPanel({ c, index }: { c: Concept; index: number }) {
           </>
         ) : (
           <>
-            <Shot img={a} className="col-span-12 row-span-4 md:col-span-8 md:row-span-6" sizes="(min-width: 768px) 60vw, 100vw" />
-            <Shot img={b} className="col-span-6 row-span-2 md:col-span-4 md:row-span-3" sizes="(min-width: 768px) 30vw, 50vw" />
-            <Shot img={d} className="col-span-6 row-span-2 md:col-span-4 md:row-span-3" sizes="(min-width: 768px) 30vw, 50vw" />
+            <Shot vehicle={v(0)} img={a} className="col-span-12 row-span-4 md:col-span-8 md:row-span-6" sizes="(min-width: 768px) 60vw, 100vw" />
+            <Shot vehicle={v(1)} img={b} className="col-span-6 row-span-2 md:col-span-4 md:row-span-3" sizes="(min-width: 768px) 30vw, 50vw" />
+            <Shot vehicle={v(2)} img={d} className="col-span-6 row-span-2 md:col-span-4 md:row-span-3" sizes="(min-width: 768px) 30vw, 50vw" />
           </>
         )}
 
@@ -117,20 +135,31 @@ export function Concepts() {
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => {
-      setDesktop(mq.matches);
-      if (trackRef.current) setDistance(Math.max(0, trackRef.current.scrollWidth - window.innerWidth));
-    };
+    const update = () => setDesktop(mq.matches);
     update();
     mq.addEventListener("change", update);
-    window.addEventListener("resize", update);
-    return () => {
-      mq.removeEventListener("change", update);
-      window.removeEventListener("resize", update);
-    };
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   const horizontal = desktop && !reduced;
+
+  // Measure the track once it is laid out horizontally, and whenever it resizes.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || !horizontal) {
+      setDistance(0);
+      return;
+    }
+    const measure = () => setDistance(Math.max(0, el.scrollWidth - window.innerWidth));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [horizontal]);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const x = useTransform(scrollYProgress, [0.06, 0.96], [0, -distance]);
   const progress = useTransform(scrollYProgress, [0.06, 0.96], [0, 1]);

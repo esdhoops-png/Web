@@ -28,7 +28,7 @@ export function WhoWeAre() {
     <section id="who-we-are" className="relative bg-charcoal">
       {/* Intro — full-bleed statement */}
       <div className="relative overflow-hidden">
-        <CineImage img={images.esdCrowd} className="h-[70svh] min-h-[460px] w-full md:h-[86svh]" parallax={8} reveal="none" />
+        <CineImage img={images.esdCamp} className="h-[70svh] min-h-[460px] w-full md:h-[86svh]" parallax={8} reveal="none" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-ink/60" />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-5 pb-12 md:px-10 md:pb-20">
           <SectionLabel className="text-bone">{whoWeAre.label}</SectionLabel>

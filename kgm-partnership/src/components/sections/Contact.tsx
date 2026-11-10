@@ -184,18 +184,24 @@ export function Contact() {
             <div className="md:col-span-7">
               <p className="label text-[0.6rem]">Image credits</p>
               <ul className="mt-4 grid gap-1">
-                {credits.map((c) => (
-                  <li key={c.url}>
-                    {c.label} — photo by {c.author},{" "}
-                    <a className="underline decoration-silver/30 underline-offset-2 hover:text-bone" href={c.url} target="_blank" rel="noreferrer">
-                      Wikimedia Commons
-                    </a>
-                    , {c.license} (cropped and colour graded).
-                  </li>
-                ))}
-                <li>Tournament photography © ESD HOOPS (latest ESD HOOPS 3x3 tournament).</li>
+                {credits.map((c) =>
+                  c.url ? (
+                    <li key={c.label}>
+                      {c.label} — photo by {c.author},{" "}
+                      <a className="underline decoration-silver/30 underline-offset-2 hover:text-bone" href={c.url} target="_blank" rel="noreferrer">
+                        Wikimedia Commons
+                      </a>
+                      , {c.license} (cropped and colour graded).
+                    </li>
+                  ) : (
+                    <li key={c.label}>
+                      {c.label} — {c.license}.
+                    </li>
+                  ),
+                )}
+                <li>Tournament and training photography © ESD HOOPS.</li>
                 <li>
-                  Training, night court and detail photography —{" "}
+                  Night court and detail photography —{" "}
                   <a className="underline decoration-silver/30 underline-offset-2 hover:text-bone" href="https://unsplash.com/license" target="_blank" rel="noreferrer">
                     Unsplash License
                   </a>

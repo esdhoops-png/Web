@@ -5,6 +5,7 @@ import { WhoWeAre } from "@/components/sections/WhoWeAre";
 import { GlobalReach } from "@/components/sections/GlobalReach";
 import { WhyKgm } from "@/components/sections/WhyKgm";
 import { Concepts } from "@/components/sections/Concepts";
+import { Fleet } from "@/components/sections/Fleet";
 import { Activation } from "@/components/sections/Activation";
 import { Synergy } from "@/components/sections/Synergy";
 import { Value } from "@/components/sections/Value";
@@ -25,6 +26,7 @@ export default function Page() {
         <GlobalReach />
         <WhyKgm />
         <Concepts />
+        <Fleet />
         <Activation />
         <Synergy />
         <Value />
