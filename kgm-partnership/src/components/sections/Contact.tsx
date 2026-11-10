@@ -9,8 +9,8 @@ import { EsdMark, KgmWordmark, Lockup } from "@/components/ui/Logos";
 type Status = "idle" | "sending" | "sent" | "error" | "not-configured";
 
 const fields = [
-  { name: "name", label: "Name", type: "text", autoComplete: "name", required: true },
-  { name: "company", label: "Company", type: "text", autoComplete: "organization", required: false },
+  { name: "name", label: "Nombre", type: "text", autoComplete: "name", required: true },
+  { name: "company", label: "Empresa", type: "text", autoComplete: "organization", required: false },
   { name: "email", label: "Email", type: "email", autoComplete: "email", required: true },
 ] as const;
 
@@ -31,7 +31,7 @@ function Field({ name, label, type, autoComplete, required }: (typeof fields)[nu
         className="label pointer-events-none absolute top-8 left-0 origin-left transition-all duration-300 peer-focus:top-1 peer-focus:text-[0.6rem] peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:text-[0.6rem]"
       >
         {label}
-        {required ? "" : " (optional)"}
+        {required ? "" : " (opcional)"}
       </label>
     </div>
   );
@@ -62,7 +62,7 @@ export function Contact() {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ ...data, _subject: "ESD HOOPS × KGM — Partnership enquiry" }),
+        body: JSON.stringify({ ...data, _subject: "ESD HOOPS × KGM — Consulta sobre la colaboración" }),
       });
       if (!res.ok) throw new Error(String(res.status));
       setStatus("sent");
@@ -73,11 +73,11 @@ export function Contact() {
   }
 
   const messages: Partial<Record<Status, { tone: "ok" | "warn"; text: string }>> = {
-    sent: { tone: "ok", text: "Thank you — your message has been sent. We'll be in touch soon." },
-    error: { tone: "warn", text: "Your message could not be sent. Please try again in a moment." },
+    sent: { tone: "ok", text: "Gracias, tu mensaje se ha enviado. Te responderemos pronto." },
+    error: { tone: "warn", text: "No se ha podido enviar el mensaje. Inténtalo de nuevo en unos minutos." },
     "not-configured": {
       tone: "warn",
-      text: "This form is not connected to a delivery service yet, so your message has not been sent.",
+      text: "Este formulario aún no está conectado a un servicio de envío, así que tu mensaje no se ha enviado.",
     },
   };
   const msg = messages[status];
@@ -119,7 +119,7 @@ export function Contact() {
               ))}
               <div className="relative border-b hairline pt-6 pb-2 focus-within:border-bone">
                 <label htmlFor="f-message" className="label">
-                  Message
+                  Mensaje
                 </label>
                 <textarea id="f-message" name="message" required rows={5} className="mt-3 w-full resize-none bg-transparent text-lg text-bone outline-none" />
               </div>
@@ -132,7 +132,7 @@ export function Contact() {
                   className="group relative inline-flex items-center gap-5 overflow-hidden rounded-full border border-bone/30 py-4 pr-4 pl-8 text-bone transition-colors duration-500 hover:border-signal disabled:opacity-60"
                 >
                   <span className="absolute inset-0 origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden />
-                  <span className="label relative text-bone">{status === "sending" ? "Sending…" : contactSection.cta}</span>
+                  <span className="label relative text-bone">{status === "sending" ? "Enviando…" : contactSection.cta}</span>
                   <span className="relative grid h-10 w-10 place-items-center rounded-full bg-bone text-ink transition-transform duration-500 group-hover:translate-x-1">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                       <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.4" />
@@ -176,39 +176,39 @@ export function Contact() {
                 <span className="block h-[11px] w-[66px]"><KgmWordmark className="h-full w-full" /></span>
               </div>
               <p className="mt-6">
-                This website is a partnership proposal prepared by ESD HOOPS. Creative concepts, activations and visuals are proposals for discussion
-                and do not represent existing events, campaigns or agreements between ESD HOOPS and KGM. KGM and the KGM logo are trademarks of
-                KG Mobility Corp., shown here for the purpose of this proposal.
+                Esta web es una propuesta de colaboración preparada por ESD HOOPS. Los conceptos creativos, las activaciones y los montajes son
+                propuestas para debatir y no representan eventos, campañas ni acuerdos existentes entre ESD HOOPS y KGM. KGM y el logotipo de KGM
+                son marcas de KG Mobility Corp. y se muestran únicamente para esta propuesta.
               </p>
             </div>
             <div className="md:col-span-7">
-              <p className="label text-[0.6rem]">Image credits</p>
+              <p className="label text-[0.6rem]">Créditos de imagen</p>
               <ul className="mt-4 grid gap-1">
                 {credits.map((c) =>
                   c.url ? (
                     <li key={c.label}>
-                      {c.label} — photo by {c.author},{" "}
+                      {c.label}: foto de {c.author},{" "}
                       <a className="underline decoration-silver/30 underline-offset-2 hover:text-bone" href={c.url} target="_blank" rel="noreferrer">
                         Wikimedia Commons
                       </a>
-                      , {c.license} (cropped and colour graded).
+                      , {c.license} (recortada y con etalonaje).
                     </li>
                   ) : (
                     <li key={c.label}>
-                      {c.label} — {c.license}.
+                      {c.label}: {c.license}.
                     </li>
                   ),
                 )}
-                <li>Tournament and training photography © ESD HOOPS.</li>
+                <li>Fotografía de torneos y entrenamientos © ESD HOOPS.</li>
                 <li>
-                  Night court and detail photography —{" "}
+                  Fotografía de pista nocturna y detalles:{" "}
                   <a className="underline decoration-silver/30 underline-offset-2 hover:text-bone" href="https://unsplash.com/license" target="_blank" rel="noreferrer">
-                    Unsplash License
+                    licencia Unsplash
                   </a>
                   .
                 </li>
               </ul>
-              <p className="mt-6">© {new Date().getFullYear()} ESD HOOPS. Strategic Partnership Proposal.</p>
+              <p className="mt-6">© {new Date().getFullYear()} ESD HOOPS. Propuesta de colaboración estratégica.</p>
             </div>
           </div>
         </div>

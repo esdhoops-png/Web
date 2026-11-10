@@ -38,7 +38,7 @@ export function GlobalReach() {
 
         {/* Animated map */}
         <figure className="relative mt-16 md:mt-24">
-          <svg viewBox={`0 0 ${world.width} ${world.height}`} className="w-full" role="img" aria-label="Map illustrating connections between North America, Europe and Asia">
+          <svg viewBox={`0 0 ${world.width} ${world.height}`} className="w-full" role="img" aria-label="Mapa que ilustra conexiones entre Norteamérica, Europa y Asia">
             <defs>
               <radialGradient id="glow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="#b97a4e" stopOpacity="0.35" />
@@ -106,7 +106,7 @@ export function GlobalReach() {
             <span className="label flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-signal" aria-hidden /> {globalReach.community}
             </span>
-            <span className="label text-[0.6rem] text-silver/60">Illustrative — regions of player connections, not offices or operations</span>
+            <span className="label text-[0.6rem] text-silver/60">Ilustrativo: regiones de conexión con jugadores, no oficinas ni operaciones</span>
           </figcaption>
         </figure>
 

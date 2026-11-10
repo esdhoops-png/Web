@@ -88,7 +88,7 @@ export function Fleet() {
 
           {/* Selector + copy */}
           <div className="mt-8 grid gap-8 md:grid-cols-12 md:items-start">
-            <div role="tablist" aria-label="KGM models" className="flex flex-wrap gap-2 md:col-span-5">
+            <div role="tablist" aria-label="Modelos KGM" className="flex flex-wrap gap-2 md:col-span-5">
               {fleet.items.map((it, i) => {
                 const selected = i === active;
                 return (
@@ -114,7 +114,7 @@ export function Fleet() {
             <div id="fleet-panel" role="tabpanel" aria-labelledby={`fleet-tab-${active}`} className="md:col-span-7">
               <AnimatePresence mode="wait">
                 <motion.div key={active} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.5, ease: EASE }}>
-                  <span className="label !text-signal">Proposed role</span>
+                  <span className="label !text-signal">Papel propuesto</span>
                   <h3 className="display mt-2 text-3xl text-bone md:text-5xl">{item.role}</h3>
                   <p className="mt-4 max-w-xl text-base leading-relaxed text-silver md:text-lg">{item.body}</p>
                 </motion.div>

@@ -13,10 +13,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "ESD HOOPS × KGM — Strategic Partnership Proposal",
   description:
-    "Two worlds. One vision. A strategic partnership proposal connecting mobility, sport and the next generation.",
+    "Two worlds. One vision. Propuesta de colaboración estratégica entre ESD HOOPS y KGM: conectando movilidad, deporte y la nueva generación.",
   openGraph: {
     title: "ESD HOOPS × KGM — Strategic Partnership Proposal",
-    description: "Connecting mobility, sport and the next generation.",
+    description: "Conectando movilidad, deporte y la nueva generación.",
     type: "website",
     images: [{ url: "/images/kgm-torres-showroom-front.jpg", width: 1920, height: 1134 }],
   },
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>

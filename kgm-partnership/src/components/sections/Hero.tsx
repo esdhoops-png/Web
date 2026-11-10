@@ -114,8 +114,8 @@ export function Hero() {
         <span className="label hidden max-w-[16rem] leading-relaxed text-bone md:block">
           ESD HOOPS × KGM <span className="text-signal">—</span> {hero.eyebrow}
         </span>
-        <a href="#vision" className="mx-auto flex flex-col items-center gap-3 md:hidden" aria-label="Scroll to the vision">
-          <span className="label text-[0.6rem]">Scroll</span>
+        <a href="#vision" className="mx-auto flex flex-col items-center gap-3 md:hidden" aria-label="Ir a la visión">
+          <span className="label text-[0.6rem]">Desliza</span>
           <span className="relative block h-10 w-px overflow-hidden bg-bone/15">
             <span className="absolute inset-0 bg-bone" style={{ animation: "scroll-cue 2.2s cubic-bezier(.22,1,.36,1) infinite" }} />
           </span>

@@ -27,7 +27,7 @@ function Shot({ img, className = "", sizes, vehicle }: { img: Img; className?: s
           >
             <VehicleCutout vehicle={vehicle} sizes="40vw" />
           </motion.div>
-          <span className="label absolute top-3 right-3 bg-ink/70 px-2 py-1 text-[0.55rem] text-bone">Concept montage</span>
+          <span className="label absolute top-3 right-3 bg-ink/70 px-2 py-1 text-[0.55rem] text-bone">Montaje conceptual</span>
         </>
       )}
     </div>
@@ -37,7 +37,7 @@ function Shot({ img, className = "", sizes, vehicle }: { img: Img; className?: s
 /** Schematic 3x3 event layout — a creative proposal, drawn as a plan. */
 function EventPlan() {
   return (
-    <svg viewBox="0 0 400 260" className="h-full w-full" role="img" aria-label="Concept plan of a 3x3 event: court, KGM vehicle display, experience zone and stands">
+    <svg viewBox="0 0 400 260" className="h-full w-full" role="img" aria-label="Plano conceptual de un evento 3x3: pista, exposición de vehículos KGM, zona de experiencia y gradas">
       <g fill="none" stroke="#f2e9df" strokeOpacity="0.7" strokeWidth="1">
         <rect x="140" y="60" width="150" height="140" />
         <path d="M140 60 h150" stroke="#b97a4e" strokeWidth="2" />
@@ -50,11 +50,11 @@ function EventPlan() {
         <path d="M140 220 h150 M140 232 h150 M140 244 h150" strokeOpacity="0.35" />
       </g>
       <g fill="#f2e9df" style={{ fontFamily: "var(--font-sans)", fontSize: 7.5, letterSpacing: "0.18em" }}>
-        <text x="215" y="140" textAnchor="middle">3X3 COURT</text>
-        <text x="65" y="98" textAnchor="middle">KGM DISPLAY</text>
-        <text x="65" y="168" textAnchor="middle">EXPERIENCE ZONE</text>
-        <text x="350" y="134" textAnchor="middle" transform="rotate(90 350 130)">ACTIVATION</text>
-        <text x="215" y="256" textAnchor="middle" fillOpacity="0.6">STANDS</text>
+        <text x="215" y="140" textAnchor="middle">PISTA 3X3</text>
+        <text x="65" y="98" textAnchor="middle">EXPOSICIÓN KGM</text>
+        <text x="65" y="168" textAnchor="middle">ZONA EXPERIENCIA</text>
+        <text x="350" y="134" textAnchor="middle" transform="rotate(90 350 130)">ACTIVACIÓN</text>
+        <text x="215" y="256" textAnchor="middle" fillOpacity="0.6">GRADAS</text>
       </g>
       <circle cx="65" cy="110" r="3" fill="#b97a4e" />
     </svg>
@@ -72,7 +72,7 @@ function ConceptPanel({ c, index }: { c: Concept; index: number }) {
           <>
             <Shot vehicle={v(0)} img={a} className="col-span-12 row-span-4 md:col-span-5 md:row-span-6" sizes="(min-width: 768px) 40vw, 100vw" />
             <div className="relative col-span-12 row-span-2 border hairline bg-ink/80 p-3 md:col-span-4 md:row-span-6 md:p-6">
-              <span className="label absolute top-3 left-3 text-[0.55rem] md:top-5 md:left-5">Concept plan</span>
+              <span className="label absolute top-3 left-3 text-[0.55rem] md:top-5 md:left-5">Plano del concepto</span>
               <EventPlan />
             </div>
             <Shot vehicle={v(1)} img={b} className="hidden md:col-span-3 md:row-span-3 md:block" sizes="25vw" />
@@ -112,7 +112,7 @@ function ConceptPanel({ c, index }: { c: Concept; index: number }) {
       <div className="grid gap-4 md:grid-cols-12 md:items-end md:gap-8">
         <div className="md:col-span-7">
           <span className="label flex items-center gap-3">
-            <span className="text-signal">Concept {c.n}</span>
+            <span className="text-signal">Concepto {c.n}</span>
             <span className="text-silver/60">—</span>
             {c.kicker}
           </span>
@@ -191,11 +191,11 @@ export function Concepts() {
           </motion.div>
           {horizontal && (
             <div className="absolute inset-x-[7vw] bottom-5 flex items-center gap-6">
-              <span className="label text-[0.6rem]">Scroll to explore</span>
+              <span className="label text-[0.6rem]">Desliza para explorar</span>
               <div className="h-px flex-1 bg-bone/10">
                 <motion.div className="h-px origin-left bg-bone" style={{ scaleX: progress }} />
               </div>
-              <span className="label text-[0.6rem]">04 concepts</span>
+              <span className="label text-[0.6rem]">04 conceptos</span>
             </div>
           )}
         </div>

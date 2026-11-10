@@ -33,11 +33,11 @@ export function Vision() {
           <div className="relative h-[520px] md:col-span-5 md:h-auto md:min-h-[640px]" aria-hidden={false}>
             <motion.div style={{ y: reduced ? 0 : slow }} className="absolute top-0 right-0 w-[72%]">
               <CineImage img={images.kgmShowroomRear} className="aspect-[4/5]" sizes="(min-width: 768px) 30vw, 70vw" reveal="up" />
-              <span className="label mt-3 block text-[0.6rem]">Mobility</span>
+              <span className="label mt-3 block text-[0.6rem]">Movilidad</span>
             </motion.div>
             <motion.div style={{ y: reduced ? 0 : fast }} className="absolute bottom-0 left-0 w-[55%]">
               <CineImage img={images.esdPortrait} className="aspect-[4/5]" sizes="(min-width: 768px) 22vw, 55vw" reveal="up" delay={0.2} />
-              <span className="label mt-3 block text-[0.6rem]">Sport</span>
+              <span className="label mt-3 block text-[0.6rem]">Deporte</span>
             </motion.div>
           </div>
         </div>

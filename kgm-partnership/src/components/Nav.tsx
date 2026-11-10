@@ -45,7 +45,7 @@ export function Nav() {
           <button
             onClick={() => go("top")}
             className="col-start-2 flex items-center justify-center gap-3 text-bone"
-            aria-label="Back to top"
+            aria-label="Volver al inicio"
           >
             <span className="block h-7 w-[19px] text-tan"><EsdMark className="h-full w-full" /></span>
             <span className="font-serif text-silver">×</span>
@@ -55,10 +55,10 @@ export function Nav() {
             onClick={() => setOpen((o) => !o)}
             className="col-start-3 flex items-center justify-self-end gap-3 text-bone"
             aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-controls="site-menu"
           >
-            <span className="label hidden text-bone sm:inline">{open ? "Close" : "Navigate"}</span>
+            <span className="label hidden text-bone sm:inline">{open ? "Cerrar" : "Menú"}</span>
             <span className="relative block h-3 w-6" aria-hidden>
               <span className={`absolute left-0 h-px w-full bg-bone transition-transform duration-500 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
               <span className={`absolute left-0 h-px w-full bg-bone transition-transform duration-500 ${open ? "top-1.5 -rotate-45" : "top-3"}`} />
@@ -74,7 +74,7 @@ export function Nav() {
             id="site-menu"
             role="dialog"
             aria-modal="true"
-            aria-label="Site navigation"
+            aria-label="Navegación"
             className="fixed inset-0 z-40 flex flex-col bg-ink"
             initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
             animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
@@ -83,7 +83,7 @@ export function Nav() {
             data-lenis-prevent
           >
             <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center overflow-y-auto px-5 pt-24 pb-10 md:px-10">
-              <nav aria-label="Sections">
+              <nav aria-label="Secciones">
                 <ol className="grid gap-x-16 md:grid-cols-2">
                   {nav.map((item, i) => (
                     <motion.li
@@ -116,7 +116,7 @@ export function Nav() {
                   <span className={`relative h-4 w-8 rounded-full border transition-colors ${reduced ? "border-signal bg-signal/30" : "border-silver/50"}`}>
                     <span className={`absolute top-0.5 h-2.5 w-2.5 rounded-full bg-bone transition-all ${reduced ? "left-4" : "left-0.5"}`} />
                   </span>
-                  Reduce motion
+                  Reducir movimiento
                 </button>
               </div>
             </div>

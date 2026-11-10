@@ -1,0 +1,399 @@
+<title>Guía reunión KGM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one reading column with a sticky section index; each web section is a "play" card with time, what's on screen, what to say. */
+:root {
+  --bg: #faf6f1; --surface: #ffffff; --fg: #142a3d; --muted: #5b6b78; --line: #e6dccf;
+  --accent: #b97a4e; --accent-soft: #f3e6da; --navy: #142a3d; --tan: #d9c4b0;
+  --serif: "Instrument Serif", "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1e2c; --surface: #142a3d; --fg: #f2e9df; --muted: #b4a796; --line: #24425c; --accent: #d39563; --accent-soft: #1c3a54; --navy: #f2e9df; --tan: #d9c4b0; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0d1e2c; --surface: #142a3d; --fg: #f2e9df; --muted: #b4a796; --line: #24425c; --accent: #d39563; --accent-soft: #1c3a54; --navy: #f2e9df; --tan: #d9c4b0; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 40px 80px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px }
+@media (max-width: 860px) { .wrap { grid-template-columns: 1fr; gap: 24px; padding-block: 24px 64px } .toc { position: static !important; } }
+
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 14px }
+.toc p { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px }
+.toc a { color: var(--fg); text-decoration: none; display: flex; gap: 10px; padding: 5px 0; border-bottom: 1px solid transparent }
+.toc a:hover, .toc a:focus-visible { color: var(--accent) }
+.toc span { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 2.6em }
+@media (max-width: 860px) { .toc ol { display: flex; flex-wrap: wrap; gap: 6px } .toc a { border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px } .toc span { display: none } }
+
+main { min-width: 0 }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 6vw, 4rem); line-height: 1; margin: 0 0 12px; text-wrap: balance }
+h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.7rem, 3.4vw, 2.3rem); line-height: 1.05; margin: 0; text-wrap: balance }
+h3 { font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 22px 0 8px; font-weight: 600 }
+.eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 14px }
+.lead { font-size: 18px; color: var(--muted); max-width: 62ch; margin: 0 }
+p, li { max-width: 68ch }
+a { color: var(--accent) }
+
+.summary { margin-top: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px }
+@media (max-width: 640px) { .summary { grid-template-columns: 1fr } }
+.summary div { border-top: 2px solid var(--accent); padding-top: 10px }
+.summary b { display: block; font-family: var(--serif); font-weight: 400; font-size: 1.5rem; line-height: 1.1 }
+.summary small { color: var(--muted); font-size: 14px }
+
+section { margin-top: 56px; scroll-margin-top: 24px }
+.play { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 24px clamp(18px, 3vw, 32px); margin-top: 16px }
+.play header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; border-bottom: 1px solid var(--line); padding-bottom: 14px }
+.time { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap }
+.time b { color: var(--fg) }
+.screen { margin: 14px 0 0; font-size: 14px; color: var(--muted) }
+.screen code { font-family: inherit; background: var(--accent-soft); color: var(--fg); padding: 1px 6px; border-radius: 3px }
+.say { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin: 8px 0; font-family: var(--serif); font-size: 1.3rem; line-height: 1.35 }
+ul { padding-left: 20px; margin: 6px 0 } li { margin: 4px 0 }
+.bridge { margin-top: 16px; font-size: 14px; color: var(--muted) }
+.bridge b { color: var(--fg); font-weight: 600 }
+.warn { margin-top: 14px; font-size: 14px; background: var(--accent-soft); padding: 10px 14px; border-radius: 4px }
+.fill { background: var(--accent-soft); border-bottom: 1px dashed var(--accent); padding: 0 4px; font-style: normal }
+
+.qa { display: grid; gap: 12px; margin-top: 16px }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px }
+summary { cursor: pointer; font-weight: 600 }
+details p { margin: 10px 0 0 }
+
+.check { list-style: none; padding: 0; display: grid; gap: 8px; margin-top: 16px }
+.check label { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px }
+.check input { margin-top: 4px; accent-color: var(--accent); width: 18px; height: 18px; flex: none }
+.check input:checked + span { color: var(--muted); text-decoration: line-through }
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px }
+@media (max-width: 640px) { .cols { grid-template-columns: 1fr } }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600&display=swap">
+
+<div class="wrap">
+  <nav class="toc" aria-label="Índice">
+    <p>Índice</p>
+    <ol>
+      <li><a href="#antes"><span>—</span>Antes de empezar</a></li>
+      <li><a href="#apertura"><span>0:00</span>Apertura</a></li>
+      <li><a href="#portada"><span>0:03</span>Portada</a></li>
+      <li><a href="#vision"><span>0:05</span>The Vision</a></li>
+      <li><a href="#quienes"><span>0:07</span>Who We Are</a></li>
+      <li><a href="#global"><span>0:11</span>Global Reach</a></li>
+      <li><a href="#why"><span>0:13</span>Why KGM?</a></li>
+      <li><a href="#conceptos"><span>0:18</span>Concepts</a></li>
+      <li><a href="#fleet"><span>0:22</span>The Fleet</a></li>
+      <li><a href="#activacion"><span>0:25</span>Activation</a></li>
+      <li><a href="#valor"><span>0:30</span>Valores y beneficios</a></li>
+      <li><a href="#cierre"><span>0:33</span>Cierre</a></li>
+      <li><a href="#preguntas"><span>—</span>Preguntas para KGM</a></li>
+      <li><a href="#objeciones"><span>—</span>Objeciones</a></li>
+      <li><a href="#no-decir"><span>—</span>Qué no decir</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <p class="eyebrow">ESD HOOPS × KGM · Reunión de presentación</p>
+    <h1>Guía de la reunión</h1>
+    <p class="lead">Recorrido por la web en el mismo orden en que aparece, con lo que hay en pantalla, qué decir y cómo pasar a la siguiente sección. Unos 35 minutos de presentación y el resto para conversar.</p>
+
+    <div class="summary">
+      <div><b>El mensaje</b><small>No buscamos un patrocinador: proponemos crear juntos experiencias que conecten KGM con una nueva generación a través del baloncesto.</small></div>
+      <div><b>El objetivo</b><small>Salir con un siguiente paso concreto: una segunda reunión para definir formato, modelos y calendario.</small></div>
+      <div><b>La actitud</b><small>Escuchar más que vender. Cada sección es una excusa para preguntarles qué buscan como marca.</small></div>
+    </div>
+
+    <section id="antes">
+      <p class="eyebrow">Antes de empezar</p>
+      <h2>Checklist del día</h2>
+      <ul class="check">
+        <li><label><input type="checkbox" id="c1"><span>Abre el enlace de la web en el portátil y deja la portada cargada antes de que entren. Si hay pantalla grande, conéctala y prueba antes.</span></label></li>
+        <li><label><input type="checkbox" id="c2"><span>Si vas a enviarles el enlace, compártelo desde el menú «Compartir» de la página. Es privado y, si no lo haces, no podrán abrirlo.</span></label></li>
+        <li><label><input type="checkbox" id="c3"><span>Ten un plan B sin internet: capturas de pantalla o la web abierta en el móvil con datos.</span></label></li>
+        <li><label><input type="checkbox" id="c4"><span>Recuerda que el formulario de contacto aún no envía mensajes. No lo uses en directo; da tu contacto en persona.</span></label></li>
+        <li><label><input type="checkbox" id="c5"><span>Prepara tus cifras reales (equipos, jugadores, asistentes, seguidores). La web no lleva ninguna a propósito: si te las piden, mejor tenerlas a mano que improvisar.</span></label></li>
+        <li><label><input type="checkbox" id="c6"><span>Confirma que tienes permiso de imagen de los jugadores que salen en las fotos.</span></label></li>
+        <li><label><input type="checkbox" id="c7"><span>Lleva tarjetas o un documento de una página con tus datos de contacto.</span></label></li>
+      </ul>
+      <h3>Cómo moverte por la web</h3>
+      <ul>
+        <li>Haz scroll despacio: los textos y las imágenes aparecen al bajar. Si vas rápido, se pierde el efecto.</li>
+        <li>Arriba a la derecha, <b>Menú</b> te lleva a cualquier sección. Úsalo si te preguntan por algo concreto.</li>
+        <li>En <b>Concepts</b>, sigue bajando y los cuatro conceptos pasan en horizontal.</li>
+        <li>En <b>The Fleet</b> y <b>Activation</b> hay botones para cambiar de modelo o de línea: haz clic delante de ellos, queda muy bien.</li>
+        <li>Si el proyector va lento, activa <b>Reducir movimiento</b> en el menú.</li>
+      </ul>
+    </section>
+
+    <section id="apertura">
+      <p class="eyebrow">Paso 1</p>
+      <h2>Apertura</h2>
+      <div class="play">
+        <header><b>Antes de abrir la web</b><span class="time"><b>3 min</b> · 0:00</span></header>
+        <p class="screen">En pantalla: nada todavía, o la portada en pausa.</p>
+        <div class="say">«Gracias por recibirnos. Antes de enseñaros nada, nos gustaría saber qué buscáis como marca este año.»</div>
+        <ul>
+          <li>Preséntate y presenta a quien te acompañe, con su papel en ESD HOOPS.</li>
+          <li>Haz una o dos preguntas abiertas (tienes ideas en <a href="#preguntas">Preguntas para KGM</a>). Apunta las respuestas y úsalas durante la presentación.</li>
+          <li>Explica el formato: «Os hemos preparado una propuesta en formato web. Son unos 30 minutos y luego lo hablamos con calma».</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="portada">
+      <p class="eyebrow">Paso 2</p>
+      <h2>Portada: Two Worlds. One Vision.</h2>
+      <div class="play">
+        <header><b>Primer impacto</b><span class="time"><b>2 min</b> · 0:03</span></header>
+        <p class="screen">En pantalla: los dos logos, el titular y el <code>Torres EVX</code> entrando en escena delante de fotos de vuestro torneo.</p>
+        <div class="say">«Dos mundos, una misma visión: conectar la movilidad, el deporte y la nueva generación.»</div>
+        <ul>
+          <li>Deja que la animación termine antes de hablar. Son 3 segundos.</li>
+          <li>Señala que las fotos de fondo son de vuestro último torneo 3x3: es real, no stock.</li>
+          <li>La idea central: la automoción y el baloncesto parecen lejanos, pero comparten valores.</li>
+        </ul>
+        <p class="bridge"><b>Para pasar:</b> «Y queremos dejar clara una cosa desde el principio…»</p>
+      </div>
+    </section>
+
+    <section id="vision">
+      <p class="eyebrow">Paso 3</p>
+      <h2>The Vision: More than a partnership</h2>
+      <div class="play">
+        <header><b>Por qué esto no es un patrocinio más</b><span class="time"><b>2 min</b> · 0:05</span></header>
+        <p class="screen">En pantalla: texto sobre ir más allá de la visibilidad, collage coche y jugador, y la frase grande que se va iluminando al bajar.</p>
+        <div class="say">«No queremos solo poner dos marcas juntas. Queremos crear algo que mueva a la gente.»</div>
+        <ul>
+          <li>Diferénciate desde el principio: no venís a pedir dinero a cambio de un logo en la camiseta.</li>
+          <li>Proponéis crecer juntos: KGM gana comunidad, contenido y experiencias; ESD HOOPS gana un socio para crecer.</li>
+          <li>Baja despacio en la frase grande para que se ilumine palabra a palabra.</li>
+        </ul>
+        <p class="bridge"><b>Para pasar:</b> «Para entender la propuesta, primero os contamos quiénes somos.»</p>
+      </div>
+    </section>
+
+    <section id="quienes">
+      <p class="eyebrow">Paso 4</p>
+      <h2>Who We Are: We build more than players</h2>
+      <div class="play">
+        <header><b>Los tres pilares de ESD HOOPS</b><span class="time"><b>4 min</b> · 0:07</span></header>
+        <p class="screen">En pantalla: foto del campus de entrenamiento y los tres pilares. La imagen de la izquierda cambia con cada pilar.</p>
+        <h3>01 · Player Development</h3>
+        <ul>
+          <li>Entrenamiento individual de jugadores amateurs y profesionales: técnica, habilidades, preparación física y rendimiento.</li>
+          <li>Las fotos son de vuestros entrenamientos. Cuenta brevemente cómo trabajáis: <i class="fill">grupos, edades, frecuencia</i>.</li>
+        </ul>
+        <h3>02 · International Player Representation</h3>
+        <ul>
+          <li>Representación y conexión de jugadores de Estados Unidos, Europa, Asia y otros mercados.</li>
+          <li>Si puedes, menciona un caso real de jugador que hayáis conectado con una oportunidad: <i class="fill">ejemplo concreto</i>.</li>
+        </ul>
+        <h3>03 · Basketball Events</h3>
+        <ul>
+          <li><b>3x3:</b> eventos vinculados al ecosistema FIBA 3x3; las ESD Street Series se inscriben en la plataforma de FIBA 3x3.</li>
+          <li><b>5x5:</b> ligas de verano, torneos y competiciones.</li>
+          <li>Aquí es donde KGM tiene más visibilidad directa: público, familias, redes.</li>
+        </ul>
+        <div class="warn">Si te preguntan por FIBA: los eventos 3x3 forman parte de su ecosistema y se registran en su plataforma. No hables de acuerdo ni de patrocinio con FIBA.</div>
+        <p class="bridge"><b>Para pasar:</b> «Y todo esto lo hacemos con una mirada internacional.»</p>
+      </div>
+    </section>
+
+    <section id="global">
+      <p class="eyebrow">Paso 5</p>
+      <h2>Global Reach: One sport. A global community</h2>
+      <div class="play">
+        <header><b>La dimensión internacional</b><span class="time"><b>2 min</b> · 0:11</span></header>
+        <p class="screen">En pantalla: mapa animado con conexiones entre Norteamérica, Europa y Asia, y fotos de jugadores.</p>
+        <div class="say">«El baloncesto es un lenguaje universal. De las canchas locales a las oportunidades internacionales.»</div>
+        <ul>
+          <li>El mapa es ilustrativo: muestra de dónde vienen los jugadores con los que conectáis, no oficinas.</li>
+          <li>Para KGM, una marca coreana con presencia en varios mercados, esa mirada internacional encaja con su propia historia.</li>
+        </ul>
+        <p class="bridge"><b>Para pasar:</b> «Ahora, la pregunta importante: ¿qué gana KGM con todo esto?»</p>
+      </div>
+    </section>
+
+    <section id="why">
+      <p class="eyebrow">Paso 6 · El más importante</p>
+      <h2>Why KGM?</h2>
+      <div class="play">
+        <header><b>Cinco razones comerciales</b><span class="time"><b>5 min</b> · 0:13</span></header>
+        <p class="screen">En pantalla: fondo claro y cinco razones. Al pasar el ratón por cada una aparece una foto.</p>
+        <ul>
+          <li><b>Nuevas generaciones:</b> jóvenes, deportistas y familias, que son los compradores de mañana y, en el caso de las familias, de hoy.</li>
+          <li><b>Experiencia de marca:</b> no es un logo en una camiseta, es estar presente en eventos, torneos y entrenamientos.</li>
+          <li><b>Visibilidad internacional:</b> conexión con perfiles de Estados Unidos, Europa y Asia.</li>
+          <li><b>Contenido y redes:</b> vídeos, reels, fotografía y campañas que KGM puede usar en sus canales.</li>
+          <li><b>Posicionamiento:</b> una marca dinámica, cercana y comprometida con los jóvenes.</li>
+        </ul>
+        <div class="say">«No se trata de anunciarse ante una comunidad. Se trata de formar parte de ella.»</div>
+        <ul>
+          <li>Conecta cada razón con lo que te hayan dicho en la apertura: «Comentabais que queríais llegar a…».</li>
+          <li>Haz una pausa después de la frase final. Es el mensaje que tienen que recordar.</li>
+        </ul>
+        <p class="bridge"><b>Para pasar:</b> «Para que no quede en palabras, hemos imaginado cómo se vería.»</p>
+      </div>
+    </section>
+
+    <section id="conceptos">
+      <p class="eyebrow">Paso 7</p>
+      <h2>Concepts: What if we connected both worlds?</h2>
+      <div class="play">
+        <header><b>Cuatro ideas visuales</b><span class="time"><b>4 min</b> · 0:18</span></header>
+        <p class="screen">En pantalla: cuatro conceptos que pasan en horizontal al hacer scroll. Tres son montajes con los coches de KGM sobre vuestras fotos.</p>
+        <ul>
+          <li><b>01 · Lifestyle:</b> un KGM junto a una cancha urbana. Estética de campaña de automoción.</li>
+          <li><b>02 · Eventos:</b> un 3x3 con la marca como protagonista. Enseña el plano: pista, exposición KGM, zona de experiencia y gradas.</li>
+          <li><b>03 · Campañas con jugadores:</b> jugadores reales junto al vehículo, con valores de ambición, rendimiento, disciplina y determinación.</li>
+          <li><b>04 · Experiencia de marca:</b> un espacio para descubrir los coches dentro del torneo.</li>
+        </ul>
+        <div class="warn">Dilo en voz alta: «Son conceptos y montajes para imaginar la colaboración, no eventos que ya hayamos hecho». Da credibilidad.</div>
+        <p class="bridge"><b>Para pasar:</b> «¿Y con qué coches?»</p>
+      </div>
+    </section>
+
+    <section id="fleet">
+      <p class="eyebrow">Paso 8</p>
+      <h2>The Fleet: The KGM range, on court</h2>
+      <div class="play">
+        <header><b>Cada modelo con un papel</b><span class="time"><b>3 min</b> · 0:22</span></header>
+        <p class="screen">En pantalla: escenario con el coche y botones para cambiar de modelo. Haz clic en cada uno.</p>
+        <ul>
+          <li><b>Musso EV:</b> el pick-up para la logística de los eventos y la exposición a pie de pista.</li>
+          <li><b>Torres EVX:</b> la zona de experiencia y las pruebas de conducción en los torneos.</li>
+          <li><b>Actyon Hybrid:</b> el protagonista de las campañas con jugadores.</li>
+        </ul>
+        <ul>
+          <li>Pregúntales qué modelos les interesa impulsar ahora. Los papeles son propuestas y se adaptan a sus prioridades.</li>
+          <li>Pregunta también si los concesionarios de la zona podrían participar con vehículos para exposición o pruebas.</li>
+        </ul>
+        <p class="bridge"><b>Para pasar:</b> «Ahora lo bajamos a tierra: cómo se activa.»</p>
+      </div>
+    </section>
+
+    <section id="activacion">
+      <p class="eyebrow">Paso 9</p>
+      <h2>Activation: Let's make it real</h2>
+      <div class="play">
+        <header><b>Cuatro líneas de activación</b><span class="time"><b>5 min</b> · 0:25</span></header>
+        <p class="screen">En pantalla: pestañas a la izquierda. Cada una muestra sus posibilidades y el beneficio para KGM.</p>
+        <div class="cols">
+          <div>
+            <h3>01 · Events</h3>
+            <ul><li>Naming de torneos, branding en pista, coches expuestos, zonas de experiencia y entrega de premios.</li><li><b>Beneficio:</b> visibilidad directa y experiencias memorables.</li></ul>
+          </div>
+          <div>
+            <h3>02 · Player Development</h3>
+            <ul><li>Ropa de entrenamiento con su marca, campañas y vídeos de superación.</li><li><b>Beneficio:</b> asociarse a valores positivos y llegar a las familias.</li></ul>
+          </div>
+          <div>
+            <h3>03 · International</h3>
+            <ul><li>Campañas con jugadores internacionales y contenido multicultural.</li><li><b>Beneficio:</b> imagen internacional.</li></ul>
+          </div>
+          <div>
+            <h3>04 · Digital Content</h3>
+            <ul><li>Vídeo, reels, fotografía y contenido conjunto para redes.</li><li><b>Beneficio:</b> contenido reutilizable en sus canales.</li></ul>
+          </div>
+        </div>
+        <ul>
+          <li>Pregunta cuál de las cuatro les encaja más. Lo normal es empezar por una o dos y crecer.</li>
+          <li>Propón empezar con un piloto: un evento 3x3 con presencia de KGM y medir resultados juntos.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="valor">
+      <p class="eyebrow">Paso 10</p>
+      <h2>Shared values y What KGM gets</h2>
+      <div class="play">
+        <header><b>Resumen de valor</b><span class="time"><b>3 min</b> · 0:30</span></header>
+        <p class="screen">En pantalla: palabras grandes en movimiento (Performance, Ambition, Innovation…) y después seis beneficios para KGM.</p>
+        <div class="say">«Ya sea en la carretera o en la pista, el progreso nace de la ambición, la disciplina y las ganas de ir más lejos.»</div>
+        <ul>
+          <li>No leas los seis beneficios: elige los dos que más encajen con lo que te han contado.</li>
+          <li>La web dice «beneficios potenciales, no resultados garantizados». Mantén ese tono: credibilidad por encima de promesas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="cierre">
+      <p class="eyebrow">Paso 11</p>
+      <h2>This is just the beginning: cierre</h2>
+      <div class="play">
+        <header><b>Pedir el siguiente paso</b><span class="time"><b>2 min</b> · 0:33</span></header>
+        <p class="screen">En pantalla: «This is just the beginning», los logos juntos y «A partnership with potential».</p>
+        <div class="say">«Esto es solo el principio. Construyamos algo que mueva a la gente.»</div>
+        <ul>
+          <li>Propón un siguiente paso concreto, con fecha: «¿Os parece que nos volvamos a ver en dos semanas con una propuesta a medida, según lo que hemos hablado hoy?»</li>
+          <li>Pregunta quién más debería estar en la próxima reunión (marketing, concesionario, dirección).</li>
+          <li>Ofrece enviarles el enlace de la web y un resumen por escrito.</li>
+          <li>Despídete agradeciendo su tiempo. No cierres hablando de dinero si no lo sacan ellos.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="preguntas">
+      <p class="eyebrow">Para escuchar</p>
+      <h2>Preguntas para KGM</h2>
+      <div class="cols" style="margin-top:16px">
+        <div class="play" style="margin:0">
+          <h3 style="margin-top:0">Sobre su marca</h3>
+          <ul>
+            <li>¿Qué objetivos de marca tenéis para el próximo año?</li>
+            <li>¿A qué público queréis llegar mejor: jóvenes, familias, empresas?</li>
+            <li>¿Qué modelos queréis impulsar ahora mismo?</li>
+            <li>¿Cómo medís el éxito de una acción de marca?</li>
+          </ul>
+        </div>
+        <div class="play" style="margin:0">
+          <h3 style="margin-top:0">Sobre la colaboración</h3>
+          <ul>
+            <li>¿Habéis colaborado antes con el deporte local? ¿Qué funcionó y qué no?</li>
+            <li>¿Preferís empezar con un evento piloto o con una temporada completa?</li>
+            <li>¿Podrían participar los concesionarios de la zona?</li>
+            <li>¿Quién decide internamente y qué plazos manejáis?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="objeciones">
+      <p class="eyebrow">Para responder con calma</p>
+      <h2>Posibles objeciones</h2>
+      <div class="qa">
+        <details><summary>«¿Qué alcance o audiencia tenéis?»</summary><p>Da solo tus cifras reales: equipos y jugadores por torneo, asistentes y seguidores en redes (<i class="fill">rellena antes de la reunión</i>). Si no tienes un dato, di: «Os lo enviamos por escrito esta semana». No redondees hacia arriba.</p></details>
+        <details><summary>«¿Cuánto cuesta?»</summary><p>«Depende del formato que encaje mejor con vosotros: un evento piloto o una temporada. Preferimos entender primero vuestros objetivos y traeros una propuesta a medida.» Si insisten, ten pensada una horquilla para un evento piloto.</p></details>
+        <details><summary>«¿Por qué baloncesto?»</summary><p>Es un deporte urbano, cercano y muy ligado a jóvenes y familias, y el 3x3 es un formato dinámico y fácil de activar en espacios abiertos, donde un vehículo encaja de forma natural.</p></details>
+        <details><summary>«¿Tenéis relación con FIBA?»</summary><p>Los eventos 3x3 forman parte del ecosistema FIBA 3x3 y se registran en su plataforma. No hay un acuerdo comercial con FIBA ni lo tendría KGM.</p></details>
+        <details><summary>«¿Las fotos son reales?»</summary><p>Las de torneos y entrenamientos sí, son vuestras. Los montajes con los coches son conceptos para imaginar la colaboración y así se indica en la web.</p></details>
+        <details><summary>«¿Quién más os patrocina?»</summary><p>Responde con la verdad. Si os interesa ofrecerles exclusividad en el sector automoción, este es buen momento para mencionarlo.</p></details>
+      </div>
+    </section>
+
+    <section id="no-decir">
+      <p class="eyebrow">Para no perder credibilidad</p>
+      <h2>Qué no decir</h2>
+      <div class="play">
+        <ul>
+          <li>No des cifras que no puedas demostrar.</li>
+          <li>No digas que hay un acuerdo con FIBA ni que KGM lo tendría.</li>
+          <li>No presentes los conceptos como eventos ya hechos.</li>
+          <li>No prometas resultados de ventas: habla de oportunidades.</li>
+          <li>No uses el formulario de la web en directo: todavía no envía mensajes.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// Remember checklist ticks on this device only.
+document.querySelectorAll('.check input').forEach(function (box) {
+  try { box.checked = localStorage.getItem('guia-kgm:' + box.id) === '1'; } catch (e) {}
+  box.addEventListener('change', function () {
+    try { localStorage.setItem('guia-kgm:' + box.id, box.checked ? '1' : '0'); } catch (e) {}
+  });
+});
+</script>

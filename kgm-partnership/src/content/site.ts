@@ -63,23 +63,23 @@ export const vehicles = {
 export const fleet = {
   label: "06 — The Fleet",
   title: "The KGM range, on court.",
-  intro: "How KGM's line-up could take part in the partnership — from the event floor to player campaigns.",
-  disclaimer: "Proposed roles for discussion. Models and availability to be agreed with KGM.",
+  intro: "Cómo podría participar la gama de KGM en la colaboración: desde la pista del evento hasta las campañas con jugadores.",
+  disclaimer: "Papeles propuestos para debatir. Modelos y disponibilidad a acordar con KGM.",
   items: [
     {
       vehicle: vehicles.mussoGreen,
       role: "Event logistics & courtside display",
-      body: "The pick-up that arrives with the court: moving equipment for 3x3 events and anchoring the KGM display zone next to the action.",
+      body: "El pick-up que llega con la pista: transporta el material de los eventos 3x3 y ancla la zona de exposición de KGM junto a la acción.",
     },
     {
       vehicle: vehicles.torresEvx,
       role: "Experience zone & test drives",
-      body: "The centrepiece of the KGM experience zone at tournaments, where players and families discover the vehicle up close.",
+      body: "La pieza central de la zona de experiencia de KGM en los torneos, donde jugadores y familias descubren el vehículo de cerca.",
     },
     {
       vehicle: vehicles.actyon,
       role: "Player campaigns",
-      body: "The hero vehicle for editorial campaigns with ESD HOOPS players, built around ambition, performance and determination.",
+      body: "El vehículo protagonista de las campañas editoriales con jugadores de ESD HOOPS, construidas en torno a la ambición, el rendimiento y la determinación.",
     },
   ],
 };
@@ -112,17 +112,17 @@ export const hero = {
   eyebrow: "Strategic Partnership Proposal",
   titleA: "Two Worlds.",
   titleB: "One Vision.",
-  subtitle: "Connecting mobility, sport and the next generation.",
+  subtitle: "Conectando movilidad, deporte y la nueva generación.",
 };
 
 export const vision = {
   label: "01 — The Vision",
   title: "More than a partnership.",
   body: [
-    "Some partnerships go beyond visibility. They create experiences, build communities and connect brands with people in meaningful ways.",
-    "ESD HOOPS and KGM share an opportunity to bring together two worlds driven by ambition, performance, innovation and passion.",
+    "Hay alianzas que van más allá de la visibilidad. Crean experiencias, construyen comunidades y conectan marcas con personas de forma significativa.",
+    "ESD HOOPS y KGM comparten la oportunidad de unir dos mundos impulsados por la ambición, el rendimiento, la innovación y la pasión.",
   ],
-  closing: "Together, we can create something bigger than a traditional sponsorship.",
+  closing: "Juntos podemos crear algo más grande que un patrocinio tradicional.",
   statement: "We don't just want to put two brands together. We want to create something that moves people.",
 };
 
@@ -130,32 +130,32 @@ export const whoWeAre = {
   label: "02 — Who We Are",
   title: "We build more than players.",
   intro:
-    "ESD HOOPS is a basketball company focused on player development, international player representation and the organisation of basketball events — a platform that connects players, opportunities and communities.",
+    "ESD HOOPS es una empresa de baloncesto centrada en el desarrollo de jugadores, la representación internacional y la organización de eventos de baloncesto: una plataforma que conecta jugadores, oportunidades y comunidades.",
   pillars: [
     {
       n: "01",
       title: "Player Development",
-      body: "Individual training and development for amateur and professional players.",
-      points: ["Technical improvement", "Individual skill development", "Physical preparation", "Athletic performance", "Player growth and evolution"],
+      body: "Entrenamiento y desarrollo individual de jugadores amateurs y profesionales.",
+      points: ["Mejora técnica", "Desarrollo de habilidades individuales", "Preparación física", "Rendimiento deportivo", "Evolución y crecimiento del jugador"],
       image: images.esdCoach,
       image2: images.esdCoachLaugh,
     },
     {
       n: "02",
       title: "International Player Representation",
-      body: "Representing and connecting players from different parts of the world. Our work has an international perspective, with talent from the United States, Europe, Asia and other international markets.",
-      points: ["United States", "Europe", "Asia", "Other international markets"],
-      footnote: "We connect players, opportunities and people within the global basketball ecosystem.",
+      body: "Representación y conexión de jugadores de diferentes partes del mundo. Nuestro trabajo tiene una perspectiva internacional, con talento de Estados Unidos, Europa, Asia y otros mercados internacionales.",
+      points: ["Estados Unidos", "Europa", "Asia", "Otros mercados internacionales"],
+      footnote: "Conectamos jugadores, oportunidades y personas dentro del ecosistema global del baloncesto.",
       image: images.esdPlayer,
       image2: images.esdProfile,
     },
     {
       n: "03",
       title: "Basketball Events",
-      body: "Organisation of basketball events and competitions across different formats.",
+      body: "Organización de eventos y competiciones de baloncesto en diferentes formatos.",
       formats: [
-        { name: "3x3 Basketball", text: "Events and competitions linked to the FIBA 3x3 ecosystem." },
-        { name: "5x5 Basketball", text: "Summer leagues, tournaments and competitions for players and basketball communities." },
+        { name: "3x3 Baloncesto", text: "Eventos y competiciones vinculados al ecosistema FIBA 3x3." },
+        { name: "5x5 Baloncesto", text: "Ligas de verano, torneos y competiciones para jugadores y comunidades de baloncesto." },
       ],
       image: images.esdCourt,
       image2: images.esdOneOnOne,
@@ -166,50 +166,50 @@ export const whoWeAre = {
 export const globalReach = {
   label: "03 — The Global Reach",
   title: "One sport. A global community.",
-  body: "Basketball is a universal language — one that connects cultures, generations and communities. ESD HOOPS works with an international perspective, built on connections with players from different regions.",
-  quote: "From local courts to international opportunities, ESD HOOPS connects talent, communities and the global basketball ecosystem.",
+  body: "El baloncesto es un lenguaje universal que conecta culturas, generaciones y comunidades. ESD HOOPS trabaja con una perspectiva internacional, construida a partir de sus conexiones con jugadores de diferentes regiones.",
+  quote: "De las canchas locales a las oportunidades internacionales, ESD HOOPS conecta talento, comunidades y el ecosistema global del baloncesto.",
   regions: [
-    { key: "northAmerica", name: "North America" },
-    { key: "europe", name: "Europe" },
+    { key: "northAmerica", name: "Norteamérica" },
+    { key: "europe", name: "Europa" },
     { key: "asia", name: "Asia" },
   ] as const,
-  community: "International Basketball Community",
+  community: "Comunidad internacional del baloncesto",
 };
 
 export const whyKgm = {
   label: "04 — Why KGM?",
   title: "Why KGM?",
-  subtitle: "An opportunity to connect with a new generation through sport, experiences and community.",
+  subtitle: "Una oportunidad para conectar con una nueva generación a través del deporte, las experiencias y la comunidad.",
   reasons: [
     {
       n: "01",
       title: "Connect with the next generation",
-      body: "Basketball connects with young people, athletes, families and new generations of consumers. KGM can reach this audience through real experiences, sporting activities and communities built around shared interests.",
+      body: "El baloncesto conecta con jóvenes, deportistas, familias y nuevas generaciones de consumidores. KGM puede acercarse a este público a través de experiencias reales, actividades deportivas y comunidades con intereses compartidos.",
       image: images.esdDribble,
     },
     {
       n: "02",
       title: "Brand experience",
-      body: "This is not just about placing a logo on a jersey. The partnership opens the door to experiences where KGM is present at events, tournaments, training sessions and sporting activities — moments the audience remembers.",
+      body: "No se trata solo de poner un logotipo en una camiseta. La colaboración abre la puerta a experiencias en las que KGM está presente en eventos, torneos, entrenamientos y actividades deportivas: momentos que el público recuerda.",
       image: images.kgmShowroomFront,
     },
     {
       n: "03",
       title: "International visibility",
-      body: "ESD HOOPS has connections with players from the United States, Europe, Asia and other international markets — an opportunity to connect KGM with sporting communities and profiles from different backgrounds.",
+      body: "ESD HOOPS tiene conexiones con jugadores de Estados Unidos, Europa, Asia y otros mercados internacionales: una oportunidad para conectar KGM con comunidades y perfiles deportivos de distintas procedencias.",
       image: images.esdDuel,
     },
     {
       n: "04",
       title: "Content & digital exposure",
-      body: "Audiovisual and digital campaigns built around valuable content.",
-      list: ["Promotional videos", "Player campaigns", "Reels & social content", "Event coverage", "Professional photography", "Lifestyle content", "Automotive × basketball campaigns"],
+      body: "Campañas audiovisuales y digitales construidas con contenido de valor.",
+      list: ["Vídeos promocionales", "Campañas con jugadores", "Reels y contenido para redes", "Cobertura de eventos", "Fotografía profesional", "Contenido lifestyle", "Campañas automoción × baloncesto"],
       image: images.kgmNight,
     },
     {
       n: "05",
       title: "Community & brand positioning",
-      body: "KGM can strengthen its image as a dynamic, approachable and innovative brand committed to new generations. Sport builds deeper relationships with people and communities.",
+      body: "KGM puede reforzar su imagen como marca dinámica, cercana e innovadora, comprometida con las nuevas generaciones. El deporte construye relaciones más profundas con las personas y las comunidades.",
       image: images.esdCommunity,
     },
   ],
@@ -219,13 +219,13 @@ export const whyKgm = {
 export const concepts = {
   label: "05 — Creative Concepts",
   title: "What if we connected both worlds?",
-  disclaimer: "Creative concepts for discussion. They do not depict existing events, activations or agreements.",
+  disclaimer: "Conceptos creativos para debatir. No representan eventos, activaciones ni acuerdos existentes.",
   items: [
     {
       n: "01",
       kicker: "KGM × Basketball Lifestyle",
       message: "Driven by passion. Connected through basketball.",
-      body: "A KGM SUV parked courtside at an urban court at golden hour. Players training, cinematic light, the language of an automotive campaign.",
+      body: "Un vehículo KGM junto a una cancha urbana al atardecer. Jugadores entrenando, luz cinematográfica y el lenguaje de una campaña de automoción.",
       images: [images.courtNight, images.esdCourt, images.esdReleaseAlt],
       montage: { vehicle: vehicles.mussoGreen, on: 0 },
     },
@@ -233,14 +233,14 @@ export const concepts = {
       n: "02",
       kicker: "KGM × ESD HOOPS Events",
       message: "More than an event. A brand experience.",
-      body: "A 3x3 event with a custom KGM court, vehicles on display, an activation zone, players and crowd — KGM as a protagonist of the event.",
+      body: "Un evento 3x3 con pista personalizada de KGM, vehículos expuestos, zona de activación, jugadores y público: KGM como protagonista del evento.",
       images: [images.esdOneOnOneAlt, images.kgmShowroomRear, images.esdCrowd],
     },
     {
       n: "03",
       kicker: "KGM × Player Campaigns",
       message: "Driven by ambition.",
-      body: "Players posing alongside a KGM vehicle in dramatic, editorial light — ambassadors of shared values.",
+      body: "Jugadores posando junto a un vehículo KGM con iluminación dramática y editorial: embajadores de valores compartidos.",
       values: ["Ambition", "Performance", "Discipline", "Determination"],
       images: [images.esdShooter, images.esdProfile, images.esdFocus],
       montage: { vehicle: vehicles.actyon, on: 1 },
@@ -249,7 +249,7 @@ export const concepts = {
       n: "04",
       kicker: "KGM × Brand Experience",
       message: "Experience KGM beyond the road.",
-      body: "A KGM showcase space inside a basketball event, where attendees discover the vehicles, interact with the brand and live the experience.",
+      body: "Un espacio de exposición de KGM dentro de un evento de baloncesto, donde los asistentes descubren los vehículos, interactúan con la marca y viven la experiencia.",
       images: [images.esdCommunity, images.kgmInterior, images.esdFlight],
       montage: { vehicle: vehicles.torresEvxVx, on: 0 },
     },
@@ -259,42 +259,42 @@ export const concepts = {
 export const activation = {
   label: "07 — Activation Strategy",
   title: "Let's make it real.",
-  intro: "Four lines of activation that turn ideas into concrete collaboration opportunities.",
+  intro: "Cuatro líneas de activación que convierten las ideas en oportunidades concretas de colaboración.",
   items: [
     {
       n: "01",
       title: "KGM × ESD HOOPS Events",
       short: "Events",
-      summary: "KGM presence at 3x3 events and 5x5 summer leagues.",
-      options: ["Tournament naming rights", "Court branding", "KGM vehicles on display", "Experience zones", "Player activations", "Award ceremonies", "Branding on promotional material", "Presence in digital communication"],
-      benefit: "Direct visibility, connection with the audience and memorable brand experiences.",
+      summary: "Presencia de KGM en eventos 3x3 y ligas de verano 5x5.",
+      options: ["Naming de torneos", "Branding en pistas", "Vehículos KGM expuestos", "Zonas de experiencia", "Activaciones con jugadores", "Entrega de premios", "Branding en material promocional", "Presencia en la comunicación digital"],
+      benefit: "Visibilidad directa, conexión con el público y experiencias de marca memorables.",
       image: images.esdOneOnOneAlt,
     },
     {
       n: "02",
       title: "KGM × Player Development",
       short: "Player Development",
-      summary: "Integrating KGM into ESD HOOPS' training programmes and sporting activities.",
-      options: ["KGM-branded training apparel", "Player campaigns", "Videos on discipline and self-improvement", "Special activities", "Experiences for players and families"],
-      benefit: "Associating the brand with positive values and connecting with athletes and families.",
+      summary: "Integrar KGM en los programas de entrenamiento y las actividades deportivas de ESD HOOPS.",
+      options: ["Ropa de entrenamiento con branding KGM", "Campañas con jugadores", "Vídeos sobre disciplina y superación", "Actividades especiales", "Experiencias para jugadores y familias"],
+      benefit: "Asociar la marca a valores positivos y conectar con deportistas y familias.",
       image: images.esdShirt,
     },
     {
       n: "03",
       title: "KGM × International Basketball",
       short: "International",
-      summary: "Using ESD HOOPS' international perspective to create campaigns and experiences with players from different backgrounds.",
-      options: ["Campaigns with international players", "Multicultural audiovisual content", "Promotional actions", "Collaborations with sporting profiles", "Connections between communities"],
-      benefit: "Building an international image and connecting with different markets.",
+      summary: "Aprovechar la perspectiva internacional de ESD HOOPS para crear campañas y experiencias con jugadores de distintas procedencias.",
+      options: ["Campañas con jugadores internacionales", "Contenido audiovisual multicultural", "Acciones promocionales", "Colaboraciones con perfiles deportivos", "Conexiones entre comunidades"],
+      benefit: "Construir una imagen internacional y conectar con diferentes mercados.",
       image: images.esdPlayerAlt,
     },
     {
       n: "04",
       title: "KGM × Digital Content",
       short: "Digital Content",
-      summary: "A professional line of audiovisual content.",
-      options: ["Video campaigns", "Reels", "Advertising photography", "Player storytelling", "Event videos", "Lifestyle campaigns", "Joint social media content"],
-      benefit: "Reusable content for KGM's own communication channels and a stronger digital presence.",
+      summary: "Una línea profesional de contenido audiovisual.",
+      options: ["Campañas de vídeo", "Reels", "Fotografía publicitaria", "Storytelling con jugadores", "Vídeos de eventos", "Campañas lifestyle", "Contenido conjunto para redes sociales"],
+      benefit: "Contenido reutilizable en los canales de comunicación de KGM y mayor presencia digital.",
       image: images.kgmNight,
     },
   ],
@@ -306,7 +306,7 @@ export const synergy = {
   values: ["Performance", "Ambition", "Innovation", "Movement", "Community", "Global Vision"],
   inline: [images.esdRelease, images.kgmInterior, images.netDark, images.kgmNight, images.esdCommunity, images.ballMacro],
   body: [
-    "Whether it's on the road or on the court, progress comes from ambition, discipline and the desire to go further.",
+    "Ya sea en la carretera o en la pista, el progreso nace de la ambición, la disciplina y las ganas de ir más lejos.",
     "Different industries. One shared mindset.",
   ],
 };
@@ -314,14 +314,14 @@ export const synergy = {
 export const value = {
   label: "09 — The Value for KGM",
   title: "What KGM gets.",
-  note: "Potential opportunities and benefits — not guaranteed results.",
+  note: "Oportunidades y beneficios potenciales, no resultados garantizados.",
   items: [
-    { title: "Direct connection with younger audiences", body: "Presence where young players, fans and families spend their time: on and around the court." },
-    { title: "Brand visibility through sports events", body: "A visible role across 3x3 events, 5x5 competitions and their communication." },
-    { title: "Authentic community engagement", body: "Being part of a basketball community rather than speaking to it from the outside." },
-    { title: "International basketball connections", body: "Access to ESD HOOPS' network of players and profiles from different regions." },
-    { title: "Professional audiovisual content", body: "Campaign-grade photography and video that KGM can use across its own channels." },
-    { title: "Memorable brand experiences", body: "Product discovery and activations people live first-hand, not just see." },
+    { title: "Direct connection with younger audiences", body: "Presencia donde pasan su tiempo los jóvenes jugadores, aficionados y familias: en la pista y a su alrededor." },
+    { title: "Brand visibility through sports events", body: "Un papel visible en los eventos 3x3, las competiciones 5x5 y su comunicación." },
+    { title: "Authentic community engagement", body: "Formar parte de una comunidad de baloncesto en lugar de hablarle desde fuera." },
+    { title: "International basketball connections", body: "Acceso a la red de jugadores y perfiles de diferentes regiones de ESD HOOPS." },
+    { title: "Professional audiovisual content", body: "Fotografía y vídeo con calidad de campaña que KGM puede usar en sus propios canales." },
+    { title: "Memorable brand experiences", body: "Descubrimiento de producto y activaciones que la gente vive en primera persona, no solo ve." },
   ],
 };
 
@@ -329,8 +329,8 @@ export const future = {
   label: "10 — The Future",
   title: "This is just the beginning.",
   body: [
-    "We believe the strongest partnerships are built through shared vision, meaningful experiences and long-term commitment.",
-    "ESD HOOPS is ready to explore how we can bring KGM closer to the world of basketball, creating opportunities that generate value for both brands.",
+    "Creemos que las alianzas más sólidas se construyen con una visión compartida, experiencias con sentido y compromiso a largo plazo.",
+    "ESD HOOPS está preparada para explorar cómo acercar KGM al mundo del baloncesto, creando oportunidades que generen valor para ambas marcas.",
   ],
   closing: "Let's build something that moves people.",
 };
@@ -338,13 +338,13 @@ export const future = {
 export const contactSection = {
   label: "11 — Contact",
   title: "Let's build something bigger.",
-  subtitle: "ESD HOOPS × KGM — Strategic Partnership Proposal",
-  cta: "Let's talk",
+  subtitle: "ESD HOOPS × KGM — Propuesta de colaboración estratégica",
+  cta: "Hablemos",
   signoff: "A partnership with potential.",
 };
 
 export const credits = [
-  { label: "KGM Musso EV, Torres EVX and Actyon Hybrid (studio images)", author: "KGM", license: "Official KGM imagery", url: "" },
+  { label: "KGM Musso EV, Torres EVX y Actyon Hybrid (imágenes de estudio)", author: "KGM", license: "imágenes oficiales de KGM", url: "" },
   { label: "KGM Torres (showroom, front & rear)", author: "Alexander-93", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:KGM_Torres_Auto_Zuerich_2023_1X7A1045.jpg" },
   { label: "KGM Torres (showroom, rear)", author: "Alexander-93", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:KGM_Torres_Auto_Zuerich_2023_1X7A1294.jpg" },
   { label: "KGM Torres (black)", author: "Alexander-93", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:SsangYong_Torres_Automesse_Ludwigsburg_2024_IMG_1442.jpg" },

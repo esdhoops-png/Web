@@ -42,7 +42,7 @@ export function Activation() {
 
         <div className="mt-16 grid gap-10 md:mt-24 md:grid-cols-12">
           {/* Tabs */}
-          <div role="tablist" aria-label="Activation lines" aria-orientation="vertical" className="flex gap-2 overflow-x-auto pb-2 md:col-span-4 md:flex-col md:gap-0 md:overflow-visible md:pb-0">
+          <div role="tablist" aria-label="Líneas de activación" aria-orientation="vertical" className="flex gap-2 overflow-x-auto pb-2 md:col-span-4 md:flex-col md:gap-0 md:overflow-visible md:pb-0">
             {activation.items.map((it, i) => {
               const selected = i === active;
               return (
@@ -60,7 +60,7 @@ export function Activation() {
                   onKeyDown={(e) => onKey(e, i)}
                   className={`group relative shrink-0 border px-4 py-3 text-left transition-colors duration-500 md:border-0 md:border-b md:px-0 md:py-7 ${selected ? "border-bone/60 md:border-bone/15" : "hairline"}`}
                 >
-                  <span className={`label block transition-colors ${selected ? "!text-signal" : ""}`}>Activation {it.n}</span>
+                  <span className={`label block transition-colors ${selected ? "!text-signal" : ""}`}>Activación {it.n}</span>
                   <span className={`display mt-2 block text-2xl transition-all duration-500 md:text-4xl ${selected ? "text-bone md:translate-x-3" : "text-silver/60 group-hover:text-bone"}`}>
                     {it.short}
                   </span>
@@ -94,7 +94,7 @@ export function Activation() {
 
                 <div className="flex flex-col">
                   <p className="font-serif text-2xl leading-snug text-bone md:text-3xl">{item.summary}</p>
-                  <span className="label mt-10 block">Possibilities</span>
+                  <span className="label mt-10 block">Posibilidades</span>
                   <ul className="mt-4">
                     {item.options.map((o, k) => (
                       <motion.li
@@ -111,7 +111,7 @@ export function Activation() {
                   </ul>
                   <div className="mt-auto pt-10">
                     <div className="border-l-2 border-signal pl-5">
-                      <span className="label !text-signal">Benefit for KGM</span>
+                      <span className="label !text-signal">Beneficio para KGM</span>
                       <p className="mt-2 text-base leading-relaxed text-bone md:text-lg">{item.benefit}</p>
                     </div>
                   </div>

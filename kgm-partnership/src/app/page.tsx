@@ -16,7 +16,7 @@ export default function Page() {
   return (
     <>
       <a href="#vision" className="label sr-only z-[60] bg-bone px-4 py-2 !text-ink focus:not-sr-only focus:fixed focus:top-4 focus:left-4">
-        Skip to content
+        Saltar al contenido
       </a>
       <Nav />
       <main>
