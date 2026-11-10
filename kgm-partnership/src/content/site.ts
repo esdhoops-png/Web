@@ -97,15 +97,18 @@ export const contact = {
 };
 
 export const nav = [
+  { id: "opportunity", label: "The Opportunity" },
   { id: "vision", label: "The Vision" },
   { id: "who-we-are", label: "Who We Are" },
   { id: "global-reach", label: "Global Reach" },
   { id: "why-kgm", label: "Why KGM" },
+  { id: "difference", label: "Not a Logo" },
   { id: "concepts", label: "Concepts" },
   { id: "fleet", label: "The Fleet" },
   { id: "activation", label: "Activation" },
   { id: "synergy", label: "Shared Values" },
   { id: "value", label: "What KGM Gets" },
+  { id: "first-move", label: "One Seat" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -355,4 +358,60 @@ export const onCourt = {
   note: "Fotografías de torneos y entrenamientos de ESD HOOPS.",
   rowA: [images.esdDrive, images.esdCoachLaugh, images.esdPodium, images.esdLayup, images.esdBanner, images.esdDuel, images.esdContest],
   rowB: [images.esdCamp, images.esdShooterAlt, images.esdOneOnOne, images.esdProfileAlt, images.esdDribble, images.esdIntensity, images.esdCrowd],
+};
+
+/** Pinned opening argument: why a brand needs a community, not more advertising. */
+export const opportunity = {
+  label: "The Opportunity",
+  beats: [
+    {
+      line: "A new generation doesn't watch ads.",
+      note: "Los pasa de largo, los silencia, los olvida. La atención ya no se compra: se gana.",
+      image: images.esdProfileAlt,
+    },
+    {
+      line: "It shows up. It plays. It shares.",
+      note: "Vive el deporte en primera persona: en la pista, en la grada y en el móvil. Cada partido se convierte en contenido.",
+      image: images.esdOneOnOneAlt,
+    },
+    {
+      line: "It remembers who was there.",
+      note: "Las marcas que recuerda no son las que le interrumpieron, sino las que estuvieron a su lado. Ese sitio, en nuestra pista, está libre.",
+      image: images.esdPodium,
+    },
+  ],
+};
+
+/** Traditional sponsorship vs. what this partnership offers. */
+export const difference = {
+  label: "The Difference",
+  title: "Not a logo. A role.",
+  intro: "La diferencia entre patrocinar un evento y formar parte de él.",
+  left: "Patrocinio tradicional",
+  right: "ESD HOOPS × KGM",
+  rows: [
+    ["Un logo en una lona", "Un papel protagonista en el evento"],
+    ["Impactos que se olvidan", "Experiencias que se recuerdan"],
+    ["Un público que mira", "Una comunidad que participa"],
+    ["Presencia de un día", "Presencia toda la temporada: eventos, entrenamientos y contenido"],
+    ["Sin material propio", "Contenido profesional para los canales de KGM"],
+    ["Una marca más entre muchas", "Un único socio de automoción"],
+  ],
+};
+
+/** Scarcity + a low-friction first step. */
+export const firstMove = {
+  label: "The First Move",
+  title: "One partner. One seat.",
+  seat: "Automoción",
+  body: "ESD HOOPS quiere trabajar con un único socio de automoción: una sola marca presente en la pista, en los entrenamientos y en el contenido. Nos gustaría que fuera KGM.",
+  note: "Exclusividad de categoría propuesta, a concretar en el acuerdo.",
+  stepsTitle: "Empezar es sencillo",
+  steps: [
+    { title: "Conversación", body: "Entendemos los objetivos de KGM y los modelos que quiere impulsar." },
+    { title: "Propuesta a medida", body: "Elegimos juntos las líneas de activación que mejor encajan." },
+    { title: "Evento piloto", body: "Un primer 3x3 con KGM en pista para medir y aprender juntos." },
+    { title: "Temporada", body: "Si funciona, lo convertimos en una alianza a largo plazo." },
+  ],
+  cta: "Empezar la conversación",
 };

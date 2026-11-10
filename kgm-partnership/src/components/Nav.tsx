@@ -51,9 +51,16 @@ export function Nav() {
             <span className="font-serif text-silver">×</span>
             <span className="block h-[10px] w-[60px]"><KgmWordmark className="h-full w-full" /></span>
           </button>
+          <div className="col-start-3 flex items-center gap-6 justify-self-end">
+          <button
+            onClick={() => go("contact")}
+            className={`label hidden rounded-full border border-tan/60 px-5 py-2.5 !text-tan transition-all duration-500 hover:bg-tan hover:!text-ink md:block ${scrolled && !open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+          >
+            Hablemos
+          </button>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="col-start-3 flex items-center justify-self-end gap-3 text-bone"
+            className="flex items-center gap-3 text-bone"
             aria-expanded={open}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-controls="site-menu"
@@ -64,6 +71,7 @@ export function Nav() {
               <span className={`absolute left-0 h-px w-full bg-bone transition-transform duration-500 ${open ? "top-1.5 -rotate-45" : "top-3"}`} />
             </span>
           </button>
+          </div>
         </div>
         <motion.div className="h-px origin-left bg-signal" style={{ scaleX: scrollYProgress }} aria-hidden />
       </motion.header>

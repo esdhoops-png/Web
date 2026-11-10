@@ -104,12 +104,12 @@ export function Hero() {
 
       {/* Scroll cue */}
       <motion.a
-        href="#vision"
+        href="#opportunity"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, delay: 3.2 }}
         className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-4"
-        aria-label="Ir a la visión"
+        aria-label="Seguir bajando"
       >
         <span className="label text-[0.6rem] md:hidden">Desliza</span>
         <span className="relative block h-8 w-px overflow-hidden bg-bone/15">
