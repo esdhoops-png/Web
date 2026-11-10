@@ -21,6 +21,14 @@ Producción: `npm run build && npm start`.
    - `NEXT_PUBLIC_SITE_URL`: URL pública (metadatos y Open Graph).
    - `NEXT_PUBLIC_ALLOW_INDEXING=true` si quieres que Google la indexe (por defecto `noindex`, al ser una propuesta privada).
 
+## Versión estática (sin servidor)
+
+```bash
+STATIC_EXPORT=1 npx next build && node scripts/prepare-static.mjs
+```
+
+Genera `static-site/`: una copia autónoma con rutas relativas y fuentes incrustadas, que se puede alojar en cualquier sitio.
+
 ## Dónde se cambia cada cosa
 
 | Qué | Dónde |
