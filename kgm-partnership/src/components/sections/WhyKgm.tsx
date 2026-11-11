@@ -80,10 +80,10 @@ function Tick({ n }: { n: string }) {
       <span aria-hidden>{lead}</span>
       <motion.span
         aria-hidden
-        className="flex flex-col will-change-transform"
+        className="flex flex-col self-start will-change-transform"
         variants={{
-          hidden: { y: "0%" },
-          show: { y: `-${(d / (d + 1)) * 100}%`, transition: { duration: 0.9 + d * 0.12, ease: EASE_INOUT, delay: 0.1 } },
+          hidden: { y: "0em" },
+          show: { y: `-${d * 1.2}em`, transition: { duration: 0.9 + d * 0.12, ease: EASE_INOUT, delay: 0.1 } },
         }}
       >
         {digits.map((k) => (

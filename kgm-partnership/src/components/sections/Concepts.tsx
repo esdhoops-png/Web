@@ -314,7 +314,7 @@ export function Concepts() {
         </div>
       </div>
 
-      <div ref={ref} className="relative" style={{ height: horizontal ? `calc(100svh + ${distance}px)` : "auto" }}>
+      <div ref={ref} className="relative" style={{ height: horizontal ? `calc(100svh + ${Math.round(distance * 0.72)}px)` : "auto" }}>
         <div className={horizontal ? "sticky top-0 flex h-[100svh] items-center overflow-hidden pb-10" : ""}>
           <motion.div
             ref={trackRef}

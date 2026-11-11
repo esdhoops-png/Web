@@ -80,7 +80,7 @@ function Row({ word, img, dir, index, skew }: { word: string; img?: Img | Vehicl
       <motion.div
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: "0px 0px -6% 0px" }}
+        viewport={{ once: true, margin: "0px 0px 0% 0px" }}
         style={reduced ? undefined : { x, skewX: lean }}
         className={`flex items-center gap-[3vw] px-5 whitespace-nowrap will-change-transform md:px-10 ${dir === 1 ? "justify-start" : "justify-end"}`}
       >
@@ -126,10 +126,10 @@ function Pill({ img }: { img: Img | Vehicle }) {
     hidden: { clipPath: reduced ? open : "inset(48% 50% 48% 50% round 999px)" },
     show: {
       clipPath: reduced ? open : ["inset(48% 50% 48% 50% round 999px)", "inset(48% 0% 48% 0% round 999px)", open],
-      transition: { duration: 1.5, ease: EASE_IO, times: [0, 0.45, 1], delay: 0.25 },
+      transition: { duration: 0.9, ease: EASE_IO, times: [0, 0.45, 1], delay: 0.1 },
     },
   };
-  const inner = { hidden: { scale: 1.5 }, show: { scale: 1, transition: { duration: 1.9, ease: EASE, delay: 0.6 } } };
+  const inner = { hidden: { scale: 1.5 }, show: { scale: 1, transition: { duration: 1.2, ease: EASE, delay: 0.2 } } };
   if ("img" in img) {
     return (
       <motion.span variants={variants} className={`${box} bg-[radial-gradient(ellipse_at_50%_120%,#24506f_0%,#142a3d_60%)]`}>

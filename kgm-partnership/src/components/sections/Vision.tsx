@@ -126,7 +126,7 @@ export function Vision() {
   // Three depths: the frame barely moves, the car tile drifts, the portrait travels fastest.
   const far = useTransform(scrollYProgress, [0, 1], ["-6%", "10%"]);
   const slow = useTransform(scrollYProgress, [0, 1], ["9%", "-9%"]);
-  const fast = useTransform(scrollYProgress, [0, 1], ["34%", "-30%"]);
+  const fast = useTransform(scrollYProgress, [0, 1], ["26%", "-8%"]);
   // Both pieces arrive slightly rotated and settle square as they reach the middle of the screen.
   const tileRotate = useTransform(scrollYProgress, [0.05, 0.5], [5, 0]);
   const portraitRotate = useTransform(scrollYProgress, [0.1, 0.55], [-7, 0]);

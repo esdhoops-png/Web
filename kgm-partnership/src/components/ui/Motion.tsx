@@ -12,25 +12,28 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 /**
  * Headline that builds itself letter by letter: every character rises from behind
  * a mask with a slight rotation, staggered across the line. Words never break.
- * (Kept under the name WordsReveal so every headline on the site uses it.)
+ * The heading itself is the observed element (the letters start clipped by their
+ * masks, so they could never report themselves as "in view").
  */
 export function WordsReveal({
   text,
-  as: Tag = "h2",
+  as = "h2",
   className = "",
   delay = 0,
   stagger = 0.022,
 }: {
   text: string;
-  as?: ElementType;
+  as?: "h1" | "h2" | "h3" | "p" | "span" | "div";
   className?: string;
   delay?: number;
   stagger?: number;
 }) {
+  const { reduced } = useMotionPrefs();
+  const M = motion[as] as typeof motion.h2;
   const words = text.split(" ");
   let n = 0;
   return (
-    <Tag className={className} aria-label={text}>
+    <M className={className} aria-label={text} initial={reduced ? "show" : "hidden"} whileInView="show" viewport={{ once: true, margin: "0px 0px -8% 0px" }}>
       {words.map((w, wi) => (
         <span key={wi} aria-hidden className="inline-block overflow-hidden pb-[0.12em] align-top whitespace-nowrap [margin-bottom:-0.04em]">
           {Array.from(w).map((c, ci) => {
@@ -39,10 +42,10 @@ export function WordsReveal({
               <motion.span
                 key={ci}
                 className="inline-block origin-bottom-left will-change-transform"
-                initial={{ y: "115%", rotate: 9, opacity: 0 }}
-                whileInView={{ y: "0%", rotate: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-                transition={{ duration: 1.05, ease: EASE, delay: delay + i * stagger, opacity: { duration: 0.4, delay: delay + i * stagger } }}
+                variants={{
+                  hidden: { y: "115%", rotate: 9, opacity: 0 },
+                  show: { y: "0%", rotate: 0, opacity: 1, transition: { duration: 0.95, ease: EASE, delay: delay + i * stagger, opacity: { duration: 0.35, delay: delay + i * stagger } } },
+                }}
               >
                 {c}
               </motion.span>
@@ -51,7 +54,7 @@ export function WordsReveal({
           {wi < words.length - 1 ? "\u00A0" : ""}
         </span>
       ))}
-    </Tag>
+    </M>
   );
 }
 
@@ -142,7 +145,7 @@ function FillWord({
 export function LetterFill({ text, className = "" }: { text: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const { reduced } = useMotionPrefs();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.9", "start 0.4"] });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.95", "start 0.62"] });
   const chars = Array.from(text);
   return (
     <span ref={ref} className={className} aria-label={text} role="text">

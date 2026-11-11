@@ -149,7 +149,7 @@ export function SceneReveal({ children, className = "" }: { children: ReactNode;
   const radius = useTransform(scrollYProgress, [0, 1], [36, 0]);
   const clip = useMotionTemplate`inset(${inset}% ${inset}% 0% ${inset}% round ${radius}px)`;
   return (
-    <motion.div ref={ref} className={className} style={reduced ? undefined : { clipPath: clip }}>
+    <motion.div ref={ref} className={className} style={{ clipPath: reduced ? "inset(0% 0% 0% 0% round 0px)" : clip }}>
       {children}
     </motion.div>
   );

@@ -27,19 +27,19 @@ const beforeCell: Variants = {
 };
 const strike: Variants = {
   hidden: { backgroundSize: "0% 1px" },
-  show: { backgroundSize: "100% 1px", transition: { duration: 0.6, ease: EASE_INOUT, delay: 0.3 } },
+  show: { backgroundSize: "100% 1px", transition: { duration: 0.45, ease: EASE_INOUT, delay: 0.1 } },
 };
 const arrowTrack: Variants = {
   hidden: { scaleX: 0 },
-  show: { scaleX: 1, transition: { duration: 0.6, ease: EASE_INOUT, delay: 0.6 } },
+  show: { scaleX: 1, transition: { duration: 0.4, ease: EASE_INOUT, delay: 0.25 } },
 };
 const arrowHead: Variants = {
   hidden: { opacity: 0, x: -44 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: EASE_INOUT, delay: 0.6, opacity: { duration: 0.2, delay: 0.6 } } },
+  show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: EASE_INOUT, delay: 0.25, opacity: { duration: 0.2, delay: 0.25 } } },
 };
 const afterWord: Variants = {
   hidden: { y: "115%" },
-  show: (i: number) => ({ y: "0%", transition: { duration: 0.9, ease: EASE_OUT, delay: 0.85 + i * 0.045 } }),
+  show: (i: number) => ({ y: "0%", transition: { duration: 0.7, ease: EASE_OUT, delay: 0.4 + i * 0.035 } }),
 };
 
 function Row({ before, after, request }: { before: string; after: string; request: () => number }) {
@@ -106,7 +106,7 @@ export function Difference() {
   const last = useRef(0);
   const request = useCallback(() => {
     const now = performance.now();
-    const start = Math.max(now, last.current + 170);
+    const start = Math.max(now, last.current + 110);
     last.current = start;
     return start - now;
   }, []);
