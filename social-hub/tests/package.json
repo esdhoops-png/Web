@@ -1,0 +1,16 @@
+{
+  "name": "social-hub-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "api": "node api.test.mjs",
+    "e2e": "node e2e.cjs",
+    "push": "node push.test.mjs"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "2.81.1",
+    "htm": "3.1.1",
+    "preact": "10.27.2",
+    "web-push": "3.6.7"
+  }
+}
