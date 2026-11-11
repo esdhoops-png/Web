@@ -328,8 +328,8 @@ const LIBRARY = [
   L(F.vC0611, 'videos', 'Ambiente del bar'), L(F.vC0618, 'videos', 'Ambiente del bar'), L(F.vC0572, 'videos', 'Ambiente del bar'), L(F.vC0573, 'videos', 'Ambiente del bar'),
   L(F.champPortada, 'champions', 'Plantilla portada'), L(F.champPortadaPsd, 'champions', 'PSD editable'), L(F.champPartido, 'champions', 'Plantilla partido'),
   L(F.champPartidoPsd, 'champions', 'PSD editable'), L(F.champPartido2, 'champions', 'Plantilla partido'),
-  L(F.tipos1, 'carruseles', 'Tipos de personas'), L(F.tipos2, 'carruseles', 'Tipos de personas'), L(F.tipos6, 'carruseles', 'Tipos de personas'), L(F.tipos7, 'carruseles', 'Tipos de personas'),
-  L(F.tiposZip, 'carruseles', 'Carrusel completo'), L(F.reglasZip, 'carruseles', 'Carrusel «reglas» completo'),
+  // «Tipos de personas» es un carrusel de VOLCÁN (verificado al ver el diseño): no va en la biblioteca de 5mentarios.
+  // «carrusel-reglas.zip» no se ha podido verificar: no se incluye.
   L(F.sello, 'disenos', 'Logo sello (blanco)'), L(F.selloNegro, 'disenos', 'Logo sello (negro)'),
   L(F.cartelHalloween, 'anteriores', 'Cartel Halloween 31 oct')
 ];

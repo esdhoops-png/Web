@@ -98,3 +98,12 @@ export function driveRef(f) {
     web_url: f.webViewLink || driveView(f.id), thumbnail_url: null, size_bytes: f.size ? Number(f.size) : null
   };
 }
+
+// Descarga el contenido real de un archivo (para llevarlo al editor del Estudio / a Storage)
+export async function downloadDriveFile(id) {
+  let t = savedToken();
+  if (!t) t = await connectDrive({ silent: true });
+  const res = await fetch(`${API}/files/${encodeURIComponent(id)}?alt=media&supportsAllDrives=true`, { headers: { Authorization: `Bearer ${t.access_token}` } });
+  if (!res.ok) throw new Error('No se pudo descargar el archivo de Drive (' + res.status + ').');
+  return res.blob();
+}

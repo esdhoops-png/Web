@@ -420,3 +420,6 @@ verify_jwt = false
 
 [functions.invite-user]
 verify_jwt = true
+
+[functions.ai-image]
+verify_jwt = true

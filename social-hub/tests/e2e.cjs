@@ -10,7 +10,8 @@ const APP = process.env.APP_URL || 'http://127.0.0.1:5173/';
 const SHOTS = process.env.SHOTS || '.';
 const cfg = `window.HUB_CONFIG={supabaseUrl:'${process.env.SUPABASE_URL || 'http://127.0.0.1:54321'}',supabaseAnonKey:'${process.env.SUPABASE_ANON_KEY}',googleClientId:'',vapidPublicKey:''}`;
 let n = 0;
-const step = async (name, fn) => { const t = Date.now(); await fn(); n++; console.log(`  ✓ ${name} (${Date.now() - t} ms)`); };
+let PAGES = [];
+const step = async (name, fn) => { const t = Date.now(); try { await fn(); } catch (e) { for (const [i, p] of PAGES.entries()) await p.screenshot({ path: `${SHOTS}/FALLO-${i}.png` }).catch(() => {}); throw e; } n++; console.log(`  ✓ ${name} (${Date.now() - t} ms)`); };
 
 async function login(ctx, email, label) {
   const p = await ctx.newPage();
@@ -34,6 +35,7 @@ const shot = (p, name) => p.screenshot({ path: `${SHOTS}/${name}.png`, fullPage:
   console.log('E2E 5 Mentarios Social Hub');
   const mk = await login(desk, 'marketing@test.local', 'marketing');
   const ow = await login(phone, 'propietario@test.local', 'propietario');
+  PAGES = [mk, ow];
 
   await step('existe un plan v1 anterior (uno sin tocar y otro ya editado)', async () => {
     const { createClient } = require('@supabase/supabase-js');

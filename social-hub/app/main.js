@@ -13,9 +13,10 @@ import { ActivityView } from './views/activity.js';
 import { SettingsView } from './views/settings.js';
 import { SearchView } from './views/search.js';
 import { GeneratorView } from './views/generator.js';
+import { StudioView } from './views/studio.js';
 
 const NAV = [
-  ['inicio', 'Inicio', 'home'], ['calendario', 'Calendario', 'calendar'], ['publicaciones', 'Publicaciones', 'posts'], ['generador', 'Generador y marca', 'sparkle'],
+  ['inicio', 'Inicio', 'home'], ['calendario', 'Calendario', 'calendar'], ['publicaciones', 'Publicaciones', 'posts'], ['estudio', 'Estudio creativo', 'palette'], ['generador', 'Generador y marca', 'sparkle'],
   ['biblioteca', 'Biblioteca', 'library'], ['tareas', 'Tareas', 'tasks'], ['chat', 'Chat', 'chat'],
   ['notificaciones', 'Notificaciones', 'bell'], ['actividad', 'Actividad', 'activity'], ['ajustes', 'Configuración', 'settings']
 ];
@@ -69,6 +70,7 @@ function NewMenu() {
   const pick = (fn) => { setOpen(false); fn(); };
   return html`<div class="menu-wrap"><button class="btn primary" onClick=${() => setOpen(!open)} aria-haspopup="menu"><${Icon} name="plus" /><span class="hide-sm">Nuevo</span></button>
     ${open ? html`<div class="menu" role="menu">
+      <button onClick=${() => pick(() => go('#/estudio'))}><${Icon} name="palette" />Diseño en el Estudio</button>
       <button onClick=${() => pick(() => go('#/generador'))}><${Icon} name="sparkle" />Generar contenido</button>
       <button onClick=${() => pick(() => openPostForm({ kind: 'post' }))}><${Icon} name="posts" />Publicación</button>
       <button onClick=${() => pick(() => openPostForm({ kind: 'event', requires_approval: false }))}><${Icon} name="music" />Evento</button>
@@ -101,6 +103,7 @@ function Shell() {
     case 'actividad': view = html`<${ActivityView} />`; break;
     case 'ajustes': view = html`<${SettingsView} query=${query} />`; break;
     case 'buscar': view = html`<${SearchView} query=${query} />`; break;
+    case 'estudio': view = html`<${StudioView} query=${query} />`; break;
     case 'generador': view = html`<${GeneratorView} query=${query} />`; break;
     default: view = html`<${Dashboard} />`;
   }

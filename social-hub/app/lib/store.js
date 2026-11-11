@@ -52,7 +52,7 @@ function friendly(e) {
 // ---------- carga de datos ----------
 export async function loadProfiles() { setState({ profiles: check(await sb.from('profiles').select('*').order('created_at')) }); }
 export async function loadPosts() {
-  setState({ posts: check(await sb.from('posts').select('*, attachments(id,role,source,drive_file_id,storage_path,name,mime_type,web_url,thumbnail_url,version_id)').order('starts_at', { ascending: true, nullsFirst: false })) });
+  setState({ posts: check(await sb.from('posts').select('*, attachments(id,role,source,drive_file_id,storage_path,name,mime_type,web_url,thumbnail_url,version_id,creative_version_id)').order('starts_at', { ascending: true, nullsFirst: false })) });
 }
 export async function loadTasks() { setState({ tasks: check(await sb.from('tasks').select('*').order('position')) }); }
 export async function loadCategories() { setState({ categories: check(await sb.from('library_categories').select('*').order('sort').order('name')) }); }
@@ -121,7 +121,10 @@ function startRealtime() {
   ch.subscribe((status) => {
     if (ch !== channel) return; // canal antiguo que se está cerrando
     setState({ realtime: status });
-    if (status === 'SUBSCRIBED') Object.keys(loaders).forEach(refresh); // al (re)conectar, ponerse al día
+    if (status === 'SUBSCRIBED') { // al (re)conectar, ponerse al día (y otra vez cuando la suscripción ya está activa)
+      Object.keys(loaders).forEach(refresh);
+      setTimeout(() => Object.keys(loaders).forEach(refresh), 3000);
+    }
     if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
       clearTimeout(timers.__rt);
       timers.__rt = setTimeout(() => { if (state.me && channel) startRealtime(); }, 4000);
@@ -154,6 +157,8 @@ export async function reloadAll() {
 }
 
 // Al volver a la app (móvil en segundo plano) se recarga todo por si se perdió algún evento
+// Repaso ligero periódico por si se perdió algún evento en tiempo real
+setInterval(() => { if (state.me && document.visibilityState === 'visible') ['posts', 'tasks', 'notifications', 'chat_messages'].forEach(refresh); }, 45000);
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && state.me) Object.keys(loaders).forEach(refresh);
 });
