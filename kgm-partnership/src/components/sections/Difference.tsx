@@ -35,7 +35,7 @@ export function Difference() {
               viewport={{ once: true, margin: "0px 0px -12% 0px" }}
               transition={{ duration: 0.9, ease: EASE, delay: i * 0.05 }}
             >
-              <span role="cell" className="text-base text-silver/55 line-through decoration-silver/30 md:col-span-5 md:text-xl">
+              <span role="cell" className="text-base text-silver/55 line-through decoration-silver/30 [html[data-theme=sand]_&]:text-silver/85 [html[data-theme=sand]_&]:decoration-silver/55 md:col-span-5 md:text-xl">
                 {before}
               </span>
               <span aria-hidden className="hidden text-signal md:col-span-1 md:block">

@@ -13,11 +13,11 @@ type Concept = (typeof concepts.items)[number];
 
 function Shot({ img, className = "", sizes, vehicle }: { img: Img; className?: string; sizes: string; vehicle?: Vehicle }) {
   return (
-    <div className={`relative overflow-hidden bg-charcoal ${className}`}>
+    <div className={`relative overflow-hidden bg-night-2 ${className}`}>
       <Image src={img.src} alt={img.alt} fill sizes={sizes} className="cine-img object-cover transition-transform duration-[1.6s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" style={{ objectPosition: img.position }} />
       {vehicle && (
         <>
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-night/85 via-night/20 to-transparent" />
           <motion.div
             className={`absolute bottom-[4%] w-[min(72%,560px)] ${vehicle.faces === "left" ? "right-[4%]" : "left-[4%]"}`}
             initial={{ x: vehicle.faces === "left" ? "40%" : "-40%", opacity: 0 }}
@@ -27,7 +27,7 @@ function Shot({ img, className = "", sizes, vehicle }: { img: Img; className?: s
           >
             <VehicleCutout vehicle={vehicle} sizes="40vw" />
           </motion.div>
-          <span className="label absolute top-3 right-3 bg-ink/70 px-2 py-1 text-[0.55rem] text-bone">Montaje conceptual</span>
+          <span className="label absolute top-3 right-3 bg-night/70 px-2 py-1 text-[0.55rem] text-day">Montaje conceptual</span>
         </>
       )}
     </div>
@@ -67,12 +67,12 @@ function ConceptPanel({ c, index }: { c: Concept; index: number }) {
   const v = (i: number) => (m && m.on === i ? m.vehicle : undefined);
   return (
     <article className="group relative flex h-full w-full shrink-0 flex-col justify-between gap-6 md:w-[86vw] md:max-w-[1500px]" aria-labelledby={`concept-${c.n}`}>
-      <div className="relative grid flex-1 grid-cols-12 grid-rows-6 gap-2 md:gap-3">
+      <div className="relative grid h-[92vw] max-h-[560px] grid-cols-12 grid-rows-6 gap-2 md:h-auto md:max-h-none md:flex-1 md:gap-3">
         {index === 1 ? (
           <>
             <Shot vehicle={v(0)} img={a} className="col-span-12 row-span-4 md:col-span-5 md:row-span-6" sizes="(min-width: 768px) 40vw, 100vw" />
-            <div className="relative col-span-12 row-span-2 border hairline bg-ink/80 p-3 md:col-span-4 md:row-span-6 md:p-6">
-              <span className="label absolute top-3 left-3 text-[0.55rem] md:top-5 md:left-5">Plano del concepto</span>
+            <div className="relative col-span-12 row-span-2 border hairline bg-night/80 p-3 [html[data-theme=sand]_&]:bg-night md:col-span-4 md:row-span-6 md:p-6">
+              <span className="label absolute top-3 left-3 text-[0.55rem] text-day-muted md:top-5 md:left-5">Plano del concepto</span>
               <EventPlan />
             </div>
             <Shot vehicle={v(1)} img={b} className="hidden md:col-span-3 md:row-span-3 md:block" sizes="25vw" />
@@ -102,7 +102,7 @@ function ConceptPanel({ c, index }: { c: Concept; index: number }) {
         {/* Campaign overlay */}
         {index !== 1 && (
           <div className="pointer-events-none absolute top-0 left-0 hidden w-[62%] p-6 md:block lg:p-10">
-            <span className="block h-[14px] w-[83px] text-bone/90">
+            <span className="block h-[14px] w-[83px] text-day/90">
               <KgmWordmark className="h-full w-full" />
             </span>
           </div>
@@ -184,7 +184,7 @@ export function Concepts() {
             style={{ x: horizontal ? x : 0 }}
           >
             {concepts.items.map((c, i) => (
-              <div key={c.n} className={horizontal ? "h-full" : "h-[110vw] max-h-[720px] min-h-[560px]"}>
+              <div key={c.n} className={horizontal ? "h-full" : ""}>
                 <ConceptPanel c={c} index={i} />
               </div>
             ))}
@@ -192,7 +192,7 @@ export function Concepts() {
           {horizontal && (
             <div className="absolute inset-x-[7vw] bottom-5 flex items-center gap-6">
               <span className="label text-[0.6rem]">Desliza para explorar</span>
-              <div className="h-px flex-1 bg-bone/10">
+              <div className="h-px flex-1 bg-bone/10 [html[data-theme=sand]_&]:bg-bone/20">
                 <motion.div className="h-px origin-left bg-bone" style={{ scaleX: progress }} />
               </div>
               <span className="label text-[0.6rem]">04 conceptos</span>

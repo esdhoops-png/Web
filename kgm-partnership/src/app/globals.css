@@ -91,6 +91,10 @@ html[data-theme="sand"] {
   .cine-img {
     filter: saturate(0.82) contrast(1.06) brightness(0.92);
   }
+  /* On sand the photos no longer need to sink into a dark page. */
+  html[data-theme="sand"] .cine-img {
+    filter: saturate(0.92) contrast(1.05) brightness(1);
+  }
   .link-line {
     position: relative;
   }

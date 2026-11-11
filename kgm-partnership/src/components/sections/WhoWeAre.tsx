@@ -29,10 +29,10 @@ export function WhoWeAre() {
       {/* Intro — full-bleed statement */}
       <div className="relative overflow-hidden">
         <CineImage img={images.esdCamp} className="h-[70svh] min-h-[460px] w-full md:h-[86svh]" parallax={8} reveal="none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-ink/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-night-2 via-night-2/40 to-night/60" />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-5 pb-12 md:px-10 md:pb-20">
-          <SectionLabel className="text-bone">{whoWeAre.label}</SectionLabel>
-          <WordsReveal text={whoWeAre.title} as="h2" className="display mt-6 max-w-5xl text-[clamp(3rem,9vw,8.5rem)] text-bone" />
+          <SectionLabel className="text-day [&>span:first-child]:bg-day-muted/50">{whoWeAre.label}</SectionLabel>
+          <WordsReveal text={whoWeAre.title} as="h2" className="display mt-6 max-w-5xl text-[clamp(3rem,9vw,8.5rem)] text-day" />
         </div>
       </div>
 
@@ -45,7 +45,7 @@ export function WhoWeAre() {
           {/* Sticky visual that follows the active pillar */}
           <div className="hidden md:col-span-5 md:block">
             <div className="sticky top-28 h-[calc(100svh-9rem)]">
-              <div className="relative h-full overflow-hidden bg-ink">
+              <div className="relative h-full overflow-hidden bg-night">
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.div
                     key={active}
@@ -60,10 +60,10 @@ export function WhoWeAre() {
                     </motion.div>
                   </motion.div>
                 </AnimatePresence>
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/80 via-transparent to-transparent" />
                 <div className="absolute bottom-6 left-6 flex items-baseline gap-3">
-                  <span className="display text-6xl text-bone">{pillar.n}</span>
-                  <span className="label">/ 03</span>
+                  <span className="display text-6xl text-day">{pillar.n}</span>
+                  <span className="label text-day-muted">/ 03</span>
                 </div>
               </div>
             </div>

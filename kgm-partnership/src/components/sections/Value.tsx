@@ -35,7 +35,7 @@ export function Value() {
                 transition={{ duration: 1, ease: EASE, delay: (i % 2) * 0.12 }}
               >
                 <div className="flex items-start justify-between">
-                  <span className="display text-7xl text-bone/15 transition-colors duration-700 group-hover:text-signal md:text-8xl">
+                  <span className="display text-7xl text-bone/15 [html[data-theme=sand]_&]:text-bone/20 [html[data-theme=sand]_&]:group-hover:text-signal transition-colors duration-700 group-hover:text-signal md:text-8xl">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="mt-3 h-2 w-2 rounded-full border border-silver/50 transition-colors duration-500 group-hover:border-signal group-hover:bg-signal" aria-hidden />

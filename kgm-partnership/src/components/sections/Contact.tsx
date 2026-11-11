@@ -16,7 +16,7 @@ const fields = [
 
 function Field({ name, label, type, autoComplete, required }: (typeof fields)[number]) {
   return (
-    <div className="group relative border-b hairline pt-6 pb-2 focus-within:border-bone">
+    <div className="group relative border-b hairline pt-6 pb-2 [html[data-theme=sand]_&]:border-bone/30 focus-within:border-bone [html[data-theme=sand]_&]:focus-within:border-bone">
       <input
         id={`f-${name}`}
         name={name}
@@ -97,7 +97,7 @@ export function Contact() {
             {details.length > 0 && (
               <dl className="mt-12 max-w-md">
                 {details.map((d) => (
-                  <div key={d.k} className="flex justify-between gap-6 border-b hairline py-4">
+                  <div key={d.k} className="flex justify-between gap-6 border-b hairline py-4 [html[data-theme=sand]_&]:border-bone/25">
                     <dt className="label">{d.k}</dt>
                     <dd className="text-bone">
                       {d.href ? (
@@ -119,7 +119,7 @@ export function Contact() {
               {fields.map((f) => (
                 <Field key={f.name} {...f} />
               ))}
-              <div className="relative border-b hairline pt-6 pb-2 focus-within:border-bone">
+              <div className="relative border-b hairline pt-6 pb-2 [html[data-theme=sand]_&]:border-bone/30 focus-within:border-bone [html[data-theme=sand]_&]:focus-within:border-bone">
                 <label htmlFor="f-message" className="label">
                   Mensaje
                 </label>
@@ -131,10 +131,10 @@ export function Contact() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="group relative inline-flex items-center gap-5 overflow-hidden rounded-full border border-bone/30 py-4 pr-4 pl-8 text-bone transition-colors duration-500 hover:border-signal disabled:opacity-60"
+                  className="group relative inline-flex items-center gap-5 overflow-hidden rounded-full border border-bone/30 [html[data-theme=sand]_&]:border-bone/50 py-4 pr-4 pl-8 text-bone transition-colors duration-500 hover:border-signal [html[data-theme=sand]_&]:hover:border-signal disabled:opacity-60"
                 >
                   <span className="absolute inset-0 origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden />
-                  <span className="label relative text-bone">{status === "sending" ? "Enviando…" : contactSection.cta}</span>
+                  <span className="label relative text-bone [html[data-theme=sand]_&]:transition-colors [html[data-theme=sand]_&]:duration-500 [html[data-theme=sand]_&]:group-hover:text-day">{status === "sending" ? "Enviando…" : contactSection.cta}</span>
                   <span className="relative grid h-10 w-10 place-items-center rounded-full bg-bone text-ink transition-transform duration-500 group-hover:translate-x-1">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                       <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.4" />
@@ -162,7 +162,7 @@ export function Contact() {
       </div>
 
       {/* Sign-off */}
-      <footer className="border-t hairline">
+      <footer className="border-t hairline [html[data-theme=sand]_&]:border-bone/20">
         <div className="mx-auto max-w-7xl px-5 py-20 md:px-10 md:py-28">
           <div className="flex flex-col items-center text-center text-bone">
             <FadeIn>
@@ -171,7 +171,7 @@ export function Contact() {
             <WordsReveal text={contactSection.signoff} as="p" className="display mt-12 text-[clamp(2.6rem,7vw,6.5rem)] text-bone" />
           </div>
 
-          <div className="mt-24 grid gap-10 border-t hairline pt-10 text-xs leading-relaxed text-silver/70 md:grid-cols-12">
+          <div className="mt-24 grid gap-10 border-t hairline [html[data-theme=sand]_&]:border-bone/20 pt-10 text-xs leading-relaxed text-silver/70 [html[data-theme=sand]_&]:text-silver md:grid-cols-12">
             <div className="md:col-span-5">
               <div className="flex items-center gap-4 text-silver">
                 <span className="block h-8 w-[22px]"><EsdMark className="h-full w-full" /></span>

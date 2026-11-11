@@ -3,7 +3,7 @@
 import { cpSync, existsSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, extname } from "node:path";
 
-const SRC = "out", DST = "static-site";
+const SRC = "out", DST = process.env.STATIC_DIR || "static-site";
 if (existsSync(DST)) rmSync(DST, { recursive: true });
 cpSync(SRC, DST, { recursive: true });
 // The host reserves top-level names starting with "_": serve Next assets from app/_next (matches assetPrefix "./app").

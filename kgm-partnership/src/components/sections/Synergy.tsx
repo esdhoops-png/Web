@@ -11,14 +11,14 @@ function Row({ word, img, dir, index }: { word: string; img?: Img | Vehicle; dir
   const ref = useRef<HTMLDivElement>(null);
   const { reduced } = useMotionPrefs();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const x = useTransform(scrollYProgress, [0, 1], [`${dir * 12}%`, `${dir * -12}%`]);
+  const x = useTransform(scrollYProgress, [0, 1], [`${dir * 3}%`, `${dir * -3}%`]);
   const accent = index === 1;
 
   return (
     <div ref={ref} className="overflow-hidden border-b hairline py-2 md:py-3">
       <motion.div style={{ x: reduced ? 0 : x }} className={`flex items-center gap-[3vw] whitespace-nowrap ${dir === 1 ? "justify-start" : "justify-end"}`}>
         {dir === -1 && img && <Pill img={img} />}
-        <span className={`display text-[clamp(3.4rem,12.5vw,13rem)] leading-[0.95] ${accent ? "text-signal italic" : "text-bone"}`}>{word}</span>
+        <span className={`display text-[clamp(2.4rem,11vw,13rem)] leading-[0.95] ${accent ? "text-signal italic" : "text-bone"}`}>{word}</span>
         {dir === 1 && img && <Pill img={img} />}
         <span className="label hidden shrink-0 md:inline">{String(index + 1).padStart(2, "0")}</span>
       </motion.div>

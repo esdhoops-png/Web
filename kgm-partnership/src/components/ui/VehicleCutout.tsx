@@ -56,7 +56,7 @@ export function StageTile({ vehicle, className = "", sizes = "40vw", caption }: 
 
 /** Three-vehicle line-up: hero model in front, two flanking models set back in the shadows. */
 export function Lineup({ left, center, right, dimSides = true, priority = false }: { left: Vehicle; center: Vehicle; right: Vehicle; dimSides?: boolean; priority?: boolean }) {
-  const side = dimSides ? "brightness-[0.5] saturate-[0.8]" : "brightness-[0.85]";
+  const side = dimSides ? "brightness-[0.5] saturate-[0.8] [html[data-theme=sand]_&]:brightness-[0.82] [html[data-theme=sand]_&]:saturate-100" : "brightness-[0.85]";
   return (
     <div className="relative flex items-end justify-center">
       <div className={`relative z-0 -mr-[9%] hidden w-[31%] translate-y-[-6%] md:block ${side}`}>

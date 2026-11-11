@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, type MotionValue } from "framer-motion
 import { useRef, type ElementType, type ReactNode } from "react";
 import type { Img } from "@/content/site";
 import { useMotionPrefs } from "@/components/Providers";
-import { palette } from "@/content/theme";
+import { palette, THEME } from "@/content/theme";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -113,7 +113,7 @@ function FillWord({
   accent: boolean;
   last: boolean;
 }) {
-  const opacity = useTransform(progress, range, [0.16, 1]);
+  const opacity = useTransform(progress, range, [THEME === "sand" ? 0.3 : 0.16, 1]);
   return (
     <span aria-hidden className="relative">
       <motion.span style={{ opacity: reduced ? 1 : opacity }} className={accent ? "text-signal" : undefined}>

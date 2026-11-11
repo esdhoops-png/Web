@@ -61,7 +61,7 @@ export function Activation() {
                   className={`group relative shrink-0 border px-4 py-3 text-left transition-colors duration-500 md:border-0 md:border-b md:px-0 md:py-7 ${selected ? "border-bone/60 md:border-bone/15" : "hairline"}`}
                 >
                   <span className={`label block transition-colors ${selected ? "!text-signal" : ""}`}>Activación {it.n}</span>
-                  <span className={`display mt-2 block text-2xl transition-all duration-500 md:text-4xl ${selected ? "text-bone md:translate-x-3" : "text-silver/60 group-hover:text-bone"}`}>
+                  <span className={`display mt-2 block text-2xl transition-all duration-500 md:text-4xl ${selected ? "text-bone md:translate-x-3" : "text-silver/60 group-hover:text-bone [html[data-theme=sand]_&]:text-silver/75 [html[data-theme=sand]_&]:group-hover:text-bone"}`}>
                     {it.short}
                   </span>
                   {selected && <motion.span layoutId="act-indicator" className="absolute top-0 bottom-0 left-0 hidden w-px bg-signal md:block" />}
@@ -88,8 +88,8 @@ export function Activation() {
                   <motion.div className="absolute inset-0" initial={{ scale: 1.15 }} animate={{ scale: 1 }} transition={{ duration: 1.6, ease: EASE }}>
                     <Image src={item.image.src} alt={item.image.alt} fill sizes="(min-width: 1024px) 30vw, 100vw" className="cine-img object-cover" style={{ objectPosition: item.image.position }} />
                   </motion.div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-transparent" />
-                  <h3 className="display absolute right-6 bottom-6 left-6 text-3xl text-bone md:text-4xl">{item.title}</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-night/90 via-night/10 to-transparent" />
+                  <h3 className="display absolute right-6 bottom-6 left-6 text-3xl text-day md:text-4xl">{item.title}</h3>
                 </div>
 
                 <div className="flex flex-col">

@@ -29,6 +29,17 @@ STATIC_EXPORT=1 npx next build && node scripts/prepare-static.mjs
 
 Genera `static-site/`: una copia autónoma con rutas relativas y fuentes incrustadas, que se puede alojar en cualquier sitio.
 
+## Temas: azul marino y arena
+
+La web tiene dos temas. El azul marino es el de por defecto; el arena usa el color de fondo del logo de ESD HOOPS con texto azul marino.
+
+```bash
+NEXT_PUBLIC_THEME=sand npm run dev      # ver el tema arena en local
+NEXT_PUBLIC_THEME=sand STATIC_EXPORT=1 npx next build && STATIC_DIR=static-site-sand node scripts/prepare-static.mjs
+```
+
+En Vercel basta con definir la variable `NEXT_PUBLIC_THEME=sand`. Los colores de ambos temas están en `src/app/globals.css` y `src/content/theme.ts`.
+
 ## Dónde se cambia cada cosa
 
 | Qué | Dónde |

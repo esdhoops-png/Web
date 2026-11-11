@@ -43,7 +43,7 @@ export function FirstMove() {
               <span className="mt-5 block h-[34px] w-[200px] md:h-[44px] md:w-[260px]">
                 <KgmWordmark className="h-full w-full" />
               </span>
-              <p className="label mt-8 normal-case leading-relaxed tracking-[0.1em] text-silver/80">{firstMove.note}</p>
+              <p className="label mt-8 normal-case leading-relaxed tracking-[0.1em] text-silver/80 [html[data-theme=sand]_&]:text-silver">{firstMove.note}</p>
             </div>
           </motion.div>
         </div>
@@ -60,7 +60,7 @@ export function FirstMove() {
                 viewport={{ once: true, margin: "0px 0px -10% 0px" }}
                 transition={{ duration: 0.9, ease: EASE, delay: i * 0.1 }}
               >
-                <span className="label !text-signal">Paso {i + 1}</span>
+                <span className="label !text-signal [html[data-theme=sand]_&]:!text-ember">Paso {i + 1}</span>
                 <h3 className="display mt-4 text-4xl">{st.title}</h3>
                 <p className="mt-3 text-base leading-relaxed text-ink/70">{st.body}</p>
               </motion.li>
@@ -76,7 +76,7 @@ export function FirstMove() {
               className="group relative inline-flex items-center gap-5 overflow-hidden rounded-full bg-ink py-4 pr-4 pl-8 text-bone"
             >
               <span className="absolute inset-0 origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden />
-              <span className="label relative text-bone">{firstMove.cta}</span>
+              <span className="label relative text-bone [html[data-theme=sand]_&]:transition-colors [html[data-theme=sand]_&]:duration-500 [html[data-theme=sand]_&]:group-hover:text-day">{firstMove.cta}</span>
               <span className="relative grid h-10 w-10 place-items-center rounded-full bg-bone text-ink transition-transform duration-500 group-hover:translate-x-1">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                   <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.4" />

@@ -104,7 +104,7 @@ export function Fleet() {
                     tabIndex={selected ? 0 : -1}
                     onClick={() => select(i)}
                     onKeyDown={(e) => onKey(e, i)}
-                    className={`rounded-full border px-5 py-2.5 text-sm transition-colors duration-500 ${selected ? "border-tan bg-tan text-ink" : "border-bone/20 text-bone hover:border-tan"}`}
+                    className={`rounded-full border px-5 py-2.5 text-sm transition-colors duration-500 ${selected ? "border-tan bg-tan text-ink" : "border-bone/20 text-bone hover:border-tan [html[data-theme=sand]_&]:border-bone/35 [html[data-theme=sand]_&]:hover:border-tan"}`}
                   >
                     {it.vehicle.name}
                   </button>
@@ -121,7 +121,7 @@ export function Fleet() {
               </AnimatePresence>
             </div>
           </div>
-          <p className="label mt-10 normal-case tracking-[0.12em] text-silver/60">{fleet.disclaimer}</p>
+          <p className="label mt-10 normal-case tracking-[0.12em] text-silver/60 [html[data-theme=sand]_&]:text-silver">{fleet.disclaimer}</p>
         </div>
       </div>
     </section>

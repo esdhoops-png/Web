@@ -25,7 +25,7 @@ function Panel({ img, className, delay, sizes, priority, mobilePosition }: { img
           fill
           priority={priority}
           sizes={sizes}
-          className="cine-img object-cover object-(--pos-m) md:object-(--pos)"
+          className="cine-img object-cover [html[data-theme=sand]_&]:grayscale [html[data-theme=sand]_&]:contrast-[1.15] [html[data-theme=sand]_&]:brightness-[1.12] object-(--pos-m) md:object-(--pos)"
           style={{ "--pos": img.position ?? "50% 50%", "--pos-m": mobilePosition ?? img.position ?? "50% 50%" } as React.CSSProperties}
         />
       </motion.div>
@@ -46,15 +46,17 @@ export function Hero() {
   return (
     <section ref={ref} id="top" className="grain relative min-h-[100svh] overflow-hidden bg-ink" aria-label="ESD HOOPS × KGM — Two worlds, one vision">
       {/* Background: the court world (players · night court · players) */}
-      <motion.div className="absolute inset-0 flex gap-[3px] md:gap-1.5" style={{ scale: reduced ? 1 : panelsScale }}>
+      <motion.div className="absolute inset-0 flex gap-[3px] md:gap-1.5 [html[data-theme=sand]_&]:opacity-80 [html[data-theme=sand]_&]:mix-blend-multiply" style={{ scale: reduced ? 1 : panelsScale }}>
         <Panel img={images.esdShooter} mobilePosition="50% 20%" className="flex-1 md:flex-[0.9]" delay={1.3} sizes="(min-width: 768px) 32vw, 100vw" priority />
         <Panel img={images.courtNight} className="hidden flex-[1.4] md:block" delay={1.1} sizes="45vw" />
         <Panel img={images.esdOneOnOne} className="hidden flex-[0.9] md:block" delay={1.45} sizes="32vw" />
       </motion.div>
 
       {/* Grading layers */}
-      <div className="pointer-events-none absolute inset-0 bg-ink/45" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(13,30,44,0.1)_0%,rgba(13,30,44,0.6)_60%,rgba(13,30,44,0.95)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-ink/45 [html[data-theme=sand]_&]:bg-ink/25" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(13,30,44,0.1)_0%,rgba(13,30,44,0.6)_60%,rgba(13,30,44,0.95)_100%)] [html[data-theme=sand]_&]:hidden" />
+      {/* Sand theme only: a pool of clean sand behind the title so the navy type reads, photos breathing at the sides */}
+      <div className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_62%_46%_at_50%_36%,rgba(217,196,176,0.96)_0%,rgba(217,196,176,0.88)_45%,rgba(217,196,176,0.35)_80%,rgba(217,196,176,0)_100%)] [html[data-theme=sand]_&]:block" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink via-ink/80 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink/80 to-transparent" />
 
@@ -81,7 +83,7 @@ export function Hero() {
           ))}
         </h1>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 2.5 }} className="mt-5 flex flex-col items-center gap-3">
-          <p className="max-w-sm font-serif text-lg text-silver italic md:max-w-none md:text-2xl">“{hero.subtitle}”</p>
+          <p className="max-w-sm font-serif text-lg text-silver italic md:max-w-none md:text-2xl [html[data-theme=sand]_&]:text-bone/85">“{hero.subtitle}”</p>
           <span className="label hidden text-bone md:block">
             ESD HOOPS × KGM <span className="mx-2 text-signal">—</span> {hero.eyebrow}
           </span>
@@ -98,6 +100,11 @@ export function Hero() {
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1], delay: 1.9 }}
         >
+          {/* Sand theme only: floor shade so the white hero car separates from the sand ground */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-[6%] bottom-[-5%] hidden h-[30%] rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(13,30,44,0.6)_0%,rgba(13,30,44,0.28)_42%,rgba(13,30,44,0)_70%)] blur-xl [html[data-theme=sand]_&]:block md:inset-x-[14%]"
+          />
           <Lineup left={vehicles.mussoWhite} center={vehicles.torresEvx} right={vehicles.actyon} priority />
         </motion.div>
       </motion.div>
@@ -111,7 +118,7 @@ export function Hero() {
         className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-4"
         aria-label="Seguir bajando"
       >
-        <span className="label text-[0.6rem] md:hidden">Desliza</span>
+        <span className="label text-[0.6rem] md:hidden [html[data-theme=sand]_&]:text-bone/80">Desliza</span>
         <span className="relative block h-8 w-px overflow-hidden bg-bone/15">
           <span className="absolute inset-0 bg-bone" style={{ animation: "scroll-cue 2.2s cubic-bezier(.22,1,.36,1) infinite" }} />
         </span>

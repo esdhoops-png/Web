@@ -33,6 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" data-theme={THEME} suppressHydrationWarning>
       <body>
+        {/* Keeps the theme when the page is embedded without its own <html> tag. */}
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.dataset.theme=${JSON.stringify(THEME)}` }} />
         <Providers>{children}</Providers>
       </body>
     </html>

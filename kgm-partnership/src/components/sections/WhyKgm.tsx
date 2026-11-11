@@ -36,7 +36,7 @@ export function WhyKgm() {
               <WordsReveal text="Why KGM" as="span" className="inline" />
               <motion.span
                 aria-hidden
-                className="inline-block text-signal"
+                className="inline-block text-signal [html[data-theme=sand]_&]:text-ember"
                 initial={{ opacity: 0, rotate: -12 }}
                 whileInView={{ opacity: 1, rotate: 0 }}
                 viewport={{ once: true }}
@@ -59,7 +59,7 @@ export function WhyKgm() {
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
             >
-              <span className="label !text-signal md:col-span-1 md:pt-4">{r.n}</span>
+              <span className="label !text-signal [html[data-theme=sand]_&]:!text-ember md:col-span-1 md:pt-4">{r.n}</span>
               <h3 className="display text-[clamp(2.2rem,4.6vw,4.2rem)] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:col-span-6 md:group-hover:translate-x-4">
                 {r.title}
               </h3>
@@ -68,7 +68,7 @@ export function WhyKgm() {
                 {r.list && (
                   <ul className="mt-6 flex flex-wrap gap-2">
                     {r.list.map((l) => (
-                      <li key={l} className="rounded-full border border-ink/20 px-4 py-1.5 text-sm text-ink/80 transition-colors hover:border-signal hover:text-signal">
+                      <li key={l} className="rounded-full border border-ink/20 px-4 py-1.5 text-sm text-ink/80 transition-colors hover:border-signal hover:text-signal [html[data-theme=sand]_&]:hover:border-ember [html[data-theme=sand]_&]:hover:text-ember">
                         {l}
                       </li>
                     ))}
@@ -84,7 +84,7 @@ export function WhyKgm() {
                   )
                 )}
               </div>
-              <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-signal transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden />
+              <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-signal [html[data-theme=sand]_&]:bg-ember transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden />
             </li>
           ))}
         </ol>
@@ -96,7 +96,7 @@ export function WhyKgm() {
               text={line}
               as="p"
               delay={i * 0.3}
-              className={`display text-[clamp(2.4rem,6.4vw,6rem)] ${i === 1 ? "text-signal italic md:pl-[16%]" : ""}`}
+              className={`display text-[clamp(2.4rem,6.4vw,6rem)] ${i === 1 ? "text-signal [html[data-theme=sand]_&]:text-ember italic md:pl-[16%]" : ""}`}
             />
           ))}
         </div>

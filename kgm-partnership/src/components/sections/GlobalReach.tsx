@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import world from "@/data/world-dots.json";
 import { globalReach, images } from "@/content/site";
+import { palette, THEME } from "@/content/theme";
 import { CineImage, FadeIn, SectionLabel, WordsReveal } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -41,22 +42,22 @@ export function GlobalReach() {
           <svg viewBox={`0 0 ${world.width} ${world.height}`} className="w-full" role="img" aria-label="Mapa que ilustra conexiones entre Norteamérica, Europa y Asia">
             <defs>
               <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#b97a4e" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#b97a4e" stopOpacity="0" />
+                <stop offset="0%" stopColor={palette.accent} stopOpacity="0.35" />
+                <stop offset="100%" stopColor={palette.accent} stopOpacity="0" />
               </radialGradient>
               <linearGradient id="arcGrad" x1="0" x2="1">
-                <stop offset="0%" stopColor="#f2e9df" stopOpacity="0.15" />
-                <stop offset="50%" stopColor="#f2e9df" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#b97a4e" stopOpacity="0.9" />
+                <stop offset="0%" stopColor={palette.fg} stopOpacity="0.15" />
+                <stop offset="50%" stopColor={palette.fg} stopOpacity="0.9" />
+                <stop offset="100%" stopColor={palette.accent} stopOpacity="0.9" />
               </linearGradient>
             </defs>
             <motion.path
               d={dotsPath}
-              stroke="#c3b3a3"
+              stroke={palette.muted}
               strokeWidth={3.2}
               strokeLinecap="round"
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 0.5 }}
+              whileInView={{ opacity: THEME === "sand" ? 0.3 : 0.5 }}
               viewport={{ once: true }}
               transition={{ duration: 1.6 }}
             />
@@ -73,7 +74,7 @@ export function GlobalReach() {
                   transition={{ duration: 2.2, ease: EASE, delay: 0.6 + i * 0.4 }}
                 />
                 {/* travelling light */}
-                <circle r={2.6} fill="#f2e9df">
+                <circle r={2.6} fill={palette.fg}>
                   <animateMotion dur={`${5 + i}s`} repeatCount="indefinite" path={d} begin={`${2 + i * 0.6}s`} />
                 </circle>
               </g>
@@ -83,13 +84,14 @@ export function GlobalReach() {
               return (
                 <g key={r.key}>
                   <circle cx={x} cy={y} r={46} fill="url(#glow)" />
-                  <circle cx={x} cy={y} r={5} fill="none" stroke="#b97a4e" strokeWidth={1} style={{ transformOrigin: `${x}px ${y}px`, animation: `pulse-ring 2.8s ease-out ${i * 0.7}s infinite` }} />
-                  <circle cx={x} cy={y} r={3.6} fill="#b97a4e" />
+                  <circle cx={x} cy={y} r={5} fill="none" stroke={palette.accent} strokeWidth={1} style={{ transformOrigin: `${x}px ${y}px`, animation: `pulse-ring 2.8s ease-out ${i * 0.7}s infinite` }} />
+                  <circle cx={x} cy={y} r={3.6} fill={palette.accent} />
                   <motion.text
                     x={x}
                     y={y + 26}
                     textAnchor="middle"
-                    fill="#f2e9df"
+                    fill={palette.fg}
+                    {...(THEME === "sand" ? { stroke: palette.bg, strokeWidth: 5, strokeLinejoin: "round" as const, paintOrder: "stroke" } : {})}
                     style={{ fontSize: 14, letterSpacing: "0.28em", textTransform: "uppercase", fontFamily: "var(--font-sans)" }}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -106,7 +108,7 @@ export function GlobalReach() {
             <span className="label flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-signal" aria-hidden /> {globalReach.community}
             </span>
-            <span className="label text-[0.6rem] text-silver/60">Ilustrativo: regiones de conexión con jugadores, no oficinas ni operaciones</span>
+            <span className="label text-[0.6rem] text-silver/60 [html[data-theme=sand]_&]:text-silver/90">Ilustrativo: regiones de conexión con jugadores, no oficinas ni operaciones</span>
           </figcaption>
         </figure>
 

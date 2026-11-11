@@ -36,7 +36,7 @@ export function Nav() {
   return (
     <>
       <motion.header
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-700 ${scrolled && !open ? "bg-ink/70 backdrop-blur-md" : "bg-transparent"}`}
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-700 ${scrolled && !open ? "bg-ink/70 backdrop-blur-md [html[data-theme=sand]_&]:bg-ink/92" : "bg-transparent"}`}
         animate={{ y: hidden ? "-100%" : "0%" }}
         transition={{ duration: 0.6, ease: EASE }}
       >
@@ -90,7 +90,8 @@ export function Nav() {
             transition={{ duration: 0.8, ease: EASE }}
             data-lenis-prevent
           >
-            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center overflow-y-auto px-5 pt-24 pb-10 md:px-10">
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-y-auto px-5 pt-24 pb-10 md:px-10">
+              <div className="my-auto">
               <nav aria-label="Secciones">
                 <ol className="grid gap-x-16 md:grid-cols-2">
                   {nav.map((item, i) => (
@@ -126,6 +127,7 @@ export function Nav() {
                   </span>
                   Reducir movimiento
                 </button>
+              </div>
               </div>
             </div>
           </motion.div>
