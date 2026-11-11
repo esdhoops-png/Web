@@ -69,6 +69,33 @@ de una vez: no duplica.
 - **Plan editorial v2** (`app/plan/editorial-plan.js`): programación real de noviembre, diseños ya entregados y ritmo del planificador.
   Al importarlo sustituye el plan anterior, salvo los elementos que ya se hayan editado, comentado o tengan diseño subido.
 
+## 1.6 Estudio creativo
+**Activarlo:** pega [`supabase/estudio.sql`](supabase/estudio.sql) en Supabase → SQL Editor → Run (se puede repetir sin problema).
+
+- **Motor de diseño** (`app/studio/engine.js`): documento por capas (texto, foto, logo, formas, pastillas, brillos, textura, rayos)
+  dibujado en Canvas 2D. Exporta **PNG/JPG reales** en 1080×1350, 1080×1920, 1080×1080 y 1920×1080, a ×1/×2/×3, y los carruseles en **ZIP**.
+- **Plantillas** (`app/studio/templates.js`): recreadas y editables a partir de los originales (Champions partido y portada, cartel de
+  Halloween/tardeo) y de los estilos de la guía (Monólogos, story «Hoy», line-up, programación, «Así fue…», menús de Navidad, marca).
+- **Diseños originales** (`app/studio/originals.js`): solo archivos verificados en Drive, con formato, colores medidos, composición y qué se
+  reutiliza. Los PNG/JPG se marcan como **imagen plana sin capas**; la variante se hace encima del original, que se conserva.
+- **Editor**: seleccionar, mover, redimensionar, texto, tipografía, tamaño, color, foto, fondo, logo y decorativos; deshacer; varias diapositivas;
+  cambio de formato; guardar como plantilla. Cada guardado es una **versión** nueva (las anteriores no se modifican).
+- **Calendario**: botón «Crear diseño» en cada publicación; al exportar se guarda en Storage, se añade como nueva versión del diseño de la
+  publicación (con aprobación si se marca) y a la Biblioteca. «Editar en el Estudio» reabre el diseño.
+- **Instrucciones escritas**: asistente por reglas (sin IA) que elige plantilla, formato y datos.
+- **Almacenamiento**: `hub/studio/<campaña>/<año-mes>/<id>/v<n>/…` + tablas `creatives` y `creative_versions` (categoría, campaña, formato,
+  publicación, versión), con los mismos permisos para los dos usuarios.
+- **Vídeo** (`app/studio/video.js`): escenas con fotos/vídeos, textos, subtítulos, transiciones, música autorizada y cierre con el logo;
+  se exporta en el navegador (MP4 en Chrome/Edge/Safari actuales; WebM si el navegador no admite MP4). El render es en tiempo real.
+- **Imágenes con IA** (`supabase/functions/ai-image`): adaptadores OpenAI (gpt-image-1) y Stability. Requiere clave del proveedor:
+  ```bash
+  npx supabase functions deploy ai-image
+  ```
+  ```bash
+  npx supabase secrets set AI_IMAGE_PROVIDER=openai OPENAI_API_KEY=sk-...
+  ```
+  Sin clave, el estudio funciona con plantillas y fotos y muestra que la IA no está configurada (no simula nada).
+
 ## 2. Google Drive (biblioteca dentro de la app)
 
 La app lee la carpeta **«Grupo 5mentarios»** de Drive con la cuenta de Google de cada persona (permiso de solo
@@ -187,6 +214,8 @@ SUPABASE_ANON_KEY=... node e2e.cjs
 - `e2e.cjs` — 20 pasos en dos navegadores a la vez (marketing en ordenador, propietario en iPhone): importación del plan,
   arrastrar en calendario y Kanban, formulario con validación, subida de versiones, pedir cambios, aprobar, comentarios,
   chat con imagen y «leído», eventos, buscador, biblioteca, preferencias y persistencia tras cerrar sesión.
+- `studio.e2e.cjs` — 14 pasos del Estudio: plantillas, instrucción escrita, edición, versiones, PNG/JPG/ZIP reales en Storage, vínculo con
+  publicación y aprobación, reedición, plantillas propias, originales, IA sin configurar, vídeo MP4 real y permisos.
 - `push.test.mjs` — cadena push completa: notificación → trigger → `send-push` → Web Push cifrado (VAPID) → descifrado.
 
 Si cambias `supabase/migrations/`, regenera `supabase/setup.sql` concatenando las migraciones en orden.

@@ -136,7 +136,10 @@ function Editorial() {
     try {
       // Sustituir el plan anterior (v1): solo se borra lo que nadie ha tocado (sin cambios, versiones ni comentarios)
       let replaced = 0, kept = 0;
-      if (oldPlan.length) {
+      // se consulta la base de datos en el momento (no la copia en memoria) para no borrar nada editado hace segundos
+      const fresh = check(await sb.from('posts').select('id, created_at, updated_at, import_key').like('import_key', plan.OLD_PREFIX + '%'));
+      if (fresh.length) {
+        const oldPlan = fresh;
         const ids = oldPlan.map((p) => p.id);
         const [vers, coms] = await Promise.all([sb.from('post_versions').select('post_id').in('post_id', ids), sb.from('comments').select('post_id').in('post_id', ids)]);
         const touched = new Set([...check(vers), ...check(coms)].map((r) => r.post_id));
@@ -148,7 +151,8 @@ function Editorial() {
           check(await sb.from('posts').delete().in('id', uids));
           replaced = untouched.length;
         }
-        const oldTasks = st.tasks.filter((t) => plan.OLD_TASK_TITLES.includes(t.title) && t.status === 'pending' && Math.abs(new Date(t.updated_at) - new Date(t.created_at)) < 2000);
+        const oldTasks = check(await sb.from('tasks').select('id, created_at, updated_at, status, title').in('title', plan.OLD_TASK_TITLES).eq('status', 'pending'))
+          .filter((t) => Math.abs(new Date(t.updated_at) - new Date(t.created_at)) < 2000);
         if (oldTasks.length) check(await sb.from('tasks').delete().in('id', oldTasks.map((t) => t.id)));
       }
       const mk = st.profiles.find((p) => p.role === 'marketing') || st.me;

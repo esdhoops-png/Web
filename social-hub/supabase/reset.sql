@@ -8,7 +8,7 @@ drop trigger if exists on_auth_user_created on auth.users;
 drop policy if exists "miembros leen ficheros hub" on storage.objects;
 drop policy if exists "miembros suben ficheros hub" on storage.objects;
 drop policy if exists "autor borra ficheros hub" on storage.objects;
-drop table if exists public.activity_log, public.push_subscriptions, public.notification_prefs, public.notifications,
+drop table if exists public.ai_images, public.creative_versions, public.creatives, public.activity_log, public.push_subscriptions, public.notification_prefs, public.notifications,
   public.attachments, public.chat_reads, public.chat_messages, public.comments, public.tasks, public.post_history,
   public.approvals, public.post_versions, public.posts, public.library_items, public.library_categories,
   public.app_settings, public.profiles cascade;

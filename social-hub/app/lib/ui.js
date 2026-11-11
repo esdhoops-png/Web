@@ -186,12 +186,14 @@ export function ModalHost() {
   }, []);
   return stack.map((m, i) => html`<div class="overlay" key=${m.id} style=${{ zIndex: 100 + i }}
       onMouseDown=${(e) => { if (e.target === e.currentTarget && !m.sticky) closeModal(m.id); }}>
-      <div class=${'modal ' + (m.size || '')} role="dialog" aria-modal="true">${m.render(() => closeModal(m.id))}</div>
+      <div class=${'modal ' + (m.size || '')} role="dialog" aria-modal="true">${m.node}</div>
     </div>`);
 }
 export function openModal(renderFn, opts = {}) {
   const id = Math.random().toString(36).slice(2);
-  modalSetter && modalSetter((s) => [...s, { id, render: renderFn, ...opts }]);
+  // el contenido se crea una sola vez: así las actualizaciones en tiempo real no reinician lo que se está escribiendo
+  const node = renderFn(() => closeModal(id));
+  modalSetter && modalSetter((s) => [...s, { id, node, ...opts }]);
   return id;
 }
 export function closeModal(id) { modalSetter && modalSetter((s) => (id ? s.filter((m) => m.id !== id) : s.slice(0, -1))); }

@@ -8,6 +8,7 @@ import { pickFiles, AttachmentRow, MediaCard } from '../lib/media.js';
 import { PostLine, TaskLine } from './dashboard.js';
 import { openTaskForm } from './tasks.js';
 import { CommentsThread } from './comments.js';
+import { designForPost } from './studio.js';
 
 // ---------- Formulario ----------
 export function openPostForm(initial = {}, existing = null) {
@@ -231,6 +232,10 @@ export function PostDetail({ id }) {
     ].map((r) => ({ ...r, post_id: p.id, due_date: due }));
     try { check(await sb.from('tasks').insert(rows)); toast('3 tareas creadas', 'Diseño, copy y aprobación'); } catch (e) { toastError(e); }
   }
+  const studioLink = (latest?.attachments || []).find((a) => a.creative_version_id) || (p.attachments || []).find((a) => a.creative_version_id);
+  async function openInStudioEdit() {
+    try { const v = check(await sb.from('creative_versions').select('creative_id').eq('id', studioLink.creative_version_id).single()); go('#/estudio?c=' + v.creative_id); } catch (e) { toastError(e); }
+  }
   const copy = (t) => navigator.clipboard.writeText(t).then(() => toast('Copiado'));
   const fullCopy = [p.copy, p.cta, p.hashtags].filter(Boolean).join('\n\n');
   const fieldLabel = { title: 'Nombre', starts_at: 'Fecha', deadline: 'Fecha límite', status: 'Estado', kind: 'Tipo', platforms: 'Plataformas', format: 'Formato', copy: 'Copy', hashtags: 'Hashtags', cta: 'CTA', objective: 'Objetivo', description: 'Descripción', assignee: 'Responsable' };
@@ -260,7 +265,9 @@ export function PostDetail({ id }) {
   <div class="post-grid">
     <div class="stack" style="gap:16px">
       <section class="card"><h2 class="card-title"><${Icon} name="palette" />Diseño${latest ? ` · versión ${latest.version_no}` : ''}
-        <button class="btn sm" style="margin-left:auto" onClick=${newVersion}><${Icon} name="upload" size=${14} />Subir nueva versión</button></h2>
+        <button class="btn sm primary" style="margin-left:auto" onClick=${() => designForPost(p)}><${Icon} name="palette" size=${14} />Crear diseño</button>
+        ${studioLink ? html`<button class="btn sm" onClick=${openInStudioEdit}><${Icon} name="edit" size=${14} />Editar en el Estudio</button>` : null}
+        <button class="btn sm" onClick=${newVersion}><${Icon} name="upload" size=${14} />Subir nueva versión</button></h2>
         ${latest ? html`<div class="media-grid">${(latest.attachments || []).map((a) => html`<${MediaCard} a=${a} key=${a.id} />`)}</div>
           ${latest.note ? html`<p class="small muted">Nota: ${latest.note}</p>` : null}`
           : html`<p class="empty">Aún no hay diseño. Súbelo como versión 1 para poder pedir aprobación.</p>`}
