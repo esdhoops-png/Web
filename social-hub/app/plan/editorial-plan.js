@@ -1,18 +1,26 @@
-// Calendario editorial de Heineken 5mentarios · 11 de noviembre – 31 de diciembre de 2026.
+// Calendario editorial de Heineken 5mentarios · 11 de noviembre – 31 de diciembre de 2026 (versión 2).
 //
-// Criterios:
-// - Ritmo que ya usabais (plan oct–nov): jueves cartel del finde, viernes y sábado stories del día,
-//   lunes carrusel con las fotos del finde ("cada lunes subimos las mejores" — web del bar).
-// - Fútbol: solo partidos grandes llevan post/reel; Champions va en stories (plantillas ya diseñadas).
-// - Se reutiliza el material que hay en Drive (IDs reales). Lo que no está en Drive se marca.
-// - NO se inventan artistas, horarios, partidos, promociones ni aperturas especiales:
-//   todo eso va en `pending_info` («Pendiente de confirmar»).
-// - Horas de publicación = propuesta de cuándo publicar (no horarios de eventos).
-// Canarias en noviembre/diciembre = UTC+0, por eso las fechas van con "Z".
+// Fuentes:
+// - «00_TRANSFERENCIA_HEINEKEN_5MENTARIOS.md» (11 nov 2026): programación de noviembre, diseños entregados,
+//   plan semanal fijo del planificador «Centro de control», captions modelo, hashtags y reglas de marca.
+// - Material real de Google Drive (IDs reales).
+// - Calendario oficial UEFA: Champions J5 24–25 nov y J6 8–9 dic.
+//
+// Ritmo semanal (planificador): lunes 13:00 carrusel de fotos · miércoles 12:00 programación (post + canal de
+// WhatsApp) y reel de programación · jueves 19:00 reel colab Volcán o ambiente · viernes y sábado stories de
+// cuenta atrás y en directo · domingo 17:00 reel de tardeo en directo (solo si hay tardeo).
+//
+// No se inventan artistas, horarios, partidos, precios ni promociones: lo que el documento marca como
+// [POR CONFIRMAR] o lo que no aparece va en `pending_info`. Horas = hora de Canarias (UTC+0 en nov/dic).
 
-const HT = '#Heineken5mentarios #5mentarios #Arucas #GranCanaria #TardeoGranCanaria #ArucasDeNoche #PlanesGranCanaria';
-const HT_FUT = '#5mentarios #Arucas #ChampionsLeague #FútbolEnArucas #GranCanaria';
-const HT_NAV = '#Heineken5mentarios #5mentarios #Arucas #NavidadEnArucas #GranCanaria #PlanesGranCanaria';
+import { HASHTAGS, BRAND } from '../lib/brand.js';
+const HT = HASHTAGS.base;
+const HT_FINDE = HASHTAGS.finde;
+const HT_MONO = HASHTAGS.monologos;
+const HT_FOTOS = HASHTAGS.fotos;
+const WA = BRAND.whatsapp;
+const DELIV = (f) => `Diseño ENTREGADO en el paquete de transferencia: 02_disenos_entregados/${f} (PNG + PSD). Subirlo como versión 1.`;
+const LOGO_END = 'Cierre con la animación del logo (@heineken5mentarios). Sin música: el audio en tendencia lo pone el responsable.';
 
 // ---------- Material existente en Google Drive ----------
 const F = {
@@ -57,215 +65,265 @@ const HALLOWEEN_IDS = ['1v2-0mKyu2v1Nz8YU0YM39KMVTYKX4IiH', '1-drZ7roNJqnZ_qIIg-
   '1IRDF1tLgEhId3bokEoq0zBrDdGnEa9nF', '1dYPnLdC-ajskQIaroi2lNdLhYBvWu52u'];
 const HALLOWEEN = HALLOWEEN_IDS.map((id, i) => ({ id, name: `DSC0${8395 + i}.JPG`, mime_type: 'image/jpeg' }));
 
+
 // ---------- Bloques reutilizables ----------
 const PLAN = [];
 const add = (o) => PLAN.push({ platforms: ['instagram'], assignee: 'marketing', ...o });
 const iso = (d, t) => `2026-${d}T${t}:00Z`;
-const MES = { '11': 'nov', '12': 'dic' };
-const dm = (d) => `${Number(d.split('-')[1])} ${MES[d.split('-')[0]]}`; // '11-20' → '20 nov'
-const rango = (a, b) => (a.split('-')[0] === b.split('-')[0] ? `${Number(a.split('-')[1])}–${dm(b)}` : `${dm(a)} – ${dm(b)}`);
 
-// Cartel semanal del finde (jueves). Programación siempre pendiente de confirmar.
-function cartelFinde(key, jueves, vie, sab, extra = {}) {
+// Miércoles 12:00 · programación en post + canal de WhatsApp (caption modelo del documento)
+function programacion(key, d, titulo, filas, extra = {}) {
+  const lineas = filas.map((f) => `${f.dia} · ${f.hora || '[hora]'} · ${f.quien || '[artista / DJ]'}`).join('\n');
+  const wa = filas.map((f) => `${f.diaCorto} ${f.hora || '[hora]'} · ${f.quien || '[artista]'}`).join('\n');
   add({
-    key, kind: 'weekly_poster', title: `Cartel del finde · ${rango(vie, sab)}`, starts_at: iso(jueves, '13:00'), deadline: `2026-${jueves}`,
-    format: 'Post 4:5 + story', platforms: ['instagram', 'whatsapp'], status: 'pending_prep',
-    objective: 'Que la gente sepa quién toca y venga el viernes y el sábado.',
-    material: 'Plantilla del cartel semanal (subir el diseño de esta semana) + sello 5mentarios',
-    copy: `🎶 Este finde en 5mentarios\n\nViernes ${dm(vie)}: [ARTISTA] (directo) + [DJ]\nSábado ${dm(sab)}: [ARTISTA] (directo) + [DJ]\n\nY si te entra hambre, pide tu smash burger de Volcán o tu pizza de Cuor desde la mesa: te la llevamos 🍔🍕\n\n¿Con quién vienes? Etiquétalo 👇`,
-    cta: 'Etiqueta a con quién vienes · Únete al canal de WhatsApp para la programación',
-    hashtags: HT,
-    pending_info: `Artistas, DJs y horarios del viernes ${dm(vie)} y sábado ${dm(sab)}.`,
-    description: 'Versión corta para el canal de WhatsApp: «Este finde en 5mentarios 🎶 Vie: [artista + DJ] · Sáb: [artista + DJ] · Comida de Volcán y Cuor a la mesa.»',
+    key, kind: 'weekly_poster', title: `Programación · ${titulo}`, starts_at: iso(d, '12:00'), deadline: `2026-${d}`,
+    format: 'Post 4:5 + canal de WhatsApp', platforms: ['instagram', 'whatsapp'], status: 'pending_prep',
+    objective: 'Que la gente sepa el plan de la semana y reserve mesa.',
+    material: 'Estilo de cartel de noche aprobado (Anton + horas en verde), logo arriba a la izquierda, pie «HEINEKEN 5MENTARIOS · ARUCAS».',
+    copy: `Este finde en 5mentarios 🍻\n\n${lineas}\n\nY si te entra el hambre, pide tu Volcán o tu Cuor di Pizza y te la llevamos a la mesa 🍔🍕\n\n¿Con quién vienes? Etiquétalo 👇`,
+    cta: `¿Con quién vienes? Etiquétalo 👇 · Reservas por WhatsApp ${WA}`, hashtags: HT_FINDE,
+    description: `Versión para el canal de WhatsApp:\n🍻 FINDE EN 5MENTARIOS\n${wa}\nComida de Volcán y Cuor di Pizza a la mesa 🍔🍕\n\nActualizar también la programación de la web (EVENTOS y PROGRAMA en index.html del repositorio heineken5mentarios).`,
     ...extra
   });
 }
-function storiesDia(key, d, label) {
-  add({
-    key, kind: 'story', title: `Stories del día · ${label}`, starts_at: iso(d, '12:30'), format: 'Stories (secuencia)', status: 'idea', requires_approval: false,
-    objective: 'Recordar el plan de hoy y enseñar el ambiente en directo.',
-    material: 'Cartel del día (recorte del cartel semanal) + vídeos grabados en el momento',
-    copy: 'Pantalla 1 (mañana): «HOY en 5mentarios» + cartel del día · sticker de ubicación\nPantalla 2 (tarde): prueba de sonido / barra preparada\nPantalla 3 (noche): directo + comida llegando a las mesas · repost de quien os etiquete',
-    cta: 'Sticker de ubicación y mención a los artistas', pending_info: 'Artista y horario de hoy (sale del cartel semanal).'
-  });
+// Miércoles · reel semanal de programación con personas hablando a cámara
+function reelProgramacion(key, d, titulo, extra = {}) {
+  add({ key, kind: 'reel', title: `Reel de programación · ${titulo}`, starts_at: iso(d, '19:30'), format: 'Reel 9:16', status: 'idea',
+    objective: 'Contar el plan de la semana con personas del equipo hablando a cámara.',
+    material: 'Hay que grabarlo (dos personas del equipo en la barra, como el guion «Lo que se viene este finde», 35 s).',
+    copy: 'Lo que se viene esta semana en 5mentarios 👀\n\n¿Con quién vienes? Etiquétalo 👇', cta: `Reserva tu mesa por WhatsApp: ${WA}`, hashtags: HT,
+    description: `Planos de menos de 2 s, gancho en el primer segundo, ubicación Arucas. ${LOGO_END}`, ...extra });
 }
-function carruselFotos(key, d, finde) {
-  add({
-    key, kind: 'carousel', title: `Carrusel fotos del finde · ${finde}`, starts_at: iso(d, '19:00'), format: 'Carrusel', status: 'pending_prep',
+// Lunes 13:00 · carrusel de fotos de la noche
+function fotosLunes(key, d, label, artista, extra = {}) {
+  add({ key, kind: 'carousel', title: `Carrusel de fotos · ${label}`, starts_at: iso(d, '13:00'), format: 'Carrusel (formato original)', status: 'pending_prep',
     objective: 'Comunidad: que la gente se vea, se etiquete y comparta.',
-    material: `Fotos de la gente del finde ${finde} (subir a Drive el domingo). Edición natural y limpia, formato original sin recortar.`,
-    copy: `Así se vivió el finde en 5mentarios ✨\n\nGracias a todos los que vinisteis. ¿Te encuentras? Etiquétate y etiqueta a tu gente 👀\n\nCada lunes subimos las mejores fotos de la semana.`,
-    cta: 'Etiquétate en las fotos', hashtags: HT,
-    pending_info: `Fotos del finde ${finde} (aún no están en Drive).`
-  });
+    material: `Fotos de ${label} (subirlas a Drive). Edición natural y limpia, formato original sin recortar. Sin flash directo, sin menores en fotos de barra o bebidas.`,
+    copy: `Así sonó ${artista ? 'el finde' : 'el finde'} en 5mentarios 🎶 Gracias a todos los que vinisteis${artista ? ` y a ${artista} por esa noche` : ''}. Búscate en las fotos y etiquétate 📸`,
+    cta: 'Búscate en las fotos y etiquétate 📸', hashtags: HT_FOTOS,
+    pending_info: `Fotos de ${label} (aún no están en Drive).`, ...extra });
+}
+// Jueves 19:00 · reel colab Volcán o ambiente
+function reelJueves(key, d, tipo, extra = {}) {
+  const volcan = tipo === 'volcan';
+  add({ key, kind: 'reel', title: volcan ? 'Reel colab con Volcán · la pides en el 5mentarios' : 'Reel de ambiente', starts_at: iso(d, '19:00'),
+    format: 'Reel 9:16', status: volcan ? 'idea' : 'pending_prep',
+    platforms: ['instagram'], objective: volcan ? 'Recordar que la comida de Volcán y Cuor di Pizza llega a la mesa.' : 'Alcance: enseñar el ambiente del bar.',
+    material: volcan ? 'Grabar POV «la pides en el 5mentarios» (burger llegando a la mesa). Publicar en colaboración con @volcansmashburger.' : 'Vídeos del bar en Drive (carpeta Heineken): C0572, C0573, C0611, C0618.',
+    copy: volcan ? 'Tú sigues con la ronda, la cena llega sola 🍔\n\nPide Volcán o Cuor di Pizza y te lo llevamos a la mesa.' : 'Tardeo, música y los tuyos 🍻\n\nLo mejor de la noche siempre empieza con un «¿vamos a 5mentarios?»',
+    cta: `Reserva tu mesa: WhatsApp ${WA}`, hashtags: HT,
+    description: `Planos de menos de 2 s, gancho en el primer segundo. ${LOGO_END}`, ...extra });
+}
+// Viernes / sábado · stories del día (cuenta atrás + directo)
+function storiesNoche(key, d, label, filas, extra = {}) {
+  const prog = filas.map((f) => `${f.hora || '[hora]'} ${f.quien || '[artista]'}`).join(' · ');
+  add({ key, kind: 'story', title: `Stories · ${label}`, starts_at: iso(d, '12:30'), format: 'Story animada «Hoy en 5mentarios» + 3–5 stories en directo',
+    status: 'idea', requires_approval: false, objective: 'Recordar el plan de hoy y enseñar el ambiente en directo.',
+    material: 'Plantilla de story animada «Hoy en 5mentarios» (11–17 s). Texto entre y≈250 y y≈1700.',
+    copy: `Story animada: «HOY» → ${prog} → «RESERVA TU MESA · WHATSAPP ${WA}» → logo.\nNoche: 3–5 stories en directo mencionando al artista. Repostear todas las menciones.`,
+    cta: 'Stickers: ubicación, mención del artista, enlace a WhatsApp', ...extra });
 }
 
-// ===================== NOVIEMBRE =====================
-add({ key: 'plan-2026-1112-halloween-carrusel', kind: 'carousel', title: 'Carrusel · Así fue el tardeo de Halloween', starts_at: iso('11-12', '19:00'), format: 'Carrusel (10 fotos)',
-  status: 'in_design', objective: 'Aprovechar las fotos del 31 de octubre: comunidad y recuerdo del evento grande del mes.',
-  material: '71 fotos del 31 de octubre en Drive (DSC08395–DSC08465). Elegir 10, edición natural, formato original.',
-  copy: 'Lo del 31 de octubre no se nos olvida 🎃\n\nDisfraces, música en directo y un tardeo de los que se recuerdan. Gracias a todos los que lo hicisteis posible.\n\n¿Sales en alguna? Etiquétate 👇',
-  cta: 'Etiquétate y comparte con quien vino contigo', hashtags: HT + ' #HalloweenArucas',
-  pending_info: 'Comprobar que estas fotos son del tardeo de Halloween y si ya se publicó un carrusel el 1-2 nov (si es así, usar solo las fotos no publicadas).',
-  attachments: HALLOWEEN.slice(0, 10) });
-add({ key: 'plan-2026-1112-reel-ambiente', kind: 'reel', title: 'Reel · Ambiente 5mentarios (tardeo)', starts_at: iso('11-12', '20:30'), format: 'Reel 9:16 (12–15 s)',
-  status: 'in_design', objective: 'Alcance: enseñar el ambiente del bar a quien aún no lo conoce.',
-  material: 'Vídeos C0611 y C0618 (carpeta Heineken de Drive)',
-  copy: 'Tardeo, música y los tuyos. Así se está en 5mentarios 🍻\n\nTe esperamos este finde en Arucas.',
-  cta: 'Guárdalo para el finde', hashtags: HT,
-  description: 'Montaje: 4–5 cortes rápidos al ritmo (barra, gente, música), texto en pantalla «Tardeo · Música · Los tuyos». Audio: tendencia animada sin letra explícita.',
-  attachments: [F.vC0611, F.vC0618] });
-cartelFinde('plan-2026-1112-cartel', '11-12', '11-13', '11-14');
-storiesDia('plan-2026-1113-stories', '11-13', 'viernes 13 nov');
-storiesDia('plan-2026-1114-stories', '11-14', 'sábado 14 nov');
-carruselFotos('plan-2026-1116-fotos', '11-16', '13–14 nov');
-add({ key: 'plan-2026-1117-tipos', kind: 'carousel', title: 'Carrusel · Tipos de personas en 5mentarios', starts_at: iso('11-17', '19:30'), format: 'Carrusel',
-  status: 'in_review', objective: 'Comunidad y alcance: contenido para etiquetar a amigos.',
-  material: 'Carrusel ya diseñado: carpeta «carrusel-tipos-de-personas» (1, 2, 6, 7.jpg) y ZIP completo en Drive.',
-  copy: '¿Cuál eres tú? 👀\n\nEn 5mentarios hay de todo: el que llega el primero, el que no se va nunca, el que pide «la última»…\n\nEtiqueta a cada uno de tus amigos en su slide 😂',
-  cta: 'Etiqueta a tus amigos en su slide', hashtags: HT,
-  pending_info: 'Comprobar si este carrusel ya se publicó en octubre. Si ya salió, sustituir por el carrusel de «reglas».',
-  attachments: [F.tipos1, F.tipos2, F.tipos6, F.tipos7, F.tiposZip] });
-cartelFinde('plan-2026-1119-cartel', '11-19', '11-20', '11-21');
-storiesDia('plan-2026-1120-stories', '11-20', 'viernes 20 nov');
-storiesDia('plan-2026-1121-stories', '11-21', 'sábado 21 nov');
-add({ key: 'plan-2026-1122-volcan-mesa', kind: 'post', title: 'Post · Del volcán a tu mesa (comida de Volcán y Cuor en 5mentarios)', starts_at: iso('11-22', '13:30'), format: 'Post 4:5',
-  status: 'idea', objective: 'Recordar que se puede pedir comida de Volcán y Cuor sin moverse de la mesa.',
-  material: 'Foto de una smash burger de Volcán en una mesa de 5mentarios (carpeta Volcan de Drive) — elegir',
-  copy: 'Tú sigues con el concierto, el partido o la ronda. La cena llega sola 🍔\n\n1. Pides en la barra\n2. Volcán la hace al momento\n3. Te la llevamos a la mesa, aún humeando\n\nTambién las pizzas de Cuor di Pizza 🍕',
-  cta: 'Pide en barra la próxima vez que vengas', hashtags: HT + ' #SmashBurger',
-  pending_info: 'Elegir foto de la carpeta de Volcán y valorar publicarlo en colaboración con @volcansmashburger.' });
-carruselFotos('plan-2026-1123-fotos', '11-23', '20–21 nov');
-// Champions League · Jornada 5 (24 y 25 de noviembre, calendario oficial UEFA)
-add({ key: 'plan-2026-1123-ucl-previa', kind: 'champions', title: 'Story · Esta semana vuelve la Champions (J5)', starts_at: iso('11-23', '18:00'), format: 'Story 9:16',
-  status: 'in_design', requires_approval: true, objective: 'Que la gente sepa que la Champions se ve en 5mentarios.',
-  material: 'Plantilla de portada Champions (champions-01-portada-jugadores.png / .psd)',
-  copy: 'Pantalla: «Martes y miércoles, CHAMPIONS en 5mentarios» + partidos que pondremos + sticker de recordatorio',
-  cta: 'Sticker «Recordarme»', hashtags: HT_FUT,
-  pending_info: 'Qué partidos de la J5 se pondrán en pantalla y a qué hora.', attachments: [F.champPortada, F.champPortadaPsd] });
-add({ key: 'plan-2026-1124-ucl', kind: 'champions', title: 'Stories Champions · Martes 24 nov (J5)', starts_at: iso('11-24', '17:00'), format: 'Stories (secuencia)',
-  status: 'in_design', objective: 'Llenar la noche de Champions.', material: 'Plantilla de partido (champions-02 .png/.psd) a actualizar con los partidos del día',
-  copy: 'Pantalla 1: partido(s) de hoy + hora (hora canaria)\nPantalla 2: pantalla grande y mesas · pide Volcán o Cuor desde la mesa\nPantalla 3: reacciones en directo / goles',
-  cta: 'Ven a verlo con tu gente', hashtags: HT_FUT, pending_info: 'Partidos y horarios de la jornada 5 que se emiten en el bar.',
-  attachments: [F.champPartido, F.champPartidoPsd] });
-add({ key: 'plan-2026-1125-ucl', kind: 'champions', title: 'Stories Champions · Miércoles 25 nov (J5)', starts_at: iso('11-25', '17:00'), format: 'Stories (secuencia)',
-  status: 'in_design', objective: 'Llenar la noche de Champions.', material: 'Plantilla de partido (champions-04 .png) a actualizar',
-  copy: 'Pantalla 1: partido(s) de hoy + hora\nPantalla 2: encuesta «¿Quién gana?»\nPantalla 3: ambiente durante el partido',
-  cta: 'Encuesta y ubicación', hashtags: HT_FUT, pending_info: 'Partidos y horarios de la jornada 5 que se emiten en el bar.', attachments: [F.champPartido2] });
-cartelFinde('plan-2026-1126-cartel', '11-26', '11-27', '11-28');
-add({ key: 'plan-2026-1127-blackfriday', kind: 'special_date', title: 'Black Friday (solo si hay promoción)', starts_at: iso('11-27', '10:00'), all_day: true, requires_approval: false, status: 'idea',
-  objective: 'Decidir si se hace algo. Si no hay promoción, no se publica nada.', pending_info: '¿Hay alguna promoción para el Black Friday? Si no, eliminar este elemento.', assignee: 'owner' });
-storiesDia('plan-2026-1127-stories', '11-27', 'viernes 27 nov');
-storiesDia('plan-2026-1128-stories', '11-28', 'sábado 28 nov');
-carruselFotos('plan-2026-1130-fotos', '11-30', '27–28 nov');
+// ===================== NOVIEMBRE · semana 9–15 =====================
+add({ key: 'p2-1111-cuenta3', kind: 'story', title: 'Story · Tardeo Exterior: faltan 3 días', starts_at: iso('11-11', '12:00'), format: 'Story 9:16',
+  status: 'in_review', objective: 'Cuenta atrás al Tardeo Exterior Halloween del sábado 14.', material: DELIV('stories/story-tardeo-faltan-3-dias'),
+  copy: 'Sticker de cuenta atrás al sábado 14 · 16:00.', cta: 'Sticker «Recordarme»' });
+add({ key: 'p2-1111-semana', kind: 'story', title: 'Story animada · Esta semana en 5mentarios (12–14 nov)', starts_at: iso('11-11', '13:00'), format: 'Story animada 17 s',
+  status: 'in_review', platforms: ['instagram', 'whatsapp'], objective: 'Programación de la semana.', material: 'Vídeo ENTREGADO: 02_disenos_entregados/videos/story-esta-semana-12-14-nov.mp4 (17 s). Subirlo como versión 1.',
+  copy: 'Jue 12 · 21:00 · Monólogos con Juan Antonio Cabrera\nVie 13 · 22:30 · Son Diferente + 00:00 DJ Ruven\nSáb 14 · desde las 16:00 · Tardeo Exterior Halloween',
+  cta: `Reserva por WhatsApp: ${WA}`,
+  description: `Canal de WhatsApp:\n🍻 ESTA SEMANA EN 5MENTARIOS\nJue 21:00 · Monólogos con Juan Antonio Cabrera\nVie 22:30 · Son Diferente + DJ Ruven\nSáb desde las 16:00 · Tardeo Exterior Halloween\nComida de Volcán y Cuor di Pizza a la mesa 🍔🍕` });
+add({ key: 'p2-1112-monologos', kind: 'event', title: 'Monólogos · Juan Antonio Cabrera', starts_at: iso('11-12', '21:00'), format: 'Evento', requires_approval: false, status: 'scheduled',
+  objective: 'Mes del humor.', description: 'Jueves 12/11 a las 21:00. Aforo limitado. Reservas 627 304 115.' });
+add({ key: 'p2-1112-monologos-story', kind: 'story', title: 'Story · Hoy monólogos con Juan Antonio Cabrera', starts_at: iso('11-12', '12:00'), format: 'Story 9:16',
+  status: 'in_review', objective: 'Llenar el aforo de esta noche.', material: DELIV('stories/story-monologos-* (Juan Antonio Cabrera)'),
+  copy: 'HOY · 21:00 · Juan Antonio Cabrera · AFORO LIMITADO · RESERVAS 627 304 115', cta: 'Enlace a WhatsApp' });
+add({ key: 'p2-1112-cuenta2', kind: 'story', title: 'Story · Tardeo Exterior: faltan 2 días', starts_at: iso('11-12', '13:00'), format: 'Story 9:16',
+  status: 'in_review', material: DELIV('stories/story-tardeo-faltan-2-dias'), copy: 'Sticker de cuenta atrás al sábado 14 · 16:00.', cta: 'Sticker «Recordarme»' });
+add({ key: 'p2-1112-reel-halloween', kind: 'reel', title: 'Reel · Así fue Halloween → ¿te vas a perder el Tardeo Exterior?', starts_at: iso('11-12', '19:00'), format: 'Reel 9:16 · 27 s',
+  status: 'in_review', objective: 'Usar el éxito de Halloween para llenar el Tardeo Exterior del sábado.',
+  material: 'Vídeo ENTREGADO: 02_disenos_entregados/videos/reel-halloween-tardeo-exterior.mp4 (sin música).',
+  copy: 'Así fue Halloween en 5mentarios 🎃\n\n¿Y ahora te vas a perder… EL TARDEO EXTERIOR? 👀\n\nSábado 14 desde las 16:00: DJ Ruven, Apolo, Son Aldea y Pedro Afonso.\n\n¿Con quién vienes? Etiquétalo 👇',
+  cta: '¿Con quién vienes? Etiquétalo 👇', hashtags: HT, description: 'Organiza el Ayuntamiento de Arucas; colaboran 5mentarios y COA. El responsable pone el audio en tendencia.' });
+add({ key: 'p2-1112-carrusel-lineup', kind: 'carousel', title: 'Carrusel line-up · Tardeo Exterior Halloween (sáb 14)', starts_at: iso('11-12', '13:30'), format: 'Carrusel 5 × 1080×1350',
+  status: 'in_review', objective: 'Presentar el line-up del tardeo.', material: DELIV('carrusel_tardeo_14/carrusel-tardeo-1…5 (portada + DJ Ruven, Apolo, Son Aldea, Pedro Afonso)'),
+  copy: 'TARDEO EXTERIOR · HALLOWEEN 🎃\n\nSábado 14 de noviembre, desde las 16:00:\n16:00 · DJ Ruven\n17:30 · Apolo\n19:30 · Son Aldea\n21:30 · Pedro Afonso\n\nOrganiza el Ayuntamiento de Arucas; colaboran 5mentarios y COA.\n\n¿Con quién vienes? Etiquétalo 👇',
+  cta: '¿Con quién vienes? Etiquétalo 👇', hashtags: HT, pending_info: 'Comprobar si el carrusel line-up y el cartel ya se publicaron.' });
+add({ key: 'p2-1113-noche', kind: 'event', title: 'Son Diferente 22:30 + DJ Ruven 00:00', starts_at: iso('11-13', '22:30'), requires_approval: false, status: 'scheduled', format: 'Evento' });
+add({ key: 'p2-1113-manana', kind: 'story', title: 'Story · Tardeo Exterior: mañana', starts_at: iso('11-13', '12:00'), format: 'Story 9:16', status: 'in_review',
+  material: DELIV('stories/story-tardeo-manana'), copy: 'Mañana · desde las 16:00 · Tardeo Exterior Halloween', cta: 'Sticker «Recordarme»' });
+storiesNoche('p2-1113-stories', '11-13', 'viernes 13 · Son Diferente + DJ Ruven', [{ hora: '22:30', quien: 'Son Diferente' }, { hora: '00:00', quien: 'DJ Ruven' }],
+  { status: 'pending_prep', material: 'Story animada «Hoy en 5mentarios» por preparar (como la del sáb 7: story-hoy-sabado-07.mp4).' });
+add({ key: 'p2-1114-tardeo', kind: 'event', title: 'Tardeo Exterior Halloween · desde las 16:00', starts_at: iso('11-14', '16:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
+  description: 'DJ Ruven 16:00 · Apolo 17:30 · Son Aldea 19:30 · Pedro Afonso 21:30. Sustituye al sábado de noche previsto. Organiza el Ayto. de Arucas; colaboran 5mentarios y COA.' });
+add({ key: 'p2-1114-hoy', kind: 'story', title: 'Stories · Hoy Tardeo Exterior (cuenta atrás + animada + directo)', starts_at: iso('11-14', '11:00'), format: 'Story «hoy» + story animada 16 s + directo',
+  status: 'in_review', requires_approval: true, material: `${DELIV('stories/story-tardeo-hoy')} Story animada ENTREGADA: videos/story-tardeo-exterior-halloween-14.mp4.`,
+  copy: 'HOY · desde las 16:00 · Tardeo Exterior Halloween\nDirecto: una story al empezar cada artista (16:00 DJ Ruven, 17:30 Apolo, 19:30 Son Aldea, 21:30 Pedro Afonso), mencionándolos. Repostear todas las menciones.',
+  cta: 'Ubicación + mención de artistas' });
+fotosLunes('p2-1116-fotos', '11-16', 'el Tardeo Exterior del sábado 14', null, {
+  copy: 'Así se vivió el Tardeo Exterior en 5mentarios 🎶 Gracias a todos los que vinisteis y a DJ Ruven, Apolo, Son Aldea y Pedro Afonso. Búscate en las fotos y etiquétate 📸',
+  description: 'Etiquetar al Ayuntamiento de Arucas y a COA como colaboradores.' });
+
+// ===================== semana 16–22 =====================
+add({ key: 'p2-1117-saul', kind: 'post', title: 'Post · Monólogos con Saúl Romero (jue 19)', starts_at: iso('11-17', '13:00'), format: 'Post 1080×1350', status: 'in_review',
+  objective: 'Llenar el aforo del jueves 19.', material: DELIV('carteles_y_posts/post-monologos-saul-romero-19'),
+  copy: `¡Este jueves nos echamos unas risas en 5mentarios! 🎤\nSaúl Romero viene con su monólogo para que te olvides de la semana a carcajadas. Tú te traes las ganas de reír y nosotros las Heineken bien fresquitas 🍻\n📅 Jueves 19 de noviembre · 🕘 21:00 · 📍 Heineken 5mentarios · Arucas\nSi te entra hambre, pide de Volcán o de Cuor di Pizza y te lo llevamos a la mesa.\nEl aforo es limitado, así que reserva en el ${WA} 😉`,
+  cta: `Reserva en el ${WA}`, hashtags: HT_MONO });
+programacion('p2-1118-prog', '11-18', 'semana 19–21 nov', [
+  { dia: 'JUEVES 19', diaCorto: 'Jue', hora: '21:00', quien: 'Monólogos con Saúl Romero' },
+  { dia: 'VIERNES 20', diaCorto: 'Vie', hora: null, quien: 'Apolo + DJ Asped' },
+  { dia: 'SÁBADO 21', diaCorto: 'Sáb', hora: null, quien: 'Son Diferente + DJ Ake' }],
+  { pending_info: 'Vie 20 (Apolo + DJ Asped) y sáb 21 (Son Diferente + DJ Ake) están [POR CONFIRMAR] (así salieron en el carrusel de noviembre). Faltan las horas.' });
+reelProgramacion('p2-1118-reel', '11-18', 'semana 19–21 nov');
+add({ key: 'p2-1119-saul-evento', kind: 'event', title: 'Monólogos · Saúl Romero', starts_at: iso('11-19', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento', description: 'Aforo limitado. Reservas 627 304 115.' });
+add({ key: 'p2-1119-saul-story', kind: 'story', title: 'Story · Hoy monólogos con Saúl Romero', starts_at: iso('11-19', '12:00'), format: 'Story 9:16', status: 'in_review',
+  material: DELIV('stories/story-monologos-* (Saúl Romero)'), copy: `HOY · 21:00 · Saúl Romero · AFORO LIMITADO · RESERVAS ${WA}`, cta: 'Enlace a WhatsApp' });
+reelJueves('p2-1119-reel', '11-19', 'ambiente', { attachments: [F.vC0611, F.vC0618] });
+storiesNoche('p2-1120-stories', '11-20', 'viernes 20', [{ hora: null, quien: 'Apolo' }, { hora: null, quien: 'DJ Asped' }], { pending_info: 'Apolo + DJ Asped [POR CONFIRMAR] y horas.' });
+storiesNoche('p2-1121-stories', '11-21', 'sábado 21', [{ hora: null, quien: 'Son Diferente' }, { hora: null, quien: 'DJ Ake' }], { pending_info: 'Son Diferente + DJ Ake [POR CONFIRMAR] y horas.' });
+fotosLunes('p2-1123-fotos', '11-23', 'el finde 20–21 nov');
+
+// ===================== semana 23–29 (Champions J5 + aniversario) =====================
+add({ key: 'p2-1123-kike', kind: 'post', title: 'Post · Kike Pérez: 26/11 SOLD OUT + nueva fecha jue 03/12', starts_at: iso('11-23', '19:00'), format: 'Post 1080×1350', status: 'in_review',
+  objective: 'Avisar del sold out y vender la nueva fecha.', material: DELIV('carteles_y_posts/post-monologos-kike-perez-03-12'),
+  copy: `¡Agotado! 🎤 Kike Pérez y sus «20 años de Komedia» llenan el 26 de noviembre.\n\n¿Te has quedado fuera? Hay nueva fecha: jueves 3 de diciembre en 5mentarios.\n\nEl aforo es limitado, así que reserva en el ${WA} 😉`,
+  cta: `Reserva en el ${WA}`, hashtags: HT_MONO, pending_info: 'Precio de la entrada (15 € según el planificador [POR CONFIRMAR]) y hora del 03/12. No poner precio hasta confirmarlo.' });
+add({ key: 'p2-1123-ucl', kind: 'champions', title: 'Story · Esta semana, Champions en 5mentarios (J5)', starts_at: iso('11-23', '18:00'), format: 'Story 9:16', status: 'pending_prep',
+  objective: 'Que se sepa que la Champions se ve en pantalla grande.', material: 'Plantillas Champions de octubre (Drive y lienzo de diseño de octubre).',
+  copy: 'Martes 24 y miércoles 25 · CHAMPIONS · PANTALLA GRANDE · Volcán · Cuor di Pizza · te lo llevamos a la mesa', cta: 'Sticker «Recordarme»', hashtags: HT,
+  pending_info: 'Qué partidos de la J5 se ponen y a qué hora (según el carrusel de noviembre hay partidos el 24 y el 25; comprobar antes de publicar).', attachments: [F.champPortada, F.champPortadaPsd] });
+for (const [k, d, lbl] of [['p2-1124-ucl', '11-24', 'martes 24'], ['p2-1125-ucl', '11-25', 'miércoles 25']]) {
+  add({ key: k, kind: 'champions', title: `Stories Champions · ${lbl} (J5)`, starts_at: iso(d, '17:00'), format: 'Stories (secuencia)', status: 'pending_prep',
+    objective: 'Llenar la noche de Champions.', material: 'Plantilla de partido (pantalla partida negro/verde, «VS», «PARTIDAZO»).',
+    copy: 'Story 1: «Hoy · [hora] · pantalla grande»\nStory 2: encuesta «¿Quién gana?»\nStory 3: «Todavía estás a tiempo» + cena con Volcán\nNo grabar la imagen de la tele.',
+    cta: 'Encuesta + ubicación', hashtags: HT, pending_info: 'Partido(s) y hora.', attachments: [F.champPartido, F.champPartidoPsd] });
+}
+programacion('p2-1125-prog', '11-25', 'semana 26–29 nov', [
+  { dia: 'JUEVES 26', diaCorto: 'Jue', hora: '—', quien: 'Kike Pérez · SOLD OUT (nueva fecha 03/12)' },
+  { dia: 'VIERNES 27', diaCorto: 'Vie', hora: null, quien: 'Alberto Déniz + DJ Ake' },
+  { dia: 'SÁBADO 28', diaCorto: 'Sáb', hora: null, quien: 'Savia Nueva + DJ Asped' },
+  { dia: 'DOMINGO 29', diaCorto: 'Dom', hora: null, quien: 'Tardeo del 4º aniversario' }],
+  { pending_info: 'Vie 27 (Alberto Déniz + DJ Ake) y sáb 28 (Savia Nueva + DJ Asped) [POR CONFIRMAR]. Horas del finde y del tardeo del aniversario.' });
+reelProgramacion('p2-1125-reel', '11-25', 'semana 26–29 nov');
+add({ key: 'p2-1126-kike-evento', kind: 'event', title: 'Monólogos · Kike Pérez (SOLD OUT)', starts_at: iso('11-26', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
+  pending_info: 'Hora: los monólogos han sido a las 21:00; confirmar para esta fecha.' });
+reelJueves('p2-1126-reel', '11-26', 'volcan');
+add({ key: 'p2-1127-aniversario', kind: 'post', title: 'Post · 4 años de tardeos (domingo 29)', starts_at: iso('11-27', '13:00'), format: 'Post 1080×1350', status: 'pending_prep',
+  objective: 'Convocar el tardeo del 4º aniversario.', material: 'Pieza «aniversario» del carrusel de noviembre (N1–N8, lienzo de diseño).',
+  copy: '4 años de tardeos 🍻\n\nEl domingo 29 lo celebramos como sabemos: tardeo, música y los tuyos.\n\n¿Con quién vienes? Etiquétalo 👇', cta: `Reserva tu mesa: WhatsApp ${WA}`, hashtags: HT,
+  pending_info: 'Hora de inicio y quién toca en el tardeo del aniversario.' });
+storiesNoche('p2-1127-stories', '11-27', 'viernes 27', [{ hora: null, quien: 'Alberto Déniz' }, { hora: null, quien: 'DJ Ake' }], { pending_info: 'Alberto Déniz + DJ Ake [POR CONFIRMAR] y horas.' });
+storiesNoche('p2-1128-stories', '11-28', 'sábado 28', [{ hora: null, quien: 'Savia Nueva' }, { hora: null, quien: 'DJ Asped' }], { pending_info: 'Savia Nueva + DJ Asped [POR CONFIRMAR] y horas.' });
+add({ key: 'p2-1129-aniversario-evento', kind: 'event', title: 'Tardeo del 4º aniversario', starts_at: iso('11-29', '17:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
+  pending_info: 'Hora de inicio (17:00 es solo la hora del reel del domingo).' });
+add({ key: 'p2-1129-reel', kind: 'reel', title: 'Reel · Tardeo del aniversario en directo', starts_at: iso('11-29', '17:00'), format: 'Reel 9:16', status: 'idea',
+  objective: 'Reel de tardeo en directo del domingo.', material: 'Grabar en el momento: planos generales del ambiente.', copy: '4 años de tardeos y los que nos quedan 🍻 Gracias, Arucas.',
+  cta: '¿Con quién viniste? Etiquétalo 👇', hashtags: HT, description: LOGO_END });
+fotosLunes('p2-1130-fotos', '11-30', 'el finde del aniversario');
 
 // ===================== DICIEMBRE =====================
-add({ key: 'plan-2026-1201-carrusel-diciembre', kind: 'carousel', title: 'Carrusel · Programación de diciembre (fijar en el perfil)', starts_at: iso('12-01', '13:00'), deadline: '2026-11-27',
-  format: 'Carrusel · fijado', platforms: ['instagram', 'whatsapp'], status: 'in_design',
-  objective: 'Que todo el mes esté a la vista: fines de semana, Champions, Navidad y fin de año.',
-  material: 'Carrusel de diciembre ya diseñado (según el equipo). NO se ha encontrado en la carpeta de Drive revisada: subirlo como versión 1.',
-  copy: 'Diciembre en 5mentarios 🎄\n\nDesliza y apunta: fines de semana con música, Champions y las fechas grandes del mes.\n\nGuárdalo para tenerlo a mano 📌',
-  cta: 'Guarda el post y comparte con tu grupo', hashtags: HT_NAV,
-  pending_info: 'Subir el diseño del carrusel de diciembre y confirmar todas las fechas que aparecen en él.' });
-add({ key: 'plan-2026-1202-reel-ambiente', kind: 'reel', title: 'Reel · Una noche en 5mentarios', starts_at: iso('12-02', '20:30'), format: 'Reel 9:16 (10–15 s)', status: 'pending_prep',
-  objective: 'Alcance y ganas de venir el finde.', material: 'Vídeos C0572 y C0573 (carpeta Heineken de Drive)',
-  copy: 'Lo mejor de la noche siempre empieza con un «¿vamos a 5mentarios?» 🍻', cta: 'Envíaselo a quien te lo diría', hashtags: HT,
-  description: 'Cortes rápidos de barra, ambiente y música. Texto final: «Este finde, en Arucas».', attachments: [F.vC0572, F.vC0573] });
-cartelFinde('plan-2026-1203-cartel', '12-03', '12-04', '12-05', { pending_info: 'Artistas y horarios del 4 y 5 dic. Puente (6 y 8 dic): ¿horario especial?' });
-storiesDia('plan-2026-1204-stories', '12-04', 'viernes 4 dic');
-storiesDia('plan-2026-1205-stories', '12-05', 'sábado 5 dic');
-add({ key: 'plan-2026-1206-constitucion', kind: 'special_date', title: 'Día de la Constitución (festivo)', starts_at: iso('12-06', '10:00'), all_day: true, requires_approval: false, status: 'idea',
-  objective: 'Fecha a tener en cuenta en el puente.', pending_info: 'Horario de apertura en el puente.', assignee: 'owner' });
-carruselFotos('plan-2026-1207-fotos', '12-07', '4–5 dic');
-add({ key: 'plan-2026-1208-inmaculada', kind: 'special_date', title: 'Inmaculada Concepción (festivo)', starts_at: iso('12-08', '10:00'), all_day: true, requires_approval: false, status: 'idea',
-  objective: 'Festivo nacional: coincide con la Champions (J6).', pending_info: 'Horario de apertura.', assignee: 'owner' });
-add({ key: 'plan-2026-1208-ucl', kind: 'champions', title: 'Stories Champions · Martes 8 dic (J6)', starts_at: iso('12-08', '17:00'), format: 'Stories (secuencia)', status: 'in_design',
-  objective: 'Noche de Champions en festivo.', material: 'Plantilla de partido Champions a actualizar', copy: 'Pantalla 1: festivo + Champions en 5mentarios\nPantalla 2: partido(s) y hora\nPantalla 3: ambiente',
-  cta: 'Ven con tu gente', hashtags: HT_FUT, pending_info: 'Partidos y horarios de la jornada 6 que se emiten.', attachments: [F.champPartido, F.champPartidoPsd] });
-add({ key: 'plan-2026-1209-ucl', kind: 'champions', title: 'Stories Champions · Miércoles 9 dic (J6)', starts_at: iso('12-09', '17:00'), format: 'Stories (secuencia)', status: 'in_design',
-  objective: 'Última noche de Champions del año.', material: 'Plantilla de partido Champions a actualizar', copy: 'Pantalla 1: «Última Champions del año»\nPantalla 2: partido(s) y hora\nPantalla 3: encuesta «¿Quién pasa?»',
-  cta: 'Encuesta', hashtags: HT_FUT, pending_info: 'Partidos y horarios de la jornada 6 que se emiten.', attachments: [F.champPartido2] });
-cartelFinde('plan-2026-1210-cartel', '12-10', '12-11', '12-12');
-storiesDia('plan-2026-1211-stories', '12-11', 'viernes 11 dic');
-storiesDia('plan-2026-1212-stories', '12-12', 'sábado 12 dic');
-carruselFotos('plan-2026-1214-fotos', '12-14', '11–12 dic');
-add({ key: 'plan-2026-1215-celebraciones', kind: 'post', title: 'Post · Tu quedada de Navidad en 5mentarios', starts_at: iso('12-15', '13:00'), format: 'Post 4:5 o carrusel', status: 'idea',
-  objective: 'Captar grupos: cenas de empresa, quedadas y despedidas (ya se ofrece en la web: «Escríbenos por Instagram»).',
-  material: 'Foto de grupo en el bar (DSC01927 / DSC01834 / DSC01847 / DSC01852 — elegir) + sello',
-  copy: '¿Cena de empresa, quedada de amigos o despedida estas fiestas? 🎄\n\nEn 5mentarios tienes música, buen ambiente y la comida de Volcán y Cuor llegando a la mesa.\n\nEscríbenos por privado y lo organizamos.',
-  cta: 'Escríbenos por DM para reservar', hashtags: HT_NAV,
-  pending_info: '¿Hay condiciones especiales para grupos (reserva, menú, horario)? Si no, publicarlo tal cual sin precios.',
-  attachments: [F.fDSC01927, F.fDSC01834, F.fDSC01847, F.fDSC01852] });
-cartelFinde('plan-2026-1217-cartel', '12-17', '12-18', '12-19');
-storiesDia('plan-2026-1218-stories', '12-18', 'viernes 18 dic');
-storiesDia('plan-2026-1219-stories', '12-19', 'sábado 19 dic');
-add({ key: 'plan-2026-1220-reel-navidad', kind: 'reel', title: 'Reel · 5mentarios se viste de Navidad', starts_at: iso('12-20', '20:00'), format: 'Reel 9:16', status: 'idea',
-  objective: 'Ambiente navideño del local para animar a venir en fiestas.', material: 'Hay que grabarlo: decoración navideña del local (ver tarea).',
-  copy: 'Ya huele a Navidad en Arucas 🎄✨\n\nNos vemos estas fiestas en 5mentarios.', cta: 'Comparte con tu grupo de las fiestas', hashtags: HT_NAV,
-  pending_info: 'Grabar la decoración navideña cuando esté montada.' });
-carruselFotos('plan-2026-1221-fotos', '12-21', '18–19 dic');
-add({ key: 'plan-2026-1222-horarios-navidad', kind: 'story', title: 'Story fijada · Horarios de Navidad y fin de año', starts_at: iso('12-22', '12:00'), format: 'Story 9:16 + destacado', platforms: ['instagram', 'whatsapp'], status: 'idea',
-  objective: 'Que nadie se quede en la puerta: horarios del 24, 25, 31 y 1.', copy: 'Pantalla: «Horarios de fiestas» 24 · 25 · 31 · 1 con apertura y cierre. Guardar en destacados.',
-  cta: 'Guardar en destacados', pending_info: 'Horarios del 24, 25 y 31 de diciembre y 1 de enero.', assignee: 'marketing' });
-cartelFinde('plan-2026-1223-cartel', '12-23', '12-25', '12-26', { title: 'Cartel de Navidad · 25–26 dic', pending_info: '¿Abre el 24 y el 25? Artistas/DJs y horarios del 25 y 26 dic.' });
-add({ key: 'plan-2026-1224-nochebuena', kind: 'post', title: 'Post · Feliz Navidad de 5mentarios', starts_at: iso('12-24', '12:00'), format: 'Post 4:5', status: 'idea',
-  objective: 'Felicitación y cercanía con la comunidad.', material: 'Diseño de felicitación con el sello 5mentarios (verde, negro y blanco)',
-  copy: 'Desde 2002 brindando con vosotros 🍻🎄\n\nGracias por otro año de tardeos, conciertos y partidos. Feliz Navidad de parte de todo el equipo de 5mentarios.',
-  cta: 'Comparte la felicitación', hashtags: HT_NAV, attachments: [F.sello] });
-add({ key: 'plan-2026-1224-nochebuena-fecha', kind: 'special_date', title: 'Nochebuena', starts_at: iso('12-24', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
-add({ key: 'plan-2026-1225-navidad-fecha', kind: 'special_date', title: 'Navidad', starts_at: iso('12-25', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
-storiesDia('plan-2026-1226-stories', '12-26', 'sábado 26 dic');
-carruselFotos('plan-2026-1228-fotos', '12-28', '25–26 dic');
-add({ key: 'plan-2026-1229-reel-2026', kind: 'reel', title: 'Reel · Nuestro 2026 en 5mentarios', starts_at: iso('12-29', '20:00'), format: 'Reel 9:16 (20–30 s)', status: 'pending_prep',
-  objective: 'Resumen del año: comunidad y orgullo de marca.', material: 'Vídeos C0611, C0618, C0572, C0573 + fotos de Halloween + fotos de los carruseles del finde',
-  copy: 'Nuestro 2026 en 5mentarios 🎶⚽🎃🎄\n\nGracias por cada tardeo, cada concierto y cada gol cantado. Lo mejor está por venir.',
-  cta: 'Etiqueta a quien ha estado contigo este año', hashtags: HT,
-  description: 'Montaje cronológico, 1–2 s por plano, texto con los momentos del año. Cerrar con el sello y «Desde 2002».',
-  attachments: [F.vC0611, F.vC0618, F.vC0572, F.vC0573, ...HALLOWEEN.slice(10, 14)] });
-add({ key: 'plan-2026-1230-nochevieja-cartel', kind: 'weekly_poster', title: 'Cartel · Nochevieja / fin de año en 5mentarios', starts_at: iso('12-30', '13:00'), format: 'Post 4:5 + story', platforms: ['instagram', 'whatsapp'], status: 'idea',
-  objective: 'Informar del plan de fin de año (solo si hay apertura especial).',
-  copy: 'Despedimos el 2026 en 5mentarios 🥂\n\n[PLAN DE NOCHEVIEJA: horario, música, entradas si las hay]\n\nNos vemos para brindar.',
-  cta: 'Escríbenos por DM para más info', hashtags: HT_NAV,
-  pending_info: '¿Abre en Nochevieja / madrugada del 1? Horario, música y si hay entrada o reserva. Si no hay plan, cambiar por story de horarios.', assignee: 'marketing' });
-add({ key: 'plan-2026-1231-nochevieja', kind: 'story', title: 'Stories · Último día del año', starts_at: iso('12-31', '12:00'), format: 'Stories (secuencia)', status: 'idea', requires_approval: false,
-  objective: 'Acompañar el último día del año y felicitar el 2027.', copy: 'Pantalla 1: horario de hoy\nPantalla 2: ambiente\nPantalla 3 (00:00): «¡Feliz 2027! Gracias por este año» con el sello',
-  pending_info: 'Horario del 31.' });
-add({ key: 'plan-2026-1231-fecha', kind: 'special_date', title: 'Nochevieja', starts_at: iso('12-31', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Plan y horario.' });
+add({ key: 'p2-1201-diciembre', kind: 'carousel', title: 'Carrusel · Programación de diciembre (fijar en el perfil)', starts_at: iso('12-01', '13:00'), deadline: '2026-11-27',
+  format: 'Carrusel · fijado', platforms: ['instagram', 'whatsapp'], status: 'in_design', objective: 'Todo el mes a la vista.',
+  material: 'Mismo formato que el calendario y carrusel de noviembre (N1–N8). El diseño de diciembre no está ni en Drive ni en el paquete de transferencia: subirlo como versión 1.',
+  copy: 'Diciembre en 5mentarios 🎄\n\nDesliza y apunta: monólogos, fines de semana con música, Champions y las fechas grandes del mes.\n\nGuárdalo para tenerlo a mano 📌', cta: 'Guarda el post', hashtags: HT,
+  pending_info: 'Programación completa de diciembre.' });
+programacion('p2-1202-prog', '12-02', 'semana 3–6 dic', [
+  { dia: 'JUEVES 3', diaCorto: 'Jue', hora: null, quien: 'Monólogos con Kike Pérez (nueva fecha)' },
+  { dia: 'VIERNES 4', diaCorto: 'Vie', hora: null, quien: null }, { dia: 'SÁBADO 5', diaCorto: 'Sáb', hora: null, quien: null }],
+  { pending_info: 'Hora del monólogo del 03/12 y artistas/DJs/horas del 4 y 5 dic. Horario del puente (6 y 8 dic).' });
+reelProgramacion('p2-1202-reel', '12-02', 'semana 3–6 dic');
+add({ key: 'p2-1203-kike-evento', kind: 'event', title: 'Monólogos · Kike Pérez (nueva fecha)', starts_at: iso('12-03', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
+  pending_info: 'Hora: los monólogos han sido a las 21:00; confirmar. Entrada 15 € [POR CONFIRMAR].' });
+add({ key: 'p2-1203-kike-story', kind: 'story', title: 'Story · Hoy Kike Pérez', starts_at: iso('12-03', '12:00'), format: 'Story 9:16', status: 'in_review',
+  material: DELIV('stories/story-monologos-* (Kike Pérez)'), copy: `HOY · Kike Pérez · AFORO LIMITADO · RESERVAS ${WA}`, cta: 'Enlace a WhatsApp' });
+reelJueves('p2-1203-reel', '12-03', 'ambiente', { attachments: [F.vC0572, F.vC0573] });
+add({ key: 'p2-1204-navidad-menus', kind: 'carousel', title: 'Carrusel · Menús de Navidad para grupos', starts_at: iso('12-04', '13:00'), format: 'Carrusel 1080×1350', status: 'in_review',
+  objective: 'Reservas de cenas de grupo en Navidad.', material: 'Diseño de Navidad en el lienzo de octubre–noviembre: tres variantes NAV, NAVB y NAVC. Elegir una y exportar PNG + PSD.',
+  copy: `Esta Navidad, la cena del grupo es en 5mentarios 🎄\n\nMenú 1 · 25 €/persona\nMenú 2 · 30 €/persona\nMenú 3 · 38 €/persona\n\nDesliza para ver qué lleva cada uno 👉\nReservas en el ${WA}`,
+  cta: `Reservas en el ${WA}`, hashtags: HT,
+  description: 'Menú 1: papas arrugadas con mojo rojo, berenjenas crujientes con miel de palma, croquetas de queso roquefort con guayaba, salteado de pollo con verduras, tacos de pescado con mojo verde.\nMenú 2: tabla de quesos canarios, surtido ibérico, langostinos crujientes con salsa agripicante, volovanes (salmón con queso, ensaladilla de batata, cochino negro con crujiente de parmesano), solomillo de cerdo a la pimienta.\nMenú 3: jamón ibérico de bellota, montadito de arroz frito con atún fresco, ensalada de salmón con canónigos, merluza en salsa verde con papas panaderas, carrilleras de cerdo con parmentier.',
+  pending_info: 'Qué bebida incluye cada menú y si estos precios son los definitivos [POR CONFIRMAR]. No publicar hasta que el propietario lo apruebe.' });
+storiesNoche('p2-1204-stories', '12-04', 'viernes 4', [{}], { pending_info: 'Artista/DJ y horas.' });
+storiesNoche('p2-1205-stories', '12-05', 'sábado 5', [{}], { pending_info: 'Artista/DJ y horas.' });
+add({ key: 'p2-1206-constitucion', kind: 'special_date', title: 'Día de la Constitución (festivo)', starts_at: iso('12-06', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario del puente.' });
+fotosLunes('p2-1207-fotos', '12-07', 'el finde 4–5 dic');
+add({ key: 'p2-1208-inmaculada', kind: 'special_date', title: 'Inmaculada Concepción (festivo)', starts_at: iso('12-08', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
+for (const [k, d, lbl] of [['p2-1208-ucl', '12-08', 'martes 8'], ['p2-1209-ucl', '12-09', 'miércoles 9']]) {
+  add({ key: k, kind: 'champions', title: `Stories Champions · ${lbl} (J6)`, starts_at: iso(d, '17:00'), format: 'Stories (secuencia)', status: 'pending_prep',
+    objective: 'Noche de Champions.', material: 'Plantilla de partido Champions.',
+    copy: 'Story 1: «Hoy · [hora] · pantalla grande»\nStory 2: encuesta «¿Quién gana?»\nStory 3: «Todavía estás a tiempo» + cena con Volcán\nNo grabar la imagen de la tele.',
+    cta: 'Encuesta + ubicación', hashtags: HT, pending_info: 'Partido(s) y hora de la J6.', attachments: [F.champPartido2] });
+}
+programacion('p2-1209-prog', '12-09', 'finde 11–12 dic', [{ dia: 'VIERNES 11', diaCorto: 'Vie' }, { dia: 'SÁBADO 12', diaCorto: 'Sáb' }], { pending_info: 'Artistas/DJs y horas del 11 y 12 dic.' });
+reelProgramacion('p2-1209-reel', '12-09', 'finde 11–12 dic');
+reelJueves('p2-1210-reel', '12-10', 'volcan');
+storiesNoche('p2-1211-stories', '12-11', 'viernes 11', [{}], { pending_info: 'Artista/DJ y horas.' });
+storiesNoche('p2-1212-stories', '12-12', 'sábado 12', [{}], { pending_info: 'Artista/DJ y horas.' });
+fotosLunes('p2-1214-fotos', '12-14', 'el finde 11–12 dic');
+programacion('p2-1216-prog', '12-16', 'finde 18–19 dic', [{ dia: 'VIERNES 18', diaCorto: 'Vie' }, { dia: 'SÁBADO 19', diaCorto: 'Sáb' }], { pending_info: 'Artistas/DJs y horas del 18 y 19 dic.' });
+reelProgramacion('p2-1216-reel', '12-16', 'finde 18–19 dic');
+reelJueves('p2-1217-reel', '12-17', 'ambiente', { title: 'Reel · 5mentarios en Navidad (ambiente)', material: 'Grabar el local con la decoración navideña (si la hay) y ambiente.', status: 'idea' });
+storiesNoche('p2-1218-stories', '12-18', 'viernes 18', [{}], { pending_info: 'Artista/DJ y horas.' });
+storiesNoche('p2-1219-stories', '12-19', 'sábado 19', [{}], { pending_info: 'Artista/DJ y horas.' });
+fotosLunes('p2-1221-fotos', '12-21', 'el finde 18–19 dic');
+add({ key: 'p2-1222-horarios', kind: 'story', title: 'Story fijada · Horarios de Navidad y fin de año', starts_at: iso('12-22', '12:00'), format: 'Story 9:16 + destacado', platforms: ['instagram', 'whatsapp'],
+  status: 'idea', objective: 'Que nadie se encuentre cerrado.', copy: 'Horarios de fiestas: 24 · 25 · 31 · 1. Guardar en destacados.', cta: 'Guardar en destacados', pending_info: 'Horarios del 24, 25 y 31 de diciembre y 1 de enero.' });
+programacion('p2-1223-prog', '12-23', 'Navidad (24–27 dic)', [{ dia: 'JUEVES 24', diaCorto: 'Jue' }, { dia: 'VIERNES 25', diaCorto: 'Vie' }, { dia: 'SÁBADO 26', diaCorto: 'Sáb' }],
+  { pending_info: '¿Se abre el 24 y el 25? Artistas/DJs y horas.' });
+add({ key: 'p2-1224-feliz', kind: 'post', title: 'Post · Feliz Navidad de 5mentarios', starts_at: iso('12-24', '12:00'), format: 'Post 1080×1350', status: 'idea',
+  objective: 'Felicitación a la comunidad.', material: 'Sello 5mentarios sobre negro con brillo verde (estilo cartel de noche).',
+  copy: 'Desde 2002 siendo el punto de encuentro de Arucas 🍻🎄\n\nGracias por otro año de tardeos, conciertos, monólogos y partidos. Feliz Navidad de parte de todo el equipo de 5mentarios.',
+  cta: 'Comparte con los tuyos', hashtags: HT, attachments: [F.sello] });
+add({ key: 'p2-1224-fecha', kind: 'special_date', title: 'Nochebuena', starts_at: iso('12-24', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
+add({ key: 'p2-1225-fecha', kind: 'special_date', title: 'Navidad', starts_at: iso('12-25', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
+storiesNoche('p2-1226-stories', '12-26', 'sábado 26', [{}], { pending_info: 'Artista/DJ y horas.' });
+fotosLunes('p2-1228-fotos', '12-28', 'el finde de Navidad');
+add({ key: 'p2-1229-reel-2026', kind: 'reel', title: 'Reel · Nuestro 2026 en 5mentarios', starts_at: iso('12-29', '19:00'), format: 'Reel 9:16 (20–27 s)', status: 'pending_prep',
+  objective: 'Resumen del año.', material: 'Vídeos del bar (C0572, C0573, C0611, C0618), fotogramas de Halloween, tardeo exterior, monólogos y aniversario.',
+  copy: 'Nuestro 2026 en 5mentarios 🎶🎤🎃🎄\n\nGracias por cada tardeo, cada concierto, cada risa y cada gol cantado. Nos vemos en 2027.',
+  cta: 'Etiqueta a quien ha estado contigo este año', hashtags: HT, description: `Planos generales, 1–2 s por plano. ${LOGO_END}`,
+  attachments: [F.vC0611, F.vC0618, F.vC0572, F.vC0573] });
+programacion('p2-1230-prog', '12-30', 'fin de año', [{ dia: 'JUEVES 31', diaCorto: 'Jue' }], { title: 'Programación · Nochevieja / fin de año', pending_info: '¿Hay plan de Nochevieja? Horario, música y reservas. Si no hay plan, sustituir por la story de horarios.' });
+add({ key: 'p2-1231-fecha', kind: 'special_date', title: 'Nochevieja', starts_at: iso('12-31', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Plan y horario.' });
+add({ key: 'p2-1231-stories', kind: 'story', title: 'Stories · Último día del año', starts_at: iso('12-31', '12:00'), format: 'Stories', status: 'idea', requires_approval: false,
+  copy: 'Horario de hoy → ambiente → 00:00 «¡Feliz 2027!» con el sello.', pending_info: 'Horario del 31.' });
 
 // ---------- Tareas ----------
 const T = (o) => ({ priority: 'medium', assignee: 'marketing', ...o });
+const confirmar = (rango, martes, post) => T({ title: `Confirmar artistas, DJs y horas · ${rango}`, assignee: 'owner', priority: 'high', due_date: martes, post,
+  description: 'El planificador pide tenerlos confirmados antes del martes de cada semana.' });
+const web = (fecha, post) => T({ title: `Actualizar la web con la programación (${fecha.slice(8)}/${fecha.slice(5, 7)})`, priority: 'medium', due_date: fecha, post,
+  description: 'EVENTOS y PROGRAMA en index.html del repositorio heineken5mentarios (grupo5mentarios.com).' });
 const TASKS = [
-  T({ title: 'Confirmar artistas y horarios del finde 13–14 nov', assignee: 'owner', priority: 'urgent', due_date: '2026-11-12', post: 'plan-2026-1112-cartel' }),
-  T({ title: 'Confirmar artistas y horarios del finde 20–21 nov', assignee: 'owner', priority: 'high', due_date: '2026-11-17', post: 'plan-2026-1119-cartel' }),
-  T({ title: 'Confirmar artistas y horarios del finde 27–28 nov', assignee: 'owner', priority: 'high', due_date: '2026-11-24', post: 'plan-2026-1126-cartel' }),
-  T({ title: 'Confirmar artistas y horarios del finde 4–5 dic (y horario del puente)', assignee: 'owner', priority: 'high', due_date: '2026-12-01', post: 'plan-2026-1203-cartel' }),
-  T({ title: 'Confirmar artistas y horarios del finde 11–12 dic', assignee: 'owner', priority: 'high', due_date: '2026-12-08', post: 'plan-2026-1210-cartel' }),
-  T({ title: 'Confirmar artistas y horarios del finde 18–19 dic', assignee: 'owner', priority: 'high', due_date: '2026-12-15', post: 'plan-2026-1217-cartel' }),
-  T({ title: 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', assignee: 'owner', priority: 'high', due_date: '2026-12-15', post: 'plan-2026-1222-horarios-navidad' }),
-  T({ title: 'Decidir si hay plan de Nochevieja', assignee: 'owner', priority: 'high', due_date: '2026-12-18', post: 'plan-2026-1230-nochevieja-cartel' }),
-  T({ title: 'Decidir si hay promoción de Black Friday', assignee: 'owner', priority: 'low', due_date: '2026-11-20', post: 'plan-2026-1127-blackfriday' }),
-  T({ title: 'Elegir 10 fotos del tardeo de Halloween y comprobar que no se publicaron', priority: 'urgent', due_date: '2026-11-12', post: 'plan-2026-1112-halloween-carrusel' }),
-  T({ title: 'Montar reel de ambiente con C0611 y C0618', priority: 'high', due_date: '2026-11-12', post: 'plan-2026-1112-reel-ambiente' }),
-  T({ title: 'Comprobar si «Tipos de personas» y «Reglas» ya se publicaron', priority: 'medium', due_date: '2026-11-16', post: 'plan-2026-1117-tipos' }),
-  T({ title: 'Subir a Drive y a la app el carrusel de diciembre', priority: 'urgent', due_date: '2026-11-27', post: 'plan-2026-1201-carrusel-diciembre',
-    description: 'No aparece en las carpetas de Drive revisadas. Subirlo como versión 1 de la publicación para que el propietario lo apruebe.' }),
-  T({ title: 'Subir a Drive los carteles semanales de noviembre y diciembre', priority: 'high', due_date: '2026-11-18',
-    description: 'No se han encontrado en Drive. Guardarlos en la categoría «Carteles semanales» de la biblioteca.' }),
-  T({ title: 'Actualizar plantilla Champions con los partidos de la J5 (24–25 nov)', priority: 'high', due_date: '2026-11-22', post: 'plan-2026-1124-ucl' }),
-  T({ title: 'Actualizar plantilla Champions con los partidos de la J6 (8–9 dic)', priority: 'high', due_date: '2026-12-06', post: 'plan-2026-1208-ucl' }),
-  T({ title: 'Revisar si hay partidos grandes de Liga (Clásico, derbis) en nov–dic', priority: 'medium', due_date: '2026-11-16',
-    description: 'Solo los partidos grandes llevan post o reel. Si hay alguno, añadirlo al calendario con su fecha oficial.' }),
-  T({ title: 'Elegir foto de Volcán en mesa de 5mentarios', priority: 'low', due_date: '2026-11-20', post: 'plan-2026-1122-volcan-mesa' }),
-  T({ title: 'Grabar la decoración navideña del local', priority: 'medium', due_date: '2026-12-18', post: 'plan-2026-1220-reel-navidad' }),
-  T({ title: 'Montar el reel resumen «Nuestro 2026»', priority: 'medium', due_date: '2026-12-27', post: 'plan-2026-1229-reel-2026' }),
-  T({ title: 'Compartir la carpeta de Drive con la cuenta de Google del propietario', priority: 'high', due_date: '2026-11-13',
-    description: 'Para que el propietario vea fotos y vídeos dentro de la app, la carpeta «Grupo 5mentarios» debe estar compartida con su cuenta de Google.' })
+  T({ title: 'Subir a Drive el paquete de transferencia (diseños, PSD, vídeos, fotos y logos)', priority: 'urgent', due_date: '2026-11-12',
+    description: 'Carpeta «Grupo 5mentarios → Heineken». Así se pueden adjuntar a cada publicación desde la app.' }),
+  T({ title: 'Story animada «Hoy» del viernes 13 (Son Diferente + DJ Ruven)', priority: 'high', due_date: '2026-11-13', post: 'p2-1113-stories' }),
+  confirmar('finde 20–21 nov', '2026-11-17', 'p2-1118-prog'),
+  confirmar('finde 27–29 nov (y tardeo del aniversario)', '2026-11-24', 'p2-1125-prog'),
+  confirmar('3–6 dic (hora de Kike Pérez y horario del puente)', '2026-12-01', 'p2-1202-prog'),
+  confirmar('finde 11–12 dic', '2026-12-08', 'p2-1209-prog'),
+  confirmar('finde 18–19 dic', '2026-12-15', 'p2-1216-prog'),
+  confirmar('Navidad (24–26 dic)', '2026-12-22', 'p2-1223-prog'),
+  T({ title: 'Confirmar precio de la entrada de Kike Pérez (15 € según el planificador)', assignee: 'owner', priority: 'medium', due_date: '2026-11-20', post: 'p2-1123-kike' }),
+  T({ title: 'Confirmar bebida incluida y precios definitivos de los menús de Navidad', assignee: 'owner', priority: 'high', due_date: '2026-12-02', post: 'p2-1204-navidad-menus' }),
+  T({ title: 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', assignee: 'owner', priority: 'high', due_date: '2026-12-15', post: 'p2-1222-horarios' }),
+  T({ title: 'Decidir si hay plan de Nochevieja', assignee: 'owner', priority: 'high', due_date: '2026-12-18', post: 'p2-1230-prog' }),
+  T({ title: 'Diseñar el carrusel de diciembre (formato del de noviembre)', priority: 'urgent', due_date: '2026-11-27', post: 'p2-1201-diciembre' }),
+  T({ title: 'Partidos y horas de la Champions J5 (24–25 nov) que se ponen', priority: 'high', due_date: '2026-11-22', post: 'p2-1124-ucl' }),
+  T({ title: 'Partidos y horas de la Champions J6 (8–9 dic) que se ponen', priority: 'high', due_date: '2026-12-06', post: 'p2-1208-ucl' }),
+  T({ title: 'Revisar si hay Clásico u otro partido grande en nov–dic', priority: 'medium', due_date: '2026-11-16',
+    description: 'Solo el Clásico y las Champions importantes llevan post o reel; el resto, stories.' }),
+  web('2026-11-11', null), web('2026-11-18', 'p2-1118-prog'), web('2026-11-25', 'p2-1125-prog'), web('2026-12-02', 'p2-1202-prog'),
+  web('2026-12-09', 'p2-1209-prog'), web('2026-12-16', 'p2-1216-prog'), web('2026-12-23', 'p2-1223-prog'),
+  T({ title: 'Grabar los reels de programación de los miércoles (personas a cámara)', priority: 'medium', due_date: '2026-11-18', post: 'p2-1118-reel' }),
+  T({ title: 'Grabar el POV «la pides en el 5mentarios» con Volcán', priority: 'medium', due_date: '2026-11-25', post: 'p2-1126-reel' }),
+  T({ title: 'Compartir la carpeta de Drive con la cuenta de Google del propietario', priority: 'high', due_date: '2026-11-13' })
 ];
 
 // ---------- Biblioteca inicial (referencias a Drive, sin copiar archivos) ----------
 const L = (f, category, notes) => ({ ...f, category, notes });
 const LIBRARY = [
-  ...HALLOWEEN.map((f) => L(f, 'eventos', 'Fotos del 31 oct (tardeo de Halloween, verificar)')),
+  ...HALLOWEEN.map((f) => L(f, 'eventos', 'Fotos del 31 oct (Halloween)')),
   L(F.fDSC01927, 'fotografias', 'Carpeta Heineken'), L(F.fDSC01834, 'fotografias'), L(F.fDSC01847, 'fotografias'), L(F.fDSC01852, 'fotografias'),
   L(F.vC0611, 'videos', 'Ambiente del bar'), L(F.vC0618, 'videos', 'Ambiente del bar'), L(F.vC0572, 'videos', 'Ambiente del bar'), L(F.vC0573, 'videos', 'Ambiente del bar'),
   L(F.champPortada, 'champions', 'Plantilla portada'), L(F.champPortadaPsd, 'champions', 'PSD editable'), L(F.champPartido, 'champions', 'Plantilla partido'),
@@ -276,4 +334,11 @@ const LIBRARY = [
   L(F.cartelHalloween, 'anteriores', 'Cartel Halloween 31 oct')
 ];
 
-export { PLAN, TASKS, LIBRARY };
+// Claves del plan anterior (v1) que la versión 2 sustituye si no se han tocado
+const OLD_PREFIX = 'plan-2026-';
+const OLD_TASK_TITLES = [
+  'Subir a Drive los carteles semanales de noviembre y diciembre', 'Revisar si hay partidos grandes de Liga (Clásico, derbis) en nov–dic',
+  'Compartir la carpeta de Drive con la cuenta de Google del propietario'
+];
+
+export { PLAN, TASKS, LIBRARY, OLD_PREFIX, OLD_TASK_TITLES };

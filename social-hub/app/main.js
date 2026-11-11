@@ -12,9 +12,10 @@ import { NotificationsView } from './views/notifications.js';
 import { ActivityView } from './views/activity.js';
 import { SettingsView } from './views/settings.js';
 import { SearchView } from './views/search.js';
+import { GeneratorView } from './views/generator.js';
 
 const NAV = [
-  ['inicio', 'Inicio', 'home'], ['calendario', 'Calendario', 'calendar'], ['publicaciones', 'Publicaciones', 'posts'],
+  ['inicio', 'Inicio', 'home'], ['calendario', 'Calendario', 'calendar'], ['publicaciones', 'Publicaciones', 'posts'], ['generador', 'Generador y marca', 'sparkle'],
   ['biblioteca', 'Biblioteca', 'library'], ['tareas', 'Tareas', 'tasks'], ['chat', 'Chat', 'chat'],
   ['notificaciones', 'Notificaciones', 'bell'], ['actividad', 'Actividad', 'activity'], ['ajustes', 'Configuración', 'settings']
 ];
@@ -68,6 +69,7 @@ function NewMenu() {
   const pick = (fn) => { setOpen(false); fn(); };
   return html`<div class="menu-wrap"><button class="btn primary" onClick=${() => setOpen(!open)} aria-haspopup="menu"><${Icon} name="plus" /><span class="hide-sm">Nuevo</span></button>
     ${open ? html`<div class="menu" role="menu">
+      <button onClick=${() => pick(() => go('#/generador'))}><${Icon} name="sparkle" />Generar contenido</button>
       <button onClick=${() => pick(() => openPostForm({ kind: 'post' }))}><${Icon} name="posts" />Publicación</button>
       <button onClick=${() => pick(() => openPostForm({ kind: 'event', requires_approval: false }))}><${Icon} name="music" />Evento</button>
       <button onClick=${() => pick(() => openPostForm({ kind: 'reminder', requires_approval: false }))}><${Icon} name="bell" />Recordatorio / reunión</button>
@@ -99,6 +101,7 @@ function Shell() {
     case 'actividad': view = html`<${ActivityView} />`; break;
     case 'ajustes': view = html`<${SettingsView} query=${query} />`; break;
     case 'buscar': view = html`<${SearchView} query=${query} />`; break;
+    case 'generador': view = html`<${GeneratorView} query=${query} />`; break;
     default: view = html`<${Dashboard} />`;
   }
   const navBtn = ([k, label, icon]) => html`<a class=${'nav-item' + (section === k ? ' active' : '')} href=${'#/' + k} key=${k}>
