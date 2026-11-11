@@ -21,7 +21,7 @@ function DriveImg({ id, alt, w = 400 }) {
   return html`<${Icon} name="image" size=${22} />${err ? null : html`<img src=${driveThumb(id, w)} alt=${alt} loading="lazy" referrerpolicy="no-referrer" onError=${() => setErr(true)} />`}`;
 }
 export function Thumb({ a, w = 400 }) {
-  if (a.source === 'drive' && a.drive_file_id && (isImage(a.mime_type) || isVideo(a.mime_type) || /pdf|photoshop/.test(a.mime_type || '')))
+  if (a.source === 'drive' && a.drive_file_id && (!a.mime_type || isImage(a.mime_type) || isVideo(a.mime_type) || /pdf|photoshop/.test(a.mime_type || '')))
     return html`<${DriveImg} id=${a.drive_file_id} alt=${a.name} w=${w} />`;
   if (a.source === 'storage' && isImage(a.mime_type)) return html`<${StorageImg} path=${a.storage_path} alt=${a.name} />`;
   return html`<${Icon} name=${a.source === 'link' ? 'link' : fileIcon(a.mime_type)} size=${22} />`;
@@ -85,7 +85,7 @@ export function DriveBrowser({ selectable, selected = [], onToggle, onOpenFile, 
   }
   useEffect(() => { if (connected && cur?.id && !q) load(() => listFolder(cur.id)); }, [connected, cur?.id]);
 
-  if (!driveConfigured()) return html`<${DriveSetupHelp} />`;
+  if (!driveConfigured()) return html`<${PublicDriveBrowser} onPick=${selectable ? onToggle : null} />`;
   if (!root) return html`<p class="empty">Configura la carpeta raíz de Drive en Ajustes → Google Drive.</p>`;
   if (!connected) return html`<div class="empty big stack" style="align-items:center">
     <${Icon} name="drive" size=${40} />
@@ -119,6 +119,39 @@ export function DriveBrowser({ selectable, selected = [], onToggle, onOpenFile, 
   </div>`;
 }
 
+// Modo sin Google Cloud: la carpeta está compartida con enlace, así que se puede mostrar
+// la vista incrustada oficial de Drive. Para usar un archivo en la app se pega su enlace.
+export function PublicDriveBrowser({ onPick }) {
+  const st = useStore();
+  const drive = st.settings.drive || {};
+  const folders = [{ id: drive.root_folder_id, name: drive.root_folder_name || 'Carpeta principal' }, ...(drive.shortcuts || [])].filter((f) => f.id);
+  const [cur, setCur] = useState(folders[0]);
+  const [view, setView] = useState('grid');
+  const [link, setLink] = useState('');
+  const [picked, setPicked] = useState([]);
+  if (!cur) return html`<p class="empty">Configura la carpeta de Drive en Ajustes → Google Drive.</p>`;
+  function add() {
+    const m = link.match(/(?:\/d\/|[?&]id=)([\w-]{20,})/);
+    if (!m) { toastError(new Error('Pega el enlace de un archivo de Drive (Compartir → Copiar enlace).')); return; }
+    const ref = { source: 'drive', drive_file_id: m[1], name: 'Archivo de Drive ' + m[1].slice(0, 6), web_url: driveView(m[1]), mime_type: null };
+    onPick(ref); setPicked([...picked, ref]); setLink('');
+  }
+  return html`<div class="stack">
+    <div class="toolbar" style="margin:0">
+      <select class="input" value=${cur.id} onChange=${(e) => setCur(folders.find((f) => f.id === e.target.value))}>${folders.map((f) => html`<option value=${f.id}>${f.name}</option>`)}</select>
+      <div class="seg"><button class=${view === 'grid' ? 'on' : ''} onClick=${() => setView('grid')}>Cuadrícula</button><button class=${view === 'list' ? 'on' : ''} onClick=${() => setView('list')}>Lista</button></div>
+      <a class="btn sm ghost" href=${driveFolderUrl(cur.id)} target="_blank" rel="noopener"><${Icon} name="external" size=${15} />Abrir en Drive</a>
+    </div>
+    <iframe key=${cur.id + view} src=${`https://drive.google.com/embeddedfolderview?id=${encodeURIComponent(cur.id)}#${view}`} title=${'Drive · ' + cur.name}
+      style="width:100%;height:min(62vh,560px);border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
+    ${onPick ? html`<div class="card stack" style="padding:12px"><b class="small">Usar un archivo en la app</b>
+      <span class="xs muted">Ábrelo (clic en la cuadrícula) → en Drive, «Compartir» → «Copiar enlace» → pégalo aquí.</span>
+      <div class="row nowrap"><input class="input" placeholder="https://drive.google.com/file/d/…" value=${link} onInput=${(e) => setLink(e.target.value)} /><button class="btn primary" onClick=${add}>Añadir</button></div>
+      ${picked.length ? html`<span class="xs" style="color:var(--verde)">${picked.length} archivo(s) añadidos a la selección</span>` : null}</div>`
+      : html`<p class="xs muted" style="margin:0">Vista de la carpeta compartida. Para guardar un archivo en una categoría o adjuntarlo a una publicación usa «Añadir archivos» → «Enlace» y pega su enlace de Drive. Con el ID de cliente de Google (README) se podrá elegir directamente desde aquí.</p>`}
+  </div>`;
+}
+
 export function DriveSetupHelp() {
   return html`<div class="card stack"><h2><${Icon} name="drive" />Google Drive aún no está conectado</h2>
     <p style="margin:0">Para ver la carpeta de Drive desde la app falta crear un <b>ID de cliente OAuth</b> en Google Cloud y pegarlo en <code>config.js</code> (<code>googleClientId</code>). Los pasos exactos están en el README del proyecto (apartado «Google Drive»).</p>
@@ -131,7 +164,7 @@ export function pickFiles({ title = 'Añadir archivos', multiple = true, default
     openModal((close) => {
       const Comp = () => {
         const st = useStore();
-        const [tab, setTab] = useState(defaultTab || (driveConfigured() ? 'drive' : 'upload'));
+        const [tab, setTab] = useState(defaultTab || 'drive');
         const [sel, setSel] = useState([]);
         const [busy, setBusy] = useState(false);
         const [link, setLink] = useState({ url: '', name: '' });
