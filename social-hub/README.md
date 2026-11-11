@@ -60,6 +60,15 @@ de una vez: no duplica.
 
 ---
 
+## 1.5 Marca, generador y plan editorial
+- **Generador y marca** (menú lateral): plantillas de la casa (programación del finde + canal de WhatsApp, story «Hoy en 5mentarios»,
+  monólogos, tardeo, carrusel de fotos, partido grande / Champions, sorteo y guiones de reel). Se rellenan con datos reales; lo que falta
+  sale como **[POR CONFIRMAR]** y no se inventa nada. Desde ahí se crea la publicación en el calendario con el caption y el brief de diseño.
+- **Guía de marca**: colores, tipografías, logo, estilos aprobados, lo que no gusta, tono, CTAs, hashtags, formatos y plan semanal.
+  Fuente única: `00_TRANSFERENCIA_HEINEKEN_5MENTARIOS.md` (11 nov 2026), resumida en [`app/lib/brand.js`](app/lib/brand.js).
+- **Plan editorial v2** (`app/plan/editorial-plan.js`): programación real de noviembre, diseños ya entregados y ritmo del planificador.
+  Al importarlo sustituye el plan anterior, salvo los elementos que ya se hayan editado, comentado o tengan diseño subido.
+
 ## 2. Google Drive (biblioteca dentro de la app)
 
 La app lee la carpeta **«Grupo 5mentarios»** de Drive con la cuenta de Google de cada persona (permiso de solo

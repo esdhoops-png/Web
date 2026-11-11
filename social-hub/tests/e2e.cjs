@@ -35,16 +35,29 @@ const shot = (p, name) => p.screenshot({ path: `${SHOTS}/${name}.png`, fullPage:
   const mk = await login(desk, 'marketing@test.local', 'marketing');
   const ow = await login(phone, 'propietario@test.local', 'propietario');
 
+  await step('existe un plan v1 anterior (uno sin tocar y otro ya editado)', async () => {
+    const { createClient } = require('@supabase/supabase-js');
+    const c = createClient(process.env.SUPABASE_URL || 'http://127.0.0.1:54321', process.env.SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+    await c.auth.signInWithPassword({ email: 'marketing@test.local', password: 'Prueba-1234' });
+    const { data } = await c.from('posts').insert([{ import_key: 'plan-2026-viejo-intacto', title: 'V1 intacto', kind: 'post', starts_at: '2026-11-20T12:00:00Z' },
+      { import_key: 'plan-2026-viejo-editado', title: 'V1 editado', kind: 'post', starts_at: '2026-11-21T12:00:00Z' }]).select();
+    await new Promise((r) => setTimeout(r, 2500));
+    await c.from('posts').update({ copy: 'cambiado a mano' }).eq('id', data[1].id);
+    global.__v1 = data;
+  });
+
   await step('marketing importa el calendario editorial (11 nov – 31 dic)', async () => {
     await mk.goto(APP + '#/ajustes?tab=editorial');
-    await mk.click('button:has-text("Importar calendario editorial")');
+    await mk.click('button:has-text("Actualizar al plan v2")');
     await mk.click('.modal-foot button.primary:has-text("Importar")');
     await mk.waitForSelector('.toast:has-text("Calendario importado")', { timeout: 20000 });
+    await mk.waitForSelector('.toast:has-text("1 del plan anterior sustituidos")');
+    await mk.waitForSelector('.toast:has-text("1 del plan anterior se conservan")');
   });
 
   await step('el propietario ve el calendario importado en su móvil sin recargar', async () => {
     await ow.goto(APP + '#/calendario?v=list');
-    await ow.waitForSelector('text=Así fue el tardeo de Halloween', { timeout: 10000 });
+    await ow.waitForSelector('text=Así fue Halloween', { timeout: 10000 });
     await shot(ow, 'm-calendario-lista');
   });
 
@@ -56,7 +69,7 @@ const shot = (p, name) => p.screenshot({ path: `${SHOTS}/${name}.png`, fullPage:
 
   await step('arrastrar una publicación a otro día cambia la fecha (y avisa al propietario)', async () => {
     await mk.goto(APP + '#/calendario?v=week&d=2026-11-16');
-    const ev = mk.locator('.week-col .ev', { hasText: 'Tipos de personas' });
+    const ev = mk.locator('.week-col .ev', { hasText: 'Monólogos con Saúl Romero (jue 19)' });
     await ev.waitFor();
     const target = mk.locator('.week-col').nth(3); // jueves 19
     await ev.dragTo(target);
@@ -228,6 +241,24 @@ const shot = (p, name) => p.screenshot({ path: `${SHOTS}/${name}.png`, fullPage:
     await mk.waitForSelector('.kpis');
     await mk.goto(postUrl);
     await mk.waitForSelector('.pill:has-text("Publicado")');
+  });
+
+  await step('generador: monólogos con datos reales → crear en el calendario', async () => {
+    await mk.goto(APP + '#/generador');
+    await mk.click('.chip:has-text("Monólogos")');
+    await mk.waitForSelector('text=Sin estos datos saldrá [POR CONFIRMAR]');
+    await mk.fill('#g-humorista', 'Saúl Romero');
+    await mk.fill('#g-fecha', '2026-11-19');
+    await mk.fill('#g-hora', '21:00');
+    await mk.waitForSelector('text=✓ Datos completos.');
+    await mk.waitForSelector('.copybox:has-text("Saúl Romero viene con su monólogo")');
+    await mk.waitForSelector('.copybox:has-text("jueves, 19 de noviembre · 🕘 21:00")');
+    await shot(mk, 'd-generador');
+    await mk.click('button:has-text("Crear en el calendario")');
+    await mk.click('.modal-foot button.primary:has-text("Crear")');
+    await mk.waitForURL(/#\/publicaciones\/[0-9a-f-]+/);
+    await mk.waitForSelector('.copybox:has-text("reserva en el 627 304 115")');
+    await mk.goto(APP + '#/generador?tab=marca'); await mk.waitForSelector('text=Las 10 reglas'); await shot(mk, 'd-marca');
   });
 
   await step('dashboard final (ordenador y móvil)', async () => {

@@ -127,12 +127,30 @@ function Editorial() {
   const [busy, setBusy] = useState(false);
   const [plan, setPlan] = useState(null);
   useEffect(() => { import('../plan/editorial-plan.js').then((m) => setPlan(m)).catch(toastError); }, []);
-  const imported = st.posts.filter((p) => p.import_key && p.import_key.startsWith('plan-2026'));
+  const imported = st.posts.filter((p) => p.import_key && p.import_key.startsWith('p2-'));
+  const oldPlan = st.posts.filter((p) => p.import_key && plan && p.import_key.startsWith(plan.OLD_PREFIX));
   async function run() {
     if (!plan) return;
-    if (!(await confirmDialog({ title: 'Importar calendario editorial', body: `Se crearán ${plan.PLAN.length} elementos (11 nov – 31 dic 2026) y ${plan.TASKS.length} tareas. Si ya se importaron, no se duplican.`, ok: 'Importar' }))) return;
+    if (!(await confirmDialog({ title: 'Importar calendario editorial', body: `Se crearán ${plan.PLAN.length} elementos (11 nov – 31 dic 2026) y ${plan.TASKS.length} tareas. Si ya se importaron, no se duplican.${oldPlan.length ? ` El plan anterior (${oldPlan.length} elementos) se sustituye, salvo lo que ya hayáis editado, comentado o con diseño subido.` : ''}`, ok: 'Importar' }))) return;
     setBusy(true);
     try {
+      // Sustituir el plan anterior (v1): solo se borra lo que nadie ha tocado (sin cambios, versiones ni comentarios)
+      let replaced = 0, kept = 0;
+      if (oldPlan.length) {
+        const ids = oldPlan.map((p) => p.id);
+        const [vers, coms] = await Promise.all([sb.from('post_versions').select('post_id').in('post_id', ids), sb.from('comments').select('post_id').in('post_id', ids)]);
+        const touched = new Set([...check(vers), ...check(coms)].map((r) => r.post_id));
+        const untouched = oldPlan.filter((p) => !touched.has(p.id) && Math.abs(new Date(p.updated_at) - new Date(p.created_at)) < 2000);
+        kept = oldPlan.length - untouched.length;
+        if (untouched.length) {
+          const uids = untouched.map((p) => p.id);
+          check(await sb.from('tasks').delete().in('post_id', uids).eq('status', 'pending'));
+          check(await sb.from('posts').delete().in('id', uids));
+          replaced = untouched.length;
+        }
+        const oldTasks = st.tasks.filter((t) => plan.OLD_TASK_TITLES.includes(t.title) && t.status === 'pending' && Math.abs(new Date(t.updated_at) - new Date(t.created_at)) < 2000);
+        if (oldTasks.length) check(await sb.from('tasks').delete().in('id', oldTasks.map((t) => t.id)));
+      }
       const mk = st.profiles.find((p) => p.role === 'marketing') || st.me;
       const owner = st.profiles.find((p) => p.role === 'owner') || st.me;
       const who = (r) => (r === 'owner' ? owner.id : mk.id);
@@ -158,15 +176,15 @@ function Editorial() {
         web_url: `https://drive.google.com/file/d/${l.id}/view`, notes: l.notes || null }));
       if (lib.length) check(await sb.from('library_items').upsert(lib, { onConflict: 'drive_file_id,category_id', ignoreDuplicates: true }));
       await reloadAll();
-      toast('Calendario importado', `${inserted.length} elementos nuevos · ${inserted.length ? tasks.length : 0} tareas`);
+      toast('Calendario importado', `${inserted.length} elementos nuevos · ${inserted.length ? tasks.length : 0} tareas${replaced ? ` · ${replaced} del plan anterior sustituidos` : ''}${kept ? ` · ${kept} del plan anterior se conservan porque ya los habíais tocado` : ''}`);
     } catch (e) { toastError(e); } finally { setBusy(false); }
   }
   return html`<section class="card stack"><h2>Calendario editorial 11 nov – 31 dic 2026</h2>
-    <p style="margin:0">Plan preparado a partir del material real de Drive (fotos del tardeo de Halloween, vídeos del bar, plantillas de stories de Champions, carruseles) y del ritmo de publicación que ya usabais: jueves cartel del finde, viernes y sábado stories del día, domingo/lunes carrusel de fotos.</p>
+    <p style="margin:0">Versión 2, hecha con la guía de transferencia de la marca: programación real de noviembre (monólogos, Tardeo Exterior del 14, aniversario del 29), diseños ya entregados, menús de Navidad y el ritmo del planificador: lunes 13:00 fotos · miércoles 12:00 programación + canal de WhatsApp + reel · jueves 19:00 reel Volcán/ambiente · viernes y sábado stories · domingo 17:00 tardeo.</p>
     <p class="small muted" style="margin:0">No se inventan artistas, horarios, partidos ni promociones: todo lo que falta aparece marcado como <b>«Pendiente de confirmar»</b> para completarlo desde cada ficha.</p>
     ${plan ? html`<div class="row"><span class="tag">${plan.PLAN.length} elementos</span><span class="tag">${plan.TASKS.length} tareas</span><span class="tag">${plan.LIBRARY.length} archivos de Drive</span>
-      <span class="tag" style="color:var(--verde)">${imported.length} ya importados</span></div>` : null}
-    <button class="btn primary" style="align-self:flex-start" disabled=${busy || !plan} onClick=${run}>${busy ? 'Importando…' : imported.length ? 'Importar lo que falte' : 'Importar calendario editorial'}</button>
+      <span class="tag" style="color:var(--verde)">${imported.length} ya importados</span>${oldPlan.length ? html`<span class="tag" style="color:var(--ambar)">${oldPlan.length} del plan anterior</span>` : null}</div>` : null}
+    <button class="btn primary" style="align-self:flex-start" disabled=${busy || !plan} onClick=${run}>${busy ? 'Importando…' : oldPlan.length ? 'Actualizar al plan v2' : imported.length ? 'Importar lo que falte' : 'Importar calendario editorial'}</button>
   </section>`;
 }
 

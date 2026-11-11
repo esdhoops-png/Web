@@ -121,7 +121,7 @@ export function PostsView({ query }) {
   const noDate = items.filter((p) => !p.starts_at);
   return html`
     <div class="page-head"><div><h1>Publicaciones</h1><p>${st.posts.length} elementos · ${counts.pending_approval} esperando aprobación</p></div>
-      <div class="actions"><button class="btn primary" onClick=${() => openPostForm({})}><${Icon} name="plus" />Nueva publicación</button></div></div>
+      <div class="actions"><a class="btn" href="#/generador"><${Icon} name="sparkle" />Generar contenido</a><button class="btn primary" onClick=${() => openPostForm({})}><${Icon} name="plus" />Nueva publicación</button></div></div>
     <div class="chips" style="margin-bottom:12px">
       <button class=${'chip' + (!f.status ? ' on' : '')} onClick=${() => setF({ ...f, status: '' })}>Todas</button>
       ${STATUS.map(([k, l]) => html`<button class=${'chip' + (f.status === k ? ' on' : '')} onClick=${() => setF({ ...f, status: f.status === k ? '' : k })}>
