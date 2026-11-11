@@ -93,6 +93,7 @@ create table private.settings (
   key text primary key,
   value text not null
 );
+alter table private.settings enable row level security; -- sin políticas: solo accesible desde funciones internas
 
 -- ---------------------------------------------------------------------
 -- Biblioteca
