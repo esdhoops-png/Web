@@ -1,0 +1,268 @@
+// Generates mockup.html and print-back.html from one shared artwork definition.
+const fs = require('fs');
+const path = require('path');
+const IMG = '../../public/images/';
+const CREAM = '#f2e9df', SAND = '#d9c4b0', CLAY = '#b97a4e', NAVY = '#142a3d', PANEL = '#1f3b56';
+
+const ESD = `<g fill="currentColor"><path d="M305,160 L448,250 V334 L398,304 V282 L356,256 V322 L432,372 L394,404 L356,380 V494 H398 V449 L448,415 V548 H305 Z"/><path d="M481,255 L622,160 V326 L573,305 V257 L530,285 V336 L622,372 V548 H481 V418 L530,439 V494 H573 V407 L481,372 Z"/><path fill-rule="evenodd" d="M657,160 L795,303 L797,548 H657 Z M708,290 L748,326 V495 H708 Z"/></g><g fill="none" stroke="currentColor" stroke-width="25"><path stroke-linejoin="round" d="M318,592 H784 V598 Q776,822 551,902 Q326,822 318,598 Z"/><path d="M551,592 V902"/><path d="M376,744 Q470,640 551,670 Q632,640 726,744"/><path d="M463,592 Q500,645 489,690 Q476,760 432,812"/><path d="M639,592 Q602,645 613,690 Q626,760 670,812"/></g>`;
+const KGM = `<g fill="currentColor"><path d="M50,170 H128 V230 H160 Q172,230 182,224 L268,174 Q273,171 280,171 H365 L254,243 L226,235 L365,328 H280 Q273,328 268,325 L182,274 Q172,268 160,268 H128 V328 H50 Z"/><path d="M405,170 H630 Q672,170 672,205 V215 H592 V205 Q592,197 582,197 H452 Q440,197 440,209 V288 Q440,300 452,300 H582 Q592,300 592,290 V268 H515 L480,240 V237 H658 Q672,237 672,250 V285 Q672,328 628,328 H405 Q362,328 362,285 V213 Q362,170 405,170 Z"/><path d="M702,170 H798 L878,250 L862,222 L912,170 H1007 V328 H930 V215 L882,272 H830 L780,215 V328 H702 Z"/></g>`;
+// logo helpers: uniform scale only (never mirrored / stretched)
+const esd = (x, y, h, color) => `<svg x="${x}" y="${y}" width="${h * 520 / 770}" height="${h}" viewBox="290 150 520 770" color="${color}">${ESD}</svg>`;
+const kgm = (x, y, w, color) => `<svg x="${x}" y="${y}" width="${w}" height="${w * 162 / 961}" viewBox="48 168 961 162" color="${color}">${KGM}</svg>`;
+
+const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">`;
+
+// ---------- BACK ARTWORK, 3000 x 3600 user units ----------
+function art() {
+  const P = [ { x: 230, y: 440, h: 1800 }, { x: 1100, y: 290, h: 2070 }, { x: 1970, y: 440, h: 1800 } ];
+  const W = 800;
+  const label = (p, n, t) => `
+    <text x="${p.x + 44}" y="${p.y + 86}" font-family="Michroma" font-size="34" letter-spacing="6" fill="${CREAM}">${n}</text>
+    <text x="${p.x + W - 44}" y="${p.y + 86}" text-anchor="end" font-family="Inter" font-weight="600" font-size="30" letter-spacing="9" fill="${CREAM}">${t}</text>
+    <rect x="${p.x + 44}" y="${p.y + 112}" width="${W - 88}" height="3" fill="${CREAM}" opacity=".55"/>`;
+  return `
+  <defs>
+    <filter id="duoCar" color-interpolation-filters="sRGB" x="0" y="0" width="1" height="1">
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.122 0.42 0.851 0.949"/>
+        <feFuncG type="table" tableValues="0.231 0.44 0.769 0.914"/>
+        <feFuncB type="table" tableValues="0.337 0.47 0.690 0.875"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="duoPhoto" color-interpolation-filters="sRGB" x="0" y="0" width="1" height="1">
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.070 0.16 0.45 0.80 0.886"/>
+        <feFuncG type="table" tableValues="0.140 0.25 0.45 0.72 0.812"/>
+        <feFuncB type="table" tableValues="0.200 0.34 0.47 0.65 0.741"/>
+      </feComponentTransfer>
+    </filter>
+    <linearGradient id="pFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${NAVY}" stop-opacity="0"/><stop offset=".55" stop-color="${NAVY}" stop-opacity="0"/>
+      <stop offset="1" stop-color="${NAVY}" stop-opacity=".88"/>
+    </linearGradient>
+    <linearGradient id="pTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${NAVY}" stop-opacity=".55"/><stop offset="1" stop-color="${NAVY}" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="${SAND}" stop-opacity=".5"/><stop offset="1" stop-color="${SAND}" stop-opacity="0"/>
+    </radialGradient>
+    ${P.map((p, i) => `<clipPath id="pc${i}"><rect x="${p.x}" y="${p.y}" width="${W}" height="${p.h}"/></clipPath>`).join('')}
+  </defs>
+
+  <!-- brand line -->
+  <g>
+    ${esd(905, 60, 150, CREAM)}
+    <text x="1046" y="160" font-family="Michroma" font-size="62" fill="${CREAM}" textLength="560" lengthAdjust="spacing">ESD HOOPS</text>
+    <text x="1686" y="158" font-family="Inter" font-weight="400" font-size="60" fill="${CLAY}" text-anchor="middle">×</text>
+    ${kgm(1766, 107, 330, CREAM)}
+  </g>
+  <text x="230" y="392" font-family="Instrument Serif" font-style="italic" font-size="132" fill="${SAND}">Two worlds.</text>
+  <text x="2770" y="392" text-anchor="end" font-family="Instrument Serif" font-style="italic" font-size="132" fill="${SAND}">One vision.</text>
+
+  <!-- panel 1 : Torres EVX front detail -->
+  <g clip-path="url(#pc0)">
+    <rect x="${P[0].x}" y="${P[0].y}" width="${W}" height="${P[0].h}" fill="${PANEL}"/>
+    <image href="${IMG}kgm-torres-evx-vx-white.webp" x="-1400" y="600" width="2757" height="1450" filter="url(#duoCar)"/>
+    <rect x="${P[0].x}" y="${P[0].y}" width="${W}" height="${P[0].h}" fill="url(#pFade)"/>
+  </g>
+  <!-- panel 2 : ESD HOOPS shooter -->
+  <g clip-path="url(#pc1)">
+    <rect x="${P[1].x}" y="${P[1].y}" width="${W}" height="${P[1].h}" fill="${PANEL}"/>
+    <image href="${IMG}esd-614.webp" x="764" y="290" width="1656" height="2070" filter="url(#duoPhoto)"/>
+    <rect x="${P[1].x}" y="${P[1].y}" width="${W}" height="260" fill="url(#pTop)"/>
+    <rect x="${P[1].x}" y="${P[1].y}" width="${W}" height="${P[1].h}" fill="url(#pFade)"/>
+  </g>
+  <!-- panel 3 : Actyon Hybrid front detail -->
+  <g clip-path="url(#pc2)">
+    <rect x="${P[2].x}" y="${P[2].y}" width="${W}" height="${P[2].h}" fill="${PANEL}"/>
+    <image href="${IMG}kgm-actyon-hybrid-green.webp" x="1880" y="600" width="2574" height="1450" filter="url(#duoCar)"/>
+    <rect x="${P[2].x}" y="${P[2].y}" width="${W}" height="${P[2].h}" fill="url(#pFade)"/>
+  </g>
+  ${label(P[0], '01', 'TORRES EVX')}
+  ${label(P[1], '02', 'ESD HOOPS 3X3')}
+  ${label(P[2], '03', 'ACTYON HYBRID')}
+  <!-- clay accents -->
+  <rect x="${P[0].x}" y="${P[0].y}" width="${W}" height="14" fill="${CLAY}"/>
+  <rect x="${P[1].x}" y="${P[1].y}" width="${W}" height="14" fill="${CLAY}"/>
+  <rect x="${P[2].x}" y="${P[2].y}" width="${W}" height="14" fill="${CLAY}"/>
+
+  <!-- hero car -->
+  <ellipse cx="1500" cy="3085" rx="1330" ry="70" fill="url(#glow)"/>
+  <image href="${IMG}kgm-torres-evx-white.webp" x="220" y="1830" width="2560" height="1332"/>
+
+  <!-- model name -->
+  <text x="230" y="3408" font-family="Michroma" font-size="252" fill="${CREAM}" textLength="2540" lengthAdjust="spacing">TORRES EVX</text>
+  <rect x="230" y="3462" width="2540" height="4" fill="${CREAM}" opacity=".6"/>
+  <g font-family="Inter" font-weight="500" font-size="34" letter-spacing="8" fill="${CREAM}">
+    <text x="230" y="3540">3X3 <tspan fill="${CLAY}">/</tspan> 5X5 <tspan fill="${CLAY}">/</tspan> PLAYER DEVELOPMENT</text>
+    <text x="1575" y="3540" text-anchor="middle" fill="${CLAY}">DRIVEN BY AMBITION</text>
+    <text x="2776" y="3540" text-anchor="end">OFFICIAL PARTNER CONCEPT</text>
+  </g>`;
+}
+
+// ---------- print-back.html ----------
+const printHtml = `<!doctype html><html><head><meta charset="utf-8"><title>ESD HOOPS x KGM - back print (navy garment)</title>${FONTS}
+<style>html,body{margin:0;background:transparent}svg{display:block}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="3600" viewBox="0 0 3000 3600">${art()}</svg>
+</body></html>`;
+fs.writeFileSync(path.join(__dirname, 'print-back.html'), printHtml);
+
+// ---------- mockup.html ----------
+const BODY = 'M800,465 C720,490 630,525 548,578 L600,900 C592,1150 584,1450 580,1700 L1420,1700 C1416,1450 1408,1150 1400,900 L1452,578 C1370,525 1280,490 1200,465 C1130,500 870,500 800,465 Z';
+const SL_L = 'M548,578 C470,640 400,800 345,1050 C310,1220 280,1380 262,1490 L428,1540 C460,1380 520,1150 600,900 Z';
+const CUFF_L = 'M266,1486 C262,1520 256,1556 250,1584 C296,1606 356,1624 404,1632 C410,1604 420,1568 430,1538 C380,1530 310,1508 266,1486 Z';
+const HEM = 'M582,1694 C584,1730 590,1766 598,1796 C800,1812 1200,1812 1402,1796 C1410,1766 1416,1730 1418,1694 C1200,1706 800,1706 582,1694 Z';
+const HOOD = 'M776,474 C796,424 900,402 1000,402 C1100,402 1204,424 1224,474 C1266,566 1238,684 1000,748 C762,684 734,566 776,474 Z';
+const PS = 0.226, PX = 1000 - 1500 * PS, PY = 778;
+
+const mockHtml = `<!doctype html><html><head><meta charset="utf-8"><title>ESD HOOPS x KGM - hoodie mockup (navy)</title>${FONTS}
+<style>html,body{margin:0;width:2000px;height:2000px;overflow:hidden;background:#b9b4ad}svg{display:block}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2000" height="2000" viewBox="0 0 2000 2000">
+<defs>
+  <radialGradient id="bg" cx=".5" cy=".42" r=".8"><stop offset="0" stop-color="#dedad4"/><stop offset=".55" stop-color="#c4bfb8"/><stop offset="1" stop-color="#96918a"/></radialGradient>
+  <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f8a83" stop-opacity="0"/><stop offset="1" stop-color="#7d7871" stop-opacity=".55"/></linearGradient>
+  <filter id="concrete" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".012 .02" numOctaves="4" seed="7"/><feColorMatrix values="0 0 0 0 .3  0 0 0 0 .29  0 0 0 0 .27  .9 0 0 0 -.32"/></filter>
+  <filter id="grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .55 0 0 0 -.2"/></filter>
+  <filter id="weave" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="1.4 .5" numOctaves="2" seed="11"/><feColorMatrix values="0 0 0 0 .75  0 0 0 0 .85  0 0 0 0 1  .5 0 0 0 -.17"/></filter>
+  <filter id="b4" filterUnits="userSpaceOnUse" x="0" y="0" width="2000" height="2000"><feGaussianBlur stdDeviation="4"/></filter>
+  <filter id="b10" filterUnits="userSpaceOnUse" x="0" y="0" width="2000" height="2000"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="b18" filterUnits="userSpaceOnUse" x="0" y="0" width="2000" height="2000"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="b30" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="34"/></filter>
+  <linearGradient id="gBody" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0c1b29"/><stop offset=".1" stop-color="#132739"/><stop offset=".5" stop-color="#172f44"/><stop offset=".9" stop-color="#122537"/><stop offset="1" stop-color="#0b1826"/>
+  </linearGradient>
+  <linearGradient id="gBodyV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c3850" stop-opacity=".55"/><stop offset=".25" stop-color="#1c3850" stop-opacity="0"/><stop offset=".8" stop-color="#07121d" stop-opacity="0"/><stop offset="1" stop-color="#07121d" stop-opacity=".45"/></linearGradient>
+  <linearGradient id="gSlL" gradientUnits="userSpaceOnUse" x1="330" y1="1040" x2="565" y2="1085"><stop offset="0" stop-color="#0a1724"/><stop offset=".22" stop-color="#142a3d"/><stop offset=".55" stop-color="#183148"/><stop offset=".85" stop-color="#112435"/><stop offset="1" stop-color="#0a1622"/></linearGradient>
+  <linearGradient id="gHood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d3a53"/><stop offset=".35" stop-color="#162d42"/><stop offset="1" stop-color="#0f2132"/></linearGradient>
+  <linearGradient id="gHoodH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#050d16" stop-opacity=".55"/><stop offset=".2" stop-color="#050d16" stop-opacity="0"/><stop offset=".8" stop-color="#050d16" stop-opacity="0"/><stop offset="1" stop-color="#050d16" stop-opacity=".55"/></linearGradient>
+  <pattern id="rib" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#132739"/><rect x="0" width="3.2" height="9" fill="#0a1825"/><rect x="5.6" width="1.4" height="9" fill="#1d3a54"/></pattern>
+  <pattern id="ribL" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(13)"><rect width="9" height="9" fill="#132739"/><rect x="0" width="3.2" height="9" fill="#0a1825"/><rect x="5.6" width="1.4" height="9" fill="#1d3a54"/></pattern>
+  <clipPath id="cBody"><path d="${BODY}"/></clipPath>
+  <clipPath id="cSl"><path d="${SL_L}"/></clipPath>
+  <clipPath id="cHood"><path d="${HOOD}"/></clipPath>
+  <clipPath id="cAll"><path d="${BODY}"/><path d="${SL_L}"/><path d="${SL_L}" transform="translate(2000,0) scale(-1,1)"/><path d="${HOOD}"/></clipPath>
+
+  <!-- one sleeve (left side geometry); the right one reuses the shape mirrored, artwork is drawn separately and never mirrored -->
+  <g id="sleeve">
+    <path d="${SL_L}" fill="url(#gSlL)"/>
+    <g clip-path="url(#cSl)">
+      <path d="M548,578 C470,640 400,800 345,1050 C310,1220 280,1380 262,1490" fill="none" stroke="#04090f" stroke-opacity=".6" stroke-width="26" filter="url(#b10)"/>
+      <path d="M600,900 C520,1150 460,1380 428,1540" fill="none" stroke="#04090f" stroke-opacity=".65" stroke-width="30" filter="url(#b10)"/>
+      <path d="M530,640 C470,760 420,900 385,1060 C355,1200 335,1340 318,1480" fill="none" stroke="#3a6185" stroke-opacity=".28" stroke-width="34" filter="url(#b18)"/>
+    </g>
+    <path d="${CUFF_L}" fill="url(#ribL)"/>
+    <path d="${CUFF_L}" fill="#04090f" opacity=".22"/>
+    <path d="M266,1488 C310,1510 380,1531 430,1539" fill="none" stroke="#04090f" stroke-opacity=".8" stroke-width="5" filter="url(#b4)"/>
+    <path d="M266,1488 C310,1510 380,1531 430,1539" fill="none" stroke="#2a4a68" stroke-opacity=".5" stroke-width="1.2"/>
+  </g>
+  <!-- sleeve fabric folds, drawn above the print -->
+  <g id="sleeveFolds" clip-path="url(#cSl)">
+    <path d="M330,1120 C390,1160 450,1168 520,1150" fill="none" stroke="#04090f" stroke-opacity=".5" stroke-width="16" filter="url(#b10)"/>
+    <path d="M336,1100 C392,1138 452,1146 524,1128" fill="none" stroke="#4a7399" stroke-opacity=".22" stroke-width="10" filter="url(#b10)"/>
+    <path d="M300,1300 C350,1350 410,1370 478,1362" fill="none" stroke="#04090f" stroke-opacity=".5" stroke-width="16" filter="url(#b10)"/>
+    <path d="M306,1282 C356,1330 414,1350 482,1340" fill="none" stroke="#4a7399" stroke-opacity=".2" stroke-width="10" filter="url(#b10)"/>
+    <path d="M276,1430 C330,1466 390,1484 440,1486" fill="none" stroke="#04090f" stroke-opacity=".55" stroke-width="18" filter="url(#b10)"/>
+    <path d="M420,850 C470,900 520,925 590,930" fill="none" stroke="#04090f" stroke-opacity=".4" stroke-width="18" filter="url(#b10)"/>
+    <path d="M548,578 L600,900" fill="none" stroke="#04090f" stroke-opacity=".7" stroke-width="16" filter="url(#b10)"/>
+  </g>
+</defs>
+
+<!-- studio -->
+<rect width="2000" height="2000" fill="url(#bg)"/>
+<rect width="2000" height="2000" filter="url(#concrete)" opacity=".5"/>
+<rect y="1500" width="2000" height="500" fill="url(#floor)"/>
+<rect width="2000" height="2000" filter="url(#grain)" opacity=".07"/>
+
+<!-- cast shadow on the wall -->
+<g filter="url(#b30)" opacity=".5" transform="translate(26,44)" fill="#1b1a18">
+  <path d="${BODY}"/><path d="${SL_L}"/><path d="${SL_L}" transform="translate(2000,0) scale(-1,1)"/><path d="${HOOD}"/><path d="${HEM}"/><path d="${CUFF_L}"/><path d="${CUFF_L}" transform="translate(2000,0) scale(-1,1)"/>
+</g>
+<g filter="url(#b10)" opacity=".45" transform="translate(8,14)" fill="#141312">
+  <path d="${BODY}"/><path d="${SL_L}"/><path d="${SL_L}" transform="translate(2000,0) scale(-1,1)"/><path d="${HEM}"/><path d="${CUFF_L}"/><path d="${CUFF_L}" transform="translate(2000,0) scale(-1,1)"/>
+</g>
+
+<!-- sleeves -->
+<use href="#sleeve"/>
+<use href="#sleeve" transform="translate(2000,0) scale(-1,1)"/>
+
+<!-- body -->
+<path d="${BODY}" fill="url(#gBody)"/>
+<path d="${BODY}" fill="url(#gBodyV)"/>
+<!-- hem rib -->
+<path d="${HEM}" fill="url(#rib)"/>
+<path d="${HEM}" fill="url(#gBody)" opacity=".35"/>
+
+<!-- ===== PRINTS ===== -->
+<g opacity=".97">
+  <svg x="${PX}" y="${PY}" width="${3000 * PS}" height="${3600 * PS}" viewBox="0 0 3000 3600">${art()}</svg>
+  <!-- left sleeve: ESD HOOPS -->
+  <g transform="translate(497,812) rotate(102.6)">
+    <text x="0" y="27" font-family="Michroma" font-size="76" fill="${CREAM}" stroke="${CREAM}" stroke-width="1.6" textLength="640" lengthAdjust="spacing">ESD HOOPS</text>
+  </g>
+  <!-- right sleeve: KGM wordmark (rotated only, not mirrored) -->
+  <g transform="translate(1482,870) rotate(77.4)">
+    ${kgm(0, -44, 520, CREAM)}
+  </g>
+</g>
+
+<!-- fabric folds over body + print -->
+<g clip-path="url(#cBody)">
+  <path d="M600,900 C640,1000 700,1090 790,1150" fill="none" stroke="#04090f" stroke-opacity=".42" stroke-width="26" filter="url(#b18)"/>
+  <path d="M1400,900 C1360,1000 1300,1090 1210,1150" fill="none" stroke="#04090f" stroke-opacity=".42" stroke-width="26" filter="url(#b18)"/>
+  <path d="M620,930 C665,1020 720,1090 800,1130" fill="none" stroke="#5a86ad" stroke-opacity=".14" stroke-width="16" filter="url(#b10)"/>
+  <path d="M1380,930 C1335,1020 1280,1090 1200,1130" fill="none" stroke="#5a86ad" stroke-opacity=".14" stroke-width="16" filter="url(#b10)"/>
+  <path d="M700,1700 C690,1560 720,1440 700,1300" fill="none" stroke="#04090f" stroke-opacity=".3" stroke-width="30" filter="url(#b18)"/>
+  <path d="M1300,1700 C1310,1560 1280,1440 1300,1300" fill="none" stroke="#04090f" stroke-opacity=".3" stroke-width="30" filter="url(#b18)"/>
+  <path d="M880,1700 C870,1640 890,1600 880,1540" fill="none" stroke="#04090f" stroke-opacity=".28" stroke-width="18" filter="url(#b10)"/>
+  <path d="M1120,1700 C1130,1640 1110,1600 1120,1540" fill="none" stroke="#04090f" stroke-opacity=".28" stroke-width="18" filter="url(#b10)"/>
+  <path d="M1000,1700 C996,1660 1004,1630 1000,1600" fill="none" stroke="#04090f" stroke-opacity=".2" stroke-width="16" filter="url(#b10)"/>
+  <path d="M580,1690 C800,1702 1200,1702 1420,1690" fill="none" stroke="#04090f" stroke-opacity=".7" stroke-width="16" filter="url(#b10)"/>
+  <path d="M548,578 C640,540 760,560 860,600" fill="none" stroke="#5a86ad" stroke-opacity=".18" stroke-width="30" filter="url(#b18)"/>
+  <path d="M1452,578 C1360,540 1240,560 1140,600" fill="none" stroke="#5a86ad" stroke-opacity=".18" stroke-width="30" filter="url(#b18)"/>
+  <path d="M612,1000 C680,1180 700,1380 640,1600" fill="none" stroke="#04090f" stroke-opacity=".38" stroke-width="34" filter="url(#b18)"/>
+  <path d="M1388,1000 C1320,1180 1300,1380 1360,1600" fill="none" stroke="#04090f" stroke-opacity=".38" stroke-width="34" filter="url(#b18)"/>
+  <path d="M650,1010 C712,1190 730,1380 676,1590" fill="none" stroke="#5a86ad" stroke-opacity=".16" stroke-width="22" filter="url(#b18)"/>
+  <path d="M1350,1010 C1288,1190 1270,1380 1324,1590" fill="none" stroke="#5a86ad" stroke-opacity=".16" stroke-width="22" filter="url(#b18)"/>
+  <path d="M640,1640 C760,1612 860,1660 960,1630 C1080,1600 1200,1662 1360,1636" fill="none" stroke="#04090f" stroke-opacity=".32" stroke-width="20" filter="url(#b10)"/>
+  <path d="M640,1618 C760,1590 860,1638 960,1608 C1080,1578 1200,1640 1360,1614" fill="none" stroke="#5a86ad" stroke-opacity=".13" stroke-width="14" filter="url(#b10)"/>
+  <path d="M760,640 C820,720 900,770 1000,790 C1100,770 1180,720 1240,640" fill="none" stroke="#5a86ad" stroke-opacity=".10" stroke-width="30" filter="url(#b18)"/>
+  <!-- armhole seams -->
+  <path d="M548,578 L600,900" fill="none" stroke="#04090f" stroke-opacity=".75" stroke-width="12" filter="url(#b4)"/>
+  <path d="M1452,578 L1400,900" fill="none" stroke="#04090f" stroke-opacity=".75" stroke-width="12" filter="url(#b4)"/>
+  <!-- hood shadow on the back -->
+  <path d="${HOOD}" fill="#03070c" opacity=".7" transform="translate(0,22)" filter="url(#b18)"/>
+</g>
+<path d="M556,584 L606,898" fill="none" stroke="#2c4d6c" stroke-opacity=".55" stroke-width="1.3" stroke-dasharray="5 3"/>
+<path d="M1444,584 L1394,898" fill="none" stroke="#2c4d6c" stroke-opacity=".55" stroke-width="1.3" stroke-dasharray="5 3"/>
+<path d="M582,1694 C800,1706 1200,1706 1418,1694" fill="none" stroke="#2c4d6c" stroke-opacity=".5" stroke-width="1.3"/>
+<use href="#sleeveFolds"/>
+<use href="#sleeveFolds" transform="translate(2000,0) scale(-1,1)"/>
+
+<!-- hood -->
+<path d="${HOOD}" fill="url(#gHood)"/>
+<path d="${HOOD}" fill="url(#gHoodH)"/>
+<g clip-path="url(#cHood)">
+  <path d="M776,474 C796,424 900,402 1000,402 C1100,402 1204,424 1224,474" fill="none" stroke="#4f7ba3" stroke-opacity=".35" stroke-width="26" filter="url(#b10)"/>
+  <path d="M790,500 C860,470 940,458 1000,458 C1060,458 1140,470 1210,500" fill="none" stroke="#03070c" stroke-opacity=".5" stroke-width="14" filter="url(#b10)"/>
+  <path d="M762,600 C800,690 900,730 1000,748 C1100,730 1200,690 1238,600" fill="none" stroke="#03070c" stroke-opacity=".6" stroke-width="40" filter="url(#b18)"/>
+  <ellipse cx="1000" cy="560" rx="120" ry="150" fill="#3f6a92" opacity=".22" filter="url(#b18)"/>
+  <!-- three-panel hood seams -->
+  <path d="M902,408 C894,500 890,620 930,726" fill="none" stroke="#03070c" stroke-opacity=".8" stroke-width="7" filter="url(#b4)"/>
+  <path d="M1098,408 C1106,500 1110,620 1070,726" fill="none" stroke="#03070c" stroke-opacity=".8" stroke-width="7" filter="url(#b4)"/>
+  <path d="M906,408 C898,500 894,620 934,726" fill="none" stroke="#35597b" stroke-opacity=".7" stroke-width="1.3" stroke-dasharray="5 3"/>
+  <path d="M1094,408 C1102,500 1106,620 1066,726" fill="none" stroke="#35597b" stroke-opacity=".7" stroke-width="1.3" stroke-dasharray="5 3"/>
+</g>
+<!-- crest on the hood -->
+${esd(1000 - 150 * 520 / 770 / 2, 492, 150, CREAM)}
+<path d="${HOOD}" fill="none" stroke="#0a1622" stroke-width="2"/>
+
+<!-- fabric texture over everything -->
+<g clip-path="url(#cAll)"><rect width="2000" height="2000" filter="url(#weave)" opacity=".16"/></g>
+<!-- outlines -->
+<path d="${BODY}" fill="none" stroke="#08121c" stroke-opacity=".5" stroke-width="1.5"/>
+</svg></body></html>`;
+fs.writeFileSync(path.join(__dirname, 'mockup.html'), mockHtml);
+console.log('built');
