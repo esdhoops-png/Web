@@ -3,7 +3,7 @@
 // políticas RLS de la base de datos). Nunca pongas aquí la "service_role key".
 window.HUB_CONFIG = {
   // Supabase → Project Settings → API
-  supabaseUrl: 'https://TU-PROYECTO.supabase.co',
+  supabaseUrl: 'https://uerdflkpksdnmxpjawwm.supabase.co',
   supabaseAnonKey: 'TU-ANON-KEY',
 
   // Google Cloud → APIs y servicios → Credenciales → ID de cliente OAuth (aplicación web)
