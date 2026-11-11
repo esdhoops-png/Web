@@ -1,5 +1,6 @@
 import { Nav } from "@/components/Nav";
 import { Intro } from "@/components/Intro";
+import { Cursor } from "@/components/Cursor";
 import { Hero } from "@/components/sections/Hero";
 import { Opportunity } from "@/components/sections/Opportunity";
 import { Difference } from "@/components/sections/Difference";
@@ -24,6 +25,7 @@ export default function Page() {
         Saltar al contenido
       </a>
       <Intro />
+      <Cursor />
       <Nav />
       <main>
         <Hero />

@@ -151,15 +151,34 @@ html[data-reduced-motion="true"] *::after {
   to { transform: translateX(-50%); }
 }
 
-/* Opening curtain: logos on navy, lifted by CSS alone so it never depends on scripts. */
-@keyframes intro-out {
-  to { clip-path: inset(0 0 100% 0); visibility: hidden; }
+/* Opening sequence: counter to 100, then two shutters part. CSS only. */
+@property --intro-n {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
 }
-@keyframes intro-logo {
-  0% { opacity: 0; transform: translateY(14px); }
-  35%, 80% { opacity: 1; transform: none; }
-  100% { opacity: 0; transform: translateY(-10px); }
+.intro { animation: intro-hide 0s linear 2.45s forwards; }
+.intro-half { animation: intro-split 0.95s cubic-bezier(0.76, 0, 0.24, 1) 1.5s forwards; }
+.intro-bottom { --dir: 1; }
+.intro-top { --dir: -1; }
+.intro-core { animation: intro-core 1.55s ease both; }
+.intro-logo { animation: intro-logo 1.1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.intro-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform-origin: left;
+  animation: intro-bar 1.25s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
 }
+.intro-count { counter-reset: n var(--intro-n); animation: intro-count 1.25s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both; }
+.intro-count::after { content: counter(n); }
+@keyframes intro-count { from { --intro-n: 0; } to { --intro-n: 100; } }
+@keyframes intro-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes intro-logo { from { opacity: 0; transform: translateY(18px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes intro-core { 0%, 88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes intro-split { to { transform: translateY(calc(var(--dir) * 101%)); } }
+@keyframes intro-hide { to { visibility: hidden; } }
 
 /* Film grain over the whole page for a photographic finish. */
 body::after {

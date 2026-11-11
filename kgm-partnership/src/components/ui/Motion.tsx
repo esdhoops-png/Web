@@ -9,13 +9,17 @@ import { palette, THEME } from "@/content/theme";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Headline that reveals word by word from behind a mask. */
+/**
+ * Headline that builds itself letter by letter: every character rises from behind
+ * a mask with a slight rotation, staggered across the line. Words never break.
+ * (Kept under the name WordsReveal so every headline on the site uses it.)
+ */
 export function WordsReveal({
   text,
   as: Tag = "h2",
   className = "",
   delay = 0,
-  stagger = 0.06,
+  stagger = 0.022,
 }: {
   text: string;
   as?: ElementType;
@@ -24,20 +28,27 @@ export function WordsReveal({
   stagger?: number;
 }) {
   const words = text.split(" ");
+  let n = 0;
   return (
     <Tag className={className} aria-label={text}>
-      {words.map((w, i) => (
-        <span key={i} aria-hidden className="inline-block overflow-hidden pb-[0.08em] align-top">
-          <motion.span
-            className="inline-block will-change-transform"
-            initial={{ y: "105%" }}
-            whileInView={{ y: "0%" }}
-            viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-            transition={{ duration: 1.1, ease: EASE, delay: delay + i * stagger }}
-          >
-            {w}
-            {i < words.length - 1 ? " " : ""}
-          </motion.span>
+      {words.map((w, wi) => (
+        <span key={wi} aria-hidden className="inline-block overflow-hidden pb-[0.12em] align-top whitespace-nowrap [margin-bottom:-0.04em]">
+          {Array.from(w).map((c, ci) => {
+            const i = n++;
+            return (
+              <motion.span
+                key={ci}
+                className="inline-block origin-bottom-left will-change-transform"
+                initial={{ y: "115%", rotate: 9, opacity: 0 }}
+                whileInView={{ y: "0%", rotate: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "0px 0px -12% 0px" }}
+                transition={{ duration: 1.05, ease: EASE, delay: delay + i * stagger, opacity: { duration: 0.4, delay: delay + i * stagger } }}
+              >
+                {c}
+              </motion.span>
+            );
+          })}
+          {wi < words.length - 1 ? "\u00A0" : ""}
         </span>
       ))}
     </Tag>
