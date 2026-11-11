@@ -4,7 +4,7 @@
 window.HUB_CONFIG = {
   // Supabase → Project Settings → API
   supabaseUrl: 'https://uerdflkpksdnmxpjawwm.supabase.co',
-  supabaseAnonKey: 'TU-ANON-KEY',
+  supabaseAnonKey: 'sb_publishable_SnUSIq0P4w-DA5w902pQAA_Dv7cQAV7',
 
   // Google Cloud → APIs y servicios → Credenciales → ID de cliente OAuth (aplicación web)
   googleClientId: '',
