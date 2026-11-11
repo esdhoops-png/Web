@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, type MotionValue } from "framer-motion
 import { useRef, type ElementType, type ReactNode } from "react";
 import type { Img } from "@/content/site";
 import { useMotionPrefs } from "@/components/Providers";
+import { palette } from "@/content/theme";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -144,9 +145,9 @@ export function LetterFill({ text, className = "" }: { text: string; className?:
 function Letter({ c, i, n, progress, reduced }: { c: string; i: number; n: number; progress: MotionValue<number>; reduced: boolean }) {
   const a = i / n;
   const b = (i + 1) / n;
-  const color = useTransform(progress, [a - 0.001, a, b, Math.min(1, b + 0.12)], ["#2b4a66", "#b97a4e", "#b97a4e", "#f2e9df"]);
+  const color = useTransform(progress, [a - 0.001, a, b, Math.min(1, b + 0.12)], [palette.dim, palette.accent, palette.accent, palette.fg]);
   return (
-    <motion.span aria-hidden style={{ color: reduced ? "#f2e9df" : color }}>
+    <motion.span aria-hidden style={{ color: reduced ? palette.fg : color }}>
       {c}
     </motion.span>
   );

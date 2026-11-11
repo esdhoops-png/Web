@@ -5,6 +5,7 @@ import "@fontsource-variable/inter";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { THEME, palette } from "@/content/theme";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const allowIndexing = process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
@@ -24,13 +25,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d1e2c",
-  colorScheme: "dark",
+  themeColor: palette.bg,
+  colorScheme: THEME === "sand" ? "light" : "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es" data-theme={THEME} suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>

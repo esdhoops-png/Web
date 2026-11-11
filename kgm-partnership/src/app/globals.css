@@ -10,10 +10,32 @@
   --color-tan: #d9c4b0;
   --color-navy-logo: #172b48;
 
+  /* Fixed tones: identical to the themed ones in the navy theme, but they do NOT
+     flip in the sand theme. Use them for scenes that must stay dark (photo-backed
+     moments, vehicle stages) and for the text that sits on them. */
+  --color-night: #0d1e2c;
+  --color-night-2: #142a3d;
+  --color-day: #f2e9df;
+  --color-day-muted: #c3b3a3;
+  --color-ember: #b97a4e;
+  --color-day-tan: #d9c4b0;
+
   --font-serif: "Instrument Serif", "Times New Roman", serif;
   --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, sans-serif;
 
   --ease-cine: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Sand theme: the tan of the ESD HOOPS logo as the ground, navy as the ink. */
+html[data-theme="sand"] {
+  --color-ink: #d9c4b0;
+  --color-charcoal: #e4d4c3;
+  --color-graphite: #ccb59f;
+  --color-bone: #142a3d;
+  --color-silver: #4c5b68;
+  --color-signal: #8a4a22;
+  --color-tan: #172b48;
+  color-scheme: light;
 }
 
 @layer base {
@@ -55,7 +77,7 @@
     letter-spacing: -0.015em;
   }
   .hairline {
-    border-color: rgb(243 241 236 / 0.12);
+    border-color: color-mix(in srgb, var(--color-bone) 14%, transparent);
   }
   .grain::after {
     content: "";

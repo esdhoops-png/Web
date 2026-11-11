@@ -49,7 +49,7 @@ export function StageTile({ vehicle, className = "", sizes = "40vw", caption }: 
       <div className="absolute inset-x-[7%] bottom-[9%]">
         <VehicleCutout vehicle={vehicle} sizes={sizes} />
       </div>
-      {caption && <span className="label absolute top-3 left-3 text-[0.55rem] text-bone/80">{caption}</span>}
+      {caption && <span className="label absolute top-3 left-3 text-[0.55rem] text-day/80">{caption}</span>}
     </div>
   );
 }
