@@ -212,6 +212,86 @@ export const TEMPLATES = [
       ], C.negro)];
     }
   },
+  // ---------------------------------------------------------------- Calendario del mes (portada del carrusel mensual)
+  {
+    key: 'mes', name: 'Calendario del mes (portada del carrusel)', category: 'carruseles',
+    basedOn: { kind: 'original', files: ['nov-01-portada.psd'], note: 'Recreada a partir de la portada del carrusel de noviembre (fondo verde, rejilla LUN–DOM, casillas negras para eventos y claras para noches con música).' },
+    formats: ['post', 'story', 'square'], defaultFormat: 'post',
+    fields: [
+      { k: 'mes', label: 'Mes', def: 'DICIEMBRE' }, { k: 'anio', label: 'Año', def: '2026' }, { k: 'mesNum', label: 'Nº de mes (1–12)', def: '12' },
+      { k: 'dias', label: 'Días (una línea: «4 · APOLO · + DJ RUVEN» = noche · «24 · TARDEO · NAVIDAD · E» = evento en negro)', def: '[DÍA] · [ARTISTA] · + DJ [NOMBRE]', multiline: true },
+      { k: 'pie', label: 'Llamada del pie', def: 'DESLIZA →' }
+    ],
+    images: [{ k: 'fotos', label: 'Fotos recortadas de artistas (opcional, parte baja)' }],
+    build({ W, H, d }) {
+      const s = W / 1080, CV = '#0B8A3E', CO = '#0A7535', CN = '#0B0B0B', CC = '#F3F3F1';
+      const y0 = H > 1500 ? 180 * s : 0, fh = 70 * s;
+      const year = +d.anio || 2026, mon = Math.min(12, Math.max(1, +d.mesNum || 12)) - 1;
+      const first = (new Date(Date.UTC(year, mon, 1)).getUTCDay() + 6) % 7, days = new Date(Date.UTC(year, mon + 1, 0)).getUTCDate();
+      const info = {}; for (const r of rowsOf(d.dias)) { const p = r.split('·').map((x) => x.trim()); const n = parseInt(p[0], 10); if (n >= 1 && n <= 31) { const ev = (p[p.length - 1] || '').toUpperCase() === 'E'; info[n] = { t: p[1] || '', sub: (ev ? p.slice(2, -1) : p.slice(2)).join(' · '), ev }; } }
+      const cw = 129 * s, step = 138.5 * s, rh = 102 * s, ch = 92 * s, gx = 60 * s;
+      const titleRow = first >= 4; const rowY = (r) => y0 + (titleRow ? 226 * s : 328 * s) + r * rh;
+      const cells = [];
+      for (let n = 1; n <= days; n++) {
+        const idx = first + n - 1, col = idx % 7, row = Math.floor(idx / 7), x = gx + col * step, y = rowY(row), it = info[n];
+        const bg = !it ? CO : it.ev ? CN : CC, fg = it && !it.ev ? CN : '#FFFFFF';
+        cells.push(L('rect', { name: `Casilla ${n}`, x, y, w: cw, h: ch, fill: bg }));
+        if (it) {
+          cells.push(text({ name: `Día ${n} · título`, bind: `dias:${n}:t`, x: x + 9 * s, y: y + 9 * s, w: cw - 18 * s, h: 46 * s, text: it.t, size: Math.round(23 * s), lineHeight: 0.98, fit: true, uppercase: true, color: it.ev ? '#2BB061' : CN }));
+          cells.push(text({ name: `Día ${n} · detalle`, x: x + 9 * s, y: y + 60 * s, w: cw - 48 * s, h: 26 * s, text: it.sub, font: 'Barlow Condensed', weight: 600, size: Math.round(14 * s), lineHeight: 1, fit: true, uppercase: true, color: fg }));
+        }
+        cells.push(text({ name: `Número ${n}`, x: x + cw - 46 * s, y: y + ch - 34 * s, w: 38 * s, h: 28 * s, text: String(n), size: Math.round(24 * s), align: 'right', color: it ? fg : 'rgba(0,0,0,.35)' }));
+      }
+      const wd = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+      return [page([
+        logo(W / 2 - 71 * s, y0 + 22 * s, 142 * s, LOGO_W),
+        ...wd.map((t, i) => text({ name: `Cabecera ${t}`, x: gx + i * step, y: y0 + 188 * s, w: cw, h: 28 * s, text: t, font: 'Barlow Condensed', weight: 600, size: Math.round(24 * s), align: 'center' })),
+        text({ name: 'Mes', bind: 'mes', x: 60 * s, y: y0 + 232 * s, w: (titleRow ? first * step - 12 * s : W - 120 * s), h: 88 * s, text: d.mes, size: Math.round(108 * s), fit: true, uppercase: true, lineHeight: 0.9 }),
+        ...cells,
+        L('image', { name: 'Fotos de artistas', bind: 'img:fotos', x: 0, y: H * 0.56, w: W, h: H * 0.44 - fh, fit: 'contain', placeholder: false }),
+        L('rect', { name: 'Pie', x: 0, y: H - fh, w: W, h: fh, fill: CC }),
+        text({ name: 'Pie · texto', x: 60 * s, y: H - fh + 24 * s, w: W * 0.6, h: 26 * s, text: 'HEINEKEN 5MENTARIOS · ARUCAS', font: 'Barlow Condensed', weight: 900, size: Math.round(24 * s), letterSpacing: 4 * s, color: CN }),
+        text({ name: 'Desliza', bind: 'pie', x: W * 0.55, y: H - fh + 24 * s, w: W * 0.45 - 60 * s, h: 26 * s, text: d.pie, font: 'Barlow Condensed', weight: 900, size: Math.round(24 * s), letterSpacing: 4 * s, color: CV, align: 'right' })
+      ], CV)];
+    }
+  },
+  // ---------------------------------------------------------------- Fin de semana · dos días (slide del carrusel)
+  {
+    key: 'finde', name: 'Fin de semana · dos días (slide del carrusel)', category: 'carruseles',
+    basedOn: { kind: 'original', files: ['nov-06-20-y-21.psd', 'nov-05-13-y-14.psd', 'slide 07/09 (27–28 nov)', 'slide 02/07 (6–7 nov)'], note: 'Recreada a partir de las slides de noviembre: dos mitades (verde/clara o negra/verde), día espaciado, nombre en Anton, pastilla LIVE rellena y pastilla DJ de contorno.' },
+    formats: ['post', 'story'], defaultFormat: 'post',
+    fields: [
+      { k: 'estilo', label: 'Estilo (A = verde arriba y claro abajo · B = negro arriba y verde abajo)', def: 'B' }, { k: 'contador', label: 'Contador (p. ej. 06/09)', def: '' },
+      { k: 'dia1', label: 'Día 1 (p. ej. VIERNES 20.11)', def: 'VIERNES [DD.MM]' }, { k: 'artista1', label: 'Artista día 1', def: '[ARTISTA]' }, { k: 'live1', label: 'Pastilla 1 · día 1', def: 'LIVE · 22:30' }, { k: 'dj1', label: 'Pastilla 2 · día 1', def: 'DJ [NOMBRE] · 00:00' },
+      { k: 'dia2', label: 'Día 2', def: 'SÁBADO [DD.MM]' }, { k: 'artista2', label: 'Artista día 2', def: '[ARTISTA]' }, { k: 'live2', label: 'Pastilla 1 · día 2', def: 'LIVE · 22:30' }, { k: 'dj2', label: 'Pastilla 2 · día 2', def: 'DJ [NOMBRE] · 00:00' }
+    ],
+    images: [{ k: 'foto1', label: 'Foto recortada · artista día 1' }, { k: 'foto2', label: 'Foto recortada · artista día 2' }],
+    build({ W, H, d }) {
+      const s = W / 1080, B = String(d.estilo || 'B').trim().toUpperCase() !== 'A', hh = H / 2;
+      const P = B ? [{ bg: '#0B0B0B', day: '#2BB061', name: '#FFFFFF', f1: '#2BB061', t1: '#0B0B0B', o: '#FFFFFF' }, { bg: '#0B8A3E', day: '#0B0B0B', name: '#FFFFFF', f1: '#0B0B0B', t1: '#FFFFFF', o: '#0B0B0B' }]
+        : [{ bg: '#0B8A3E', day: '#0B0B0B', name: '#0B0B0B', f1: '#0B0B0B', t1: '#FFFFFF', o: '#0B0B0B' }, { bg: '#F3F3F1', day: '#0B8A3E', name: '#0B0B0B', f1: '#0B8A3E', t1: '#FFFFFF', o: '#0B0B0B' }];
+      const pw = (t) => Math.min(420 * s, (String(t || '').length * 17 + 70) * s);
+      const half = (i) => {
+        const c = P[i], y0 = i * hh, n = i + 1, a = d[`artista${n}`], base = y0 + (hh - 675 * s) / 2 + (i === 0 ? 300 : 70) * s;
+        return [
+          L('rect', { name: `Bloque día ${n}`, x: 0, y: y0, w: W, h: hh, fill: c.bg }),
+          L('image', { name: `Foto día ${n}`, bind: `img:foto${n}`, x: W * 0.42, y: y0, w: W * 0.58, h: hh, fit: 'contain', placeholder: false }),
+          text({ name: `Día ${n}`, bind: `dia${n}`, x: 64 * s, y: base, w: W * 0.6, h: 40 * s, text: d[`dia${n}`], font: 'Barlow Condensed', weight: 900, size: Math.round(36 * s), letterSpacing: 9 * s, color: c.day, uppercase: true }),
+          text({ name: `Artista ${n}`, bind: `artista${n}`, x: 62 * s, y: base + 50 * s, w: W * 0.56, h: 190 * s, text: a, size: Math.round(150 * s), lineHeight: 0.92, fit: true, uppercase: true, color: c.name, valign: 'middle' }),
+          L('pill', { name: `Pastilla LIVE ${n}`, bind: `live${n}`, x: 64 * s, y: base + 256 * s, w: pw(d[`live${n}`]), h: 62 * s, fill: c.f1, text: d[`live${n}`], font: 'Barlow Condensed', weight: 900, size: Math.round(30 * s), letterSpacing: 2 * s, color: c.t1 }),
+          L('pill', { name: `Pastilla DJ ${n}`, bind: `dj${n}`, x: 64 * s + pw(d[`live${n}`]) + 16 * s, y: base + 256 * s, w: pw(d[`dj${n}`]), h: 62 * s, fill: 'rgba(0,0,0,0)', stroke: c.o, strokeWidth: 3 * s, text: d[`dj${n}`], font: 'Barlow Condensed', weight: 900, size: Math.round(30 * s), letterSpacing: 2 * s, color: c.o })
+        ];
+      };
+      const ft = P[1].day;
+      return [page([
+        ...half(0), ...half(1),
+        logo(69 * s, 54 * s, 103 * s, LOGO_W),
+        ...(d.contador ? [text({ name: 'Contador', bind: 'contador', x: 200 * s, y: 92 * s, w: 140 * s, h: 28 * s, text: d.contador, font: 'Barlow Condensed', weight: 900, size: Math.round(26 * s), letterSpacing: 3 * s, color: P[0].day })] : []),
+        text({ name: 'Pie · texto', x: 64 * s, y: H - 74 * s, w: W * 0.6, h: 26 * s, text: 'HEINEKEN 5MENTARIOS · ARUCAS', font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: B ? '#0B0B0B' : '#6B6B6B', opacity: B ? 0.75 : 1 }),
+        text({ name: 'Desliza', x: W * 0.6, y: H - 74 * s, w: W * 0.4 - 70 * s, h: 26 * s, text: 'DESLIZA →', font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: B ? '#0B0B0B' : '#0B8A3E', align: 'right' })
+      ], P[0].bg)];
+    }
+  },
   // ---------------------------------------------------------------- Portada carrusel de fotos
   {
     key: 'fotos-portada', name: 'Portada «Así fue…» (carrusel de fotos)', category: 'carruseles',

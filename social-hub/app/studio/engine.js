@@ -7,7 +7,7 @@
 //   line      color, width
 //   text      text, font, size, weight, color, align, valign, letterSpacing, lineHeight, uppercase,
 //             strokeColor, strokeWidth, glowColor, glowBlur, fit (encoge para caber)
-//   pill      fill, text, font, size, weight, color, letterSpacing, radius
+//   pill      fill, text, font, size, weight, color, letterSpacing, radius, stroke, strokeWidth (pastilla de contorno)
 //   image     ref {kind:'storage'|'asset'|'url'|'data', path|url}, fit 'cover'|'contain', grayscale, brightness,
 //             frame (px de marco tipo polaroid), frameColor, shadow, placeholder (texto si no hay foto)
 //   repeat    text, font, size, color, rows, gap, outlineEvery (filas alternas solo contorno), strokeColor
@@ -182,6 +182,7 @@ function drawLayer(ctx, l) {
     case 'text': drawText(ctx, l); break;
     case 'pill': {
       ctx.fillStyle = l.fill || '#2BB061'; roundRect(ctx, 0, 0, l.w, l.h, l.radius ?? l.h / 2); ctx.fill();
+      if (l.stroke && l.strokeWidth) { ctx.strokeStyle = l.stroke; ctx.lineWidth = l.strokeWidth; roundRect(ctx, l.strokeWidth / 2, l.strokeWidth / 2, l.w - l.strokeWidth, l.h - l.strokeWidth, (l.radius ?? l.h / 2) - l.strokeWidth / 2); ctx.stroke(); }
       drawText(ctx, { ...l, x: 0, y: 0, align: 'center', valign: 'middle', fit: true, color: l.color || '#04140A', glowColor: null }); break;
     }
     case 'image': drawImage(ctx, l); break;

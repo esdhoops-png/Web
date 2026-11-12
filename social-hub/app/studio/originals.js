@@ -52,7 +52,8 @@ export const ORIGINALS = [
   }
 ];
 
-// Recibidos en el chat el 12 nov 2026 (archivos reales, aún NO subidos a la app ni a Drive)
+// Recibidos en el chat el 12 nov 2026 (archivos reales, aún NO subidos a la app ni a Drive).
+// AVISO sábado 21: «Son Aldea» (programación del 12 nov y Sin título-1), «Son Diferente» (nov-06 y calendario) o «Directo» (calendario de Sin título-1). Pendiente de confirmar.
 export const RECEIVED = [
   { name: 'Story «Faltan 2 días» · Tardeo Exterior Halloween', format: 'Imagen 1080×1920 (plana)', flat: true,
     composition: 'Foto oscura de fondo, logo arriba centrado, «FALTAN» verde muy espaciado, «2 DÍAS» gigante blanco con halo verde, banda verde girada «TARDEO EXTERIOR», «HALLOWEEN» gigante, fecha manuscrita verde «Sábado 14 · Noviembre», «DESDE LAS 16:00», filas hora verde / artista blanco a la derecha con líneas verdes finas, pie ORGANIZA (Ayto. de Arucas, cajita blanca) / COLABORAN (5mentarios, COA).',
@@ -62,7 +63,24 @@ export const RECEIVED = [
     reusable: 'Ritmo de escenas para el módulo de vídeo.', post: 'p2-1111-semana' },
   { name: 'Reel «Así fue Halloween → ¿te vas a perder el Tardeo Exterior?»', format: 'Vídeo HEVC 1080×1920 · 23,8 s', flat: true,
     composition: 'Planos del bar en Halloween con logo arriba, «Así fue…» manuscrito, «HALLOWEEN en 5mentarios», «¿Y AHORA TE VAS A PERDER… EL TARDEO EXTERIOR?» y cartel final con line-up y colaboradores.',
-    reusable: 'Referencia de reel de recuerdo + llamada al siguiente evento.', post: 'p2-1112-reel-halloween' }
+    reusable: 'Referencia de reel de recuerdo + llamada al siguiente evento.', post: 'p2-1112-reel-halloween' },
+  { name: 'nov-01-portada.psd · Calendario de noviembre (portada del carrusel)', format: 'PSD 1080×1350 · 119 capas con nombre (rasterizadas)', flat: false,
+    composition: 'Fondo verde #0B8A3E, logo centrado, cabecera LUN–DOM, «NOVIEMBRE» en Anton blanco, casillas 129×92: verde oscuro vacías, negras para Champions/monólogos/tardeos y claras para noches con música; pie claro «HEINEKEN 5MENTARIOS · ARUCAS / DESLIZA →». Versión final con fotos recortadas de artistas abajo.',
+    reusable: 'Recreada como plantilla «Calendario del mes»; usada para diciembre. Las capas tienen nombre, pero los textos están rasterizados: se pueden mover u ocultar en Photoshop, no reescribir.', post: 'p2-1201-diciembre' },
+  { name: 'nov-05-13-y-14.psd · Slide 05/09 (vie 13 Son Diferente · sáb 14 Tardeo)', format: 'PSD 1080×1350 · 25 capas (rasterizadas)', flat: false,
+    composition: 'Mitad izquierda negra con foto y nombre en Anton; mitad derecha verde «TARDEO» con filas hora/artista separadas por líneas finas.', reusable: 'Estructura de filas del tardeo.', post: null },
+  { name: 'nov-06-20-y-21.psd · Slide 06/09 (vie 20 Apolo · sáb 21 Son Diferente)', format: 'PSD 1080×1350 · 16 capas (rasterizadas)', flat: false,
+    composition: 'Mitad superior verde con número «20» de contorno, foto recortada, pastilla LIVE negra y DJ de contorno; mitad inferior clara con «21» verde macizo.', reusable: 'Recreada como plantilla «Fin de semana · dos días» (estilo A).', post: 'p2-1121-stories' },
+  { name: 'Slide 07/09 (vie 27 Alberto Déniz · sáb 28 Savia Nueva) y slide 02/07 (vie 6 Alberto Déniz · sáb 7 Cremita de Coco)', format: 'Imágenes 1080×1350 (planas)', flat: true,
+    composition: 'Mitad superior negra con foto, día en verde espaciado, nombre gigante blanco, pastilla LIVE verde y DJ de contorno blanco; mitad inferior verde.', reusable: 'Plantilla «Fin de semana · dos días» (estilo B).', post: null },
+  { name: 'Slide 07/07 «Champions en noviembre»', format: 'Imagen 1080×1350 (plana)', flat: true,
+    composition: 'Fondo claro, pastilla negra «FÚTBOL EN PANTALLA GRANDE», «CHAMPIONS» negro + «EN NOVIEMBRE» verde, filas fecha/hora y «LOCAL vs VISITANTE» (equipo nuestro en negro, rival en gris).',
+    reusable: 'Fuente de los partidos de la J5: mar 24 R. Madrid vs PSV 20:00 · mié 25 Sabah vs Barça 17:45.', post: 'p2-1123-ucl' },
+  { name: 'Foto de grupo en blanco y negro (4 músicos)', format: 'Imagen 1080×1350 (plana)', flat: true,
+    composition: 'Cuatro músicos recortados en blanco y negro sobre fondo blanco.', reusable: 'Recurso de foto. No se sabe de qué grupo es: pendiente de identificar.', post: null },
+  { name: 'Sin título-1.psd · Lienzo del carrusel de noviembre (6 slides en 6480×1350)', format: 'PSD 6480×1350 · ~110 capas con nombre (textos rasterizados, fotos de artistas como objetos inteligentes)', flat: false,
+    composition: 'Calendario · 02/07 vie 6 Alberto Déniz / sáb 7 Cremita de Coco · 07/07 Champions en noviembre · «TARDEO» repetido dom 8 (Son Karibe 16:30, Kilian Viera 18:30) · 04/06 vie 13 Son Diferente / sáb 14 Pedro Afonso · 05/06 vie 20 Apolo / sáb 21 Son Aldea.',
+    reusable: 'Versión anterior (el sábado 14 aún era noche con Pedro Afonso). Recortes sin fondo de Cremita de Coco, Kike Pérez, Kilian Viera, Apolo y el dúo de Son Diferente como objetos inteligentes: se pueden exportar y subir a la Biblioteca.', post: null }
 ];
 
 // Lo que la guía cita pero NO está disponible en este proyecto (no se finge tenerlo)
