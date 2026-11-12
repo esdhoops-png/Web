@@ -115,6 +115,7 @@ function reelJueves(key, d, tipo, extra = {}) {
     description: `Planos de menos de 2 s, gancho en el primer segundo. ${LOGO_END}`, ...extra });
 }
 // Viernes / sábado · stories del día (cuenta atrás + directo)
+const SAT21 = 'CONFLICTO sábado 21: la programación enviada el 12 nov y la slide 05/06 del PSD «Sin título-1» dicen Son Aldea + DJ Ake; el calendario y la slide 06/09 (nov-06-20-y-21.psd) dicen Son Diferente + DJ Ake; otra versión del calendario dice «Directo + DJ Ake». Confirmar con el propietario antes de publicar.';
 function storiesNoche(key, d, label, filas, extra = {}) {
   const prog = filas.map((f) => `${f.hora || '[hora]'} ${f.quien || '[artista]'}`).join(' · ');
   add({ key, kind: 'story', title: `Stories · ${label}`, starts_at: iso(d, '12:30'), format: 'Story animada «Hoy en 5mentarios» + 3–5 stories en directo',
@@ -179,7 +180,7 @@ add({ key: 'p2-1119-saul-story', kind: 'story', title: 'Story · Hoy monólogos 
   material: DELIV('stories/story-monologos-* (Saúl Romero)'), copy: `HOY · 21:00 · Saúl Romero · AFORO LIMITADO · RESERVAS ${WA}`, cta: 'Enlace a WhatsApp' });
 reelJueves('p2-1119-reel', '11-19', 'ambiente', { attachments: [F.vC0611, F.vC0618] });
 storiesNoche('p2-1120-stories', '11-20', 'viernes 20 · Apolo + DJ Asped', [{ hora: '22:30', quien: 'Apolo' }, { hora: '00:00', quien: 'DJ Asped' }], { status: 'pending_prep' });
-storiesNoche('p2-1121-stories', '11-21', 'sábado 21 · Son Aldea + DJ Ake', [{ hora: '22:30', quien: 'Son Aldea' }, { hora: '00:00', quien: 'DJ Ake' }], { status: 'pending_prep' });
+storiesNoche('p2-1121-stories', '11-21', 'sábado 21 · Son Aldea + DJ Ake', [{ hora: '22:30', quien: 'Son Aldea' }, { hora: '00:00', quien: 'DJ Ake' }], { status: 'pending_prep', pending_info: SAT21 });
 fotosLunes('p2-1123-fotos', '11-23', 'el finde 20–21 nov');
 
 // ===================== semana 23–29 (Champions J5 + aniversario) =====================
@@ -189,13 +190,13 @@ add({ key: 'p2-1123-kike', kind: 'post', title: 'Post · Kike Pérez: 26/11 SOLD
   cta: `Reserva en el ${WA}`, hashtags: HT_MONO, pending_info: 'Precio de la entrada (15 € según el planificador [POR CONFIRMAR]) y hora del 03/12. No poner precio hasta confirmarlo.' });
 add({ key: 'p2-1123-ucl', kind: 'champions', title: 'Story · Esta semana, Champions en 5mentarios (J5)', starts_at: iso('11-23', '18:00'), format: 'Story 9:16', status: 'pending_prep',
   objective: 'Que se sepa que la Champions se ve en pantalla grande.', material: 'Plantillas Champions de octubre (Drive y lienzo de diseño de octubre).',
-  copy: 'Martes 24 y miércoles 25 · CHAMPIONS · PANTALLA GRANDE · Volcán · Cuor di Pizza · te lo llevamos a la mesa', cta: 'Sticker «Recordarme»', hashtags: HT,
-  pending_info: 'Qué partidos de la J5 se ponen y a qué hora (según el carrusel de noviembre hay partidos el 24 y el 25; comprobar antes de publicar).', attachments: [F.champPortada, F.champPortadaPsd] });
-for (const [k, d, lbl] of [['p2-1124-ucl', '11-24', 'martes 24'], ['p2-1125-ucl', '11-25', 'miércoles 25']]) {
-  add({ key: k, kind: 'champions', title: `Stories Champions · ${lbl} (J5)`, starts_at: iso(d, '17:00'), format: 'Stories (secuencia)', status: 'pending_prep',
+  copy: 'Mar 24 · 20:00 · R. Madrid vs PSV\nMié 25 · 17:45 · Sabah vs Barça\nCHAMPIONS · PANTALLA GRANDE · Volcán · Cuor di Pizza · te lo llevamos a la mesa', cta: 'Sticker «Recordarme»', hashtags: HT,
+  pending_info: null, attachments: [F.champPortada, F.champPortadaPsd] });
+for (const [k, d, lbl, cal] of [['p2-1124-ucl', '11-24', 'martes 24', 'R. Madrid vs PSV · 20:00'], ['p2-1125-ucl', '11-25', 'miércoles 25', 'Sabah vs Barça · 17:45']]) {
+  add({ key: k, kind: 'champions', title: `Stories Champions · ${lbl} · ${cal}`, starts_at: iso(d, '17:00'), format: 'Stories (secuencia)', status: 'pending_prep',
     objective: 'Llenar la noche de Champions.', material: 'Plantilla de partido (pantalla partida negro/verde, «VS», «PARTIDAZO»).',
-    copy: 'Story 1: «Hoy · [hora] · pantalla grande»\nStory 2: encuesta «¿Quién gana?»\nStory 3: «Todavía estás a tiempo» + cena con Volcán\nNo grabar la imagen de la tele.',
-    cta: 'Encuesta + ubicación', hashtags: HT, pending_info: 'Partido(s) y hora.', attachments: [F.champPartido, F.champPartidoPsd] });
+    copy: `Story 1: «Hoy · ${cal} · pantalla grande»`+'\nStory 2: encuesta «¿Quién gana?»\nStory 3: «Todavía estás a tiempo» + cena con Volcán\nNo grabar la imagen de la tele.',
+    cta: 'Encuesta + ubicación', hashtags: HT, pending_info: null, description: `${cal} (según el carrusel «Champions en noviembre» entregado).`, attachments: [F.champPartido, F.champPartidoPsd] });
 }
 programacion('p2-1125-prog', '11-25', 'semana 26–29 nov', [
   { dia: 'JUEVES 26', diaCorto: 'Jue', hora: '—', quien: 'Kike Pérez · SOLD OUT (nueva fecha 03/12)' },
@@ -294,7 +295,7 @@ add({ key: 'p2-1231-stories', kind: 'story', title: 'Stories · Hoy Tardeo de Fi
 // ---------- Eventos de diciembre CONFIRMADOS por el propietario (mensaje del 12 nov 2026) ----------
 const EV = (key, d, t, title, description) => add({ key, kind: 'event', title, starts_at: iso(d, t), requires_approval: false, status: 'scheduled', format: 'Evento', description });
 EV('p2e-1120', '11-20', '22:30', 'Apolo 22:30 + DJ Asped 00:00');
-EV('p2e-1121', '11-21', '22:30', 'Son Aldea 22:30 + DJ Ake 00:00');
+add({ key: 'p2e-1121', kind: 'event', title: 'Son Aldea 22:30 + DJ Ake 00:00', starts_at: iso('11-21', '22:30'), requires_approval: false, status: 'scheduled', format: 'Evento', pending_info: SAT21 });
 EV('p2e-1127', '11-27', '22:30', 'Alberto Déniz 22:30 + DJ Ake 00:00');
 EV('p2e-1128', '11-28', '22:30', 'Savia Nueva 22:30 + DJ Asped 00:00');
 EV('p2e-1204', '12-04', '22:30', 'Apolo 22:30 + DJ Ruven 00:00');
@@ -326,7 +327,8 @@ const TASKS = [
   T({ title: 'Confirmar bebida incluida y precios definitivos de los menús de Navidad', assignee: 'owner', priority: 'high', due_date: '2026-12-02', post: 'p2-1204-navidad-menus' }),
   T({ title: 'Confirmar si se abre el 1 de enero (horario)', assignee: 'owner', priority: 'low', due_date: '2026-12-18', post: 'p2-1222-horarios' }),
   T({ title: 'Diseñar el carrusel de diciembre (formato del de noviembre)', priority: 'urgent', due_date: '2026-11-27', post: 'p2-1201-diciembre' }),
-  T({ title: 'Partidos y horas de la Champions J5 (24–25 nov) que se ponen', priority: 'high', due_date: '2026-11-22', post: 'p2-1124-ucl' }),
+  T({ title: 'Confirmar el sábado 21 nov: ¿Son Aldea o Son Diferente? (la programación enviada y el carrusel no coinciden)', assignee: 'owner', priority: 'high', due_date: '2026-11-17',
+    description: 'Son Aldea: programación enviada el 12 nov y slide 05/06 de «Sin título-1.psd». Son Diferente: calendario de noviembre y slide 06/09 (nov-06-20-y-21.psd). «Directo»: calendario de «Sin título-1.psd». DJ Ake coincide en todas. Si el carrusel publicado es incorrecto, corregirlo.' }),
   T({ title: 'Partidos y horas de la Champions J6 (8–9 dic) que se ponen', priority: 'high', due_date: '2026-12-06', post: 'p2-1208-ucl' }),
   T({ title: 'Revisar si hay Clásico u otro partido grande en nov–dic', priority: 'medium', due_date: '2026-11-16',
     description: 'Solo el Clásico y las Champions importantes llevan post o reel; el resto, stories.' }),
@@ -359,7 +361,7 @@ const OLD_TASK_TITLES = [
 ];
 
 // Publicaciones actualizadas con la programación de diciembre: si ya se importaron y nadie las ha tocado, se actualizan
-const SYNC_KEYS = ['p2-1114-tardeo', 'p2-1118-prog', 'p2-1120-stories', 'p2-1121-stories', 'p2-1125-prog', 'p2-1127-aniversario', 'p2-1127-stories', 'p2-1128-stories', 'p2-1129-aniversario-evento', 'p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
+const SYNC_KEYS = ['p2-1114-tardeo', 'p2e-1121', 'p2-1123-ucl', 'p2-1124-ucl', 'p2-1125-ucl', 'p2-1118-prog', 'p2-1120-stories', 'p2-1121-stories', 'p2-1125-prog', 'p2-1127-aniversario', 'p2-1127-stories', 'p2-1128-stories', 'p2-1129-aniversario-evento', 'p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
   'p2-1219-stories', 'p2-1222-horarios', 'p2-1223-prog', 'p2-1224-fecha', 'p2-1225-fecha', 'p2-1226-stories', 'p2-1230-prog', 'p2-1231-fecha', 'p2-1231-stories'];
 const OBSOLETE_TASKS = ['Aclarar el sábado 14: ¿se mantiene el Tardeo Exterior Halloween además de la noche con Pedro Afonso?', 'Confirmar artistas, DJs y horas · finde 20–21 nov', 'Confirmar artistas, DJs y horas · finde 27–29 nov (y tardeo del aniversario)','Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
   'Confirmar artistas, DJs y horas · finde 18–19 dic', 'Confirmar artistas, DJs y horas · Navidad (24–26 dic)', 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', 'Decidir si hay plan de Nochevieja'];
