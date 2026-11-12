@@ -80,7 +80,7 @@ function programacion(key, d, titulo, filas, extra = {}) {
     format: 'Post 4:5 + canal de WhatsApp', platforms: ['instagram', 'whatsapp'], status: 'pending_prep',
     objective: 'Que la gente sepa el plan de la semana y reserve mesa.',
     material: 'Estilo de cartel de noche aprobado (Anton + horas en verde), logo arriba a la izquierda, pie «HEINEKEN 5MENTARIOS · ARUCAS».',
-    copy: `Este finde en 5mentarios 🍻\n\n${lineas}\n\nY si te entra el hambre, pide tu Volcán o tu Cuor di Pizza y te la llevamos a la mesa 🍔🍕\n\n¿Con quién vienes? Etiquétalo 👇`,
+    copy: `${filas.length > 2 ? 'Esta semana' : 'Este finde'} en 5mentarios 🍻\n\n${lineas}\n\nY si te entra el hambre, pide tu Volcán o tu Cuor di Pizza y te la llevamos a la mesa 🍔🍕\n\n¿Con quién vienes? Etiquétalo 👇`,
     cta: `¿Con quién vienes? Etiquétalo 👇 · Reservas por WhatsApp ${WA}`, hashtags: HT_FINDE,
     description: `Versión para el canal de WhatsApp:\n🍻 FINDE EN 5MENTARIOS\n${wa}\nComida de Volcán y Cuor di Pizza a la mesa 🍔🍕\n\nActualizar también la programación de la web (EVENTOS y PROGRAMA en index.html del repositorio heineken5mentarios).`,
     ...extra
@@ -227,10 +227,12 @@ add({ key: 'p2-1201-diciembre', kind: 'carousel', title: 'Carrusel · Programaci
   material: 'Mismo formato que el calendario y carrusel de noviembre (N1–N8). El diseño de diciembre no está ni en Drive ni en el paquete de transferencia: subirlo como versión 1.',
   copy: 'Diciembre en 5mentarios 🎄\n\nDesliza y apunta: monólogos, fines de semana con música, Champions y las fechas grandes del mes.\n\nGuárdalo para tenerlo a mano 📌', cta: 'Guarda el post', hashtags: HT,
   pending_info: 'Programación completa de diciembre.' });
-programacion('p2-1202-prog', '12-02', 'semana 3–6 dic', [
+programacion('p2-1202-prog', '12-02', 'semana 3–7 dic', [
   { dia: 'JUEVES 3', diaCorto: 'Jue', hora: null, quien: 'Monólogos con Kike Pérez (nueva fecha)' },
-  { dia: 'VIERNES 4', diaCorto: 'Vie', hora: null, quien: null }, { dia: 'SÁBADO 5', diaCorto: 'Sáb', hora: null, quien: null }],
-  { pending_info: 'Hora del monólogo del 03/12 y artistas/DJs/horas del 4 y 5 dic. Horario del puente (6 y 8 dic).' });
+  { dia: 'VIERNES 4', diaCorto: 'Vie', hora: '22:30', quien: 'Apolo + 00:00 DJ Ruven' },
+  { dia: 'SÁBADO 5', diaCorto: 'Sáb', hora: '22:30', quien: 'Son Aldea + 00:00 DJ Asped' },
+  { dia: 'LUNES 7 (víspera de festivo)', diaCorto: 'Lun', hora: '22:30', quien: 'Willy Flores + 00:00 DJ Asped' }],
+  { pending_info: 'Hora del monólogo de Kike Pérez del 03/12.' });
 reelProgramacion('p2-1202-reel', '12-02', 'semana 3–6 dic');
 add({ key: 'p2-1203-kike-evento', kind: 'event', title: 'Monólogos · Kike Pérez (nueva fecha)', starts_at: iso('12-03', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
   pending_info: 'Hora: los monólogos han sido a las 21:00; confirmar. Entrada 15 € [POR CONFIRMAR].' });
@@ -243,8 +245,8 @@ add({ key: 'p2-1204-navidad-menus', kind: 'carousel', title: 'Carrusel · Menús
   cta: `Reservas en el ${WA}`, hashtags: HT,
   description: 'Menú 1: papas arrugadas con mojo rojo, berenjenas crujientes con miel de palma, croquetas de queso roquefort con guayaba, salteado de pollo con verduras, tacos de pescado con mojo verde.\nMenú 2: tabla de quesos canarios, surtido ibérico, langostinos crujientes con salsa agripicante, volovanes (salmón con queso, ensaladilla de batata, cochino negro con crujiente de parmesano), solomillo de cerdo a la pimienta.\nMenú 3: jamón ibérico de bellota, montadito de arroz frito con atún fresco, ensalada de salmón con canónigos, merluza en salsa verde con papas panaderas, carrilleras de cerdo con parmentier.',
   pending_info: 'Qué bebida incluye cada menú y si estos precios son los definitivos [POR CONFIRMAR]. No publicar hasta que el propietario lo apruebe.' });
-storiesNoche('p2-1204-stories', '12-04', 'viernes 4', [{}], { pending_info: 'Artista/DJ y horas.' });
-storiesNoche('p2-1205-stories', '12-05', 'sábado 5', [{}], { pending_info: 'Artista/DJ y horas.' });
+storiesNoche('p2-1204-stories', '12-04', 'viernes 4 · Apolo + DJ Ruven', [{ hora: '22:30', quien: 'Apolo' }, { hora: '00:00', quien: 'DJ Ruven' }], { status: 'pending_prep' });
+storiesNoche('p2-1205-stories', '12-05', 'sábado 5 · Son Aldea + DJ Asped', [{ hora: '22:30', quien: 'Son Aldea' }, { hora: '00:00', quien: 'DJ Asped' }], { status: 'pending_prep' });
 add({ key: 'p2-1206-constitucion', kind: 'special_date', title: 'Día de la Constitución (festivo)', starts_at: iso('12-06', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario del puente.' });
 fotosLunes('p2-1207-fotos', '12-07', 'el finde 4–5 dic');
 add({ key: 'p2-1208-inmaculada', kind: 'special_date', title: 'Inmaculada Concepción (festivo)', starts_at: iso('12-08', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
@@ -254,39 +256,58 @@ for (const [k, d, lbl] of [['p2-1208-ucl', '12-08', 'martes 8'], ['p2-1209-ucl',
     copy: 'Story 1: «Hoy · [hora] · pantalla grande»\nStory 2: encuesta «¿Quién gana?»\nStory 3: «Todavía estás a tiempo» + cena con Volcán\nNo grabar la imagen de la tele.',
     cta: 'Encuesta + ubicación', hashtags: HT, pending_info: 'Partido(s) y hora de la J6.', attachments: [F.champPartido2] });
 }
-programacion('p2-1209-prog', '12-09', 'finde 11–12 dic', [{ dia: 'VIERNES 11', diaCorto: 'Vie' }, { dia: 'SÁBADO 12', diaCorto: 'Sáb' }], { pending_info: 'Artistas/DJs y horas del 11 y 12 dic.' });
+programacion('p2-1209-prog', '12-09', 'finde 11–12 dic', [{ dia: 'VIERNES 11', diaCorto: 'Vie', hora: '22:30', quien: 'Yet Garbey + 00:00 DJ Ake' }, { dia: 'SÁBADO 12', diaCorto: 'Sáb', hora: '22:30', quien: 'Son Karibe + 00:00 DJ Asped' }]);
 reelProgramacion('p2-1209-reel', '12-09', 'finde 11–12 dic');
 reelJueves('p2-1210-reel', '12-10', 'volcan');
-storiesNoche('p2-1211-stories', '12-11', 'viernes 11', [{}], { pending_info: 'Artista/DJ y horas.' });
-storiesNoche('p2-1212-stories', '12-12', 'sábado 12', [{}], { pending_info: 'Artista/DJ y horas.' });
+storiesNoche('p2-1211-stories', '12-11', 'viernes 11 · Yet Garbey + DJ Ake', [{ hora: '22:30', quien: 'Yet Garbey' }, { hora: '00:00', quien: 'DJ Ake' }], { status: 'pending_prep' });
+storiesNoche('p2-1212-stories', '12-12', 'sábado 12 · Son Karibe + DJ Asped', [{ hora: '22:30', quien: 'Son Karibe' }, { hora: '00:00', quien: 'DJ Asped' }], { status: 'pending_prep' });
 fotosLunes('p2-1214-fotos', '12-14', 'el finde 11–12 dic');
-programacion('p2-1216-prog', '12-16', 'finde 18–19 dic', [{ dia: 'VIERNES 18', diaCorto: 'Vie' }, { dia: 'SÁBADO 19', diaCorto: 'Sáb' }], { pending_info: 'Artistas/DJs y horas del 18 y 19 dic.' });
+programacion('p2-1216-prog', '12-16', 'finde 18–19 dic', [{ dia: 'VIERNES 18', diaCorto: 'Vie', hora: '22:30', quien: 'Pedro Afonso + 00:00 DJ Ake' }, { dia: 'SÁBADO 19', diaCorto: 'Sáb', hora: '22:30', quien: 'Café de Luna + 00:00 DJ Asped' }]);
 reelProgramacion('p2-1216-reel', '12-16', 'finde 18–19 dic');
 reelJueves('p2-1217-reel', '12-17', 'ambiente', { title: 'Reel · 5mentarios en Navidad (ambiente)', material: 'Grabar el local con la decoración navideña (si la hay) y ambiente.', status: 'idea' });
-storiesNoche('p2-1218-stories', '12-18', 'viernes 18', [{}], { pending_info: 'Artista/DJ y horas.' });
-storiesNoche('p2-1219-stories', '12-19', 'sábado 19', [{}], { pending_info: 'Artista/DJ y horas.' });
+storiesNoche('p2-1218-stories', '12-18', 'viernes 18 · Pedro Afonso + DJ Ake', [{ hora: '22:30', quien: 'Pedro Afonso' }, { hora: '00:00', quien: 'DJ Ake' }], { status: 'pending_prep' });
+storiesNoche('p2-1219-stories', '12-19', 'sábado 19 · Café de Luna + DJ Asped', [{ hora: '22:30', quien: 'Café de Luna' }, { hora: '00:00', quien: 'DJ Asped' }], { status: 'pending_prep' });
 fotosLunes('p2-1221-fotos', '12-21', 'el finde 18–19 dic');
 add({ key: 'p2-1222-horarios', kind: 'story', title: 'Story fijada · Horarios de Navidad y fin de año', starts_at: iso('12-22', '12:00'), format: 'Story 9:16 + destacado', platforms: ['instagram', 'whatsapp'],
-  status: 'idea', objective: 'Que nadie se encuentre cerrado.', copy: 'Horarios de fiestas: 24 · 25 · 31 · 1. Guardar en destacados.', cta: 'Guardar en destacados', pending_info: 'Horarios del 24, 25 y 31 de diciembre y 1 de enero.' });
-programacion('p2-1223-prog', '12-23', 'Navidad (24–27 dic)', [{ dia: 'JUEVES 24', diaCorto: 'Jue' }, { dia: 'VIERNES 25', diaCorto: 'Vie' }, { dia: 'SÁBADO 26', diaCorto: 'Sáb' }],
-  { pending_info: '¿Se abre el 24 y el 25? Artistas/DJs y horas.' });
+  status: 'pending_prep', objective: 'Que nadie se encuentre cerrado.', copy: '24 DIC · desde las 16:30 · Tardeo de Navidad (exterior) · DJs hasta las 04:00 (exterior) y las 06:00 (interior)\n25 DIC · desde las 23:00 · DJ Asped\n31 DIC · desde las 16:30 · Tardeo de Fin de Año (exterior) · DJs hasta las 04:00 (exterior) y las 06:00 (interior)\nGuardar en destacados.', cta: 'Guardar en destacados',
+  pending_info: 'Horario del 1 de enero (si se quiere añadir).' });
+programacion('p2-1223-prog', '12-23', 'Navidad (24–26 dic)', [
+  { dia: 'JUEVES 24', diaCorto: 'Jue', hora: '16:30', quien: 'Tardeo de Navidad (exterior): Son Aldea 16:30 · Kilian Viera 18:30 · DJ Ake 00:00–04:00 (exterior) · DJ Ruven 00:00–06:00 (interior)' },
+  { dia: 'VIERNES 25', diaCorto: 'Vie', hora: '23:00', quien: 'DJ Asped' },
+  { dia: 'SÁBADO 26', diaCorto: 'Sáb', hora: '22:30', quien: 'Savia Nueva + 00:00 DJ Ruven' }]);
 add({ key: 'p2-1224-feliz', kind: 'post', title: 'Post · Feliz Navidad de 5mentarios', starts_at: iso('12-24', '12:00'), format: 'Post 1080×1350', status: 'idea',
   objective: 'Felicitación a la comunidad.', material: 'Sello 5mentarios sobre negro con brillo verde (estilo cartel de noche).',
   copy: 'Desde 2002 siendo el punto de encuentro de Arucas 🍻🎄\n\nGracias por otro año de tardeos, conciertos, monólogos y partidos. Feliz Navidad de parte de todo el equipo de 5mentarios.',
   cta: 'Comparte con los tuyos', hashtags: HT, attachments: [F.sello] });
-add({ key: 'p2-1224-fecha', kind: 'special_date', title: 'Nochebuena', starts_at: iso('12-24', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
-add({ key: 'p2-1225-fecha', kind: 'special_date', title: 'Navidad', starts_at: iso('12-25', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Horario.' });
-storiesNoche('p2-1226-stories', '12-26', 'sábado 26', [{}], { pending_info: 'Artista/DJ y horas.' });
+add({ key: 'p2-1224-fecha', kind: 'special_date', title: 'Nochebuena', starts_at: iso('12-24', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', description: 'Tardeo de Navidad desde las 16:30 (ver evento).' });
+add({ key: 'p2-1225-fecha', kind: 'special_date', title: 'Navidad', starts_at: iso('12-25', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', description: 'Abre desde las 23:00 con DJ Asped.' });
+storiesNoche('p2-1226-stories', '12-26', 'sábado 26 · Savia Nueva + DJ Ruven', [{ hora: '22:30', quien: 'Savia Nueva' }, { hora: '00:00', quien: 'DJ Ruven' }], { status: 'pending_prep' });
 fotosLunes('p2-1228-fotos', '12-28', 'el finde de Navidad');
 add({ key: 'p2-1229-reel-2026', kind: 'reel', title: 'Reel · Nuestro 2026 en 5mentarios', starts_at: iso('12-29', '19:00'), format: 'Reel 9:16 (20–27 s)', status: 'pending_prep',
   objective: 'Resumen del año.', material: 'Vídeos del bar (C0572, C0573, C0611, C0618), fotogramas de Halloween, tardeo exterior, monólogos y aniversario.',
   copy: 'Nuestro 2026 en 5mentarios 🎶🎤🎃🎄\n\nGracias por cada tardeo, cada concierto, cada risa y cada gol cantado. Nos vemos en 2027.',
   cta: 'Etiqueta a quien ha estado contigo este año', hashtags: HT, description: `Planos generales, 1–2 s por plano. ${LOGO_END}`,
   attachments: [F.vC0611, F.vC0618, F.vC0572, F.vC0573] });
-programacion('p2-1230-prog', '12-30', 'fin de año', [{ dia: 'JUEVES 31', diaCorto: 'Jue' }], { title: 'Programación · Nochevieja / fin de año', pending_info: '¿Hay plan de Nochevieja? Horario, música y reservas. Si no hay plan, sustituir por la story de horarios.' });
-add({ key: 'p2-1231-fecha', kind: 'special_date', title: 'Nochevieja', starts_at: iso('12-31', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', pending_info: 'Plan y horario.' });
-add({ key: 'p2-1231-stories', kind: 'story', title: 'Stories · Último día del año', starts_at: iso('12-31', '12:00'), format: 'Stories', status: 'idea', requires_approval: false,
-  copy: 'Horario de hoy → ambiente → 00:00 «¡Feliz 2027!» con el sello.', pending_info: 'Horario del 31.' });
+programacion('p2-1230-prog', '12-30', 'fin de año', [
+  { dia: 'JUEVES 31', diaCorto: 'Jue', hora: '16:30', quien: 'Tardeo de Fin de Año (exterior): Apolo 16:30 · Cremita de Coco 18:30 · DJ Ake 00:00–04:00 (exterior) · DJ Asped 00:00–06:00 (interior)' }],
+  { title: 'Programación · Tardeo de Fin de Año' });
+add({ key: 'p2-1231-fecha', kind: 'special_date', title: 'Nochevieja', starts_at: iso('12-31', '10:00'), all_day: true, requires_approval: false, status: 'idea', assignee: 'owner', description: 'Tardeo de Fin de Año desde las 16:30 (ver evento).' });
+add({ key: 'p2-1231-stories', kind: 'story', title: 'Stories · Hoy Tardeo de Fin de Año', starts_at: iso('12-31', '11:00'), format: 'Story «Hoy» + directo', status: 'pending_prep', requires_approval: true,
+  copy: 'HOY · 16:30 Apolo · 18:30 Cremita de Coco · 00:00 DJ Ake (exterior, hasta las 04:00) · 00:00 DJ Asped (interior, hasta las 06:00). A las 00:00: «¡Feliz 2027!» con el sello.', cta: 'Ubicación + mención de artistas' });
+
+// ---------- Eventos de diciembre CONFIRMADOS por el propietario (mensaje del 12 nov 2026) ----------
+const EV = (key, d, t, title, description) => add({ key, kind: 'event', title, starts_at: iso(d, t), requires_approval: false, status: 'scheduled', format: 'Evento', description });
+EV('p2e-1204', '12-04', '22:30', 'Apolo 22:30 + DJ Ruven 00:00');
+EV('p2e-1205', '12-05', '22:30', 'Son Aldea 22:30 + DJ Asped 00:00');
+EV('p2e-1207', '12-07', '22:30', 'Willy Flores 22:30 + DJ Asped 00:00', 'Lunes víspera del festivo del 8.');
+EV('p2e-1211', '12-11', '22:30', 'Yet Garbey 22:30 + DJ Ake 00:00');
+EV('p2e-1212', '12-12', '22:30', 'Son Karibe 22:30 + DJ Asped 00:00');
+EV('p2e-1218', '12-18', '22:30', 'Pedro Afonso 22:30 + DJ Ake 00:00');
+EV('p2e-1219', '12-19', '22:30', 'Café de Luna 22:30 + DJ Asped 00:00');
+EV('p2e-1224', '12-24', '16:30', 'Tardeo de Navidad 🎄 (exterior)', '16:30 Son Aldea · 18:30 Kilian Viera · de 00:00 a 04:00 DJ Ake (exterior) · de 00:00 a 06:00 DJ Ruven (interior).');
+EV('p2e-1225', '12-25', '23:00', 'DJ Asped desde las 23:00');
+EV('p2e-1226', '12-26', '22:30', 'Savia Nueva 22:30 + DJ Ruven 00:00');
+EV('p2e-1231', '12-31', '16:30', 'Tardeo de Fin de Año 🍇 (exterior)', '16:30 Apolo · 18:30 Cremita de Coco · de 00:00 a 04:00 DJ Ake (exterior) · de 00:00 a 06:00 DJ Asped (interior).');
 
 // ---------- Tareas ----------
 const T = (o) => ({ priority: 'medium', assignee: 'marketing', ...o });
@@ -300,14 +321,10 @@ const TASKS = [
   T({ title: 'Story animada «Hoy» del viernes 13 (Son Diferente + DJ Ruven)', priority: 'high', due_date: '2026-11-13', post: 'p2-1113-stories' }),
   confirmar('finde 20–21 nov', '2026-11-17', 'p2-1118-prog'),
   confirmar('finde 27–29 nov (y tardeo del aniversario)', '2026-11-24', 'p2-1125-prog'),
-  confirmar('3–6 dic (hora de Kike Pérez y horario del puente)', '2026-12-01', 'p2-1202-prog'),
-  confirmar('finde 11–12 dic', '2026-12-08', 'p2-1209-prog'),
-  confirmar('finde 18–19 dic', '2026-12-15', 'p2-1216-prog'),
-  confirmar('Navidad (24–26 dic)', '2026-12-22', 'p2-1223-prog'),
+  T({ title: 'Confirmar la hora del monólogo de Kike Pérez (jue 3 dic)', assignee: 'owner', priority: 'high', due_date: '2026-11-30', post: 'p2-1202-prog' }),
   T({ title: 'Confirmar precio de la entrada de Kike Pérez (15 € según el planificador)', assignee: 'owner', priority: 'medium', due_date: '2026-11-20', post: 'p2-1123-kike' }),
   T({ title: 'Confirmar bebida incluida y precios definitivos de los menús de Navidad', assignee: 'owner', priority: 'high', due_date: '2026-12-02', post: 'p2-1204-navidad-menus' }),
-  T({ title: 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', assignee: 'owner', priority: 'high', due_date: '2026-12-15', post: 'p2-1222-horarios' }),
-  T({ title: 'Decidir si hay plan de Nochevieja', assignee: 'owner', priority: 'high', due_date: '2026-12-18', post: 'p2-1230-prog' }),
+  T({ title: 'Confirmar si se abre el 1 de enero (horario)', assignee: 'owner', priority: 'low', due_date: '2026-12-18', post: 'p2-1222-horarios' }),
   T({ title: 'Diseñar el carrusel de diciembre (formato del de noviembre)', priority: 'urgent', due_date: '2026-11-27', post: 'p2-1201-diciembre' }),
   T({ title: 'Partidos y horas de la Champions J5 (24–25 nov) que se ponen', priority: 'high', due_date: '2026-11-22', post: 'p2-1124-ucl' }),
   T({ title: 'Partidos y horas de la Champions J6 (8–9 dic) que se ponen', priority: 'high', due_date: '2026-12-06', post: 'p2-1208-ucl' }),
@@ -341,4 +358,10 @@ const OLD_TASK_TITLES = [
   'Compartir la carpeta de Drive con la cuenta de Google del propietario'
 ];
 
-export { PLAN, TASKS, LIBRARY, OLD_PREFIX, OLD_TASK_TITLES };
+// Publicaciones actualizadas con la programación de diciembre: si ya se importaron y nadie las ha tocado, se actualizan
+const SYNC_KEYS = ['p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
+  'p2-1219-stories', 'p2-1222-horarios', 'p2-1223-prog', 'p2-1224-fecha', 'p2-1225-fecha', 'p2-1226-stories', 'p2-1230-prog', 'p2-1231-fecha', 'p2-1231-stories'];
+const OBSOLETE_TASKS = ['Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
+  'Confirmar artistas, DJs y horas · finde 18–19 dic', 'Confirmar artistas, DJs y horas · Navidad (24–26 dic)', 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', 'Decidir si hay plan de Nochevieja'];
+
+export { PLAN, TASKS, LIBRARY, OLD_PREFIX, OLD_TASK_TITLES, SYNC_KEYS, OBSOLETE_TASKS };

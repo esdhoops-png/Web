@@ -96,6 +96,13 @@ de una vez: no duplica.
   ```
   Sin clave, el estudio funciona con plantillas y fotos y muestra que la IA no está configurada (no simula nada).
 
+## 1.7 Plan de marketing (12 nov – 31 dic 2026)
+Menú **Plan de marketing**: panel de control (calculado con los datos reales), auditoría, estrategia, 8 campañas y **Ejecutar plan**.
+Al ejecutarlo (con vuestra sesión): importa el calendario sin duplicar (ni por clave ni con publicaciones hechas a mano el mismo día),
+actualiza lo que nadie ha tocado con la información nueva confirmada, genera los diseños con información completa (PNG reales en Storage,
+vinculados a su publicación, en la Biblioteca y **pendientes de aprobación**) y guarda como **borrador editable** lo que tiene datos pendientes.
+Se puede repetir: no duplica. Código: `app/marketing/` y `app/plan/importer.js`. Prueba: `tests/marketing.e2e.cjs`.
+
 ## 2. Google Drive (biblioteca dentro de la app)
 
 La app lee la carpeta **«Grupo 5mentarios»** de Drive con la cuenta de Google de cada persona (permiso de solo

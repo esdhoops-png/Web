@@ -134,53 +134,10 @@ function Editorial() {
     if (!(await confirmDialog({ title: 'Importar calendario editorial', body: `Se crearán ${plan.PLAN.length} elementos (11 nov – 31 dic 2026) y ${plan.TASKS.length} tareas. Si ya se importaron, no se duplican.${oldPlan.length ? ` El plan anterior (${oldPlan.length} elementos) se sustituye, salvo lo que ya hayáis editado, comentado o con diseño subido.` : ''}`, ok: 'Importar' }))) return;
     setBusy(true);
     try {
-      // Sustituir el plan anterior (v1): solo se borra lo que nadie ha tocado (sin cambios, versiones ni comentarios)
-      let replaced = 0, kept = 0;
-      // se consulta la base de datos en el momento (no la copia en memoria) para no borrar nada editado hace segundos
-      const fresh = check(await sb.from('posts').select('id, created_at, updated_at, import_key').like('import_key', plan.OLD_PREFIX + '%'));
-      if (fresh.length) {
-        const oldPlan = fresh;
-        const ids = oldPlan.map((p) => p.id);
-        const [vers, coms] = await Promise.all([sb.from('post_versions').select('post_id').in('post_id', ids), sb.from('comments').select('post_id').in('post_id', ids)]);
-        const touched = new Set([...check(vers), ...check(coms)].map((r) => r.post_id));
-        const untouched = oldPlan.filter((p) => !touched.has(p.id) && Math.abs(new Date(p.updated_at) - new Date(p.created_at)) < 2000);
-        kept = oldPlan.length - untouched.length;
-        if (untouched.length) {
-          const uids = untouched.map((p) => p.id);
-          check(await sb.from('tasks').delete().in('post_id', uids).eq('status', 'pending'));
-          check(await sb.from('posts').delete().in('id', uids));
-          replaced = untouched.length;
-        }
-        const oldTasks = check(await sb.from('tasks').select('id, created_at, updated_at, status, title').in('title', plan.OLD_TASK_TITLES).eq('status', 'pending'))
-          .filter((t) => Math.abs(new Date(t.updated_at) - new Date(t.created_at)) < 2000);
-        if (oldTasks.length) check(await sb.from('tasks').delete().in('id', oldTasks.map((t) => t.id)));
-      }
-      const mk = st.profiles.find((p) => p.role === 'marketing') || st.me;
-      const owner = st.profiles.find((p) => p.role === 'owner') || st.me;
-      const who = (r) => (r === 'owner' ? owner.id : mk.id);
-      const rows = plan.PLAN.map((p) => ({ import_key: p.key, kind: p.kind, title: p.title, description: p.description || null, starts_at: p.starts_at, all_day: !!p.all_day, deadline: p.deadline || null,
-        platforms: p.platforms || ['instagram'], format: p.format || null, objective: p.objective || null, copy: p.copy || null, hashtags: p.hashtags || null, cta: p.cta || null,
-        material: p.material || null, status: p.status || 'idea', requires_approval: p.requires_approval ?? true, assignee_id: who(p.assignee || 'marketing'), pending_info: p.pending_info || null }));
-      const inserted = [];
-      for (let i = 0; i < rows.length; i += 50) {
-        const r = check(await sb.from('posts').upsert(rows.slice(i, i + 50), { onConflict: 'import_key', ignoreDuplicates: true }).select('id,import_key'));
-        inserted.push(...r);
-      }
-      const keyToId = Object.fromEntries(inserted.map((r) => [r.import_key, r.id]));
-      const atts = plan.PLAN.flatMap((p) => (keyToId[p.key] ? (p.attachments || []).map((a) => ({ post_id: keyToId[p.key], role: a.role || (/^video/.test(a.mime_type) ? 'video' : /^image/.test(a.mime_type) ? 'photo' : 'file'),
-        source: 'drive', drive_file_id: a.id, name: a.name, mime_type: a.mime_type, web_url: `https://drive.google.com/file/d/${a.id}/view` })) : []));
-      for (let i = 0; i < atts.length; i += 100) check(await sb.from('attachments').insert(atts.slice(i, i + 100)));
-      // tareas (solo si su publicación se ha creado ahora)
-      const tasks = plan.TASKS.filter((t) => !t.post || keyToId[t.post]).map((t) => ({ title: t.title, description: t.description || null, priority: t.priority || 'medium',
-        due_date: t.due_date || null, assignee_id: who(t.assignee || 'marketing'), post_id: t.post ? keyToId[t.post] : null }));
-      if (tasks.length && inserted.length) check(await sb.from('tasks').insert(tasks));
-      // biblioteca: referencias al material existente en Drive
-      const cats = Object.fromEntries(st.categories.map((c) => [c.slug, c.id]));
-      const lib = plan.LIBRARY.filter((l) => cats[l.category]).map((l) => ({ category_id: cats[l.category], source: 'drive', drive_file_id: l.id, name: l.name, mime_type: l.mime_type,
-        web_url: `https://drive.google.com/file/d/${l.id}/view`, notes: l.notes || null }));
-      if (lib.length) check(await sb.from('library_items').upsert(lib, { onConflict: 'drive_file_id,category_id', ignoreDuplicates: true }));
-      await reloadAll();
-      toast('Calendario importado', `${inserted.length} elementos nuevos · ${inserted.length ? tasks.length : 0} tareas${replaced ? ` · ${replaced} del plan anterior sustituidos` : ''}${kept ? ` · ${kept} del plan anterior se conservan porque ya los habíais tocado` : ''}`);
+      const { importEditorialPlan } = await import('../plan/importer.js');
+      const { PLAN_EXTRA } = await import('../marketing/production-plan.js');
+      const r = await importEditorialPlan({ plan, extra: PLAN_EXTRA });
+      toast('Calendario importado', `${r.inserted} elementos nuevos · ${r.tasks} tareas${r.replaced ? ` · ${r.replaced} del plan anterior sustituidos` : ''}${r.kept ? ` · ${r.kept} del plan anterior se conservan porque ya los habíais tocado` : ''}${r.duplicates.length ? ` · ${r.duplicates.length} ya existían` : ''}`);
     } catch (e) { toastError(e); } finally { setBusy(false); }
   }
   return html`<section class="card stack"><h2>Calendario editorial 11 nov – 31 dic 2026</h2>
