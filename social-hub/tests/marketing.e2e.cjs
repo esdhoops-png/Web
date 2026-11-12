@@ -75,6 +75,24 @@ let n = 0; const step = async (name, fn) => { const t = Date.now(); await fn(); 
     await p.screenshot({ path: `${SHOTS}/m-ejecucion.png`, fullPage: true });
   });
 
+  await step('los diseños hechos con el estilo anterior se rehacen con el de los PSD (solo si nadie los tocó)', async () => {
+    const { data: cr } = await admin.from('creatives').select('id, template_key, creative_versions(id, note)').eq('template_key', 'artista').limit(2);
+    const [a, b] = cr;
+    await admin.from('creatives').update({ template_key: 'story-hoy' }).in('id', [a.id, b.id]);
+    // b ha sido retocado a mano: no se debe tocar
+    const docB = (await admin.from('creative_versions').select('doc, preview_path').eq('creative_id', b.id).limit(1).single()).data;
+    await admin.from('creative_versions').insert({ creative_id: b.id, doc: docB.doc, preview_path: docB.preview_path, exports: [], note: 'Retoque a mano' });
+    await p.goto(APP + '#/inicio'); await p.waitForSelector('.kpis');
+    await p.goto(APP + '#/marketing?tab=ejecucion');
+    await p.click('button:has-text("Ejecutar plan de marketing")');
+    await p.click('.modal-foot button.primary:has-text("Ejecutar")');
+    await p.waitForSelector('.toast:has-text("Plan ejecutado")', { timeout: 300000 });
+    const A = (await admin.from('creatives').select('template_key, creative_versions(id)').eq('id', a.id).single()).data;
+    const B = (await admin.from('creatives').select('template_key, creative_versions(id)').eq('id', b.id).single()).data;
+    assert.equal(A.template_key, 'artista'); assert.equal(A.creative_versions.length, a.creative_versions.length + 1);
+    assert.equal(B.template_key, 'story-hoy'); assert.equal(B.creative_versions.length, b.creative_versions.length + 1);
+  });
+
   await step('panel de control con datos reales', async () => {
     await p.goto(APP + '#/marketing?tab=panel'); await p.waitForSelector('text=Calendario planificado');
     await p.screenshot({ path: `${SHOTS}/m-panel.png` });

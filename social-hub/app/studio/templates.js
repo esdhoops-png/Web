@@ -212,6 +212,127 @@ export const TEMPLATES = [
       ], C.negro)];
     }
   },
+  // ================================================================ ESTILO PSD (carrusel de noviembre)
+  // Colores medidos en los PSD: verde #0B8A3E, verde vivo #2BB061, negro #0B0B0B, claro #F3F3F1, gris #8A8A86.
+  // ---------------------------------------------------------------- Artista / plan del día
+  {
+    key: 'artista', name: 'Artista del día (estilo PSD)', category: 'carteles',
+    basedOn: { kind: 'original', files: ['slide 07/09 (Alberto Déniz)', 'slide 02/07', 'nov-05-13-y-14.psd'], note: 'Una sola actuación a página completa: foto recortada a la derecha, día en verde espaciado, nombre gigante en Anton, pastilla rellena y pastilla de contorno.' },
+    formats: ['post', 'story', 'square'], defaultFormat: 'post',
+    fields: [
+      { k: 'estilo', label: 'Estilo (B = negro · A = verde)', def: 'B' }, { k: 'contador', label: 'Contador (opcional)', def: '' }, { k: 'kicker', label: 'Etiqueta superior (opcional, p. ej. HOY)', def: '' },
+      { k: 'dia', label: 'Día (p. ej. VIERNES 27.11)', def: 'VIERNES [DD.MM]' }, { k: 'nombre', label: 'Artista / evento', def: '[ARTISTA]' },
+      { k: 'pill1', label: 'Pastilla rellena', def: 'LIVE · 22:30' }, { k: 'pill2', label: 'Pastilla de contorno (opcional)', def: 'DJ [NOMBRE] · 00:00' },
+      { k: 'nota', label: 'Línea final (opcional)', def: '' }, { k: 'cta', label: 'Llamada del pie', def: '¡TE ESPERAMOS!' }
+    ],
+    images: [{ k: 'foto', label: 'Foto recortada del artista (sin fondo)' }],
+    build({ W, H, d }) {
+      const s = W / 1080, B = String(d.estilo || 'B').trim().toUpperCase() !== 'A', story = H > W * 1.5;
+      const c = B ? { bg: '#0B0B0B', day: '#2BB061', name: '#FFFFFF', f1: '#2BB061', t1: '#0B0B0B', o: '#FFFFFF', ft: '#8A8A86', cta: '#2BB061' }
+        : { bg: '#0B8A3E', day: '#0B0B0B', name: '#FFFFFF', f1: '#0B0B0B', t1: '#FFFFFF', o: '#0B0B0B', ft: '#0B0B0B', cta: '#0B0B0B' };
+      const pw = (t) => Math.min(520 * s, (String(t || '').length * 18 + 72) * s);
+      const top = story ? H * 0.40 : H * 0.29, k = story ? 1.25 : 1, num = (String(d.dia || '').match(/\b(\d{1,2})[.\/]/) || [])[1] || '';
+      return [page([
+        ...(num ? [text({ name: 'Número del día', x: W * 0.5, y: story ? H * 0.1 : H * 0.06, w: W * 0.5 - 40 * s, h: story ? 760 * s : 560 * s, text: num, size: Math.round((story ? 700 : 520) * s), lineHeight: 0.9, align: 'right', color: 'transparent', strokeColor: B ? 'rgba(43,176,97,.55)' : 'rgba(11,11,11,.5)', strokeWidth: 3 * s })] : []),
+        L('image', { name: 'Foto del artista', bind: 'img:foto', x: W * 0.38, y: story ? H * 0.12 : 0, w: W * 0.62, h: story ? H * 0.78 : H * 0.78, fit: 'contain', focusY: 1, placeholder: false }),
+        L('rect', { name: 'Degradado bajo la foto', x: 0, y: (story ? H * 0.78 : H * 0.62), w: W, h: H * 0.2, gradient: { angle: 90, stops: [[0, B ? 'rgba(11,11,11,0)' : 'rgba(11,138,62,0)'], [1, c.bg]] } }),
+        logo(69 * s, 54 * s, 103 * s, LOGO_W),
+        ...(d.contador ? [text({ name: 'Contador', bind: 'contador', x: 200 * s, y: 92 * s, w: 160 * s, h: 28 * s, text: d.contador, font: 'Barlow Condensed', weight: 900, size: Math.round(26 * s), letterSpacing: 3 * s, color: c.day })] : []),
+        ...(d.kicker ? [L('pill', { name: 'Etiqueta', bind: 'kicker', x: 64 * s, y: top - 110 * s, w: pw(d.kicker), h: 58 * s, fill: c.f1, text: d.kicker, font: 'Barlow Condensed', weight: 900, size: Math.round(28 * s), letterSpacing: 4 * s, color: c.t1 })] : []),
+        text({ name: 'Día', bind: 'dia', x: 64 * s, y: top, w: W * 0.7, h: 44 * s, text: d.dia, font: 'Barlow Condensed', weight: 900, size: Math.round(40 * k * s), letterSpacing: 10 * s, color: c.day, uppercase: true }),
+        text({ name: 'Nombre', bind: 'nombre', x: 60 * s, y: top + 84 * k * s, w: W * (story ? 0.8 : 0.56), h: 316 * k * s, text: d.nombre, size: Math.round(170 * k * s), lineHeight: 0.92, fit: true, uppercase: true, color: c.name, valign: 'middle' }),
+        L('pill', { name: 'Pastilla rellena', bind: 'pill1', x: 64 * s, y: top + 420 * k * s, w: pw(d.pill1) * k, h: 66 * k * s, fill: c.f1, text: d.pill1, font: 'Barlow Condensed', weight: 900, size: Math.round(32 * k * s), letterSpacing: 2 * s, color: c.t1 }),
+        ...(d.pill2 ? [L('pill', { name: 'Pastilla de contorno', bind: 'pill2', x: 64 * s, y: top + (420 + 82) * k * s, w: pw(d.pill2) * k, h: 66 * k * s, fill: 'rgba(0,0,0,0)', stroke: c.o, strokeWidth: 3 * s, text: d.pill2, font: 'Barlow Condensed', weight: 900, size: Math.round(32 * k * s), letterSpacing: 2 * s, color: c.o })] : []),
+        ...(d.nota ? [text({ name: 'Nota', bind: 'nota', x: 64 * s, y: top + (d.pill2 ? 600 : 520) * k * s, w: W * 0.6, h: 70 * s, text: d.nota, font: 'Barlow Condensed', weight: 600, size: Math.round(30 * s), lineHeight: 1.15, color: c.name, fit: true })] : []),
+        text({ name: 'Pie · texto', x: 64 * s, y: H - 74 * s, w: W * 0.6, h: 26 * s, text: 'HEINEKEN 5MENTARIOS · ARUCAS', font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: c.ft }),
+        text({ name: 'Llamada', bind: 'cta', x: W * 0.55, y: H - 74 * s, w: W * 0.45 - 70 * s, h: 26 * s, text: d.cta, font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: c.cta, align: 'right' })
+      ], c.bg)];
+    }
+  },
+  // ---------------------------------------------------------------- Lista (fondo claro: «Champions en noviembre»)
+  {
+    key: 'lista', name: 'Lista con titular (estilo PSD «Champions en noviembre»)', category: 'carteles',
+    basedOn: { kind: 'original', files: ['slide 07/07 «Champions en noviembre» (Sin título-1.psd)'], note: 'Fondo claro, pastilla negra, titular en dos líneas (negro + verde), filas separadas por líneas negras con fecha en verde, hora grande y texto en Anton.' },
+    formats: ['post', 'story', 'square'], defaultFormat: 'post',
+    fields: [
+      { k: 'contador', label: 'Contador (opcional)', def: '' }, { k: 'kicker', label: 'Pastilla', def: 'FÚTBOL EN PANTALLA GRANDE' },
+      { k: 'titulo1', label: 'Titular · línea negra', def: 'CHAMPIONS' }, { k: 'titulo2', label: 'Titular · línea verde', def: 'EN [MES]' },
+      { k: 'filas', label: 'Filas (una línea: «MAR 24.11 · 20:00 · R. MADRID vs PSV · detalle opcional»)', def: '[DÍA DD.MM] · [HORA] · [TEXTO]', multiline: true },
+      { k: 'nota', label: 'Frase final', def: 'Pide Volcán Smash Burger y te lo llevamos a la mesa.' }, { k: 'cta', label: 'Llamada del pie', def: '¡TE ESPERAMOS!' }
+    ],
+    images: [],
+    build({ W, H, d }) {
+      const s = W / 1080, CL = '#F3F3F1', N = '#0B0B0B', V = '#0B8A3E', G = '#8A8A86';
+      const rows = rowsOf(d.filas).slice(0, 7), story = H > W * 1.5, sq = H <= W;
+      const t0 = !rows.length ? H * 0.2 : story ? 330 * s : sq ? 150 * s : 213 * s, ts = sq ? 120 : story ? 190 : 165;
+      const titleH = (ts * 0.92) * s, y1 = t0 + 74 * s, y2 = y1 + titleH, listTop = y2 + titleH + 32 * s;
+      const listEnd = H - (story ? 300 : 150) * s, step = rows.length ? Math.min((story ? 185 : 135) * s, (listEnd - listTop) / rows.length) : 0;
+      const team = (t) => (/BAR[CÇ]A|MADRID|5MENTARIOS/i.test(t) ? N : G);
+      const row = (r, i) => {
+        const p = r.split('·').map((x) => x.trim()), y = listTop + i * step, main = p[2] || '', sub = p.slice(3).join(' · ');
+        const ms = Math.min((story ? 86 : 72) * s, step * 0.5), mx = 270 * s, mw = W - mx - 77 * s, my = y + (step - ms * (sub ? 1.5 : 1)) / 2;
+        const out = [L('line', { name: `Línea ${i + 1}`, x: 51 * s, y, w: W - 128 * s, h: 4, width: 3 * s, color: N }),
+          text({ name: `Fecha ${i + 1}`, bind: `filas:${i}:0`, x: 52 * s, y: y + step * 0.2, w: 200 * s, h: 28 * s, text: p[0] || '', font: 'Barlow Condensed', weight: 900, size: Math.round(Math.min(26 * s, step * 0.2)), letterSpacing: 3 * s, color: V }),
+          text({ name: `Hora ${i + 1}`, bind: `filas:${i}:1`, x: 52 * s, y: y + step * 0.2 + Math.min(30 * s, step * 0.23), w: 200 * s, h: Math.min(56 * s, step * 0.42), text: p[1] || '', size: Math.round(Math.min(54 * s, step * 0.4)), color: N, fit: true })];
+        const vs = main.split(/\s+vs\.?\s+/i);
+        if (vs.length === 2) {
+          const w1 = Math.min(mw * 0.48, vs[0].length * ms * 0.46);
+          out.push(text({ name: `Equipo A ${i + 1}`, x: mx, y: my, w: w1, h: ms * 1.05, text: vs[0], size: Math.round(ms), color: team(vs[0]), uppercase: true, fit: true }),
+            text({ name: `vs ${i + 1}`, x: mx + w1 + 12 * s, y: my + ms * 0.3, w: 44 * s, h: ms * 0.7, text: 'vs', size: Math.round(ms * 0.6), color: V }),
+            text({ name: `Equipo B ${i + 1}`, x: mx + w1 + 60 * s, y: my, w: mw - w1 - 60 * s, h: ms * 1.05, text: vs[1], size: Math.round(ms), color: team(vs[1]), uppercase: true, fit: true }));
+        } else out.push(text({ name: `Texto ${i + 1}`, bind: `filas:${i}:2`, x: mx, y: my, w: mw, h: ms * 1.05, text: main, size: Math.round(ms), color: N, uppercase: true, fit: true }));
+        if (sub) out.push(text({ name: `Detalle ${i + 1}`, x: mx, y: my + ms * 1.08, w: mw, h: ms * 0.45, text: sub, font: 'Barlow Condensed', weight: 900, size: Math.round(ms * 0.36), letterSpacing: 3 * s, color: G, uppercase: true, fit: true }));
+        return out;
+      };
+      return [page([
+        logo(56 * s, 54 * s, 103 * s, LOGO_B),
+        ...(d.contador ? [text({ name: 'Contador', bind: 'contador', x: W - 230 * s, y: 92 * s, w: 150 * s, h: 28 * s, text: d.contador, font: 'Barlow Condensed', weight: 900, size: Math.round(26 * s), letterSpacing: 3 * s, color: V, align: 'right' })] : []),
+        L('pill', { name: 'Pastilla', bind: 'kicker', x: 51 * s, y: t0, w: Math.min(W - 102 * s, (String(d.kicker).length * 17 + 80) * s), h: 58 * s, fill: N, text: d.kicker, font: 'Barlow Condensed', weight: 900, size: Math.round(27 * s), letterSpacing: 4 * s, color: '#FFFFFF' }),
+        text({ name: 'Titular negro', bind: 'titulo1', x: 50 * s, y: y1, w: W - 100 * s, h: titleH, text: d.titulo1, size: Math.round(ts * s), lineHeight: 0.92, fit: true, uppercase: true, color: N }),
+        text({ name: 'Titular verde', bind: 'titulo2', x: 50 * s, y: y2, w: W - 100 * s, h: titleH, text: d.titulo2, size: Math.round(ts * s), lineHeight: 0.92, fit: true, uppercase: true, color: V }),
+        ...rows.flatMap(row),
+        ...(!rows.length ? [logo(W / 2 - 190 * s, y2 + titleH + (H - y2 - titleH - 160 * s) / 2 - 175 * s, 380 * s, LOGO_B, 'Sello')] : []),
+        ...(rows.length ? [L('line', { name: 'Línea final', x: 51 * s, y: listTop + rows.length * step, w: W - 128 * s, h: 4, width: 3 * s, color: N })] : []),
+        ...(d.nota ? [text({ name: 'Frase final', bind: 'nota', x: 52 * s, y: H - 126 * s, w: W - 104 * s, h: 34 * s, text: d.nota, font: 'Barlow Condensed', weight: 600, size: Math.round(28 * s), color: '#333333', fit: true })] : []),
+        text({ name: 'Pie · texto', x: 52 * s, y: H - 75 * s, w: W * 0.6, h: 26 * s, text: 'HEINEKEN 5MENTARIOS · ARUCAS', font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: '#6E6E6A' }),
+        text({ name: 'Llamada', bind: 'cta', x: W * 0.55, y: H - 75 * s, w: W * 0.45 - 80 * s, h: 26 * s, text: d.cta, font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: V, align: 'right' })
+      ], CL)];
+    }
+  },
+  // ---------------------------------------------------------------- Tardeo (palabra repetida + banda)
+  {
+    key: 'tardeo-xl', name: 'Tardeo · palabra repetida (estilo PSD)', category: 'eventos',
+    basedOn: { kind: 'original', files: ['slide del tardeo del domingo 08.11 (Sin título-1.psd)'], note: 'Banda negra superior con horas en verde y artistas en blanco, «TARDEO» repetido en filas (verde, contorno, negro) y banda verde con la fecha.' },
+    formats: ['post', 'story', 'square'], defaultFormat: 'post',
+    fields: [
+      { k: 'filas', label: 'Programa (una línea: «16:30 · SON KARIBE»)', def: '[HORA] · [ARTISTA]\n[HORA] · [ARTISTA]', multiline: true },
+      { k: 'palabra', label: 'Palabra repetida', def: 'TARDEO' }, { k: 'banda', label: 'Banda verde', def: '[DÍA DD.MM] · AL AIRE LIBRE' },
+      { k: 'cta', label: 'Llamada de la banda negra', def: 'DESLIZA →' }
+    ],
+    images: [],
+    build({ W, H, d }) {
+      const s = W / 1080, N = '#0B0B0B', V = '#0B8A3E', CL = '#F3F3F1';
+      const story = H > W * 1.5, rows = rowsOf(d.filas).slice(0, 5), rh = (rows.length > 3 ? 64 : 86) * (story ? 1.35 : 1) * s, rs = (rows.length > 3 ? 60 : 78) * (story ? 1.3 : 1);
+      const bandH = (story ? 160 : 43) * s + rows.length * rh + 90 * s, word = String(d.palabra || 'TARDEO').toUpperCase(), line = `${word} ${word} ${word} ${word}`;
+      const fs = Math.round(196 * s), lh = 164 * s, styles = [{ color: V }, { color: 'transparent', strokeColor: N, strokeWidth: 2.5 * s }, { color: N }];
+      const bandY = bandH + 3 * lh + 20 * s, after = bandY + 143 * s + 20 * s;
+      const nAfter = Math.max(1, Math.ceil((H - after) / lh));
+      const wordRow = (i, y, k) => text({ name: `${word} ${k}`, x: -((i * 137) % 420) * s - 60 * s, y, w: 3200 * s, h: lh * 1.05, text: line, size: fs, lineHeight: 0.85, ...styles[i % 3] });
+      return [page([
+        ...[0, 1, 2].map((i) => wordRow(i, bandH + 18 * s + i * lh, i + 1)),
+        L('rect', { name: 'Banda verde', x: 0, y: bandY, w: W, h: 143 * s, fill: V }),
+        text({ name: 'Banda · texto', bind: 'banda', x: 28 * s, y: bandY + 20 * s, w: W - 56 * s, h: 110 * s, text: d.banda, size: Math.round(96 * s), fit: true, uppercase: true, color: '#FFFFFF', valign: 'middle', align: 'center' }),
+        ...Array.from({ length: nAfter }, (_, j) => wordRow(j + 1, after + j * lh, j + 4)),
+        L('rect', { name: 'Banda negra', x: 0, y: 0, w: W, h: bandH, fill: N }),
+        ...rows.flatMap((r, i) => { const p = r.split('·').map((x) => x.trim()); const y = (story ? 160 : 43) * s + i * rh; return [
+          text({ name: `Hora ${i + 1}`, bind: `filas:${i}:0`, x: 64 * s, y: y + rh * 0.3, w: 110 * s, h: rh * 0.62, text: p[0] || '', size: Math.round(rs * 0.55 * s), color: '#2BB061', fit: true }),
+          text({ name: `Artista ${i + 1}`, bind: `filas:${i}:1`, x: 180 * s, y, w: W * 0.66, h: rh, text: p.slice(1).join(' · '), size: Math.round(rs * s), color: '#FFFFFF', uppercase: true, fit: true })]; }),
+        logo(W - 225 * s, (story ? 150 : 46) * s, 160 * s, LOGO_W),
+        text({ name: 'Pie · texto', x: 64 * s, y: bandH - 63 * s, w: W * 0.6, h: 26 * s, text: 'HEINEKEN 5MENTARIOS · ARUCAS', font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: '#BDBDBA' }),
+        text({ name: 'Llamada', bind: 'cta', x: W * 0.55, y: bandH - 63 * s, w: W * 0.45 - 70 * s, h: 26 * s, text: d.cta, font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: '#2BB061', align: 'right' })
+      ], CL)];
+    }
+  },
   // ---------------------------------------------------------------- Calendario del mes (portada del carrusel mensual)
   {
     key: 'mes', name: 'Calendario del mes (portada del carrusel)', category: 'carruseles',
@@ -315,7 +436,7 @@ export const TEMPLATES = [
   // ---------------------------------------------------------------- Menús de Navidad
   {
     key: 'navidad-menus', name: 'Menús de Navidad (carrusel)', category: 'promociones',
-    basedOn: { kind: 'guia', files: ['NAV / NAVB / NAVC (lienzo de diseño, no disponible aquí)'], note: 'Contenido de los menús de la guía. Precios y bebida [POR CONFIRMAR].' },
+    basedOn: { kind: 'original', files: ['Estilo de la slide «Champions en noviembre» (Sin título-1.psd)'], note: 'Contenido de los menús de la guía con el estilo claro de los PSD. Precios y bebida [POR CONFIRMAR].' },
     formats: ['post', 'square'], defaultFormat: 'post', multiPage: true,
     fields: [
       { k: 'portada', label: 'Título portada', def: 'MENÚS DE NAVIDAD' },
@@ -327,22 +448,29 @@ export const TEMPLATES = [
     images: [{ k: 'foto', label: 'Foto de portada (opcional)' }],
     build({ W, H, d }) {
       const s = W / 1080;
+      const N = '#0B0B0B', V = '#0B8A3E', CL = '#F3F3F1';
+      const foot = (cta) => [text({ name: 'Pie · texto', x: 52 * s, y: H - 75 * s, w: W * 0.6, h: 26 * s, text: 'HEINEKEN 5MENTARIOS · ARUCAS', font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: '#6E6E6A' }),
+        text({ name: 'Llamada', x: W * 0.55, y: H - 75 * s, w: W * 0.45 - 80 * s, h: 26 * s, text: cta, font: 'Barlow Condensed', weight: 900, size: Math.round(22 * s), letterSpacing: 4 * s, color: V, align: 'right' })];
+      const words = String(d.portada || '').trim().split(/\s+/), half = Math.ceil(words.length / 2);
       const cover = page([
-        L('image', { name: 'Foto', bind: 'img:foto', x: 0, y: 0, w: W, h: H, brightness: 0.4, placeholder: false }),
-        L('glow', { name: 'Brillo', x: 0, y: H * 0.2, w: W, h: H * 0.5, color: C.verde, strength: 0.4 }),
-        logo(W / 2 - 80 * s, 80 * s, 160 * s),
-        text({ name: 'Título', bind: 'portada', x: 60 * s, y: H * 0.38, w: W - 120 * s, h: 320 * s, text: d.portada, size: Math.round(150 * s), align: 'center', fit: true, glowColor: C.verde, glowBlur: 40 * s }),
-        text({ name: 'Para grupos', x: 60 * s, y: H * 0.65, w: W - 120 * s, h: 50 * s, text: 'CENAS DE GRUPO · HEINEKEN 5MENTARIOS', font: 'Barlow Condensed', weight: 600, size: Math.round(32 * s), letterSpacing: 6 * s, color: C.verde, align: 'center', fit: true }),
-        ...footer(W, H, { swipe: true })
-      ]);
-      const menu = (n) => page([
-        logo(36 * s, 30 * s, 100 * s),
-        text({ name: 'Menú', bind: `m${n}`, x: 60 * s, y: H * 0.15, w: W - 120 * s, h: 130 * s, text: d[`m${n}`], size: Math.round(100 * s), color: C.verde, fit: true }),
-        L('line', { name: 'Línea', x: 60 * s, y: H * 0.15 + 140 * s, w: W - 120 * s, h: 4, width: 2, color: 'rgba(242,239,232,.3)' }),
-        text({ name: 'Platos', bind: `m${n}p`, x: 60 * s, y: H * 0.15 + 175 * s, w: W - 120 * s, h: H * 0.58, text: d[`m${n}p`], font: 'Barlow Condensed', weight: 600, size: Math.round(66 * s), lineHeight: 1.45, color: C.blanco, fit: true, valign: 'middle' }),
-        text({ name: 'Reserva', bind: 'reserva', x: 60 * s, y: H * 0.86, w: W - 120 * s, h: 40 * s, text: d.reserva, font: 'Barlow Condensed', weight: 900, size: Math.round(34 * s), letterSpacing: 6 * s, color: C.verde }),
-        ...footer(W, H, { swipe: n < 3, counter: `${n + 1}/4` })
-      ]);
+        L('image', { name: 'Foto', bind: 'img:foto', x: 0, y: H * 0.55, w: W, h: H * 0.38, fit: 'contain', focusY: 1, placeholder: false }),
+        logo(56 * s, 54 * s, 103 * s, LOGO_B),
+        text({ name: 'Contador', x: W - 230 * s, y: 92 * s, w: 150 * s, h: 28 * s, text: '01/04', font: 'Barlow Condensed', weight: 900, size: Math.round(26 * s), letterSpacing: 3 * s, color: V, align: 'right' }),
+        L('pill', { name: 'Pastilla', x: 51 * s, y: 200 * s, w: 470 * s, h: 58 * s, fill: N, text: 'CENAS DE GRUPO', font: 'Barlow Condensed', weight: 900, size: Math.round(27 * s), letterSpacing: 4 * s, color: '#FFFFFF' }),
+        text({ name: 'Titular negro', bind: 'portada', x: 50 * s, y: 287 * s, w: W - 100 * s, h: 152 * s, text: words.slice(0, half).join(' '), size: Math.round(165 * s), lineHeight: 0.92, fit: true, uppercase: true, color: N }),
+        text({ name: 'Titular verde', x: 50 * s, y: 437 * s, w: W - 100 * s, h: 152 * s, text: words.slice(half).join(' '), size: Math.round(165 * s), lineHeight: 0.92, fit: true, uppercase: true, color: V }),
+        ...foot('DESLIZA →')
+      ], CL);
+      const menu = (n) => { const [tt, pr] = String(d[`m${n}`] || '').split('·').map((x) => x.trim()); const platos = rowsOf(d[`m${n}p`]).slice(0, 9); const st = Math.min(78 * s, (H * 0.5) / Math.max(platos.length, 1)); return page([
+        logo(56 * s, 54 * s, 103 * s, LOGO_B),
+        text({ name: 'Contador', x: W - 230 * s, y: 92 * s, w: 150 * s, h: 28 * s, text: `0${n + 1}/04`, font: 'Barlow Condensed', weight: 900, size: Math.round(26 * s), letterSpacing: 3 * s, color: V, align: 'right' }),
+        L('pill', { name: 'Pastilla', x: 51 * s, y: 190 * s, w: 260 * s, h: 58 * s, fill: N, text: tt || `MENÚ ${n}`, font: 'Barlow Condensed', weight: 900, size: Math.round(27 * s), letterSpacing: 4 * s, color: '#FFFFFF' }),
+        text({ name: 'Precio', bind: `m${n}`, x: 50 * s, y: 262 * s, w: W - 100 * s, h: 150 * s, text: pr || '', size: Math.round(150 * s), lineHeight: 0.92, fit: true, uppercase: true, color: V }),
+        ...platos.flatMap((pl, i) => [L('line', { name: `Línea ${i + 1}`, x: 51 * s, y: 450 * s + i * st, w: W - 128 * s, h: 4, width: 2 * s, color: N }),
+          text({ name: `Plato ${i + 1}`, x: 52 * s, y: 450 * s + i * st + st * 0.2, w: W - 130 * s, h: st * 0.66, text: pl, size: Math.round(Math.min(46 * s, st * 0.56)), color: N, uppercase: true, fit: true })]),
+        text({ name: 'Reserva', bind: 'reserva', x: 52 * s, y: H - 126 * s, w: W - 104 * s, h: 34 * s, text: d.reserva, font: 'Barlow Condensed', weight: 900, size: Math.round(28 * s), letterSpacing: 3 * s, color: N }),
+        ...foot(n < 3 ? 'DESLIZA →' : '¡TE ESPERAMOS!')
+      ], CL); };
       return [cover, menu(1), menu(2), menu(3)];
     }
   },

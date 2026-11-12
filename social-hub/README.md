@@ -76,6 +76,11 @@ de una vez: no duplica.
   dibujado en Canvas 2D. Exporta **PNG/JPG reales** en 1080×1350, 1080×1920, 1080×1080 y 1920×1080, a ×1/×2/×3, y los carruseles en **ZIP**.
 - **Plantillas** (`app/studio/templates.js`): recreadas y editables a partir de los originales (Champions partido y portada, cartel de
   Halloween/tardeo) y de los estilos de la guía (Monólogos, story «Hoy», line-up, programación, «Así fue…», menús de Navidad, marca).
+  **Estilo de referencia: los PSD del carrusel de noviembre.** Plantillas recreadas de ellos: «Artista del día», «Lista con titular»
+  (Champions en noviembre), «Tardeo · palabra repetida», «Fin de semana · dos días» y «Calendario del mes»; los menús de Navidad usan
+  ese mismo estilo claro. Todos los diseños del plan de marketing se producen con estas plantillas. Si un diseño se generó con el estilo
+  anterior y nadie lo ha retocado (ni aprobado, programado o publicado), al volver a ejecutar el plan se guarda una versión nueva con el
+  estilo de los PSD; los retocados a mano no se tocan.
 - **Diseños originales** (`app/studio/originals.js`): solo archivos verificados en Drive, con formato, colores medidos, composición y qué se
   reutiliza. Los PNG/JPG se marcan como **imagen plana sin capas**; la variante se hace encima del original, que se conserva.
 - **Editor**: seleccionar, mover, redimensionar, texto, tipografía, tamaño, color, foto, fondo, logo y decorativos; deshacer; varias diapositivas;
