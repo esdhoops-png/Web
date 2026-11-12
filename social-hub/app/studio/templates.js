@@ -141,7 +141,7 @@ export const TEMPLATES = [
   // ---------------------------------------------------------------- Story «Hoy en 5mentarios»
   {
     key: 'story-hoy', name: 'Story «Hoy en 5mentarios»', category: 'stories',
-    basedOn: { kind: 'guia', files: ['story-hoy-sabado-07.mp4 (no disponible aquí)'], note: 'Versión estática (fotograma resumen) de la story animada descrita en la guía. La animación se hace en el módulo de vídeo.' },
+    basedOn: { kind: 'original', files: ['story-esta-semana-12-14-nov.mp4', 'story «Faltan 2 días» del Tardeo Exterior'], note: 'Recreada a partir de las stories reales enviadas el 12 nov (rayos verdes, pastilla de fecha, filas hora verde / nombre a la derecha con líneas finas). Versión estática; la animación se hace en el módulo de vídeo.' },
     formats: ['story'], defaultFormat: 'story',
     fields: [{ k: 'fecha', label: 'Fecha (pastilla)', def: '[DÍA] [DD.MM]' }, { k: 'filas', label: 'Programa (una línea: «22:30 Son Diferente»)', def: '[HORA] [ARTISTA]\n[HORA] [DJ]', multiline: true }, { k: 'reserva', label: 'Llamada final', def: 'RESERVA TU MESA · WHATSAPP 627 304 115' }],
     images: [],
@@ -155,10 +155,12 @@ export const TEMPLATES = [
         text({ name: 'HOY', x: 60 * s, y: 430 * s, w: W - 120 * s, h: 300 * s, text: 'HOY', size: Math.round(300 * s), align: 'center', glowColor: C.verde, glowBlur: 50 * s }),
         text({ name: 'en 5mentarios', x: 60 * s, y: 740 * s, w: W - 120 * s, h: 60 * s, text: 'EN 5MENTARIOS', font: 'Barlow Condensed', weight: 600, size: Math.round(44 * s), letterSpacing: 12 * s, color: C.blanco, align: 'center' }),
         ...rows.flatMap((r, i) => { const m = r.match(/^(\d{1,2}[:.]\d{2})\s+(.*)$/); const n = Math.max(rows.length, 1);
-          const rh = Math.min(250, 660 / n) * s; const y0 = 900 * s + (660 * s - rh * n) / 2; const y = y0 + i * rh; const hs = Math.min(150, rh / s * 0.75) * s;
+          const rh = Math.min(170, 640 / n) * s; const y0 = 900 * s + (640 * s - rh * n) / 2; const y = y0 + i * rh; const fs = Math.min(84, rh / s * 0.55) * s;
           return [
-          text({ name: `Hora ${i + 1}`, bind: `filas:${i}:hora`, x: 80 * s, y: y + (rh - hs) / 2, w: 380 * s, h: hs, text: m ? m[1] : '', size: Math.round(hs * 0.92), color: 'transparent', strokeColor: C.verde, strokeWidth: 4 * s }),
-          text({ name: `Artista ${i + 1}`, bind: `filas:${i}:nombre`, x: 470 * s, y: y + (rh - hs * 0.8) / 2, w: W - 540 * s, h: hs * 0.8, text: m ? m[2] : r, size: Math.round(hs * 0.62), fit: true, uppercase: true, valign: 'middle' })]; }),
+          ...(i === 0 ? [L('line', { name: 'Línea superior', x: 100 * s, y: y - 3 * s, w: W - 200 * s, h: 6 * s, width: 2 * s, color: 'rgba(43,176,97,.45)' })] : []),
+          text({ name: `Hora ${i + 1}`, bind: `filas:${i}:hora`, x: 100 * s, y: y + (rh - fs) / 2, w: 300 * s, h: fs * 1.1, text: m ? m[1] : '', size: Math.round(fs), color: C.verde }),
+          text({ name: `Artista ${i + 1}`, bind: `filas:${i}:nombre`, x: 400 * s, y: y + (rh - fs) / 2, w: W - 500 * s, h: fs * 1.1, text: m ? m[2] : r, size: Math.round(fs), fit: true, uppercase: true, align: 'right' }),
+          L('line', { name: `Separador ${i + 1}`, x: 100 * s, y: y + rh - 3 * s, w: W - 200 * s, h: 6 * s, width: 2 * s, color: 'rgba(43,176,97,.45)' })]; }),
         text({ name: 'Reserva', bind: 'reserva', x: 60 * s, y: 1620 * s, w: W - 120 * s, h: 60 * s, text: d.reserva, font: 'Barlow Condensed', weight: 900, size: Math.round(40 * s), letterSpacing: 3 * s, color: C.verde, align: 'center', fit: true })
       ], C.negroV)];
     }

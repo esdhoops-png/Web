@@ -19,8 +19,6 @@ export const PLAN_EXTRA = [
     pending_info: 'Qué partidos de la J6 se ponen y a qué hora (para las stories de cada día).', info: 'C' },
   { key: 'p3-1128-aniversario', kind: 'story', title: 'Story · Mañana, Tardeo pre Navidad (4º aniversario)', starts_at: iso('11-28', '12:00'), format: 'Story 9:16', status: 'in_design',
     objective: 'Recordatorio del aniversario.', copy: 'Sticker de cuenta atrás al domingo 29 a las 17:00.', cta: 'Sticker «Recordarme»', hashtags: '', info: 'C' },
-  { key: 'p3-1114-noche', kind: 'story', title: 'Stories · sábado 14 · Pedro Afonso + DJ Asped', starts_at: iso('11-14', '18:00'), format: 'Story «Hoy» + directo', status: 'pending_prep',
-    objective: 'Recordar la noche del sábado.', copy: 'HOY · 22:30 Pedro Afonso · 00:00 DJ Asped. Directo mencionando al artista.', cta: 'Ubicación + mención', hashtags: '', info: 'C' },
   { key: 'p3-1129-hoy', kind: 'story', title: 'Stories · Hoy Tardeo pre Navidad · 4º aniversario', starts_at: iso('11-29', '11:00'), format: 'Story «Hoy» + directo', status: 'pending_prep',
     objective: 'Recordatorio del día y directo.', copy: 'HOY · 17:00 Cremita de Coco · 19:00 Yet Garbey.', cta: 'Ubicación + mención', hashtags: '', info: 'C' },
   { key: 'p3-1204-menus', kind: 'story', title: 'Story · Menús de Navidad para grupos', starts_at: iso('12-04', '13:30'), format: 'Story 9:16', status: 'in_design',
@@ -86,7 +84,6 @@ export const DESIGNS = {
   'p2-1121-stories': { template: 'story-hoy', format: 'story', complete: true, data: { fecha: 'SÁB 21.11', filas: '22:30 SON ALDEA\n00:00 DJ AKE' }, source: 'Programación de noviembre confirmada por el propietario (12 nov)' },
   'p2-1127-stories': { template: 'story-hoy', format: 'story', complete: true, data: { fecha: 'VIE 27.11', filas: '22:30 ALBERTO DÉNIZ\n00:00 DJ AKE' }, source: 'Programación de noviembre confirmada por el propietario (12 nov)' },
   'p2-1128-stories': { template: 'story-hoy', format: 'story', complete: true, data: { fecha: 'SÁB 28.11', filas: '22:30 SAVIA NUEVA\n00:00 DJ ASPED' }, source: 'Programación de noviembre confirmada por el propietario (12 nov)' },
-  'p3-1114-noche': { template: 'story-hoy', format: 'story', complete: true, data: { fecha: 'SÁB 14.11', filas: '22:30 PEDRO AFONSO\n00:00 DJ ASPED' }, source: 'Programación de noviembre confirmada por el propietario (12 nov)' },
   'p3-1129-hoy': { template: 'story-hoy', format: 'story', complete: true, data: { fecha: 'DOM 29.11', filas: '17:00 CREMITA DE COCO\n19:00 YET GARBEY' }, source: 'Programación de noviembre confirmada por el propietario (12 nov)' },
   // Incompletos → borrador editable con huecos (falta información)
   'p2-1118-prog': { template: 'programacion', format: 'post', complete: true, data: { titulo: 'ESTA SEMANA', filas: 'JUE 19 · 21:00 · MONÓLOGOS: SAÚL ROMERO\nVIE 20 · 22:30 · APOLO · 00:00 DJ ASPED\nSÁB 21 · 22:30 · SON ALDEA · 00:00 DJ AKE' }, source: 'Programación de noviembre confirmada por el propietario (12 nov)' },
