@@ -8,7 +8,7 @@ import { FORMATS, FONT_LIST, uid, loadAssets, renderPage, hitTest, rescaleDoc, c
 import { TEMPLATES, CATEGORIES, CATEGORY_LABEL, BRAND_COLORS, templateByKey, buildDoc } from '../studio/templates.js';
 import { studioAvailable, listCreatives, getCreative, createCreative, updateCreative, saveVersion, renderExports, linkToPost, addToLibrary, refForCanvas } from '../studio/data.js';
 import { interpret } from '../studio/brief.js';
-import { ORIGINALS, MISSING } from '../studio/originals.js';
+import { ORIGINALS, MISSING, RECEIVED } from '../studio/originals.js';
 import { aiStatus, generateImage } from '../studio/ai.js';
 import { VideoStudio } from './video-studio.js';
 
@@ -513,6 +513,10 @@ function OriginalsTab() {
         <div class="row">${t ? html`<button class="btn sm primary" onClick=${() => startTemplate(t, t.defaultFormat, { title: 'Nuevo · ' + t.name })}>Usar plantilla recreada</button>` : null}
           ${o.flat ? html`<button class="btn sm" onClick=${() => variant(o)}>Variante sobre el original</button>` : null}
           <a class="btn sm ghost" href=${driveView(o.drive)} target="_blank" rel="noopener"><${Icon} name="external" size=${13} />Original</a></div></div></div>`; })}</div>
+    <section class="card stack"><h2>Recibidos el 12 nov (pendientes de subir a la app)</h2>
+      ${RECEIVED.map((r) => html`<div class="small" style="padding:6px 0;border-top:1px solid var(--line)"><b>${r.name}</b> · ${r.format}${r.flat ? ' · sin capas editables' : ''}
+        <div class="muted xs"><b>Composición:</b> ${r.composition}</div><div class="muted xs"><b>Reutilizable:</b> ${r.reusable}</div></div>`)}
+      <p class="xs muted" style="margin:0">Súbelos en su publicación (Subir nueva versión → Subir archivo) para que queden guardados como versión 1.</p></section>
     <section class="card"><h2>No disponible en este proyecto (no se ha importado)</h2><ul class="small" style="margin:0;padding-left:18px">${MISSING.map((m) => html`<li>${m}</li>`)}</ul>
       <p class="xs muted">Cuando subas el paquete a Drive se pueden registrar aquí. Verificado y descartado: «Tipos de personas» es un carrusel de Volcán.</p></section></div>`;
 }

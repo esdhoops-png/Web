@@ -76,6 +76,17 @@ export async function importEditorialPlan({ plan, extra = [], onLog = () => {} }
     }
     onLog(`Actualizadas con la programación confirmada: ${report.synced}.`);
   }
+  if (plan.REMOVED_KEYS?.length) {
+    const rem = check(await sb.from('posts').select('id, created_at, updated_at, status').in('import_key', plan.REMOVED_KEYS));
+    if (rem.length) {
+      const rids = rem.map((r) => r.id);
+      const [v2, c2] = await Promise.all([sb.from('post_versions').select('post_id').in('post_id', rids), sb.from('comments').select('post_id').in('post_id', rids)]);
+      const t2 = new Set([...check(v2), ...check(c2)].map((r) => r.post_id));
+      const del = rem.filter((r) => !t2.has(r.id)).map((r) => r.id);
+      if (del.length) { check(await sb.from('posts').delete().in('id', del)); onLog(`Publicaciones retiradas del plan eliminadas: ${del.length}.`); }
+      if (rem.length > del.length) onLog(`Retiradas del plan pero conservadas porque ya tenían diseño o comentarios: ${rem.length - del.length} (revisarlas a mano).`);
+    }
+  }
   if (plan.OBSOLETE_TASKS?.length) {
     const obs = check(await sb.from('tasks').select('id, created_at, updated_at').in('title', plan.OBSOLETE_TASKS).eq('status', 'pending'))
       .filter((t) => Math.abs(new Date(t.updated_at) - new Date(t.created_at)) < 2000);

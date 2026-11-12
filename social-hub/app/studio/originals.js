@@ -52,6 +52,19 @@ export const ORIGINALS = [
   }
 ];
 
+// Recibidos en el chat el 12 nov 2026 (archivos reales, aún NO subidos a la app ni a Drive)
+export const RECEIVED = [
+  { name: 'Story «Faltan 2 días» · Tardeo Exterior Halloween', format: 'Imagen 1080×1920 (plana)', flat: true,
+    composition: 'Foto oscura de fondo, logo arriba centrado, «FALTAN» verde muy espaciado, «2 DÍAS» gigante blanco con halo verde, banda verde girada «TARDEO EXTERIOR», «HALLOWEEN» gigante, fecha manuscrita verde «Sábado 14 · Noviembre», «DESDE LAS 16:00», filas hora verde / artista blanco a la derecha con líneas verdes finas, pie ORGANIZA (Ayto. de Arucas, cajita blanca) / COLABORAN (5mentarios, COA).',
+    reusable: 'Estructura de cuenta atrás y de filas; usada para la plantilla «Story HOY».', post: 'p2-1112-cuenta2' },
+  { name: 'story-esta-semana-12-14-nov.mp4', format: 'Vídeo H.264 1080×1920 · 17,2 s', flat: true,
+    composition: 'Rayos verdes, pastilla «12 – 14 NOV», «ESTA SEMANA EN 5MENTARIOS», escena por día con el día en contorno («JUE 12»), foto recortada del humorista, filas hora/artista, «RESERVA TU MESA» y cierre con el logo.',
+    reusable: 'Ritmo de escenas para el módulo de vídeo.', post: 'p2-1111-semana' },
+  { name: 'Reel «Así fue Halloween → ¿te vas a perder el Tardeo Exterior?»', format: 'Vídeo HEVC 1080×1920 · 23,8 s', flat: true,
+    composition: 'Planos del bar en Halloween con logo arriba, «Así fue…» manuscrito, «HALLOWEEN en 5mentarios», «¿Y AHORA TE VAS A PERDER… EL TARDEO EXTERIOR?» y cartel final con line-up y colaboradores.',
+    reusable: 'Referencia de reel de recuerdo + llamada al siguiente evento.', post: 'p2-1112-reel-halloween' }
+];
+
 // Lo que la guía cita pero NO está disponible en este proyecto (no se finge tenerlo)
 export const MISSING = [
   'Paquete de transferencia: 01_marca, 02_disenos_entregados (monólogos, cartel y carrusel del tardeo del 14, stories y vídeos), 03_fuentes_editables y 04_fotos_y_recursos.',

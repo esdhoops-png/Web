@@ -155,7 +155,7 @@ add({ key: 'p2-1113-manana', kind: 'story', title: 'Story · Tardeo Exterior: ma
 storiesNoche('p2-1113-stories', '11-13', 'viernes 13 · Son Diferente + DJ Ruven', [{ hora: '22:30', quien: 'Son Diferente' }, { hora: '00:00', quien: 'DJ Ruven' }],
   { status: 'pending_prep', material: 'Story animada «Hoy en 5mentarios» por preparar (como la del sáb 7: story-hoy-sabado-07.mp4).' });
 add({ key: 'p2-1114-tardeo', kind: 'event', title: 'Tardeo Exterior Halloween · desde las 16:00', starts_at: iso('11-14', '16:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
-  description: 'DJ Ruven 16:00 · Apolo 17:30 · Son Aldea 19:30 · Pedro Afonso 21:30. Sustituye al sábado de noche previsto. Organiza el Ayto. de Arucas; colaboran 5mentarios y COA.', pending_info: 'La programación de noviembre del propietario (12 nov) pone el sábado 14 a las 22:30 Pedro Afonso + 00:00 DJ Asped y no incluye este tardeo: confirmar si se mantiene.' });
+  description: 'DJ Ruven 16:00 · Apolo 17:30 · Son Aldea 19:30 · Pedro Afonso 21:30. Sustituye al sábado de noche previsto. Organiza el Ayto. de Arucas; colaboran 5mentarios y COA.', pending_info: null });
 add({ key: 'p2-1114-hoy', kind: 'story', title: 'Stories · Hoy Tardeo Exterior (cuenta atrás + animada + directo)', starts_at: iso('11-14', '11:00'), format: 'Story «hoy» + story animada 16 s + directo',
   status: 'in_review', requires_approval: true, material: `${DELIV('stories/story-tardeo-hoy')} Story animada ENTREGADA: videos/story-tardeo-exterior-halloween-14.mp4.`,
   copy: 'HOY · desde las 16:00 · Tardeo Exterior Halloween\nDirecto: una story al empezar cada artista (16:00 DJ Ruven, 17:30 Apolo, 19:30 Son Aldea, 21:30 Pedro Afonso), mencionándolos. Repostear todas las menciones.',
@@ -293,7 +293,6 @@ add({ key: 'p2-1231-stories', kind: 'story', title: 'Stories · Hoy Tardeo de Fi
 
 // ---------- Eventos de diciembre CONFIRMADOS por el propietario (mensaje del 12 nov 2026) ----------
 const EV = (key, d, t, title, description) => add({ key, kind: 'event', title, starts_at: iso(d, t), requires_approval: false, status: 'scheduled', format: 'Evento', description });
-EV('p2e-1114', '11-14', '22:30', 'Pedro Afonso 22:30 + DJ Asped 00:00', 'Programación de noviembre del propietario (12 nov).');
 EV('p2e-1120', '11-20', '22:30', 'Apolo 22:30 + DJ Asped 00:00');
 EV('p2e-1121', '11-21', '22:30', 'Son Aldea 22:30 + DJ Ake 00:00');
 EV('p2e-1127', '11-27', '22:30', 'Alberto Déniz 22:30 + DJ Ake 00:00');
@@ -320,7 +319,8 @@ const TASKS = [
   T({ title: 'Subir a Drive el paquete de transferencia (diseños, PSD, vídeos, fotos y logos)', priority: 'urgent', due_date: '2026-11-12',
     description: 'Carpeta «Grupo 5mentarios → Heineken». Así se pueden adjuntar a cada publicación desde la app.' }),
   T({ title: 'Story animada «Hoy» del viernes 13 (Son Diferente + DJ Ruven)', priority: 'high', due_date: '2026-11-13', post: 'p2-1113-stories' }),
-  T({ title: 'Aclarar el sábado 14: ¿se mantiene el Tardeo Exterior Halloween además de la noche con Pedro Afonso?', assignee: 'owner', priority: 'urgent', due_date: '2026-11-13', post: 'p2-1114-tardeo' }),
+  T({ title: 'Subir a la app los diseños ya entregados de esta semana (story «faltan 2 días», story «esta semana 12–14», reel Halloween → tardeo)', priority: 'urgent', due_date: '2026-11-12', post: 'p2-1112-reel-halloween',
+    description: 'Cada uno en su publicación: «Subir nueva versión» → «Subir archivo». Así quedan guardados como versión 1 y el propietario puede verlos.' }),
   T({ title: 'Confirmar la hora del monólogo de Kike Pérez (jue 3 dic)', assignee: 'owner', priority: 'high', due_date: '2026-11-30', post: 'p2-1202-prog' }),
   T({ title: 'Confirmar precio de la entrada de Kike Pérez (15 € según el planificador)', assignee: 'owner', priority: 'medium', due_date: '2026-11-20', post: 'p2-1123-kike' }),
   T({ title: 'Confirmar bebida incluida y precios definitivos de los menús de Navidad', assignee: 'owner', priority: 'high', due_date: '2026-12-02', post: 'p2-1204-navidad-menus' }),
@@ -361,7 +361,10 @@ const OLD_TASK_TITLES = [
 // Publicaciones actualizadas con la programación de diciembre: si ya se importaron y nadie las ha tocado, se actualizan
 const SYNC_KEYS = ['p2-1114-tardeo', 'p2-1118-prog', 'p2-1120-stories', 'p2-1121-stories', 'p2-1125-prog', 'p2-1127-aniversario', 'p2-1127-stories', 'p2-1128-stories', 'p2-1129-aniversario-evento', 'p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
   'p2-1219-stories', 'p2-1222-horarios', 'p2-1223-prog', 'p2-1224-fecha', 'p2-1225-fecha', 'p2-1226-stories', 'p2-1230-prog', 'p2-1231-fecha', 'p2-1231-stories'];
-const OBSOLETE_TASKS = ['Confirmar artistas, DJs y horas · finde 20–21 nov', 'Confirmar artistas, DJs y horas · finde 27–29 nov (y tardeo del aniversario)','Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
+const OBSOLETE_TASKS = ['Aclarar el sábado 14: ¿se mantiene el Tardeo Exterior Halloween además de la noche con Pedro Afonso?', 'Confirmar artistas, DJs y horas · finde 20–21 nov', 'Confirmar artistas, DJs y horas · finde 27–29 nov (y tardeo del aniversario)','Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
   'Confirmar artistas, DJs y horas · finde 18–19 dic', 'Confirmar artistas, DJs y horas · Navidad (24–26 dic)', 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', 'Decidir si hay plan de Nochevieja'];
 
-export { PLAN, TASKS, LIBRARY, OLD_PREFIX, OLD_TASK_TITLES, SYNC_KEYS, OBSOLETE_TASKS };
+// Claves retiradas (si se importaron y nadie las ha tocado, se borran): la noche del 14 la sustituye el Tardeo Exterior
+const REMOVED_KEYS = ['p2e-1114', 'p3-1114-noche'];
+
+export { PLAN, TASKS, LIBRARY, OLD_PREFIX, OLD_TASK_TITLES, SYNC_KEYS, OBSOLETE_TASKS, REMOVED_KEYS };
