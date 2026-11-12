@@ -33,7 +33,7 @@ export function VideoStudio({ creatives, reload }) {
     <section class="card stack"><h2>Stories animadas del plan (${STORY_VIDEOS.length})</h2>
       <p class="small muted" style="margin:0">Con el estilo de la story animada del 11 nov: rayos verdes, una escena por día, «Reserva tu mesa» y cierre con el logo. MP4 1080×1920 ya generados con la programación confirmada. Al ejecutar el plan de marketing se guardan en cada publicación, pendientes de aprobación.</p>
       <div class="list">${STORY_VIDEOS.map((v) => html`<a class="li" key=${v.key} href=${'media/stories/' + v.file} target="_blank" rel="noopener"><${Icon} name="video" />
-        <div class="body"><div class="title">${v.spec.mode === 'hoy' ? 'Hoy · ' + v.spec.intro.tags : 'Esta semana · ' + v.spec.rango}</div><div class="sub">${v.spec.days.map((d) => d.dia).join(' · ')} · ${storyDuration(v.spec).toFixed(1)} s · ${v.file}</div></div><span class="btn sm">Ver</span></a>`)}</div></section>
+        <div class="body"><div class="title">${storyLabel(v.spec)}</div><div class="sub">${storySummary(v.spec)} · ${storyDuration(v.spec).toFixed(1)} s · ${v.file}</div></div><span class="btn sm">Ver</span></a>`)}</div></section>
     <section class="card"><h2>Vídeos guardados</h2>${videos.length ? html`<div class="list">${videos.map((c) => html`<div class="li" key=${c.id} onClick=${() => open(c)}><${Icon} name="video" />
       <div class="body"><div class="title">${c.title}</div><div class="sub">v${c.current_version} · ${c.width}×${c.height} · ${fmt.rel(c.updated_at)}</div></div><span class="btn sm">Abrir</span></div>`)}</div>` : html`<p class="empty">Aún no hay vídeos.</p>`}</section></div>`;
 }
@@ -138,6 +138,9 @@ function VideoEditor({ initial, onExit }) {
 }
 
 // Story animada del plan: vídeo ya exportado (MP4). Se ve, se descarga y se vincula; para cambiar textos se edita el plan y se vuelve a generar.
+const storyLabel = (sp) => (sp.mode === 'hoy' ? 'Hoy · ' + sp.rango : sp.mode === 'partido' ? `Champions · ${sp.local} vs ${sp.visitante}` : 'Esta semana · ' + sp.rango);
+const storySummary = (sp) => (sp.mode === 'hoy' ? (sp.acts || []).map((a) => `${a.hora} ${a.name}`).join(' · ') : sp.mode === 'partido' ? `Hoy · ${sp.hora} · en pantalla grande`
+  : (sp.days || []).map((d) => d.dia).join(' · '));
 function StoryViewer({ initial, onExit }) {
   const [url, setUrl] = useState(null);
   const ex = (initial.version?.exports || [])[0];
@@ -148,6 +151,6 @@ function StoryViewer({ initial, onExit }) {
       ${url ? html`<a class="btn primary sm" href=${url} download="story.mp4"><${Icon} name="download" size=${15} />Descargar MP4</a>` : null}</div>
     <div class="row" style="align-items:flex-start;gap:20px;flex-wrap:wrap">
       ${url ? html`<video src=${url} controls playsinline style="width:300px;max-width:100%;border-radius:12px;background:#000"></video>` : html`<p class="empty">Cargando…</p>`}
-      <div class="stack small" style="gap:6px;min-width:220px"><b>Contenido</b>${(sp.days || []).map((d) => html`<div><b>${d.dia}</b> ${d.band || d.kicker || ''} ${d.big || ''}<br />${(d.rows || []).map((r) => r.join(' · ')).join(' / ')}</div>`)}
+      <div class="stack small" style="gap:6px;min-width:220px"><b>Contenido</b><div><b>${storyLabel(sp)}</b><br />${storySummary(sp)}</div>
         <span class="muted">1080×1920 · ${ex ? (ex.size / 1048576).toFixed(1) + ' MB' : ''} · versión ${initial.version?.version_no}</span></div></div></div>`;
 }

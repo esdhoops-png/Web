@@ -5,7 +5,11 @@
 // Se dibuja fotograma a fotograma en un canvas: el mismo código sirve para la vista previa, para grabar en el navegador
 // (MediaRecorder, en tiempo real) y para renderizar fuera (fotograma a fotograma). No usa IA.
 //
-// spec = { mode: 'semana' | 'hoy', rango: '26 – 29 NOV', intro: { t1, t2, sub, tags }, days: [
+// Además: mode 'hoy' (recreada de story-hoy-sabado-31.mp4: «HOY», una escena por actuación con la hora en contorno, foto
+// recortada y nombre, resumen y logo) y mode 'partido' (recreada de las stories de Champions del 3 y 4 nov).
+//   hoy:     { mode:'hoy', rango:'SÁBADO 31', intro:{ sub, tags }, acts:[{ hora, kicker, name, photo }], resumen:{ t1, t2 }, cta:{ pill } }
+//   partido: { mode:'partido', rango:'CHAMPIONS', local, visitante, hora, photo }
+// spec = { mode: 'semana', rango: '26 – 29 NOV', intro: { t1, t2, sub, tags }, days: [
 //   { dia: 'VIE 27', kicker: 'MÚSICA EN DIRECTO + DJ', band: null | 'TARDEO PRE NAVIDAD', title: null | '4º ANIVERSARIO',
 //     desde: null | 'DESDE LAS 17:00', rows: [['22:30', 'ALBERTO DÉNIZ'], ['00:00', 'DJ AKE']], big: null | 'SOLD OUT' } ],
 //   cta: { t1: 'RESERVA', t2: 'TU MESA', pill: 'WHATSAPP 627 304 115' }, outro: 'ARUCAS · TE ESPERAMOS' }
@@ -19,7 +23,19 @@ export function storyTimeline(spec) {
   const sc = [];
   let t = 0;
   const push = (type, dur, data) => { sc.push({ type, start: t, dur, data }); t += dur; };
-  push('intro', spec.mode === 'hoy' ? 2.4 : 2.6, spec.intro || {});
+  if (spec.mode === 'hoy') {
+    push('hintro', 2.2, spec.intro || {});
+    (spec.acts || []).forEach((a, i) => push('act', 2.4, { ...a, n: i + 1, of: spec.acts.length }));
+    push('resumen', 3.2, spec);
+    push('outro', 2.3, { text: spec.outro || 'ARUCAS · NOS VEMOS HOY' });
+    return sc;
+  }
+  if (spec.mode === 'partido') {
+    push('match', 8.4, spec);
+    push('outro', 2.8, { text: spec.outro || 'ARUCAS · NOS VEMOS HOY' });
+    return sc;
+  }
+  push('intro', 2.6, spec.intro || {});
   for (const d of spec.days || []) {
     const n = (d.rows || []).length;
     push('day', Math.max(2.8, 1.5 + 0.42 * n + 1.3 + (d.band ? 0.5 : 0)), d);
@@ -30,10 +46,14 @@ export function storyTimeline(spec) {
 }
 export const storyDuration = (spec) => { const s = storyTimeline(spec); const l = s[s.length - 1]; return l.start + l.dur; };
 
-export async function loadStoryAssets(base = document.baseURI) {
-  const logo = await new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = new URL('icons/5mentarios-sello.svg', base).href; });
+const img = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+// Logo + fotos de artistas (media/artistas/<archivo>.png, recortes sin fondo sacados de los PSD) que use la story
+export async function loadStoryAssets(base = document.baseURI, spec = null) {
+  const logo = await img(new URL('icons/5mentarios-sello.svg', base).href);
+  const files = [...new Set([...(spec?.acts || []).map((a) => a.photo), spec?.photo].filter(Boolean))];
+  const photos = Object.fromEntries(await Promise.all(files.map(async (f) => [f, await img(new URL('media/artistas/' + f, base).href)])));
   await Promise.all(['400 100px "Anton"', '900 40px "Barlow Condensed"', '600 40px "Barlow Condensed"'].map((f) => document.fonts.load(f).catch(() => {})));
-  return { logo };
+  return { logo, photos };
 }
 
 function spaced(ctx, text, x, y, ls, align = 'left') {
@@ -163,6 +183,89 @@ function sceneOutro(ctx, spec, d, lt, W, H, assets) {
   spaced(ctx, d.text, W / 2, H * 0.47 + 330, 8, 'center'); ctx.restore();
 }
 
+
+// ---------- «HOY» (recreada de story-hoy-sabado-31.mp4) ----------
+function glowBg(ctx, W, H, t) {
+  ctx.fillStyle = '#060A08'; ctx.fillRect(0, 0, W, H);
+  const g = ctx.createRadialGradient(W / 2, H * 0.36, 0, W / 2, H * 0.36, W * 0.95); g.addColorStop(0, `rgba(30,110,62,${0.42 + 0.04 * Math.sin(t * 1.5)})`); g.addColorStop(0.6, 'rgba(20,70,40,.12)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function sceneHoyIntro(ctx, spec, d, lt, W, H) {
+  const a = at(lt, 0, 0.7), s = 2.2 - 1.2 * a;
+  ctx.save(); ctx.globalAlpha = Math.min(1, 0.25 + a); ctx.translate(W / 2, H * 0.4); ctx.scale(s, s);
+  glowText(ctx, d.t1 || 'HOY', 0, 0, 330, G); ctx.restore();
+  const b = at(lt, 0.7, 0.45); ctx.save(); ctx.globalAlpha = b; ctx.textAlign = 'center';
+  ctx.font = '400 78px "Anton"'; ctx.fillStyle = '#F2EFE8'; ctx.fillText(d.sub || 'EN 5MENTARIOS', W / 2, H * 0.4 + 120 + (1 - b) * 24);
+  if (d.tags) { ctx.font = '900 32px "Barlow Condensed"'; ctx.fillStyle = 'rgba(242,239,232,.75)'; spaced(ctx, d.tags, W / 2, H * 0.4 + 180 + (1 - b) * 24, 7, 'center'); }
+  ctx.textAlign = 'left'; ctx.restore();
+}
+function photoFit(ctx, im, cx, top, maxW, maxH, alpha, scale = 1) {
+  const r = Math.min(maxW / im.width, maxH / im.height) * scale, w = im.width * r, h = im.height * r;
+  ctx.save(); ctx.globalAlpha = alpha; ctx.drawImage(im, cx - w / 2, top + (maxH - h), w, h); ctx.restore();
+}
+function sceneAct(ctx, spec, d, lt, W, H, assets) {
+  const a = at(lt, 0, 0.5);
+  ctx.save(); ctx.globalAlpha = a * 0.9; ctx.font = '400 300px "Anton"'; ctx.textAlign = 'center'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(43,176,97,.55)';
+  ctx.strokeText(d.hora || '', W / 2, H * 0.215); ctx.restore();
+  const im = assets.photos?.[d.photo];
+  const nameY = im ? H * 0.745 : H * 0.52;
+  if (im) {
+    photoFit(ctx, im, W / 2, H * 0.12, W * 0.86, H * 0.54, at(lt, 0.05, 0.6), 1.06 - 0.06 * at(lt, 0, 1.2));
+    const f = ctx.createLinearGradient(0, H * 0.5, 0, H * 0.67); f.addColorStop(0, 'rgba(6,10,8,0)'); f.addColorStop(1, 'rgba(6,10,8,1)');
+    ctx.fillStyle = f; ctx.fillRect(0, H * 0.5, W, H * 0.18);
+  }
+  const b = at(lt, 0.35, 0.45); ctx.save(); ctx.globalAlpha = b; ctx.textAlign = 'center';
+  if (d.kicker) { ctx.font = '900 32px "Barlow Condensed"'; ctx.fillStyle = G; spaced(ctx, d.kicker, W / 2, nameY - (im ? 165 : 215) + (1 - b) * 20, 7, 'center'); }
+  const ns = fitFont(ctx, d.name || '', '"Anton"', im ? 150 : 200, W - 120); ctx.font = `400 ${ns}px "Anton"`; ctx.fillStyle = '#F2EFE8'; ctx.textAlign = 'center';
+  ctx.fillText(d.name || '', W / 2, nameY + (1 - b) * 30); ctx.restore();
+  ctx.save(); ctx.globalAlpha = 0.6; ctx.font = '900 26px "Barlow Condensed"'; ctx.fillStyle = '#9A9A9A'; ctx.textAlign = 'right'; ctx.fillText(`${d.n}/${d.of}`, W - 70, H - 90); ctx.restore();
+}
+function sceneResumen(ctx, spec, d, lt, W, H) {
+  const a = at(lt, 0, 0.45); ctx.save(); ctx.globalAlpha = a;
+  ctx.font = '400 150px "Anton"'; ctx.textAlign = 'center'; ctx.fillStyle = '#F2EFE8'; ctx.fillText(spec.resumen?.t1 || 'HOY', W / 2, H * 0.3);
+  const t2 = spec.resumen?.t2 || ''; if (t2) { const s2 = fitFont(ctx, t2, '"Anton"', 150, W - 140); ctx.font = `400 ${s2}px "Anton"`; ctx.fillStyle = G; ctx.fillText(t2, W / 2, H * 0.3 + 140); }
+  ctx.restore();
+  const acts = spec.acts || [], rh = acts.length > 3 ? 92 : 104, y0 = H * 0.3 + 230;
+  acts.forEach((x, i) => {
+    const b = at(lt, 0.35 + i * 0.22, 0.4), y = y0 + i * rh; ctx.save(); ctx.globalAlpha = b; ctx.translate(-(1 - b) * 50, 0);
+    ctx.fillStyle = 'rgba(242,239,232,.14)'; ctx.fillRect(120, y - 6, W - 240, 2);
+    ctx.font = '400 54px "Anton"'; ctx.fillStyle = G; ctx.textAlign = 'left'; ctx.fillText(x.hora || '', 130, y + 62);
+    const ns = fitFont(ctx, x.name || '', '"Anton"', 54, W - 330 - 130); ctx.font = `400 ${ns}px "Anton"`; ctx.fillStyle = '#F2EFE8'; ctx.fillText(x.name || '', 310, y + 62);
+    ctx.restore();
+  });
+  const c = at(lt, 0.45 + acts.length * 0.22, 0.4), yc = y0 + acts.length * rh + 70; ctx.save(); ctx.globalAlpha = c; ctx.textAlign = 'center';
+  ctx.font = '400 66px "Anton"'; ctx.fillStyle = '#F2EFE8'; ctx.fillText('RESERVA TU MESA', W / 2, yc + 20);
+  if (spec.cta?.pill) pill(ctx, spec.cta.pill, W / 2, yc + 50, 64, G, '#04140A', 32, 'center', 3);
+  ctx.restore();
+}
+// ---------- Partido (recreada de story-barca-aston-villa-hoy.mp4 / story-aek-real-madrid-hoy.mp4) ----------
+function sceneMatch(ctx, spec, d, lt, W, H, assets) {
+  const im = assets.photos?.[spec.photo];
+  if (im) { const r = Math.max(W / im.width, (H * 0.62) / im.height) * (1.04 - 0.04 * clamp(lt / 8)); ctx.drawImage(im, (W - im.width * r) / 2, 0, im.width * r, im.height * r); }
+  else {
+    // sin foto: «CHAMPIONS» repetido en contorno (de la portada de Champions), muy suave
+    ctx.save(); ctx.font = '400 230px "Anton"'; ctx.lineWidth = 2;
+    for (let i = 0; i < 6; i++) { ctx.strokeStyle = i % 2 ? 'rgba(43,176,97,.24)' : 'rgba(242,239,232,.10)'; const off = ((lt * 40 + i * 260) % 900); ctx.strokeText('CHAMPIONS CHAMPIONS', -off, 230 + i * 205); }
+    ctx.restore();
+  }
+  const f = ctx.createLinearGradient(0, H * 0.3, 0, H * 0.66); f.addColorStop(0, 'rgba(6,10,8,0)'); f.addColorStop(1, 'rgba(6,10,8,1)'); ctx.fillStyle = f; ctx.fillRect(0, H * 0.3, W, H * 0.4);
+  const x0 = 70, y0 = H * 0.53;
+  const a = at(lt, 0.4, 0.45); ctx.save(); ctx.globalAlpha = a; ctx.translate(-(1 - a) * 60, 0);
+  glowText(ctx, 'HOY', x0, y0, 250, G, true, 'left'); ctx.restore();
+  ctx.font = '400 250px "Anton"'; const hw = ctx.measureText('HOY').width;
+  const b = at(lt, 0.9, 0.4); ctx.save(); ctx.globalAlpha = b; ctx.font = '400 58px "Anton"'; ctx.fillStyle = '#F2EFE8'; ctx.fillText(spec.kicker1 || 'FÚTBOL EN', x0 + hw + 30, y0 - 140); ctx.fillText(spec.kicker2 || '5MENTARIOS', x0 + hw + 30, y0 - 78); ctx.restore();
+  const c = at(lt, 1.4, 0.45); ctx.save(); ctx.globalAlpha = c; const s1 = fitFont(ctx, spec.local, '"Anton"', 190, W - 140); ctx.font = `400 ${s1}px "Anton"`; ctx.fillStyle = '#F2EFE8'; ctx.fillText(spec.local, x0, y0 + 190 + (1 - c) * 30); ctx.restore();
+  const e = at(lt, 1.9, 0.45), yv = y0 + 300; ctx.save(); ctx.globalAlpha = e;
+  ctx.fillStyle = G; ctx.beginPath(); ctx.arc(x0 + 34, yv - 30, 34, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#04140A'; ctx.font = '400 34px "Anton"'; ctx.textAlign = 'center'; ctx.fillText('vs', x0 + 34, yv - 18);
+  ctx.textAlign = 'left'; const s2 = fitFont(ctx, spec.visitante, '"Anton"', 100, W - 260); ctx.font = `400 ${s2}px "Anton"`; ctx.fillStyle = '#F2EFE8'; ctx.fillText(spec.visitante, x0 + 90, yv); ctx.restore();
+  const g2 = at(lt, 2.5, 0.5), yb = yv + 50, bw = W - 2 * x0; ctx.save(); ctx.globalAlpha = g2;
+  ctx.fillStyle = '#F2EFE8'; ctx.fillRect(x0, yb, bw * g2, 92); ctx.fillStyle = G; ctx.fillRect(x0, yb, Math.min(200, bw * g2), 92);
+  ctx.fillStyle = '#04140A'; ctx.font = '400 60px "Anton"'; ctx.fillText(spec.hora, x0 + 24, yb + 70);
+  ctx.font = '900 38px "Barlow Condensed"'; ctx.fillStyle = '#0B0B0B'; spaced(ctx, spec.barra || 'EN PANTALLA GRANDE', x0 + 230, yb + 60, 2); ctx.restore();
+  const h = at(lt, 3.1, 0.45); ctx.save(); ctx.globalAlpha = h; ctx.font = '900 34px "Barlow Condensed"'; ctx.fillStyle = 'rgba(242,239,232,.75)';
+  const w1 = spaced(ctx, 'RESERVA TU MESA  →', x0, yb + 160, 5); ctx.fillStyle = G; ctx.font = '900 40px "Barlow Condensed"'; spaced(ctx, spec.tel || '627 304 115', x0 + w1 + 24, yb + 160, 3); ctx.restore();
+}
+
 // Dibuja el fotograma del instante t (segundos)
 export function drawStory(ctx, spec, t, assets = {}) {
   const W = ctx.canvas.width, H = ctx.canvas.height;
@@ -170,12 +273,16 @@ export function drawStory(ctx, spec, t, assets = {}) {
   const tl = storyTimeline(spec);
   const sc = tl.find((s) => t >= s.start && t < s.start + s.dur) || tl[tl.length - 1];
   const lt = t - sc.start;
-  background(ctx, t, W0, H0, sc.type === 'outro' ? Math.max(0, 1 - lt / 0.4) : 1);
+  if (spec.mode === 'hoy' || spec.mode === 'partido') glowBg(ctx, W0, H0, t); else background(ctx, t, W0, H0, sc.type === 'outro' ? Math.max(0, 1 - lt / 0.4) : 1);
   if (sc.type !== 'outro') header(ctx, spec, assets, W0, at(t, 0, 0.4));
   // salida de cada escena: fundido en los últimos 0,28 s (menos la última)
   const out = sc.type === 'outro' ? 1 : clamp((sc.dur - lt) / 0.28);
   ctx.save(); ctx.globalAlpha = out;
   if (sc.type === 'intro') sceneIntro(ctx, spec, sc.data, lt, W0, H0);
+  else if (sc.type === 'hintro') sceneHoyIntro(ctx, spec, sc.data, lt, W0, H0);
+  else if (sc.type === 'act') sceneAct(ctx, spec, sc.data, lt, W0, H0, assets);
+  else if (sc.type === 'resumen') sceneResumen(ctx, spec, sc.data, lt, W0, H0);
+  else if (sc.type === 'match') sceneMatch(ctx, spec, sc.data, lt, W0, H0, assets);
   else if (sc.type === 'day') sceneDay(ctx, spec, sc.data, lt, W0, H0);
   else if (sc.type === 'cta') sceneCta(ctx, spec, sc.data, lt, W0, H0);
   else sceneOutro(ctx, spec, sc.data, lt, W0, H0, assets);
@@ -184,7 +291,7 @@ export function drawStory(ctx, spec, t, assets = {}) {
 
 // Graba la story en el navegador (tiempo real). Devuelve { blob, ext, mime }.
 export async function recordStory(spec, { onProgress = () => {} } = {}) {
-  const assets = await loadStoryAssets();
+  const assets = await loadStoryAssets(document.baseURI, spec);
   const c = document.createElement('canvas'); c.width = W0; c.height = H0; const ctx = c.getContext('2d');
   const mimes = ['video/mp4;codecs=avc1.42E01E', 'video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
   const mime = mimes.find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m));
