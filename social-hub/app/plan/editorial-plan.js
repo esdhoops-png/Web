@@ -155,7 +155,7 @@ add({ key: 'p2-1113-manana', kind: 'story', title: 'Story · Tardeo Exterior: ma
 storiesNoche('p2-1113-stories', '11-13', 'viernes 13 · Son Diferente + DJ Ruven', [{ hora: '22:30', quien: 'Son Diferente' }, { hora: '00:00', quien: 'DJ Ruven' }],
   { status: 'pending_prep', material: 'Story animada «Hoy en 5mentarios» por preparar (como la del sáb 7: story-hoy-sabado-07.mp4).' });
 add({ key: 'p2-1114-tardeo', kind: 'event', title: 'Tardeo Exterior Halloween · desde las 16:00', starts_at: iso('11-14', '16:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
-  description: 'DJ Ruven 16:00 · Apolo 17:30 · Son Aldea 19:30 · Pedro Afonso 21:30. Sustituye al sábado de noche previsto. Organiza el Ayto. de Arucas; colaboran 5mentarios y COA.' });
+  description: 'DJ Ruven 16:00 · Apolo 17:30 · Son Aldea 19:30 · Pedro Afonso 21:30. Sustituye al sábado de noche previsto. Organiza el Ayto. de Arucas; colaboran 5mentarios y COA.', pending_info: 'La programación de noviembre del propietario (12 nov) pone el sábado 14 a las 22:30 Pedro Afonso + 00:00 DJ Asped y no incluye este tardeo: confirmar si se mantiene.' });
 add({ key: 'p2-1114-hoy', kind: 'story', title: 'Stories · Hoy Tardeo Exterior (cuenta atrás + animada + directo)', starts_at: iso('11-14', '11:00'), format: 'Story «hoy» + story animada 16 s + directo',
   status: 'in_review', requires_approval: true, material: `${DELIV('stories/story-tardeo-hoy')} Story animada ENTREGADA: videos/story-tardeo-exterior-halloween-14.mp4.`,
   copy: 'HOY · desde las 16:00 · Tardeo Exterior Halloween\nDirecto: una story al empezar cada artista (16:00 DJ Ruven, 17:30 Apolo, 19:30 Son Aldea, 21:30 Pedro Afonso), mencionándolos. Repostear todas las menciones.',
@@ -171,16 +171,15 @@ add({ key: 'p2-1117-saul', kind: 'post', title: 'Post · Monólogos con Saúl Ro
   cta: `Reserva en el ${WA}`, hashtags: HT_MONO });
 programacion('p2-1118-prog', '11-18', 'semana 19–21 nov', [
   { dia: 'JUEVES 19', diaCorto: 'Jue', hora: '21:00', quien: 'Monólogos con Saúl Romero' },
-  { dia: 'VIERNES 20', diaCorto: 'Vie', hora: null, quien: 'Apolo + DJ Asped' },
-  { dia: 'SÁBADO 21', diaCorto: 'Sáb', hora: null, quien: 'Son Diferente + DJ Ake' }],
-  { pending_info: 'Vie 20 (Apolo + DJ Asped) y sáb 21 (Son Diferente + DJ Ake) están [POR CONFIRMAR] (así salieron en el carrusel de noviembre). Faltan las horas.' });
+  { dia: 'VIERNES 20', diaCorto: 'Vie', hora: '22:30', quien: 'Apolo + 00:00 DJ Asped' },
+  { dia: 'SÁBADO 21', diaCorto: 'Sáb', hora: '22:30', quien: 'Son Aldea + 00:00 DJ Ake' }]);
 reelProgramacion('p2-1118-reel', '11-18', 'semana 19–21 nov');
 add({ key: 'p2-1119-saul-evento', kind: 'event', title: 'Monólogos · Saúl Romero', starts_at: iso('11-19', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento', description: 'Aforo limitado. Reservas 627 304 115.' });
 add({ key: 'p2-1119-saul-story', kind: 'story', title: 'Story · Hoy monólogos con Saúl Romero', starts_at: iso('11-19', '12:00'), format: 'Story 9:16', status: 'in_review',
   material: DELIV('stories/story-monologos-* (Saúl Romero)'), copy: `HOY · 21:00 · Saúl Romero · AFORO LIMITADO · RESERVAS ${WA}`, cta: 'Enlace a WhatsApp' });
 reelJueves('p2-1119-reel', '11-19', 'ambiente', { attachments: [F.vC0611, F.vC0618] });
-storiesNoche('p2-1120-stories', '11-20', 'viernes 20', [{ hora: null, quien: 'Apolo' }, { hora: null, quien: 'DJ Asped' }], { pending_info: 'Apolo + DJ Asped [POR CONFIRMAR] y horas.' });
-storiesNoche('p2-1121-stories', '11-21', 'sábado 21', [{ hora: null, quien: 'Son Diferente' }, { hora: null, quien: 'DJ Ake' }], { pending_info: 'Son Diferente + DJ Ake [POR CONFIRMAR] y horas.' });
+storiesNoche('p2-1120-stories', '11-20', 'viernes 20 · Apolo + DJ Asped', [{ hora: '22:30', quien: 'Apolo' }, { hora: '00:00', quien: 'DJ Asped' }], { status: 'pending_prep' });
+storiesNoche('p2-1121-stories', '11-21', 'sábado 21 · Son Aldea + DJ Ake', [{ hora: '22:30', quien: 'Son Aldea' }, { hora: '00:00', quien: 'DJ Ake' }], { status: 'pending_prep' });
 fotosLunes('p2-1123-fotos', '11-23', 'el finde 20–21 nov');
 
 // ===================== semana 23–29 (Champions J5 + aniversario) =====================
@@ -200,22 +199,19 @@ for (const [k, d, lbl] of [['p2-1124-ucl', '11-24', 'martes 24'], ['p2-1125-ucl'
 }
 programacion('p2-1125-prog', '11-25', 'semana 26–29 nov', [
   { dia: 'JUEVES 26', diaCorto: 'Jue', hora: '—', quien: 'Kike Pérez · SOLD OUT (nueva fecha 03/12)' },
-  { dia: 'VIERNES 27', diaCorto: 'Vie', hora: null, quien: 'Alberto Déniz + DJ Ake' },
-  { dia: 'SÁBADO 28', diaCorto: 'Sáb', hora: null, quien: 'Savia Nueva + DJ Asped' },
-  { dia: 'DOMINGO 29', diaCorto: 'Dom', hora: null, quien: 'Tardeo del 4º aniversario' }],
-  { pending_info: 'Vie 27 (Alberto Déniz + DJ Ake) y sáb 28 (Savia Nueva + DJ Asped) [POR CONFIRMAR]. Horas del finde y del tardeo del aniversario.' });
+  { dia: 'VIERNES 27', diaCorto: 'Vie', hora: '22:30', quien: 'Alberto Déniz + 00:00 DJ Ake' },
+  { dia: 'SÁBADO 28', diaCorto: 'Sáb', hora: '22:30', quien: 'Savia Nueva + 00:00 DJ Asped' },
+  { dia: 'DOMINGO 29', diaCorto: 'Dom', hora: '17:00', quien: 'Tardeo pre Navidad · 4º aniversario: Cremita de Coco 17:00 · Yet Garbey 19:00' }]);
 reelProgramacion('p2-1125-reel', '11-25', 'semana 26–29 nov');
 add({ key: 'p2-1126-kike-evento', kind: 'event', title: 'Monólogos · Kike Pérez (SOLD OUT)', starts_at: iso('11-26', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
   pending_info: 'Hora: los monólogos han sido a las 21:00; confirmar para esta fecha.' });
 reelJueves('p2-1126-reel', '11-26', 'volcan');
-add({ key: 'p2-1127-aniversario', kind: 'post', title: 'Post · 4 años de tardeos (domingo 29)', starts_at: iso('11-27', '13:00'), format: 'Post 1080×1350', status: 'pending_prep',
-  objective: 'Convocar el tardeo del 4º aniversario.', material: 'Pieza «aniversario» del carrusel de noviembre (N1–N8, lienzo de diseño).',
-  copy: '4 años de tardeos 🍻\n\nEl domingo 29 lo celebramos como sabemos: tardeo, música y los tuyos.\n\n¿Con quién vienes? Etiquétalo 👇', cta: `Reserva tu mesa: WhatsApp ${WA}`, hashtags: HT,
-  pending_info: 'Hora de inicio y quién toca en el tardeo del aniversario.' });
-storiesNoche('p2-1127-stories', '11-27', 'viernes 27', [{ hora: null, quien: 'Alberto Déniz' }, { hora: null, quien: 'DJ Ake' }], { pending_info: 'Alberto Déniz + DJ Ake [POR CONFIRMAR] y horas.' });
-storiesNoche('p2-1128-stories', '11-28', 'sábado 28', [{ hora: null, quien: 'Savia Nueva' }, { hora: null, quien: 'DJ Asped' }], { pending_info: 'Savia Nueva + DJ Asped [POR CONFIRMAR] y horas.' });
-add({ key: 'p2-1129-aniversario-evento', kind: 'event', title: 'Tardeo del 4º aniversario', starts_at: iso('11-29', '17:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
-  pending_info: 'Hora de inicio (17:00 es solo la hora del reel del domingo).' });
+add({ key: 'p2-1127-aniversario', kind: 'post', title: 'Post · Tardeo pre Navidad · 4º aniversario (domingo 29)', starts_at: iso('11-27', '13:00'), format: 'Post 1080×1350', status: 'pending_prep',
+  objective: 'Convocar el tardeo del 4º aniversario.', material: 'Plantilla «cartel de noche».',
+  copy: '4 años de tardeos 🍻🎄\n\nEl domingo 29 lo celebramos con el Tardeo pre Navidad:\n17:00 · Cremita de Coco\n19:00 · Yet Garbey\n\nTardeo, música y los tuyos. ¿Con quién vienes? Etiquétalo 👇', cta: `Reserva tu mesa: WhatsApp ${WA}`, hashtags: HT });
+storiesNoche('p2-1127-stories', '11-27', 'viernes 27 · Alberto Déniz + DJ Ake', [{ hora: '22:30', quien: 'Alberto Déniz' }, { hora: '00:00', quien: 'DJ Ake' }], { status: 'pending_prep' });
+storiesNoche('p2-1128-stories', '11-28', 'sábado 28 · Savia Nueva + DJ Asped', [{ hora: '22:30', quien: 'Savia Nueva' }, { hora: '00:00', quien: 'DJ Asped' }], { status: 'pending_prep' });
+add({ key: 'p2-1129-aniversario-evento', kind: 'event', title: 'Tardeo pre Navidad 🎄 · 4º aniversario', starts_at: iso('11-29', '17:00'), requires_approval: false, status: 'scheduled', format: 'Evento', description: '17:00 Cremita de Coco · 19:00 Yet Garbey.' });
 add({ key: 'p2-1129-reel', kind: 'reel', title: 'Reel · Tardeo del aniversario en directo', starts_at: iso('11-29', '17:00'), format: 'Reel 9:16', status: 'idea',
   objective: 'Reel de tardeo en directo del domingo.', material: 'Grabar en el momento: planos generales del ambiente.', copy: '4 años de tardeos y los que nos quedan 🍻 Gracias, Arucas.',
   cta: '¿Con quién viniste? Etiquétalo 👇', hashtags: HT, description: LOGO_END });
@@ -297,6 +293,11 @@ add({ key: 'p2-1231-stories', kind: 'story', title: 'Stories · Hoy Tardeo de Fi
 
 // ---------- Eventos de diciembre CONFIRMADOS por el propietario (mensaje del 12 nov 2026) ----------
 const EV = (key, d, t, title, description) => add({ key, kind: 'event', title, starts_at: iso(d, t), requires_approval: false, status: 'scheduled', format: 'Evento', description });
+EV('p2e-1114', '11-14', '22:30', 'Pedro Afonso 22:30 + DJ Asped 00:00', 'Programación de noviembre del propietario (12 nov).');
+EV('p2e-1120', '11-20', '22:30', 'Apolo 22:30 + DJ Asped 00:00');
+EV('p2e-1121', '11-21', '22:30', 'Son Aldea 22:30 + DJ Ake 00:00');
+EV('p2e-1127', '11-27', '22:30', 'Alberto Déniz 22:30 + DJ Ake 00:00');
+EV('p2e-1128', '11-28', '22:30', 'Savia Nueva 22:30 + DJ Asped 00:00');
 EV('p2e-1204', '12-04', '22:30', 'Apolo 22:30 + DJ Ruven 00:00');
 EV('p2e-1205', '12-05', '22:30', 'Son Aldea 22:30 + DJ Asped 00:00');
 EV('p2e-1207', '12-07', '22:30', 'Willy Flores 22:30 + DJ Asped 00:00', 'Lunes víspera del festivo del 8.');
@@ -319,8 +320,7 @@ const TASKS = [
   T({ title: 'Subir a Drive el paquete de transferencia (diseños, PSD, vídeos, fotos y logos)', priority: 'urgent', due_date: '2026-11-12',
     description: 'Carpeta «Grupo 5mentarios → Heineken». Así se pueden adjuntar a cada publicación desde la app.' }),
   T({ title: 'Story animada «Hoy» del viernes 13 (Son Diferente + DJ Ruven)', priority: 'high', due_date: '2026-11-13', post: 'p2-1113-stories' }),
-  confirmar('finde 20–21 nov', '2026-11-17', 'p2-1118-prog'),
-  confirmar('finde 27–29 nov (y tardeo del aniversario)', '2026-11-24', 'p2-1125-prog'),
+  T({ title: 'Aclarar el sábado 14: ¿se mantiene el Tardeo Exterior Halloween además de la noche con Pedro Afonso?', assignee: 'owner', priority: 'urgent', due_date: '2026-11-13', post: 'p2-1114-tardeo' }),
   T({ title: 'Confirmar la hora del monólogo de Kike Pérez (jue 3 dic)', assignee: 'owner', priority: 'high', due_date: '2026-11-30', post: 'p2-1202-prog' }),
   T({ title: 'Confirmar precio de la entrada de Kike Pérez (15 € según el planificador)', assignee: 'owner', priority: 'medium', due_date: '2026-11-20', post: 'p2-1123-kike' }),
   T({ title: 'Confirmar bebida incluida y precios definitivos de los menús de Navidad', assignee: 'owner', priority: 'high', due_date: '2026-12-02', post: 'p2-1204-navidad-menus' }),
@@ -359,9 +359,9 @@ const OLD_TASK_TITLES = [
 ];
 
 // Publicaciones actualizadas con la programación de diciembre: si ya se importaron y nadie las ha tocado, se actualizan
-const SYNC_KEYS = ['p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
+const SYNC_KEYS = ['p2-1114-tardeo', 'p2-1118-prog', 'p2-1120-stories', 'p2-1121-stories', 'p2-1125-prog', 'p2-1127-aniversario', 'p2-1127-stories', 'p2-1128-stories', 'p2-1129-aniversario-evento', 'p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
   'p2-1219-stories', 'p2-1222-horarios', 'p2-1223-prog', 'p2-1224-fecha', 'p2-1225-fecha', 'p2-1226-stories', 'p2-1230-prog', 'p2-1231-fecha', 'p2-1231-stories'];
-const OBSOLETE_TASKS = ['Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
+const OBSOLETE_TASKS = ['Confirmar artistas, DJs y horas · finde 20–21 nov', 'Confirmar artistas, DJs y horas · finde 27–29 nov (y tardeo del aniversario)','Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
   'Confirmar artistas, DJs y horas · finde 18–19 dic', 'Confirmar artistas, DJs y horas · Navidad (24–26 dic)', 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', 'Decidir si hay plan de Nochevieja'];
 
 export { PLAN, TASKS, LIBRARY, OLD_PREFIX, OLD_TASK_TITLES, SYNC_KEYS, OBSOLETE_TASKS };
