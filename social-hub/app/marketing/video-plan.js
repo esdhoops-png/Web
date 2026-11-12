@@ -7,7 +7,11 @@ const WA = `WHATSAPP ${BRAND.whatsapp}`;
 const iso = (d, t) => `2026-${d}T${t}:00Z`;
 const CTA = { t1: 'RESERVA', t2: 'TU MESA', pill: WA };
 const noche = (dia, artista, dj) => ({ dia, kicker: 'MÚSICA EN DIRECTO + DJ', rows: [['22:30', artista], ['00:00', dj]] });
-const hoy = (rango, dia) => ({ mode: 'hoy', rango, intro: { t1: 'HOY', sub: 'EN 5MENTARIOS', tags: dia }, cta: CTA });
+// Fotos: recortes sin fondo sacados de los PSD de noviembre (solo artistas identificados en el propio PSD). Sin foto → solo nombre.
+const PHOTOS = { 'APOLO': 'apolo.png', 'ALBERTO DÉNIZ': 'alberto-deniz.png', 'CREMITA DE COCO': 'cremita-de-coco.png', 'KILIAN VIERA': 'kilian-viera.png',
+  'SON ALDEA': 'son-aldea.png', 'PEDRO AFONSO': 'pedro-afonso.png', 'KIKE PÉREZ': 'kike-perez.png', 'SON DIFERENTE': 'son-diferente.png' };
+const A = (hora, name, kicker = 'EN DIRECTO') => ({ hora, name, kicker, photo: PHOTOS[name] || null });
+const DJ = (hora, name, kicker = 'HASTA EL CIERRE') => ({ hora, name, kicker, photo: PHOTOS[name] || null });
 
 // Publicaciones nuevas: story animada «Esta semana» (miércoles 13:00, como la del 11 nov)
 export const VIDEO_POSTS = [
@@ -34,23 +38,27 @@ export const STORY_VIDEOS = [
   { key: 'p3-1222-semana', file: 'navidad-24-26-dic.mp4', spec: { mode: 'semana', rango: '24 – 26 DIC', intro: { t1: 'ESTA', t2: 'NAVIDAD', sub: 'EN 5MENTARIOS', tags: 'TARDEO · DJ · DIRECTO' }, cta: CTA, days: [
     { dia: 'JUE 24', band: 'TARDEO DE NAVIDAD', desde: 'AL AIRE LIBRE · DESDE LAS 16:30', rows: [['16:30', 'SON ALDEA'], ['18:30', 'KILIAN VIERA'], ['00:00', 'DJ AKE · EXTERIOR'], ['00:00', 'DJ RUVEN · INTERIOR']] },
     { dia: 'VIE 25', kicker: 'DESDE LAS 23:00', rows: [['23:00', 'DJ ASPED']] }, noche('SÁB 26', 'SAVIA NUEVA', 'DJ RUVEN')] } },
-  // ---------- «Hoy» (una por noche, en las publicaciones de stories del día) ----------
+  // ---------- «Hoy» (estilo de story-hoy-sabado-31.mp4: una escena por actuación) ----------
   ...[
-    ['p2-1120-stories', 'hoy-20-nov.mp4', '20 NOV', 'VIERNES 20 DE NOVIEMBRE', noche('VIE 20', 'APOLO', 'DJ ASPED')],
-    ['p2-1127-stories', 'hoy-27-nov.mp4', '27 NOV', 'VIERNES 27 DE NOVIEMBRE', noche('VIE 27', 'ALBERTO DÉNIZ', 'DJ AKE')],
-    ['p2-1128-stories', 'hoy-28-nov.mp4', '28 NOV', 'SÁBADO 28 DE NOVIEMBRE', noche('SÁB 28', 'SAVIA NUEVA', 'DJ ASPED')],
-    ['p3-1129-hoy', 'hoy-29-nov.mp4', '29 NOV', 'DOMINGO 29 DE NOVIEMBRE', { dia: 'DOM 29', band: 'TARDEO PRE NAVIDAD', title: '4º ANIVERSARIO', desde: 'DESDE LAS 17:00', rows: [['17:00', 'CREMITA DE COCO'], ['19:00', 'YET GARBEY']] }],
-    ['p2-1204-stories', 'hoy-4-dic.mp4', '4 DIC', 'VIERNES 4 DE DICIEMBRE', noche('VIE 4', 'APOLO', 'DJ RUVEN')],
-    ['p2-1205-stories', 'hoy-5-dic.mp4', '5 DIC', 'SÁBADO 5 DE DICIEMBRE', noche('SÁB 5', 'SON ALDEA', 'DJ ASPED')],
-    ['p3-1207-hoy', 'hoy-7-dic.mp4', '7 DIC', 'LUNES 7 DE DICIEMBRE', noche('LUN 7', 'WILLY FLORES', 'DJ ASPED')],
-    ['p2-1211-stories', 'hoy-11-dic.mp4', '11 DIC', 'VIERNES 11 DE DICIEMBRE', noche('VIE 11', 'YET GARBEY', 'DJ AKE')],
-    ['p2-1212-stories', 'hoy-12-dic.mp4', '12 DIC', 'SÁBADO 12 DE DICIEMBRE', noche('SÁB 12', 'SON KARIBE', 'DJ ASPED')],
-    ['p2-1218-stories', 'hoy-18-dic.mp4', '18 DIC', 'VIERNES 18 DE DICIEMBRE', noche('VIE 18', 'PEDRO AFONSO', 'DJ AKE')],
-    ['p2-1219-stories', 'hoy-19-dic.mp4', '19 DIC', 'SÁBADO 19 DE DICIEMBRE', noche('SÁB 19', 'CAFÉ DE LUNA', 'DJ ASPED')],
-    ['p3-1224-hoy', 'hoy-24-dic.mp4', '24 DIC', 'NOCHEBUENA', { dia: 'JUE 24', band: 'TARDEO DE NAVIDAD', desde: 'AL AIRE LIBRE · DESDE LAS 16:30', rows: [['16:30', 'SON ALDEA'], ['18:30', 'KILIAN VIERA'], ['00:00', 'DJ AKE · EXTERIOR'], ['00:00', 'DJ RUVEN · INTERIOR']] }],
-    ['p3-1225-hoy', 'hoy-25-dic.mp4', '25 DIC', 'NAVIDAD', { dia: 'VIE 25', kicker: 'DESDE LAS 23:00', rows: [['23:00', 'DJ ASPED']] }],
-    ['p2-1226-stories', 'hoy-26-dic.mp4', '26 DIC', 'SÁBADO 26 DE DICIEMBRE', noche('SÁB 26', 'SAVIA NUEVA', 'DJ RUVEN')],
-    ['p2-1231-stories', 'hoy-31-dic.mp4', '31 DIC', 'NOCHEVIEJA', { dia: 'JUE 31', band: 'TARDEO DE FIN DE AÑO', desde: 'AL AIRE LIBRE · DESDE LAS 16:30', rows: [['16:30', 'APOLO'], ['18:30', 'CREMITA DE COCO'], ['00:00', 'DJ AKE · EXTERIOR'], ['00:00', 'DJ ASPED · INTERIOR']] }]
-  ].map(([key, file, rango, dia, day]) => ({ key, file, spec: { ...hoy(rango, dia), days: [day] } }))
+    ['p2-1120-stories', 'hoy-20-nov.mp4', 'VIERNES 20', 'VIERNES', [A('22:30', 'APOLO'), DJ('00:00', 'DJ ASPED')]],
+    ['p2-1127-stories', 'hoy-27-nov.mp4', 'VIERNES 27', 'VIERNES', [A('22:30', 'ALBERTO DÉNIZ'), DJ('00:00', 'DJ AKE')]],
+    ['p2-1128-stories', 'hoy-28-nov.mp4', 'SÁBADO 28', 'SÁBADO', [A('22:30', 'SAVIA NUEVA'), DJ('00:00', 'DJ ASPED')]],
+    ['p3-1129-hoy', 'hoy-29-nov.mp4', 'DOMINGO 29', 'DOMINGO', [A('17:00', 'CREMITA DE COCO', 'ABRE'), A('19:00', 'YET GARBEY')], { tags: 'TARDEO PRE NAVIDAD · 4º ANIVERSARIO' }],
+    ['p2-1204-stories', 'hoy-4-dic.mp4', 'VIERNES 4', 'VIERNES', [A('22:30', 'APOLO'), DJ('00:00', 'DJ RUVEN')]],
+    ['p2-1205-stories', 'hoy-5-dic.mp4', 'SÁBADO 5', 'SÁBADO', [A('22:30', 'SON ALDEA'), DJ('00:00', 'DJ ASPED')]],
+    ['p3-1207-hoy', 'hoy-7-dic.mp4', 'LUNES 7', 'LUNES', [A('22:30', 'WILLY FLORES'), DJ('00:00', 'DJ ASPED')], { tags: 'VÍSPERA DE FESTIVO · DESDE LAS 22:30' }],
+    ['p2-1211-stories', 'hoy-11-dic.mp4', 'VIERNES 11', 'VIERNES', [A('22:30', 'YET GARBEY'), DJ('00:00', 'DJ AKE')]],
+    ['p2-1212-stories', 'hoy-12-dic.mp4', 'SÁBADO 12', 'SÁBADO', [A('22:30', 'SON KARIBE'), DJ('00:00', 'DJ ASPED')]],
+    ['p2-1218-stories', 'hoy-18-dic.mp4', 'VIERNES 18', 'VIERNES', [A('22:30', 'PEDRO AFONSO'), DJ('00:00', 'DJ AKE')]],
+    ['p2-1219-stories', 'hoy-19-dic.mp4', 'SÁBADO 19', 'SÁBADO', [A('22:30', 'CAFÉ DE LUNA'), DJ('00:00', 'DJ ASPED')]],
+    ['p3-1224-hoy', 'hoy-24-dic.mp4', 'NOCHEBUENA', 'NOCHEBUENA', [A('16:30', 'SON ALDEA', 'ABRE'), A('18:30', 'KILIAN VIERA'), DJ('00:00', 'DJ AKE', 'EXTERIOR · HASTA LAS 04:00'), DJ('00:00', 'DJ RUVEN', 'INTERIOR · HASTA LAS 06:00')], { tags: 'TARDEO DE NAVIDAD · AL AIRE LIBRE' }],
+    ['p3-1225-hoy', 'hoy-25-dic.mp4', 'NAVIDAD', 'NAVIDAD', [DJ('23:00', 'DJ ASPED', 'DESDE LAS 23:00')], { tags: 'NOCHE DE NAVIDAD · DESDE LAS 23:00' }],
+    ['p2-1226-stories', 'hoy-26-dic.mp4', 'SÁBADO 26', 'SÁBADO', [A('22:30', 'SAVIA NUEVA'), DJ('00:00', 'DJ RUVEN')]],
+    ['p2-1231-stories', 'hoy-31-dic.mp4', 'NOCHEVIEJA', 'NOCHEVIEJA', [A('16:30', 'APOLO', 'ABRE'), A('18:30', 'CREMITA DE COCO'), DJ('00:00', 'DJ AKE', 'EXTERIOR · HASTA LAS 04:00'), DJ('00:00', 'DJ ASPED', 'INTERIOR · HASTA LAS 06:00')], { tags: 'TARDEO DE FIN DE AÑO · AL AIRE LIBRE' }]
+  ].map(([key, file, rango, dia, acts, o = {}]) => ({ key, file, spec: { mode: 'hoy', rango, intro: { sub: 'EN 5MENTARIOS', tags: o.tags || `${acts.length === 1 ? '1 DIRECTO' : acts.length + ' DIRECTOS'} · DESDE LAS ${acts[0].hora}`.replace('1 DIRECTO', 'DJ') },
+    acts, resumen: { t1: ['NOCHEBUENA', 'NAVIDAD', 'NOCHEVIEJA'].includes(dia) ? 'ESTA' : 'ESTE', t2: dia }, cta: { pill: WA } } })),
+  // ---------- Champions · día de partido (estilo de las stories del 3 y 4 nov) ----------
+  { key: 'p2-1124-ucl', file: 'champions-24-nov.mp4', spec: { mode: 'partido', rango: 'CHAMPIONS', local: 'R. MADRID', visitante: 'PSV', hora: '20:00', photo: null } },
+  { key: 'p2-1125-ucl', file: 'champions-25-nov.mp4', spec: { mode: 'partido', rango: 'CHAMPIONS', local: 'BARÇA', visitante: 'SABAH', hora: '17:45', photo: null } }
 ];
 export const PENDING_VIDEOS = [{ key: 'p2-1121-stories', why: 'Sábado 21 nov: falta confirmar si toca Son Aldea, Son Diferente o «Directo».' }];

@@ -80,7 +80,13 @@ export const RECEIVED = [
     composition: 'Cuatro músicos recortados en blanco y negro sobre fondo blanco.', reusable: 'Recurso de foto. No se sabe de qué grupo es: pendiente de identificar.', post: null },
   { name: 'Sin título-1.psd · Lienzo del carrusel de noviembre (6 slides en 6480×1350)', format: 'PSD 6480×1350 · ~110 capas con nombre (textos rasterizados, fotos de artistas como objetos inteligentes)', flat: false,
     composition: 'Calendario · 02/07 vie 6 Alberto Déniz / sáb 7 Cremita de Coco · 07/07 Champions en noviembre · «TARDEO» repetido dom 8 (Son Karibe 16:30, Kilian Viera 18:30) · 04/06 vie 13 Son Diferente / sáb 14 Pedro Afonso · 05/06 vie 20 Apolo / sáb 21 Son Aldea.',
-    reusable: 'Versión anterior (el sábado 14 aún era noche con Pedro Afonso). Recortes sin fondo de Cremita de Coco, Kike Pérez, Kilian Viera, Apolo y el dúo de Son Diferente como objetos inteligentes: se pueden exportar y subir a la Biblioteca.', post: null }
+    reusable: 'Versión anterior (el sábado 14 aún era noche con Pedro Afonso). Recortes sin fondo de Cremita de Coco, Kike Pérez, Kilian Viera, Apolo y el dúo de Son Diferente como objetos inteligentes: se pueden exportar y subir a la Biblioteca.', post: null },
+  { name: 'story-hoy-sabado-31.mp4 · Story animada «Hoy» del sábado 31 oct', format: 'Vídeo H.264 1080×1920 · 16,5 s', flat: true,
+    composition: '«HOY» verde gigante que se acerca, «EN 5MENTARIOS · 4 DIRECTOS · DESDE LAS 17:30», una escena por actuación (hora en contorno verde arriba, foto recortada, «ABRE / EN DIRECTO / HASTA EL CIERRE» y nombre), resumen «ESTE SÁBADO» con filas, «RESERVA TU MESA» + WhatsApp y logo «ARUCAS · NOS VEMOS HOY».',
+    reusable: 'Recreada como story animada «Hoy» (modo hoy de story-motion.js).', post: null },
+  { name: 'story-barca-aston-villa-hoy.mp4 y story-aek-real-madrid-hoy.mp4 · Stories de partido', format: 'Vídeos H.264 1080×1920 · 11,2 s', flat: true,
+    composition: 'Foto del jugador arriba con degradado a negro, pastilla «CHAMPIONS», «HOY» verde + «FÚTBOL EN 5MENTARIOS», equipo grande, «vs» en círculo verde + rival, barra blanca con la hora en verde y «EN PANTALLA GRANDE», «RESERVA TU MESA → 627 304 115» y logo.',
+    reusable: 'Recreada como story de partido (modo partido). Las fotos de jugadores son de terceros: se añaden solo si el responsable las aporta.', post: null }
 ];
 
 // Lo que la guía cita pero NO está disponible en este proyecto (no se finge tenerlo)

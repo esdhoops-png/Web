@@ -92,8 +92,10 @@ de una vez: no duplica.
   publicación, versión), con los mismos permisos para los dos usuarios.
 - **Vídeo** (`app/studio/video.js`): escenas con fotos/vídeos, textos, subtítulos, transiciones, música autorizada y cierre con el logo;
   se exporta en el navegador (MP4 en Chrome/Edge/Safari actuales; WebM si el navegador no admite MP4). El render es en tiempo real.
-- **Stories animadas** (`app/studio/story-motion.js` + `app/marketing/video-plan.js`): recreadas de la story real «Esta semana» del
-  11 nov (rayos verdes, escena por día, filas hora/artista, «Reserva tu mesa», cierre con el logo). Los MP4 de 1080×1920 (H.264, 30 fps)
+- **Stories animadas** (`app/studio/story-motion.js` + `app/marketing/video-plan.js`): tres estilos recreados de los vídeos reales:
+  «Esta semana» (story del 11 nov: rayos verdes, escena por día), «Hoy» (story del sábado 31: una escena por actuación con la hora en
+  contorno, foto recortada y nombre, resumen y logo) y «Partido» (stories de Champions del 3 y 4 nov). Las fotos de artistas son los
+  recortes sin fondo de los PSD de noviembre (`media/artistas/`), solo de artistas identificados en el propio PSD. Los MP4 de 1080×1920 (H.264, 30 fps)
   de la programación confirmada están en `media/stories/`; al ejecutar el plan se guardan en Storage, se vinculan a su publicación y quedan
   pendientes de aprobación. El sábado 21 nov no lleva vídeo hasta que se confirme quién toca. Para cambiar un texto se edita `video-plan.js`
   y se vuelven a generar (también se pueden grabar en el navegador con `recordStory`).

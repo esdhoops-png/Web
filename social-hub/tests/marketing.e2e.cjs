@@ -35,7 +35,7 @@ let n = 0; const step = async (name, fn) => { const t = Date.now(); await fn(); 
     const drafts = cr.filter((c) => !c.creative_versions.some((v) => v.exports.length));
     firstGen = gen.length;
     console.log(`    diseños con archivo: ${gen.length} · borradores: ${drafts.length} · stories animadas: ${vids.length}`);
-    assert.equal(vids.length, 20, 'deberían adjuntarse las 20 stories animadas');
+    assert.equal(vids.length, 22, 'deberían adjuntarse las 22 stories animadas');
     for (const c of vids.slice(0, 3)) { const e = c.creative_versions[0].exports[0]; const { data } = await admin.storage.from('hub').download(e.path); const buf = Buffer.from(await data.arrayBuffer());
       assert.equal(buf.slice(4, 8).toString(), 'ftyp', e.path); assert.ok(buf.length > 500000); }
     const vposts = (await admin.from('posts').select('id, status').in('id', vids.map((c) => c.post_id))).data;
@@ -78,7 +78,7 @@ let n = 0; const step = async (name, fn) => { const t = Date.now(); await fn(); 
     assert.equal(after, before);
     const { data: cr } = await admin.from('creatives').select('id, category, creative_versions(exports)');
     assert.equal(cr.filter((c) => c.category !== 'video' && c.creative_versions.some((v) => v.exports.length)).length, firstGen);
-    assert.equal(cr.filter((c) => c.category === 'video').length, 20);
+    assert.equal(cr.filter((c) => c.category === 'video').length, 22);
     await p.screenshot({ path: `${SHOTS}/m-ejecucion.png`, fullPage: true });
   });
 

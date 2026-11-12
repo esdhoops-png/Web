@@ -69,7 +69,7 @@ export async function runProduction({ keyToId, onLog = () => {}, onlyKeys = null
     } catch (e) { out.errors.push({ key, error: e.message }); onLog(`✗ ${key}: ${e.message}`); }
   }
   // Stories animadas: vídeo MP4 ya renderizado y publicado junto a la app (media/stories/…)
-  let assets = null;
+
   for (const v of vkeys) {
     const postId = keyToId[v.key]; const post = postById[postId];
     if (!postId) { out.skipped.push({ key: v.key, why: 'La publicación del vídeo no está en el calendario (fecha pasada o no importada).' }); continue; }
@@ -78,7 +78,7 @@ export async function runProduction({ keyToId, onLog = () => {}, onlyKeys = null
       const res = await fetch(new URL('media/stories/' + v.file, document.baseURI).href);
       if (!res.ok) throw new Error(`no se encuentra el vídeo ${v.file} (HTTP ${res.status})`);
       const blob = await res.blob(); const mp4 = blob.type === 'video/mp4' ? blob : new Blob([blob], { type: 'video/mp4' });
-      assets = assets || (await loadStoryAssets());
+      const assets = await loadStoryAssets(document.baseURI, v.spec);
       const cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1920; drawStory(cv.getContext('2d'), v.spec, 1.6, assets);
       const thumb = { v: 1, width: 1080, height: 1920, pages: [{ id: 'p', bg: '#000', layers: [{ id: 'i', type: 'image', x: 0, y: 0, w: 1080, h: 1920, ref: { kind: 'url', url: cv.toDataURL('image/jpeg', 0.8) }, visible: true, opacity: 1, rotation: 0 }] }] };
       const dur = storyDuration(v.spec), camp = campaignOf(v.key);
