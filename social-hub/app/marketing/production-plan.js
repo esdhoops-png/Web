@@ -6,6 +6,7 @@
 //  - video           → es un vídeo que hay que grabar: no se genera imagen.
 // Clasificación de cada dato: C = confirmado (guía/UEFA), P = pendiente de confirmación, M = propuesta de marketing.
 import { BRAND } from '../lib/brand.js';
+import { VIDEO_POSTS } from './video-plan.js';
 const WA = BRAND.whatsapp;
 const iso = (d, t) => `2026-${d}T${t}:00Z`;
 const HT = '#Arucas #GranCanaria #TardeoGranCanaria #5mentarios #ArucasDeNoche #Heineken5mentarios #PlanesGranCanaria';
@@ -46,7 +47,9 @@ export const PLAN_EXTRA = [
     cta: `Reservas por WhatsApp ${WA}`, hashtags: HT, description: 'Canal de WhatsApp: 🍇 TARDEO DE FIN DE AÑO · Jue 31 · 16:30 Apolo · 18:30 Cremita de Coco · 00:00 DJ Ake (ext.) · 00:00 DJ Asped (int.)', info: 'C' },
   { key: 'p3-1231-gracias', kind: 'post', title: 'Post · Gracias por este 2026', starts_at: iso('12-31', '13:00'), format: 'Post 1080×1350', status: 'in_design',
     objective: 'Cerrar el año con la comunidad.', copy: 'Gracias por cada tardeo, cada concierto, cada risa y cada gol cantado en 2026 🍻\n\nNos vemos en 2027 en 5mentarios, el punto de encuentro de Arucas desde 2002.',
-    cta: 'Etiqueta a quien ha estado contigo este año 👇', hashtags: HT, info: 'M' }
+    cta: 'Etiqueta a quien ha estado contigo este año 👇', hashtags: HT, info: 'M' },
+  // stories animadas «Esta semana» (vídeo)
+  ...VIDEO_POSTS
 ];
 
 const PC = '[POR CONFIRMAR]';

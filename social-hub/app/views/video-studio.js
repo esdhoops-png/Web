@@ -6,6 +6,8 @@ import { pickFiles } from '../lib/media.js';
 import { newVideoDoc, newScene, totalDuration, prepare, drawAt, exportVideo, pickMime, setVideoStorageResolver, OUTRO } from '../studio/video.js';
 import { createCreative, getCreative, saveVersion, linkToPost, addToLibrary, updateCreative } from '../studio/data.js';
 import { downloadBlob } from '../studio/engine.js';
+import { STORY_VIDEOS } from '../marketing/video-plan.js';
+import { storyDuration } from '../studio/story-motion.js';
 
 setVideoStorageResolver((p) => signedUrl(p));
 
@@ -18,7 +20,8 @@ const GUIONES = {
 export function VideoStudio({ creatives, reload }) {
   const [editing, setEditing] = useState(null);
   const videos = creatives.filter((c) => c.category === 'video');
-  async function open(c) { try { const f = await getCreative(c.id); const last = f.creative_versions.sort((a, b) => b.version_no - a.version_no)[0]; setEditing({ creative: f, doc: last.doc }); } catch (e) { toastError(e); } }
+  async function open(c) { try { const f = await getCreative(c.id); const last = f.creative_versions.sort((a, b) => b.version_no - a.version_no)[0]; setEditing({ creative: f, doc: last.doc, version: last }); } catch (e) { toastError(e); } }
+  if (editing && editing.doc?.kind === 'story-motion') return html`<${StoryViewer} initial=${editing} onExit=${() => setEditing(null)} />`;
   if (editing) return html`<${VideoEditor} initial=${editing} onExit=${() => { setEditing(null); reload(); }} />`;
   const mime = pickMime();
   return html`<div class="stack" style="gap:16px">
@@ -27,6 +30,10 @@ export function VideoStudio({ creatives, reload }) {
       <div class="row">${[['story', 'Reel / story 9:16'], ['square', 'Cuadrado 1:1'], ['landscape', 'Horizontal 16:9']].map(([k, l]) => html`<button class="btn" onClick=${() => setEditing({ creative: null, doc: newVideoDoc(k) })}><${Icon} name="video" size=${15} />${l}</button>`)}</div>
       <div class="row small"><span class="muted">Empezar con guion:</span>${Object.entries(GUIONES).map(([k, v]) => html`<button class="chip" onClick=${() => { const d = newVideoDoc('story'); d.script = k; d.scenes = v.map((t) => ({ ...newScene(), text: t })); setEditing({ creative: null, doc: d }); }}>${k}</button>`)}</div>
     </section>
+    <section class="card stack"><h2>Stories animadas del plan (${STORY_VIDEOS.length})</h2>
+      <p class="small muted" style="margin:0">Con el estilo de la story animada del 11 nov: rayos verdes, una escena por día, «Reserva tu mesa» y cierre con el logo. MP4 1080×1920 ya generados con la programación confirmada. Al ejecutar el plan de marketing se guardan en cada publicación, pendientes de aprobación.</p>
+      <div class="list">${STORY_VIDEOS.map((v) => html`<a class="li" key=${v.key} href=${'media/stories/' + v.file} target="_blank" rel="noopener"><${Icon} name="video" />
+        <div class="body"><div class="title">${v.spec.mode === 'hoy' ? 'Hoy · ' + v.spec.intro.tags : 'Esta semana · ' + v.spec.rango}</div><div class="sub">${v.spec.days.map((d) => d.dia).join(' · ')} · ${storyDuration(v.spec).toFixed(1)} s · ${v.file}</div></div><span class="btn sm">Ver</span></a>`)}</div></section>
     <section class="card"><h2>Vídeos guardados</h2>${videos.length ? html`<div class="list">${videos.map((c) => html`<div class="li" key=${c.id} onClick=${() => open(c)}><${Icon} name="video" />
       <div class="body"><div class="title">${c.title}</div><div class="sub">v${c.current_version} · ${c.width}×${c.height} · ${fmt.rel(c.updated_at)}</div></div><span class="btn sm">Abrir</span></div>`)}</div>` : html`<p class="empty">Aún no hay vídeos.</p>`}</section></div>`;
 }
@@ -128,4 +135,19 @@ function VideoEditor({ initial, onExit }) {
         ${busy && progress ? html`<div style="width:100%;height:8px;background:var(--line);border-radius:4px"><div style=${{ width: progress * 100 + '%', height: '100%', background: 'var(--verde)', borderRadius: '4px' }}></div></div>` : null}
       </div>
     </div></div>`;
+}
+
+// Story animada del plan: vídeo ya exportado (MP4). Se ve, se descarga y se vincula; para cambiar textos se edita el plan y se vuelve a generar.
+function StoryViewer({ initial, onExit }) {
+  const [url, setUrl] = useState(null);
+  const ex = (initial.version?.exports || [])[0];
+  useEffect(() => { if (ex) signedUrl(ex.path).then(setUrl).catch(toastError); }, []);
+  const sp = initial.doc.spec || {};
+  return html`<div class="stack" style="gap:14px">
+    <div class="row"><button class="btn ghost sm" onClick=${onExit}><${Icon} name="chevL" size=${15} />Vídeos</button><b>${initial.creative.title}</b><div class="grow"></div>
+      ${url ? html`<a class="btn primary sm" href=${url} download="story.mp4"><${Icon} name="download" size=${15} />Descargar MP4</a>` : null}</div>
+    <div class="row" style="align-items:flex-start;gap:20px;flex-wrap:wrap">
+      ${url ? html`<video src=${url} controls playsinline style="width:300px;max-width:100%;border-radius:12px;background:#000"></video>` : html`<p class="empty">Cargando…</p>`}
+      <div class="stack small" style="gap:6px;min-width:220px"><b>Contenido</b>${(sp.days || []).map((d) => html`<div><b>${d.dia}</b> ${d.band || d.kicker || ''} ${d.big || ''}<br />${(d.rows || []).map((r) => r.join(' · ')).join(' / ')}</div>`)}
+        <span class="muted">1080×1920 · ${ex ? (ex.size / 1048576).toFixed(1) + ' MB' : ''} · versión ${initial.version?.version_no}</span></div></div></div>`;
 }

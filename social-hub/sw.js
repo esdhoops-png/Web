@@ -24,6 +24,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== self.location.origin) return;
+  if (url.pathname.includes('/media/')) return; // vídeos grandes: directos de la red, sin guardarlos en caché
   e.respondWith(
     fetch(e.request)
       .then((res) => {
