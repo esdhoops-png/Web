@@ -6,7 +6,7 @@ export const PERIOD = { from: '2026-11-12', to: '2026-12-31' };
 
 export const STRATEGY = {
   objetivosMarketing: [
-    'Llenar el bar en las fechas fuertes ya confirmadas: monólogos (19/11 y 03/12), tardeo del 4º aniversario (29/11), noches de Champions (24–25/11 y 8–9/12), Tardeo de Navidad (24/12) y Tardeo de Fin de Año (31/12).',
+    'Llenar el bar en las fechas fuertes ya confirmadas: monólogos (19/11 y 03/12), Tardeo pre Navidad del 4º aniversario (29/11), noches de Champions (24–25/11 y 8–9/12), Tardeo de Navidad (24/12) y Tardeo de Fin de Año (31/12).',
     'Convertir la intención en reservas por WhatsApp (627 304 115), que es el canal de reserva de la casa.',
     'Captar grupos para Navidad (cenas de empresa, amigos, despedidas) con los menús de Navidad, una vez confirmados precios y bebida.',
     'Reforzar «Heineken 5mentarios» como el punto de encuentro de Arucas desde 2002, y la comida de Volcán y Cuor di Pizza servida en la mesa.'
@@ -63,19 +63,19 @@ export const CAMPAIGNS = [
     publico: 'Gente que sale de tardeo y de noche en Arucas y el norte.', canales: ['Instagram', 'Canal de WhatsApp', 'Web grupo5mentarios.com'],
     piezas: ['Programación de los miércoles', 'Stories «Hoy» viernes y sábado', 'Carrusel de fotos de los lunes', 'Reel de programación'],
     kpis: ['Publicaciones de programación hechas a tiempo (miércoles)', 'Mensajes de reserva por WhatsApp', 'Etiquetas en carruseles de fotos'],
-    keys: ['p2-1113-noche', 'p2-1113-stories', 'p3-1207-hoy', 'p2e-1204', 'p2e-1205', 'p2e-1207', 'p2e-1211', 'p2e-1212', 'p2e-1218', 'p2e-1219', 'p2e-1226', 'p2-1118', 'p2-1120', 'p2-1121', 'p2-1123-fotos', 'p2-1125-prog', 'p2-1125-reel', 'p2-1127-stories', 'p2-1128-stories', 'p2-1130', 'p2-1202', 'p2-1204-stories', 'p2-1205', 'p2-1207', 'p2-1209-prog', 'p2-1209-reel', 'p2-1211', 'p2-1212', 'p2-1214', 'p2-1216', 'p2-1218', 'p2-1219', 'p2-1221', 'p2-1226', 'p2-1228'] },
+    keys: ['p2-1113-noche', 'p2-1113-stories', 'p3-1114-noche', 'p2e-1114', 'p2e-1120', 'p2e-1121', 'p2e-1127', 'p2e-1128', 'p3-1207-hoy', 'p2e-1204', 'p2e-1205', 'p2e-1207', 'p2e-1211', 'p2e-1212', 'p2e-1218', 'p2e-1219', 'p2e-1226', 'p2-1118', 'p2-1120', 'p2-1121', 'p2-1123-fotos', 'p2-1125-prog', 'p2-1125-reel', 'p2-1127-stories', 'p2-1128-stories', 'p2-1130', 'p2-1202', 'p2-1204-stories', 'p2-1205', 'p2-1207', 'p2-1209-prog', 'p2-1209-reel', 'p2-1211', 'p2-1212', 'p2-1214', 'p2-1216', 'p2-1218', 'p2-1219', 'p2-1221', 'p2-1226', 'p2-1228'] },
   { id: 'champions', name: 'Champions en pantalla grande', from: '2026-11-23', to: '2026-12-09',
     objetivo: 'Llenar las noches de Champions con cena de Volcán y Cuor di Pizza en la mesa.', mensaje: 'Champions en 5mentarios · pantalla grande.',
     publico: 'Aficionados al fútbol de Arucas y alrededores.', canales: ['Instagram stories', 'Canal de WhatsApp'],
     piezas: ['Story de aviso J5 y J6', 'Stories de partido (cuando se confirmen partidos y horas)'],
     kpis: ['Mesas ocupadas en las noches de partido (registro del local)', 'Votos en la encuesta «¿Quién gana?»'],
     keys: ['p2-1123-ucl', 'p2-1124-ucl', 'p2-1125-ucl', 'p3-1207-ucl', 'p2-1208-ucl', 'p2-1209-ucl'] },
-  { id: 'aniversario', name: '4 años de tardeos', from: '2026-11-25', to: '2026-11-30',
+  { id: 'aniversario', name: 'Tardeo pre Navidad · 4º aniversario', from: '2026-11-25', to: '2026-11-30',
     objetivo: 'Convertir el aniversario en el tardeo más lleno del mes.', mensaje: '4 años de tardeos: tardeo, música y los tuyos.',
     publico: 'Comunidad del tardeo y clientes habituales.', canales: ['Instagram (post, stories, reel)', 'Canal de WhatsApp'],
-    piezas: ['Post «save the date»', 'Story de apoyo', 'Reel en directo', 'Carrusel de fotos del lunes 30'],
+    piezas: ['Post (Cremita de Coco 17:00 · Yet Garbey 19:00)', 'Story «mañana»', 'Story «Hoy»', 'Reel en directo', 'Carrusel de fotos del lunes 30'],
     kpis: ['Asistencia el domingo 29', 'Etiquetas y menciones del día'],
-    keys: ['p2-1127-aniversario', 'p3-1128-aniversario', 'p2-1129', 'p2-1130-fotos'] },
+    keys: ['p2-1127-aniversario', 'p3-1128-aniversario', 'p3-1129-hoy', 'p2-1129', 'p2-1130-fotos'] },
   { id: 'navidad-grupos', name: 'Navidad en grupo', from: '2026-12-01', to: '2026-12-23',
     objetivo: 'Reservas de cenas de grupo con los menús de Navidad.', mensaje: 'Esta Navidad, la cena del grupo es en 5mentarios.',
     publico: 'Empresas, grupos de amigos y despedidas de Arucas y el norte.', canales: ['Instagram (carrusel fijado, post, stories)', 'Canal de WhatsApp'],
