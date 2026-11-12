@@ -154,9 +154,11 @@ export const TEMPLATES = [
         L('pill', { name: 'Fecha', bind: 'fecha', x: W - 330 * s, y: 270 * s, w: 260 * s, h: 64 * s, fill: C.verde, text: d.fecha, font: 'Anton', size: Math.round(30 * s), color: '#000' }),
         text({ name: 'HOY', x: 60 * s, y: 430 * s, w: W - 120 * s, h: 300 * s, text: 'HOY', size: Math.round(300 * s), align: 'center', glowColor: C.verde, glowBlur: 50 * s }),
         text({ name: 'en 5mentarios', x: 60 * s, y: 740 * s, w: W - 120 * s, h: 60 * s, text: 'EN 5MENTARIOS', font: 'Barlow Condensed', weight: 600, size: Math.round(44 * s), letterSpacing: 12 * s, color: C.blanco, align: 'center' }),
-        ...rows.flatMap((r, i) => { const m = r.match(/^(\d{1,2}[:.]\d{2})\s+(.*)$/); const y = 880 * s + i * 170 * s; return [
-          text({ name: `Hora ${i + 1}`, bind: `filas:${i}:hora`, x: 90 * s, y, w: 300 * s, h: 130 * s, text: m ? m[1] : '', size: Math.round(110 * s), color: 'transparent', strokeColor: C.verde, strokeWidth: 4 * s }),
-          text({ name: `Artista ${i + 1}`, bind: `filas:${i}:nombre`, x: 420 * s, y: y + 20 * s, w: W - 510 * s, h: 100 * s, text: m ? m[2] : r, size: Math.round(70 * s), fit: true, uppercase: true })]; }),
+        ...rows.flatMap((r, i) => { const m = r.match(/^(\d{1,2}[:.]\d{2})\s+(.*)$/); const n = Math.max(rows.length, 1);
+          const rh = Math.min(250, 660 / n) * s; const y0 = 900 * s + (660 * s - rh * n) / 2; const y = y0 + i * rh; const hs = Math.min(150, rh / s * 0.75) * s;
+          return [
+          text({ name: `Hora ${i + 1}`, bind: `filas:${i}:hora`, x: 80 * s, y: y + (rh - hs) / 2, w: 380 * s, h: hs, text: m ? m[1] : '', size: Math.round(hs * 0.92), color: 'transparent', strokeColor: C.verde, strokeWidth: 4 * s }),
+          text({ name: `Artista ${i + 1}`, bind: `filas:${i}:nombre`, x: 470 * s, y: y + (rh - hs * 0.8) / 2, w: W - 540 * s, h: hs * 0.8, text: m ? m[2] : r, size: Math.round(hs * 0.62), fit: true, uppercase: true, valign: 'middle' })]; }),
         text({ name: 'Reserva', bind: 'reserva', x: 60 * s, y: 1620 * s, w: W - 120 * s, h: 60 * s, text: d.reserva, font: 'Barlow Condensed', weight: 900, size: Math.round(40 * s), letterSpacing: 3 * s, color: C.verde, align: 'center', fit: true })
       ], C.negroV)];
     }
@@ -255,11 +257,49 @@ export const TEMPLATES = [
         logo(36 * s, 30 * s, 100 * s),
         text({ name: 'Menú', bind: `m${n}`, x: 60 * s, y: H * 0.15, w: W - 120 * s, h: 130 * s, text: d[`m${n}`], size: Math.round(100 * s), color: C.verde, fit: true }),
         L('line', { name: 'Línea', x: 60 * s, y: H * 0.15 + 140 * s, w: W - 120 * s, h: 4, width: 2, color: 'rgba(242,239,232,.3)' }),
-        text({ name: 'Platos', bind: `m${n}p`, x: 60 * s, y: H * 0.15 + 175 * s, w: W - 120 * s, h: H * 0.5, text: d[`m${n}p`], font: 'Barlow Condensed', weight: 600, size: Math.round(52 * s), lineHeight: 1.35, color: C.blanco, fit: true }),
+        text({ name: 'Platos', bind: `m${n}p`, x: 60 * s, y: H * 0.15 + 175 * s, w: W - 120 * s, h: H * 0.58, text: d[`m${n}p`], font: 'Barlow Condensed', weight: 600, size: Math.round(66 * s), lineHeight: 1.45, color: C.blanco, fit: true, valign: 'middle' }),
         text({ name: 'Reserva', bind: 'reserva', x: 60 * s, y: H * 0.86, w: W - 120 * s, h: 40 * s, text: d.reserva, font: 'Barlow Condensed', weight: 900, size: Math.round(34 * s), letterSpacing: 6 * s, color: C.verde }),
         ...footer(W, H, { swipe: n < 3, counter: `${n + 1}/4` })
       ]);
       return [cover, menu(1), menu(2), menu(3)];
+    }
+  },
+  // ---------------------------------------------------------------- Anuncio (cartel de noche sin foto)
+  {
+    key: 'anuncio', name: 'Anuncio · cartel de noche (sin foto)', category: 'carteles',
+    basedOn: { kind: 'guia', files: [], note: 'Estilo «cartel de noche» de la guía (fondo negro, brillo verde, titular Anton con halo, fecha manuscrita en verde neón, pastilla verde). Para avisos que no necesitan foto.' },
+    formats: ['post', 'story', 'square', 'landscape'], defaultFormat: 'post',
+    fields: [
+      { k: 'kicker', label: 'Antetítulo', def: 'HEINEKEN 5MENTARIOS' }, { k: 'titulo', label: 'Titular', def: 'TITULAR' },
+      { k: 'fecha', label: 'Fecha (manuscrita)', def: '' }, { k: 'cuerpo', label: 'Líneas (una por línea)', def: '', multiline: true },
+      { k: 'pill', label: 'Pastilla', def: '' }, { k: 'cta', label: 'Llamada final', def: 'RESERVAS 627 304 115' }, { k: 'etiqueta', label: 'Etiqueta girada (opcional)', def: '' }
+    ],
+    images: [{ k: 'fondo', label: 'Foto de fondo (opcional)' }],
+    build({ W, H, d }) {
+      const s = Math.min(W, H) / 1080, tall = H / W > 1.5, cx = 60 * s;
+      const lines = rowsOf(d.cuerpo);
+      const lh = (tall ? 74 : 66) * s, bs = Math.round((tall ? 56 : 50) * s);
+      const titleH = H * (tall ? 0.2 : 0.25);
+      const blockH = 70 * s + titleH + (d.fecha ? 100 * s : 30 * s) + lines.length * lh + (d.pill ? 110 * s : 0);
+      const top = tall ? 430 * s : 150 * s, bottom = H * 0.84;
+      const titleY = Math.max(top + 70 * s, top + (bottom - top - blockH) / 2 + 70 * s);
+      let y = titleY + titleH + (d.fecha ? 100 * s : 30 * s);
+      const body = lines.map((t, i) => text({ name: `Línea ${i + 1}`, bind: `cuerpo:${i}`, x: cx, y: y + i * lh, w: W - 2 * cx, h: lh * 0.9, text: t, font: 'Barlow Condensed', weight: 900, size: bs, letterSpacing: 3 * s, color: C.blanco, align: 'center', fit: true }));
+      y += lines.length * lh + 30 * s;
+      return [page([
+        L('image', { name: 'Foto de fondo', bind: 'img:fondo', x: 0, y: 0, w: W, h: H, brightness: 0.35, placeholder: false }),
+        L('grain', { name: 'Textura', x: 0, y: 0, w: W, h: H, amount: 0.35 }),
+        L('glow', { name: 'Brillo verde', x: -W * 0.15, y: titleY - H * 0.1, w: W * 1.3, h: titleH + H * 0.25, color: C.verde, strength: 0.4 }),
+        logo(tall ? W / 2 - 60 * s : 36 * s, tall ? 250 * s : 30 * s, tall ? 120 * s : 110 * s),
+        ...(d.etiqueta ? [L('pill', { name: 'Etiqueta', bind: 'etiqueta', x: W - 330 * s, y: tall ? 400 * s : 70 * s, w: 260 * s, h: 66 * s, rotation: -6, fill: '#000', radius: 4 * s, text: d.etiqueta, font: 'Anton', size: Math.round(34 * s), color: '#FFF' })] : []),
+        text({ name: 'Antetítulo', bind: 'kicker', x: cx, y: titleY - 70 * s, w: W - 2 * cx, h: 50 * s, text: d.kicker, font: 'Barlow Condensed', weight: 600, size: Math.round(34 * s), letterSpacing: 10 * s, color: C.verde, align: 'center', fit: true }),
+        text({ name: 'Titular', bind: 'titulo', x: cx, y: titleY, w: W - 2 * cx, h: titleH, text: d.titulo, size: Math.round(170 * s), align: 'center', valign: 'middle', fit: true, glowColor: C.verde, glowBlur: 40 * s, uppercase: true, lineHeight: 0.98 }),
+        ...(d.fecha ? [text({ name: 'Fecha manuscrita', bind: 'fecha', x: cx, y: titleY + titleH + 14 * s, w: W - 2 * cx, h: 76 * s, text: d.fecha, font: 'Permanent Marker', size: Math.round(58 * s), color: C.neon, align: 'center', fit: true })] : []),
+        ...body,
+        ...(d.pill ? [L('pill', { name: 'Pastilla', bind: 'pill', x: W / 2 - 300 * s, y, w: 600 * s, h: 76 * s, fill: C.verde, text: d.pill, font: 'Anton', size: Math.round(38 * s), color: '#000' })] : []),
+        text({ name: 'Llamada final', bind: 'cta', x: cx, y: H * (tall ? 0.86 : 0.86), w: W - 2 * cx, h: 44 * s, text: d.cta, font: 'Barlow Condensed', weight: 600, size: Math.round(30 * s), letterSpacing: 6 * s, color: C.blanco, align: 'center', fit: true }),
+        ...(tall ? [] : footer(W, H))
+      ], C.negroV)];
     }
   },
   // ---------------------------------------------------------------- Felicitación / marca
