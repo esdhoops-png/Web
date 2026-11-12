@@ -29,11 +29,17 @@ let n = 0; const step = async (name, fn) => { const t = Date.now(); await fn(); 
     await p.click('button:has-text("Ejecutar plan de marketing")');
     await p.click('.modal-foot button.primary:has-text("Ejecutar")');
     await p.waitForSelector('.toast:has-text("Plan ejecutado")', { timeout: 300000 });
-    const { data: cr } = await admin.from('creatives').select('id, post_id, title, creative_versions(exports, doc)');
+    const { data: cr0 } = await admin.from('creatives').select('id, post_id, title, category, creative_versions(exports, doc)');
+    const vids = cr0.filter((c) => c.category === 'video'); const cr = cr0.filter((c) => c.category !== 'video');
     const gen = cr.filter((c) => c.creative_versions.some((v) => v.exports.length));
     const drafts = cr.filter((c) => !c.creative_versions.some((v) => v.exports.length));
     firstGen = gen.length;
-    console.log(`    diseños con archivo: ${gen.length} · borradores: ${drafts.length}`);
+    console.log(`    diseños con archivo: ${gen.length} · borradores: ${drafts.length} · stories animadas: ${vids.length}`);
+    assert.equal(vids.length, 20, 'deberían adjuntarse las 20 stories animadas');
+    for (const c of vids.slice(0, 3)) { const e = c.creative_versions[0].exports[0]; const { data } = await admin.storage.from('hub').download(e.path); const buf = Buffer.from(await data.arrayBuffer());
+      assert.equal(buf.slice(4, 8).toString(), 'ftyp', e.path); assert.ok(buf.length > 500000); }
+    const vposts = (await admin.from('posts').select('id, status').in('id', vids.map((c) => c.post_id))).data;
+    assert.ok(vposts.every((x) => x.status === 'pending_approval'));
     assert.ok(gen.length >= 25, 'debería haber al menos 25 diseños generados');
     // todos los archivos existen en Storage y son PNG
     for (const c of gen.slice(0, 40)) for (const v of c.creative_versions) for (const e of v.exports) {
@@ -70,8 +76,9 @@ let n = 0; const step = async (name, fn) => { const t = Date.now(); await fn(); 
     await p.waitForSelector('.toast:has-text("Plan ejecutado")', { timeout: 300000 });
     const after = (await admin.from('posts').select('id', { count: 'exact', head: true })).count;
     assert.equal(after, before);
-    const { data: cr } = await admin.from('creatives').select('id, creative_versions(exports)');
-    assert.equal(cr.filter((c) => c.creative_versions.some((v) => v.exports.length)).length, firstGen);
+    const { data: cr } = await admin.from('creatives').select('id, category, creative_versions(exports)');
+    assert.equal(cr.filter((c) => c.category !== 'video' && c.creative_versions.some((v) => v.exports.length)).length, firstGen);
+    assert.equal(cr.filter((c) => c.category === 'video').length, 20);
     await p.screenshot({ path: `${SHOTS}/m-ejecucion.png`, fullPage: true });
   });
 

@@ -478,7 +478,7 @@ function CreativeCard({ c, asTemplate }) {
 function DesignsTab({ creatives }) {
   const [f, setF] = useState({ q: '', cat: '', camp: '', fmt: '', post: '' });
   const camps = [...new Set(creatives.map((c) => c.campaign).filter(Boolean))];
-  const list = creatives.filter((c) => !c.is_template && (!f.q || c.title.toLowerCase().includes(f.q.toLowerCase())) && (!f.cat || c.category === f.cat) && (!f.camp || c.campaign === f.camp)
+  const list = creatives.filter((c) => !c.is_template && c.category !== 'video' && (!f.q || c.title.toLowerCase().includes(f.q.toLowerCase())) && (!f.cat || c.category === f.cat) && (!f.camp || c.campaign === f.camp)
     && (!f.fmt || c.format === f.fmt) && (!f.post || (f.post === 'yes' ? c.post_id : !c.post_id)));
   return html`<div class="stack">
     <div class="toolbar"><input class="input" style="flex:1;min-width:180px" placeholder="Buscar diseños…" value=${f.q} onInput=${(e) => setF({ ...f, q: e.target.value })} />

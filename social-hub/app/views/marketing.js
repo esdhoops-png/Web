@@ -146,11 +146,11 @@ function Execute({ creatives, reloadCreatives }) {
       add('Fase 5–7 · Produciendo diseños (render real en este navegador)…');
       const prod = await runProduction({ keyToId: imp.keyToId, onLog: add });
       const rep = { at: new Date().toISOString(), by: st.me.full_name, import: { inserted: imp.inserted, already: imp.already, duplicates: imp.duplicates, past: imp.past, tasks: imp.tasks, replaced: imp.replaced, kept: imp.kept },
-        generated: prod.generated, drafts: prod.drafts, skipped: prod.skipped, errors: prod.errors };
+        generated: prod.generated, videos: prod.videos, drafts: prod.drafts, skipped: prod.skipped, errors: prod.errors };
       setResult(rep);
       if (st.me.is_admin) await sb.from('app_settings').upsert({ key: 'marketing_report', value: rep, updated_by: st.me.id, updated_at: new Date().toISOString() });
       await reloadCreatives();
-      toast('Plan ejecutado', `${prod.generated.length} diseños generados · ${prod.drafts.length} borradores con datos pendientes`);
+      toast('Plan ejecutado', `${prod.generated.length} diseños generados · ${(prod.videos || []).length} stories animadas · ${prod.drafts.length} borradores con datos pendientes`);
     } catch (e) { toastError(e); add('✗ ' + e.message); } finally { setBusy(false); }
   }
   const generatedC = (creatives || []).filter((c) => c.post_id && generated(c));
@@ -164,7 +164,7 @@ function Execute({ creatives, reloadCreatives }) {
       <p class="small muted" style="margin:0">${fmt.dateTime(result.at)} · ${result.by}</p>
       <div class="info-grid"><div><span>Publicaciones nuevas</span>${result.import.inserted}</div><div><span>Ya existían (no duplicadas)</span>${result.import.already + result.import.duplicates.length}</div>
         <div><span>Tareas nuevas</span>${result.import.tasks}</div><div><span>Fechas pasadas no importadas</span>${result.import.past}</div>
-        <div><span>Diseños generados</span>${result.generated.length} (${result.generated.reduce((a, g) => a + g.files, 0)} archivos PNG)</div><div><span>Borradores con datos pendientes</span>${result.drafts.length}</div>
+        <div><span>Diseños generados</span>${result.generated.length} (${result.generated.reduce((a, g) => a + g.files, 0)} archivos PNG)</div><div><span>Stories animadas (MP4)</span>${(result.videos || []).length}</div><div><span>Borradores con datos pendientes</span>${result.drafts.length}</div>
         <div><span>Omitidos</span>${result.skipped.length}</div><div><span>Errores</span>${result.errors.length}</div></div>
       ${result.import.duplicates.length ? html`<details><summary class="small">Coincidían con publicaciones ya creadas (${result.import.duplicates.length})</summary><ul class="small">${result.import.duplicates.map((d) => html`<li>${d.plan} ↔ ${d.existing}</li>`)}</ul></details>` : null}
       ${result.errors.length ? html`<ul class="small error-text">${result.errors.map((e) => html`<li>${e.key}: ${e.error}</li>`)}</ul>` : null}</section>` : null}
