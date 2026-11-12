@@ -1,1 +1,4 @@
+*.png
+disenos/
+export-*
 node_modules/
