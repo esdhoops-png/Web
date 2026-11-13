@@ -65,75 +65,98 @@ window.CUOR = {
   ],
 
   /* ------------------------------------------------------------------------
-     CARTA REAL · fuente: carta de Just Eat del local (cuordipizzaarucas.com).
+     CARTA REAL · fuente: carta del local en PDF (Cambios cour di pizza carta español).
      Cada plato:
-       prices → tamaños y precios: [{ label: 'Mediana', price: 7.5 }, …]
-       tag    → frase corta encima del nombre (opcional)
+       prices → tamaños y precios: [{ label: 'Normal', price: 7.5 }, …] (label vacío = precio único)
        badge  → etiqueta sobre la ilustración (hot: true la pinta en degradado)
        art    → ingredientes que se dibujan en la ilustración de la pizza
-       dish   → ilustración especial: calzone, rellena, leon, focaccia, can, water
+       dish   → ilustración especial: focaccia, rellena, bruschetta, tiramisu, pannacotta…
+     Cada categoría: home: false → sale solo en la carta completa, no en las pestañas de la portada.
      ------------------------------------------------------------------------ */
   menu: [
     {
-      "title": "Le classiche",
-      "note": "Las de toda la vida",
+      "title": "Pizzas",
+      "note": "Normal / XXL",
       "items": [
         {
           "id": "margherita",
           "name": "Margherita",
-          "description": "Albahaca",
+          "description": "Tomate y mozzarella.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 5.5
+              "label": "Normal",
+              "price": 7.5
             },
             {
-              "label": "Familiar",
-              "price": 10.0
+              "label": "XXL",
+              "price": 12
             }
           ],
-          "badge": "La clásica",
           "art": {
             "toppings": [
               "cheese",
               "basil"
             ]
-          }
+          },
+          "badge": "La clásica"
         },
         {
           "id": "prosciutto",
           "name": "Prosciutto",
-          "description": "Jamón cocido, orégano",
+          "description": "Tomate, mozzarella y jamón cocido.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.0
+              "label": "Normal",
+              "price": 9
             },
             {
-              "label": "Familiar",
-              "price": 11.5
+              "label": "XXL",
+              "price": 14
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "oregano",
-              "ham"
+              "ham",
+              "oregano"
             ]
           }
         },
         {
-          "id": "prosciutto-e-funghi",
-          "name": "Prosciutto e Funghi",
-          "description": "Jamón cocido, champiñón",
+          "id": "diavola",
+          "name": "Diavola",
+          "description": "Tomate, mozzarella y salami.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.5
+              "label": "Normal",
+              "price": 9.5
             },
             {
-              "label": "Familiar",
-              "price": 12.0
+              "label": "XXL",
+              "price": 15
+            }
+          ],
+          "art": {
+            "toppings": [
+              "cheese",
+              "salami"
+            ]
+          },
+          "badge": "Picante",
+          "hot": true
+        },
+        {
+          "id": "prosciutto-e-funghi",
+          "name": "Prosciutto e Funghi",
+          "description": "Tomate, mozzarella, jamón cocido y champiñones.",
+          "prices": [
+            {
+              "label": "Normal",
+              "price": 10
+            },
+            {
+              "label": "XXL",
+              "price": 15.5
             }
           ],
           "art": {
@@ -145,131 +168,64 @@ window.CUOR = {
           }
         },
         {
-          "id": "diavola",
-          "name": "Diavola",
-          "description": "Salami picante, guindilla",
+          "id": "vegetal",
+          "name": "Vegetal",
+          "description": "Tomate, mozzarella, calabacín, pimiento, rúcula y tomate cherry.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.0
+              "label": "Normal",
+              "price": 10
             },
             {
-              "label": "Familiar",
-              "price": 11.5
-            }
-          ],
-          "badge": "Picante",
-          "hot": true,
-          "art": {
-            "toppings": [
-              "cheese",
-              "salami",
-              "chili"
-            ]
-          }
-        },
-        {
-          "id": "napoli",
-          "name": "Napoli",
-          "description": "Anchoas, orégano",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 6.5
-            },
-            {
-              "label": "Familiar",
-              "price": 11.0
+              "label": "XXL",
+              "price": 15
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "anchovy",
-              "oregano"
-            ]
-          }
-        },
-        {
-          "id": "romana",
-          "name": "Romana",
-          "description": "Alcaparras, anchoas, orégano",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 7.0
-            },
-            {
-              "label": "Familiar",
-              "price": 11.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "caper",
-              "anchovy",
-              "oregano"
+              "zucchini",
+              "pepper",
+              "arugula",
+              "cherry"
             ]
           }
         },
         {
           "id": "siciliana",
           "name": "Siciliana",
-          "description": "Alcaparras, anchoas, aceitunas, orégano",
+          "description": "Tomate, mozzarella, alcaparras, aceitunas y anchoas.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.5
+              "label": "Normal",
+              "price": 10.5
             },
             {
-              "label": "Familiar",
-              "price": 12.0
+              "label": "XXL",
+              "price": 16
             }
           ],
           "art": {
             "toppings": [
               "cheese",
               "caper",
-              "anchovy",
               "olive",
-              "oregano"
-            ]
-          }
-        },
-        {
-          "id": "pugliese",
-          "name": "Pugliese",
-          "description": "Cebolla",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 6.0
-            },
-            {
-              "label": "Familiar",
-              "price": 10.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "onion"
+              "anchovy"
             ]
           }
         },
         {
           "id": "quattro-formaggi",
           "name": "Quattro Formaggi",
-          "description": "Grana padano, gorgonzola, fontina",
+          "description": "Tomate, mozzarella, Grana Padano, gorgonzola y fontina.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.5
+              "label": "Normal",
+              "price": 10
             },
             {
-              "label": "Familiar",
-              "price": 12.0
+              "label": "XXL",
+              "price": 15.5
             }
           ],
           "art": {
@@ -280,65 +236,17 @@ window.CUOR = {
           }
         },
         {
-          "id": "quattro-stagioni",
-          "name": "Quattro Stagioni",
-          "description": "Jamón cocido, champiñón, alcachofas, pimiento",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 7.5
-            },
-            {
-              "label": "Familiar",
-              "price": 12.0
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "ham",
-              "mushroom",
-              "pepper",
-              "artichoke"
-            ]
-          }
-        },
-        {
-          "id": "capricciosa",
-          "name": "Capricciosa",
-          "description": "Champiñón, jamón cocido, aceitunas, alcachofas",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 7.5
-            },
-            {
-              "label": "Familiar",
-              "price": 12.0
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "olive",
-              "ham",
-              "mushroom",
-              "artichoke"
-            ]
-          }
-        },
-        {
           "id": "hawaiana",
           "name": "Hawaiana",
-          "description": "Jamón cocido, piña",
+          "description": "Tomate, mozzarella, jamón cocido y piña.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.5
+              "label": "Normal",
+              "price": 9.5
             },
             {
-              "label": "Familiar",
-              "price": 12.0
+              "label": "XXL",
+              "price": 15
             }
           ],
           "art": {
@@ -350,234 +258,67 @@ window.CUOR = {
           }
         },
         {
-          "id": "alemana",
-          "name": "Alemana",
-          "description": "Salchicha",
+          "id": "quattro-stagioni",
+          "name": "Quattro Stagioni",
+          "description": "Tomate, mozzarella, jamón cocido, champiñones, alcachofas y pimiento.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 7.0
+              "label": "Normal",
+              "price": 11
             },
             {
-              "label": "Familiar",
-              "price": 11.5
+              "label": "XXL",
+              "price": 17
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "sausage"
-            ]
-          }
-        },
-        {
-          "id": "serrano",
-          "name": "Serrano",
-          "description": "Jamón serrano",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 8.0
-            },
-            {
-              "label": "Familiar",
-              "price": 12.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "serrano"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "title": "Especiales",
-      "note": "Con nombre propio",
-      "items": [
-        {
-          "id": "cuor-di-pizza",
-          "name": "Cuor di Pizza",
-          "description": "Bresaola, setas porcini, grana padano, rúcula, tomate cherry",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 10.0
-            },
-            {
-              "label": "Familiar",
-              "price": 14.5
-            }
-          ],
-          "badge": "Lleva nuestro nombre",
-          "hot": true,
-          "art": {
-            "toppings": [
-              "cheese",
-              "cherry",
-              "grana",
-              "porcini",
-              "bresaola",
-              "arugula"
-            ]
-          }
-        },
-        {
-          "id": "arucas",
-          "name": "Arucas",
-          "description": "Chorizo, pimiento",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 8.0
-            },
-            {
-              "label": "Familiar",
-              "price": 12.5
-            }
-          ],
-          "badge": "Como el pueblo",
-          "art": {
-            "toppings": [
-              "cheese",
-              "pepper",
-              "chorizo"
-            ]
-          }
-        },
-        {
-          "id": "leon-y-castillo",
-          "name": "León y Castillo",
-          "description": "Medio calzone, media pizza al gusto",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 9.5
-            },
-            {
-              "label": "Familiar",
-              "price": 14.0
-            }
-          ],
-          "badge": "Como nuestra calle",
-          "tag": "Medio calzone, media pizza",
-          "dish": "leon",
-          "art": {
-            "toppings": [
-              "cheese"
+              "ham",
+              "mushroom",
+              "artichoke",
+              "pepper"
             ]
           }
         },
         {
           "id": "catedral",
           "name": "Catedral",
-          "description": "Atún, cebolla, orégano",
+          "description": "Tomate, mozzarella, atún y cebolla.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 8.0
-            },
-            {
-              "label": "Familiar",
-              "price": 12.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "oregano",
-              "onion",
-              "tuna"
-            ]
-          }
-        },
-        {
-          "id": "golosa",
-          "name": "Golosa",
-          "description": "Bresaola, grana padano, rúcula, aceite extra virgen y pimienta negra",
-          "prices": [
-            {
-              "label": "Mediana",
+              "label": "Normal",
               "price": 9.5
             },
             {
-              "label": "Familiar",
-              "price": 14.0
+              "label": "XXL",
+              "price": 14.5
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "grana",
-              "bresaola",
-              "arugula"
-            ]
-          }
-        },
-        {
-          "id": "deliciosa",
-          "name": "Deliciosa",
-          "description": "Jamón serrano, rúcula, tomate cherry, grana padano",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 9.0
-            },
-            {
-              "label": "Familiar",
-              "price": 13.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "cherry",
-              "grana",
-              "arugula",
-              "serrano"
-            ]
-          }
-        },
-        {
-          "id": "genova",
-          "name": "Génova",
-          "description": "Pesto, tomate cherry, nueces",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 8.5
-            },
-            {
-              "label": "Familiar",
-              "price": 13.0
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "pesto",
-              "cherry",
-              "walnut"
+              "tuna",
+              "onion"
             ]
           }
         },
         {
           "id": "carbonara",
           "name": "Carbonara",
-          "description": "Panceta, huevos, grana padano, pimienta negra",
+          "description": "Mozzarella, guanciale, huevo, Grana Padano y pimienta negra.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 8.5
+              "label": "Normal",
+              "price": 11
             },
             {
-              "label": "Familiar",
-              "price": 13.0
+              "label": "XXL",
+              "price": 16
             }
           ],
           "art": {
+            "sauce": "white",
             "toppings": [
               "cheese",
               "bacon",
@@ -587,397 +328,209 @@ window.CUOR = {
           }
         },
         {
-          "id": "cochina",
-          "name": "Cochina",
-          "description": "Panceta italiana, papas, pimiento, romero",
+          "id": "deliciosa",
+          "name": "Deliciosa",
+          "description": "Tomate, mozzarella, jamón serrano, rúcula y tomate cherry.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 8.5
+              "label": "Normal",
+              "price": 11
             },
             {
-              "label": "Familiar",
-              "price": 13.0
+              "label": "XXL",
+              "price": 16
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "bacon",
-              "pepper",
-              "potato",
-              "rosemary"
+              "serrano",
+              "arugula",
+              "cherry"
             ]
           }
         },
         {
-          "id": "popeye",
-          "name": "Popeye",
-          "description": "Espinacas, grana padano, ajo",
+          "id": "del-mar",
+          "name": "Del Mar",
+          "description": "Tomate, mozzarella, cangrejo, langostino, ajo y perejil.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 8.0
+              "label": "Normal",
+              "price": 11
             },
             {
-              "label": "Familiar",
-              "price": 12.5
+              "label": "XXL",
+              "price": 17
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "grana",
-              "spinach",
+              "crab",
+              "prawn",
               "garlic"
             ]
           }
         },
         {
-          "id": "speedy-gonzalez",
-          "name": "Speedy González",
-          "description": "Carne de ternera, pimiento y bacon (picante al gusto)",
+          "id": "barbacoa",
+          "name": "Barbacoa",
+          "description": "Tomate, mozzarella, ternera, bacon, salchicha, cebolla y salsa barbacoa.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 10.0
+              "label": "Normal",
+              "price": 11.5
             },
             {
-              "label": "Familiar",
-              "price": 14.5
-            }
-          ],
-          "badge": "Picante al gusto",
-          "hot": true,
-          "art": {
-            "toppings": [
-              "cheese",
-              "bacon",
-              "pepper",
-              "meat"
-            ]
-          }
-        },
-        {
-          "id": "carnivora",
-          "name": "Carnívora",
-          "description": "Bacon, carne, salami picante, salchicha, jamón cocido",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 13.0
-            },
-            {
-              "label": "Familiar",
-              "price": 17.5
+              "label": "XXL",
+              "price": 17
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "bacon",
-              "ham",
               "meat",
-              "salami",
-              "sausage"
+              "bacon",
+              "sausage",
+              "onion"
             ]
           }
         },
         {
-          "id": "italia",
-          "name": "Italia",
-          "description": "Calabacín, tomate cherry, langostinos y rúcula",
+          "id": "cuor-di-pizza",
+          "name": "Cuor di Pizza",
+          "description": "Tomate, mozzarella, bresaola, porcini, Grana Padano, rúcula y tomate cherry.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 9.5
+              "label": "Normal",
+              "price": 12.5
             },
             {
-              "label": "Familiar",
-              "price": 14.0
+              "label": "XXL",
+              "price": 19
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "cherry",
-              "prawn",
+              "bresaola",
+              "porcini",
+              "grana",
               "arugula",
-              "zucchini"
+              "cherry"
+            ]
+          },
+          "badge": "Lleva nuestro nombre",
+          "hot": true
+        },
+        {
+          "id": "mare-e-monti",
+          "name": "Mare e Monti",
+          "description": "Tomate, mozzarella, mix de setas, langostinos, ajo y perejil.",
+          "prices": [
+            {
+              "label": "Normal",
+              "price": 12
+            },
+            {
+              "label": "XXL",
+              "price": 18
+            }
+          ],
+          "art": {
+            "toppings": [
+              "cheese",
+              "porcini",
+              "prawn",
+              "garlic"
             ]
           }
         },
         {
           "id": "bianca-e-rosa",
           "name": "Bianca e Rosa",
-          "description": "Atún, jamón cocido y langostinos",
+          "description": "Tomate, mozzarella, atún, jamón cocido y langostinos.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 10.5
+              "label": "Normal",
+              "price": 12
             },
             {
-              "label": "Familiar",
-              "price": 15.0
+              "label": "XXL",
+              "price": 18.5
             }
           ],
           "art": {
             "toppings": [
               "cheese",
-              "ham",
-              "prawn",
-              "tuna"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "title": "Mar y huerta",
-      "note": "Marisco, setas y verduras",
-      "items": [
-        {
-          "id": "mare-e-monti",
-          "name": "Mare e Monti",
-          "description": "Mix de setas, langostinos, ajo y perejil",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 11.5
-            },
-            {
-              "label": "Familiar",
-              "price": 16.0
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "porcini",
-              "prawn",
-              "oregano",
-              "garlic"
-            ]
-          }
-        },
-        {
-          "id": "del-mar",
-          "name": "del Mar",
-          "description": "Cangrejo, langostinos, ajo, perejil",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 9.0
-            },
-            {
-              "label": "Familiar",
-              "price": 13.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "prawn",
-              "crab",
-              "oregano",
-              "garlic"
-            ]
-          }
-        },
-        {
-          "id": "boscaiola",
-          "name": "Boscaiola",
-          "description": "Mix de setas, ajo, perejil",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 9.0
-            },
-            {
-              "label": "Familiar",
-              "price": 13.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "porcini",
-              "oregano",
-              "garlic"
-            ]
-          }
-        },
-        {
-          "id": "vegetal",
-          "name": "Vegetal",
-          "description": "Calabacín, pimiento, rúcula, tomate cherry",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 7.5
-            },
-            {
-              "label": "Familiar",
-              "price": 12.0
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "cherry",
-              "arugula",
-              "zucchini",
-              "pepper"
-            ]
-          }
-        },
-        {
-          "id": "vegetal-especial",
-          "name": "Vegetal Especial",
-          "description": "Calabacín, champiñones, ajo, perejil y pimiento",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 9.0
-            },
-            {
-              "label": "Familiar",
-              "price": 13.5
-            }
-          ],
-          "art": {
-            "toppings": [
-              "cheese",
-              "mushroom",
-              "zucchini",
-              "pepper",
-              "oregano",
-              "garlic"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "title": "Calzone y rellenas",
-      "note": "Dobladas o rellenas",
-      "items": [
-        {
-          "id": "calzone",
-          "name": "Calzone",
-          "description": "Jamón cocido, champiñón",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 7.5
-            },
-            {
-              "label": "Familiar",
-              "price": 12.0
-            }
-          ],
-          "dish": "calzone",
-          "art": {
-            "toppings": [
-              "cheese",
-              "ham",
-              "mushroom"
-            ]
-          }
-        },
-        {
-          "id": "calzone-farcito",
-          "name": "Calzone Farcito",
-          "description": "Jamón cocido, champiñón, alcachofas, pimiento",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 8.0
-            },
-            {
-              "label": "Familiar",
-              "price": 12.5
-            }
-          ],
-          "dish": "calzone",
-          "art": {
-            "toppings": [
-              "cheese",
-              "ham",
-              "mushroom",
-              "pepper",
-              "artichoke"
-            ]
-          }
-        },
-        {
-          "id": "rellena",
-          "name": "Rellena",
-          "description": "A elegir entre: Atún y cebolla, Jamón cocido y salchicha o Jamón cocido y champiñón",
-          "prices": [
-            {
-              "label": "Mediana",
-              "price": 12.0
-            },
-            {
-              "label": "Familiar",
-              "price": 20.0
-            }
-          ],
-          "tag": "Tres rellenos a elegir",
-          "dish": "rellena",
-          "art": {
-            "toppings": [
-              "cheese",
-              "onion",
-              "ham",
-              "mushroom",
               "tuna",
-              "sausage"
+              "ham",
+              "prawn"
             ]
           }
         },
         {
-          "id": "rellena-de-carne",
-          "name": "Rellena de Carne",
-          "description": "Carne de ternera, pimiento y bacon (picante al gusto)",
+          "id": "speedy-gonzalez",
+          "name": "Speedy González",
+          "description": "Tomate, mozzarella, ternera, pimiento y bacon.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 16.0
+              "label": "Normal",
+              "price": 11
             },
             {
-              "label": "Familiar",
-              "price": 24.0
+              "label": "XXL",
+              "price": 16.5
             }
           ],
-          "tag": "Picante al gusto",
-          "dish": "rellena",
           "art": {
             "toppings": [
               "cheese",
-              "bacon",
+              "meat",
               "pepper",
-              "meat"
+              "bacon"
             ]
           }
         }
       ]
     },
     {
-      "title": "Focaccia",
-      "note": "De la focacceria",
+      "title": "Focaccias italianas",
+      "note": "Recién salidas del horno",
       "items": [
         {
-          "id": "focaccia",
-          "name": "Focaccia",
-          "tag": "Cuatro sabores a elegir",
-          "badge": "Focacceria",
-          "description": "A elegir entre: ajo, perejil y aceite de oliva virgen; romero, sal gorda y aceite de oliva virgen; tomate, ajo y orégano; o mozzarella y orégano.",
+          "id": "ajo-perejil-y-aove",
+          "name": "Ajo, perejil y AOVE",
+          "description": "Ajo, perejil y aceite de oliva virgen extra.",
           "prices": [
             {
-              "label": "Mediana",
-              "price": 3.5
+              "label": "",
+              "price": 4.5
+            }
+          ],
+          "dish": "focaccia"
+        },
+        {
+          "id": "tomate-ajo-y-oregano",
+          "name": "Tomate, ajo y orégano",
+          "description": "Tomate, ajo y orégano.",
+          "prices": [
+            {
+              "label": "",
+              "price": 4.5
+            }
+          ],
+          "dish": "focaccia"
+        },
+        {
+          "id": "tricolor",
+          "name": "Tricolor",
+          "description": "Queso; tomate, ajo y orégano; ajo, perejil y aceite de oliva virgen extra.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5
             }
           ],
           "dish": "focaccia"
@@ -985,111 +538,577 @@ window.CUOR = {
       ]
     },
     {
-      "title": "Bebidas",
-      "note": "Refrescos y agua",
+      "title": "Focaccias rellenas italianas",
       "items": [
         {
-          "id": "agua-pequena",
-          "name": "Agua pequeña",
-          "description": "Agua mineral",
+          "id": "la-mortadella",
+          "name": "La Mortadella",
+          "description": "Mortadela con pistacho, stracciatella, pesto de albahaca y pistacho troceado.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 11
             }
           ],
-          "dish": "water"
+          "dish": "rellena"
         },
         {
-          "id": "coca-cola-zero",
-          "name": "Coca-Cola Zero",
-          "description": "Lata de 33 cl",
+          "id": "la-trufada",
+          "name": "La Trufada",
+          "description": "Prosciutto crudo, mozzarella fresca, crema de trufa y rúcula.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 12
             }
           ],
-          "dish": "can",
-          "color": "#1C1A1A"
+          "dish": "rellena"
         },
         {
-          "id": "nestea",
-          "name": "Nestea",
-          "description": "Lata de 33 cl",
+          "id": "focaccia-la-diavola",
+          "name": "La Diavola",
+          "description": "Salami picante, mozzarella fresca, tomate y orégano.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 9.5
             }
           ],
-          "dish": "can",
-          "color": "#C98B3A"
+          "dish": "rellena"
         },
         {
-          "id": "7up",
-          "name": "7up",
-          "description": "Lata de 33 cl",
+          "id": "la-porchetta",
+          "name": "La Porchetta",
+          "description": "Porchetta italiana, provola ahumada y crema de queso con pimienta negra.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 11.5
             }
           ],
-          "dish": "can",
-          "color": "#2E9E4F"
+          "dish": "rellena"
+        }
+      ]
+    },
+    {
+      "title": "Focaccias rellenas canarias",
+      "items": [
+        {
+          "id": "la-chorizo",
+          "name": "La Chorizo",
+          "description": "Chorizo de Teror, cebolla asada, queso de rulo, rúcula y miel.",
+          "prices": [
+            {
+              "label": "",
+              "price": 9
+            }
+          ],
+          "dish": "rellena"
         },
         {
-          "id": "fanta-limon",
-          "name": "Fanta Limón",
-          "description": "Lata de 33 cl",
+          "id": "pata-canaria",
+          "name": "Pata Canaria",
+          "description": "Pata asada, mojo rojo, cebolla asada, pimiento asado y queso semiduro.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 10.5
             }
           ],
-          "dish": "can",
-          "color": "#F2D23A"
+          "dish": "rellena"
         },
         {
-          "id": "coca-cola",
-          "name": "Coca-Cola",
-          "description": "Lata de 33 cl",
+          "id": "la-cochina",
+          "name": "La Cochina",
+          "description": "Pulled pork, queso tierno, membrillo y un toque de salsa brava.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 10.5
             }
           ],
-          "dish": "can",
-          "color": "#D3201C"
+          "dish": "rellena"
+        }
+      ]
+    },
+    {
+      "title": "Entrantes",
+      "items": [
+        {
+          "id": "pan-de-ajo",
+          "name": "Pan de ajo",
+          "description": "Pan con mantequilla de ajo.",
+          "prices": [
+            {
+              "label": "",
+              "price": 2.5
+            }
+          ],
+          "dish": "bruschetta"
         },
         {
-          "id": "fanta-naranja",
-          "name": "Fanta Naranja",
-          "description": "Lata de 33 cl",
+          "id": "pan-de-ajo-con-queso",
+          "name": "Pan de ajo con queso",
+          "description": "Pan con mantequilla de ajo y queso.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 3
             }
           ],
-          "dish": "can",
-          "color": "#F28A1E"
+          "dish": "bruschetta"
+        }
+      ]
+    },
+    {
+      "title": "Ensaladas",
+      "home": false,
+      "items": [
+        {
+          "id": "ensalada-de-burrata",
+          "name": "Ensalada de burrata",
+          "description": "Melocotón, tomate, aguacate, rúcula, costra de parmesano, burrata, aceite picante y vinagre balsámico.",
+          "prices": [
+            {
+              "label": "",
+              "price": 12.5
+            }
+          ]
         },
         {
-          "id": "clipper",
-          "name": "Clipper",
-          "description": "Lata de 33 cl",
+          "id": "ensalada-caprese",
+          "name": "Ensalada caprese",
+          "description": "Tomate, mozzarella, albahaca y pesto.",
           "prices": [
             {
               "label": "",
-              "price": 2.0
+              "price": 8.5
+            }
+          ]
+        },
+        {
+          "id": "ensalada-de-salmon-ahumado",
+          "name": "Ensalada de salmón ahumado",
+          "description": "Canónigos, mango, aguacate, mozzarella, tomate cherry, salmón ahumado y vinagreta de pesto.",
+          "prices": [
+            {
+              "label": "",
+              "price": 12.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Postres",
+      "items": [
+        {
+          "id": "tiramisu-de-pistacho",
+          "name": "Tiramisú de pistacho",
+          "prices": [
+            {
+              "label": "",
+              "price": 6.5
             }
           ],
-          "dish": "can",
-          "color": "#E2507A"
+          "dish": "tiramisu"
+        },
+        {
+          "id": "brookie",
+          "name": "Brookie",
+          "prices": [
+            {
+              "label": "",
+              "price": 6
+            }
+          ],
+          "dish": "pannacotta"
+        },
+        {
+          "id": "tarta-de-queso-y-chocolate",
+          "name": "Tarta de queso y chocolate",
+          "prices": [
+            {
+              "label": "",
+              "price": 6.5
+            }
+          ],
+          "dish": "pannacotta"
+        }
+      ]
+    },
+    {
+      "title": "Bebidas frías",
+      "home": false,
+      "items": [
+        {
+          "id": "coca-cola-coca-cola-zero",
+          "name": "Coca-Cola / Coca-Cola Zero",
+          "prices": [
+            {
+              "label": "",
+              "price": 2.5
+            }
+          ]
+        },
+        {
+          "id": "refresco-de-naranja-limon-sprite",
+          "name": "Refresco de naranja / limón / Sprite",
+          "prices": [
+            {
+              "label": "",
+              "price": 2.5
+            }
+          ]
+        },
+        {
+          "id": "monster-aquarius",
+          "name": "Monster / Aquarius",
+          "prices": [
+            {
+              "label": "",
+              "price": 3
+            }
+          ]
+        },
+        {
+          "id": "nestea-de-mango-pina-limon",
+          "name": "Nestea de mango-piña / limón",
+          "prices": [
+            {
+              "label": "",
+              "price": 3
+            }
+          ]
+        },
+        {
+          "id": "appletiser",
+          "name": "Appletiser",
+          "prices": [
+            {
+              "label": "",
+              "price": 3
+            }
+          ]
+        },
+        {
+          "id": "vino-blanco",
+          "name": "Vino blanco",
+          "prices": [
+            {
+              "label": "",
+              "price": 4.2
+            }
+          ]
+        },
+        {
+          "id": "vino-tinto",
+          "name": "Vino tinto",
+          "prices": [
+            {
+              "label": "",
+              "price": 4.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cervezas",
+      "home": false,
+      "items": [
+        {
+          "id": "cana-moretti",
+          "name": "Caña Moretti",
+          "prices": [
+            {
+              "label": "",
+              "price": 3
+            }
+          ]
+        },
+        {
+          "id": "cana-cruzcampo-reserva",
+          "name": "Caña Cruzcampo Reserva",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.2
+            }
+          ]
+        },
+        {
+          "id": "heineken",
+          "name": "Heineken",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "heineken-0-0",
+          "name": "Heineken 0,0",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "amstel-limon-0-0",
+          "name": "Amstel Limón 0,0",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "cruzcampo-limon",
+          "name": "Cruzcampo Limón",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "cruzcampo-sin-gluten",
+          "name": "Cruzcampo sin gluten",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "cruzcampo-reserva",
+          "name": "Cruzcampo Reserva",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "18-70",
+          "name": "18/70",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "id": "moretti",
+          "name": "Moretti",
+          "prices": [
+            {
+              "label": "",
+              "price": 3.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cócteles",
+      "home": false,
+      "items": [
+        {
+          "id": "mojito-clasico",
+          "name": "Mojito clásico",
+          "prices": [
+            {
+              "label": "",
+              "price": 7.5
+            }
+          ]
+        },
+        {
+          "id": "mojito-de-fresa",
+          "name": "Mojito de fresa",
+          "prices": [
+            {
+              "label": "",
+              "price": 7.5
+            }
+          ]
+        },
+        {
+          "id": "mojito-de-maracuya",
+          "name": "Mojito de maracuyá",
+          "prices": [
+            {
+              "label": "",
+              "price": 7.5
+            }
+          ]
+        },
+        {
+          "id": "aperol-spritz",
+          "name": "Aperol Spritz",
+          "prices": [
+            {
+              "label": "",
+              "price": 7
+            }
+          ]
+        },
+        {
+          "id": "campari-spritz",
+          "name": "Campari Spritz",
+          "prices": [
+            {
+              "label": "",
+              "price": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Licores",
+      "home": false,
+      "items": [
+        {
+          "id": "baileys",
+          "name": "Baileys",
+          "prices": [
+            {
+              "label": "",
+              "price": 6.5
+            }
+          ]
+        },
+        {
+          "id": "amaretto",
+          "name": "Amaretto",
+          "prices": [
+            {
+              "label": "",
+              "price": 6.5
+            }
+          ]
+        },
+        {
+          "id": "limoncello",
+          "name": "Limoncello",
+          "prices": [
+            {
+              "label": "",
+              "price": 6.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Zumos de fruta",
+      "note": "Con base de zumo de manzana",
+      "home": false,
+      "items": [
+        {
+          "id": "pasion",
+          "name": "Pasión",
+          "description": "Fruta de la pasión, piña, mango y limón.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.5
+            }
+          ]
+        },
+        {
+          "id": "lava",
+          "name": "Lava",
+          "description": "Mango, cereza, arándano y fresa.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.5
+            }
+          ]
+        },
+        {
+          "id": "pina-colada",
+          "name": "Piña Colada",
+          "description": "Plátano, coco y piña.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.5
+            }
+          ]
+        },
+        {
+          "id": "pitaya",
+          "name": "Pitaya",
+          "description": "Pitaya, mango y fresa.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Batidos con base de leche",
+      "home": false,
+      "items": [
+        {
+          "id": "cookies",
+          "name": "Cookies",
+          "description": "Cookies con helado de vainilla.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.7
+            }
+          ]
+        },
+        {
+          "id": "batido-fresa",
+          "name": "Fresa",
+          "description": "Fresa y helado de vainilla.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.7
+            }
+          ]
+        },
+        {
+          "id": "caramelo",
+          "name": "Caramelo",
+          "description": "Helado de vainilla con caramelo.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.7
+            }
+          ]
+        },
+        {
+          "id": "platano",
+          "name": "Plátano",
+          "description": "Helado de vainilla con plátano.",
+          "prices": [
+            {
+              "label": "",
+              "price": 5.7
+            }
+          ]
         }
       ]
     }
