@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>La carta · Cuor di Pizza</title>
-<meta name="description" content="La carta de Cuor di Pizza: pizzas rojas y blancas, entrantes para compartir y postres italianos.">
+<meta name="description" content="La carta de Cuor di Pizza en Arucas: pizzas, focaccias, entrantes, postres y bebidas. Menu in English, Français, Deutsch.">
 <meta name="theme-color" content="#120C09">
 <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -18,10 +18,11 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 <script>document.documentElement.classList.add('js');</script>
 <script src="assets/js/config.js" defer></script>
+<script src="assets/js/carta-i18n.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 </head>
 <body>
-<a class="skip-link" href="#main">Saltar al contenido</a>
+<a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
 
 <svg class="sprite" aria-hidden="true" focusable="false">
   <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.2C6.2 17.4 2.6 13.9 2.6 9.4 2.6 6.2 5 3.8 8 3.8c1.7 0 3.1.8 4 2.1.9-1.3 2.3-2.1 4-2.1 3 0 5.4 2.4 5.4 5.6 0 4.5-3.6 8-9.4 11.8z"/></symbol>
@@ -42,13 +43,13 @@
       <span class="brand__name"><span>CUOR DI <b>PIZZA</b></span><small>PIZZERIA &amp; FOCACCERIA</small></span>
     </a>
     <nav class="nav" aria-label="Principal">
-      <a href="index.html#anatomia">Anatomía</a>
-      <a href="carta.html" class="is-active" aria-current="page">Carta</a>
-      <a href="index.html#oficio">El oficio</a>
-      <a href="index.html#local">Dónde estamos</a>
+      <a href="index.html#anatomia" data-i18n="navAnatomy">Anatomía</a>
+      <a href="carta.html" class="is-active" aria-current="page" data-i18n="navMenu">Carta</a>
+      <a href="index.html#oficio" data-i18n="navCraft">El oficio</a>
+      <a href="index.html#local" data-i18n="navFind">Dónde estamos</a>
     </nav>
     <div class="header__actions">
-      <a class="btn btn--sm btn--fire" href="index.html#carta"><span>Pedir en la mesa</span></a>
+      <a class="btn btn--sm btn--fire" href="index.html#carta"><span data-i18n="order">Pedir en la mesa</span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><span></span><span></span></button>
     </div>
   </div>
@@ -56,23 +57,24 @@
 
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
   <nav class="menu__links" aria-label="Menú móvil">
-    <a href="index.html#anatomia" style="--i:0"><span>01</span>Anatomía</a>
-    <a href="carta.html" style="--i:1" aria-current="page"><span>02</span>Carta</a>
-    <a href="index.html#oficio" style="--i:2"><span>03</span>El oficio</a>
-    <a href="index.html#local" style="--i:3"><span>04</span>Dónde estamos</a>
+    <a href="index.html#anatomia" style="--i:0"><span>01</span><b data-i18n="navAnatomy">Anatomía</b></a>
+    <a href="carta.html" style="--i:1" aria-current="page"><span>02</span><b data-i18n="navMenu">Carta</b></a>
+    <a href="index.html#oficio" style="--i:2"><span>03</span><b data-i18n="navCraft">El oficio</b></a>
+    <a href="index.html#local" style="--i:3"><span>04</span><b data-i18n="navFind">Dónde estamos</b></a>
   </nav>
-  <div class="menu__foot" style="--i:4"><a class="btn btn--fire" href="index.html">Volver al inicio</a></div>
+  <div class="menu__foot" style="--i:4"><a class="btn btn--fire" href="index.html" data-i18n="home">Volver al inicio</a></div>
 </div>
 
 <main id="main" class="menu-page">
   <div class="container">
     <header class="menu-page__head">
       <div>
-        <p class="kicker">La carta</p>
-        <h1 class="section-title">Nuestra <em class="sauce-text">carta</em></h1>
+        <div class="lang-switch" id="lang-switch" role="group" aria-label="Idioma de la carta"></div>
+        <p class="kicker" data-i18n="kicker">La carta</p>
+        <h1 class="section-title" data-i18n-html="heading">Nuestra <em class="sauce-text">carta</em></h1>
       </div>
       <div>
-        <p class="section-lead">Pizzas en tamaño mediano y familiar, calzone, focaccia y bebidas. Todos los ingredientes son frescos y de primera calidad.</p>
+        <p class="section-lead" data-i18n="lead">Pizzas en tamaño normal y XXL, focaccias recién horneadas, entrantes, postres y bebidas. Ingredientes frescos y de primera calidad.</p>
         <p class="demo-banner" data-demo-note hidden><strong>Carta de demostración.</strong> Los nombres, descripciones y precios son provisionales y se sustituirán por la carta real de Cuor di Pizza.</p>
         <a class="link" id="menu-pdf" href="#" target="_blank" rel="noopener" hidden>Descargar la carta en PDF</a>
       </div>
@@ -84,10 +86,10 @@
     <div id="menu-list"></div>
 
     <div class="menu-page__foot">
-      <h2 class="section-title">¿Te <em class="sauce-text">esperamos?</em></h2>
+      <h2 class="section-title" data-i18n-html="footTitle">¿Te <em class="sauce-text">esperamos?</em></h2>
       <div class="club__actions" id="cta-actions">
-        <a class="btn btn--fire" href="https://www.just-eat.es/restaurants-cuordipizzaarucas/menu" target="_blank" rel="noopener">Pedir a domicilio</a>
-        <a class="btn btn--outline" data-link="maps" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+        <a class="btn btn--fire" href="https://www.just-eat.es/restaurants-cuordipizzaarucas/menu" target="_blank" rel="noopener" data-i18n="delivery">Pedir a domicilio</a>
+        <a class="btn btn--outline" data-link="maps" href="#" target="_blank" rel="noopener" data-i18n="directions">Cómo llegar</a>
       </div>
     </div>
   </div>
@@ -102,7 +104,7 @@
     </div>
     <p class="footer__giant" aria-hidden="true">CUOR<em>di</em>PIZZA</p>
     <div class="footer__bottom">
-      <span>© <span data-fill="year"></span> Cuor di Pizza · Un local del Grupo 5mentarios</span>
+      <span>© <span data-fill="year"></span> Cuor di Pizza · <span data-i18n="group">Un local del Grupo 5mentarios</span></span>
       <ul class="footer__legal" data-fill="legal"></ul>
     </div>
   </div>

@@ -707,24 +707,75 @@
 
   // Botones que solo existen si el servicio existe de verdad
   const extra = [];
-  if (phone) extra.push(`<a class="btn btn--outline" href="tel:${esc(phone.replace(/[^\d+]/g, ''))}">Llamar</a>`);
-  if (links.reservation) extra.push(`<a class="btn btn--outline" href="${esc(links.reservation)}" target="_blank" rel="noopener">Reservar mesa</a>`);
-  if (links.delivery) extra.push(`<a class="btn btn--outline" href="${esc(links.delivery)}" target="_blank" rel="noopener">Pedir a domicilio</a>`);
+  if (phone) extra.push(`<a class="btn btn--outline" href="tel:${esc(phone.replace(/[^\d+]/g, ''))}" data-i18n="call">Llamar</a>`);
+  if (links.reservation) extra.push(`<a class="btn btn--outline" href="${esc(links.reservation)}" target="_blank" rel="noopener" data-i18n="reserve">Reservar mesa</a>`);
+  if (links.delivery) extra.push(`<a class="btn btn--outline" href="${esc(links.delivery)}" target="_blank" rel="noopener" data-i18n="delivery">Pedir a domicilio</a>`);
   ['#place-actions', '#cta-actions'].forEach((s) => $(s)?.insertAdjacentHTML('beforeend', extra.join('')));
 
-  // Carta completa (carta.html)
+  // Carta completa (carta.html), en español, inglés, francés y alemán
   const list = $('#menu-list');
   if (list) {
+    const I18N = window.CUOR_I18N || {};
+    const LANGS = (I18N.langs || [{ code: 'es' }]).map((l) => l.code);
     const slug = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const cats = $('#menu-cats');
-    if (cats) cats.innerHTML = MENU.map((c) => `<a href="#${slug(c.title)}">${esc(c.title)}</a>`).join('');
-    list.innerHTML = MENU.map((cat) => `
+    const langStore = {
+      get() { try { return localStorage.getItem('cuor-lang'); } catch { return null; } },
+      set(v) { try { localStorage.setItem('cuor-lang', v); } catch { /* sin almacenamiento */ } },
+    };
+    // Idioma: ?lang=xx en el enlace → el que eligió antes → el del móvil (quien escanea el QR) → español
+    const pick = (v) => (v && LANGS.includes(v.slice(0, 2).toLowerCase()) ? v.slice(0, 2).toLowerCase() : null);
+    let lang = pick(new URLSearchParams(location.search).get('lang')) || pick(langStore.get())
+      || (navigator.languages || [navigator.language]).map(pick).find(Boolean) || 'es';
+
+    const tr = (it) => {
+      const t = (I18N.items?.[it.id] || {})[lang] || [];
+      return { name: t[0] || it.name, description: t[1] || it.description };
+    };
+    const trCat = (c) => {
+      const t = (I18N.cats?.[c.title] || {})[lang] || [];
+      return { title: t[0] || c.title, note: lang === 'es' ? c.note : (t[1] ?? c.note) };
+    };
+    const trSize = (l) => (lang === 'es' || !l ? l : (I18N.sizes?.[l]?.[lang] || l));
+
+    const switcher = $('#lang-switch');
+    const render = () => {
+      const ui = { ...(I18N.ui?.es || {}), ...(I18N.ui?.[lang] || {}) };
+      root.lang = lang;
+      if (ui.title) document.title = ui.title;
+      $$('[data-i18n]').forEach((el) => { const v = ui[el.dataset.i18n]; if (v) el.textContent = v; });
+      $$('[data-i18n-html]').forEach((el) => { const v = ui[el.dataset.i18nHtml]; if (v) el.innerHTML = v; });
+      if (switcher) {
+        switcher.setAttribute('aria-label', ui.langs || 'Idioma');
+        switcher.innerHTML = (I18N.langs || []).map((l) => `<button type="button" lang="${l.code}" data-lang="${l.code}" aria-pressed="${l.code === lang}" title="${esc(l.name)}">${esc(l.label)}</button>`).join('');
+      }
+      const cats = $('#menu-cats');
+      if (cats) cats.innerHTML = MENU.map((c) => `<a href="#${slug(c.title)}">${esc(trCat(c).title)}</a>`).join('');
+      list.innerHTML = MENU.map((cat) => {
+        const tc = trCat(cat);
+        return `
       <section class="menu-cat" id="${slug(cat.title)}" aria-labelledby="t-${slug(cat.title)}">
-        <header class="reveal"><h2 class="menu-cat__title" id="t-${slug(cat.title)}" lang="it">${esc(cat.title)}</h2>${cat.note ? `<p class="menu-cat__note">${esc(cat.note)}</p>` : ''}</header>
-        <ul class="menu-items">${(cat.items || []).map((it) => `
-          <li class="menu-item reveal" id="${esc(it.id)}"><div class="menu-item__row"><h3 class="menu-item__name">${esc(it.name)}</h3><span class="menu-item__leader" aria-hidden="true"></span><span class="menu-item__prices">${optionsOf(it).map((o) => `<span class="menu-item__price">${o.label ? `<small>${esc(o.label)}</small>` : ''}${euro(o.price)}</span>`).join('')}</span></div>
-          ${it.description ? `<p class="menu-item__desc">${esc(it.description)}</p>` : ''}</li>`).join('')}</ul>
-      </section>`).join('');
+        <header class="reveal"><h2 class="menu-cat__title" id="t-${slug(cat.title)}">${esc(tc.title)}</h2>${tc.note ? `<p class="menu-cat__note">${esc(tc.note)}</p>` : ''}</header>
+        <ul class="menu-items">${(cat.items || []).map((it) => {
+          const t = tr(it);
+          return `
+          <li class="menu-item reveal" id="${esc(it.id)}"><div class="menu-item__row"><h3 class="menu-item__name">${esc(t.name)}</h3><span class="menu-item__leader" aria-hidden="true"></span><span class="menu-item__prices">${optionsOf(it).map((o) => `<span class="menu-item__price">${o.label ? `<small>${esc(trSize(o.label))}</small>` : ''}${euro(o.price)}</span>`).join('')}</span></div>
+          ${t.description ? `<p class="menu-item__desc">${esc(t.description)}</p>` : ''}</li>`;
+        }).join('')}</ul>
+      </section>`;
+      }).join('');
+      $$('.reveal', list).forEach(observe);
+    };
+    switcher?.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-lang]');
+      if (!b || b.dataset.lang === lang) return;
+      lang = b.dataset.lang; langStore.set(lang);
+      const u = new URL(location.href);
+      if (lang === 'es') u.searchParams.delete('lang'); else u.searchParams.set('lang', lang);
+      history.replaceState(null, '', u);
+      render();
+      $(`[data-lang="${lang}"]`, switcher)?.focus();
+    });
+    render();
     const pdf = $('#menu-pdf');
     if (pdf && links.menuPdf) { pdf.href = links.menuPdf; pdf.hidden = false; }
   }
