@@ -468,6 +468,13 @@ section[id] { scroll-margin-top: 60px; }
 .menu-cats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
 .menu-cats a { padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; font-weight: 700; transition: background-color .3s, color .3s; }
 .menu-cats a:hover { background: var(--cream); color: var(--oven); }
+.menu__links a b { font-weight: inherit; }
+/* Selector de idioma de la carta */
+.lang-switch { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 22px; border: 1px solid var(--line); border-radius: 999px; }
+.lang-switch button { min-width: 48px; min-height: 40px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: inherit; font: 800 13px/1 var(--font-body); letter-spacing: .08em; cursor: pointer; transition: background-color .3s, color .3s; }
+.lang-switch button:hover { background: rgba(246, 235, 221, .1); }
+.lang-switch button[aria-pressed="true"] { background: var(--cream); color: var(--oven); }
+.lang-switch button:focus-visible { outline: 2px solid var(--mustard); outline-offset: 2px; }
 .menu-cat { display: grid; grid-template-columns: 4fr 8fr; gap: 20px 60px; padding: 56px 0; border-bottom: 1px solid var(--line); }
 @media (min-width: 960px) { .menu-cat > header { position: sticky; top: calc(var(--header-h) + 24px); align-self: start; } }
 .menu-cat__title { font-family: var(--font-display); font-size: clamp(40px, 5vw, 70px); line-height: 1; text-transform: uppercase; }
