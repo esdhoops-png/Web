@@ -33,7 +33,9 @@
   const menuUrl = links.menu || 'carta.html';
   const mapsUrl = links.maps || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([C.name || 'Cuor di Pizza', addr.street, addr.locality, addr.region || C.region].filter(Boolean).join(' '))}`;
   const MENU = Array.isArray(C.menu) ? C.menu : [];
-  // Cada tamaño (Mediana / Familiar) es un artículo propio de «Tu mesa».
+  // En la portada (pestañas con ilustración) solo salen las categorías sin «home: false».
+  const HOME_MENU = MENU.filter((c) => c.home !== false);
+  // Cada tamaño (Normal / XXL) es un artículo propio de «Tu mesa».
   const optionsOf = (it) => (Array.isArray(it.prices) && it.prices.length ? it.prices : [{ label: '', price: it.price }])
     .map((o) => ({ ...o, id: o.label ? `${it.id}--${o.label.toLowerCase()}` : it.id }));
   const byId = {};
@@ -533,9 +535,9 @@
   const plus = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
   const cardsEl = $('#cards');
   const tabsEl = $('#tabs');
-  if (cardsEl && tabsEl && MENU.length) {
+  if (cardsEl && tabsEl && HOME_MENU.length) {
     const render = (ci) => {
-      cardsEl.innerHTML = (MENU[ci].items || []).map((it, i) => `
+      cardsEl.innerHTML = (HOME_MENU[ci].items || []).map((it, i) => `
         <article class="card" style="--i:${i}">
           <div class="card__visual">
             ${it.badge ? `<span class="card__badge${it.hot ? ' hot' : ''}">${esc(it.badge)}</span>` : ''}
@@ -552,7 +554,7 @@
           </div>
         </article>`).join('');
     };
-    tabsEl.innerHTML = MENU.map((c, i) => `<button role="tab" type="button" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${esc(c.title)}</button>`).join('') + '<span class="tab-indicator" aria-hidden="true"></span>';
+    tabsEl.innerHTML = HOME_MENU.map((c, i) => `<button role="tab" type="button" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${esc(c.title)}</button>`).join('') + '<span class="tab-indicator" aria-hidden="true"></span>';
     const tabs = $$('[role="tab"]', tabsEl);
     const indicator = $('.tab-indicator', tabsEl);
     const moveIndicator = () => {
