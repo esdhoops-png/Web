@@ -1,0 +1,184 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"></head><body>
+<title>Semáforo de faltas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: una sola columna tipo app; cabecera índigo como la puerta del taxi, tarjeta grande y tres botones de semáforo abajo. */
+:root {
+  --bg: #f4f5fb; --paper: #ffffff; --ink: #1a1d2e; --muted: #5b6080; --line: #dde0ee; --soft: #eceef7;
+  --indigo: #232a6b; --on-indigo: #ffffff;
+  --verde: #12804a; --verde-soft: #e2f3e9; --ambar: #b06a00; --ambar-soft: #fbefd9; --rojo: #c8202f; --rojo-soft: #fbe5e7;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif; --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10121c; --paper: #191c2b; --ink: #e8eaf5; --muted: #9ba1c0; --line: #2c3047; --soft: #22263a; --indigo: #2c3480;
+  --verde: #4fd18c; --verde-soft: #15301f; --ambar: #f0a83c; --ambar-soft: #34270f; --rojo: #ff6f7b; --rojo-soft: #3a1a1f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #10121c; --paper: #191c2b; --ink: #e8eaf5; --muted: #9ba1c0; --line: #2c3047; --soft: #22263a; --indigo: #2c3480;
+  --verde: #4fd18c; --verde-soft: #15301f; --ambar: #f0a83c; --ambar-soft: #34270f; --rojo: #ff6f7b; --rojo-soft: #3a1a1f; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45; }
+.wrap { max-width: 640px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { background: var(--indigo); color: var(--on-indigo); }
+header .wrap { padding-block: 16px 0; display: grid; gap: 2px; }
+.plate { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; opacity: .75; }
+h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(32px, 8vw, 44px); line-height: 1; text-transform: uppercase; }
+.tabs { display: flex; gap: 4px; margin-top: 12px; }
+.tab { border: 0; background: transparent; color: var(--on-indigo); opacity: .75; font: 700 17px var(--display); letter-spacing: .05em; text-transform: uppercase; padding: 10px 16px; border-radius: 8px 8px 0 0; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--bg); color: var(--ink); opacity: 1; }
+main.wrap { padding-block: 16px 40px; display: grid; gap: 14px; }
+main.wrap > * { min-width: 0; }
+button { font-family: inherit; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--rojo); outline-offset: 2px; }
+.filtros { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 6px 14px; font-size: 15px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--indigo); border-color: var(--indigo); color: var(--on-indigo); }
+.barra { display: grid; gap: 6px; }
+.barra .txt { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--muted); }
+.barra .txt b { color: var(--ink); }
+.track { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; display: flex; }
+.track i { display: block; height: 100%; background: var(--verde); transition: width .3s; }
+.tarjeta { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 22px 20px; display: grid; gap: 10px; min-height: 210px; align-content: center; }
+.quien { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--muted); }
+.falta { font-size: clamp(21px, 5.4vw, 26px); font-weight: 700; line-height: 1.3; text-wrap: pretty; }
+.luces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.luz { border: 0; border-radius: 14px; padding: 16px 6px; font: 800 20px/1 var(--display); text-transform: uppercase; letter-spacing: .03em; color: #fff; cursor: pointer; display: grid; justify-items: center; gap: 8px; }
+.luz span { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.9); }
+.luz.l { background: #12804a; } .luz.g { background: #c27a00; } .luz.m { background: #c8202f; }
+.luz:disabled { opacity: .35; cursor: default; }
+.luz.elegida { outline: 4px solid var(--ink); outline-offset: 2px; opacity: 1; }
+.fb { border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+.fb.ok { background: var(--verde-soft); } .fb.ko { background: var(--rojo-soft); }
+.fb b { font-family: var(--display); font-size: 22px; text-transform: uppercase; }
+.fb.ok b { color: var(--verde); } .fb.ko b { color: var(--rojo); }
+.fb span { font-size: 15px; }
+.fb small { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.sig { justify-self: stretch; border: 0; border-radius: 12px; padding: 14px; background: var(--indigo); color: var(--on-indigo); font-weight: 700; font-size: 17px; cursor: pointer; }
+.fin { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 22px 20px; display: grid; gap: 10px; text-align: center; }
+.fin h2 { margin: 0; font-family: var(--display); font-size: 30px; text-transform: uppercase; }
+.pista { font-size: 14px; color: var(--muted); }
+.mini { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 8px; padding: 8px 12px; font-size: 14px; cursor: pointer; justify-self: center; }
+/* Lista */
+.buscar { width: 100%; font: inherit; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); }
+.grupo { display: grid; gap: 8px; }
+.grupo h2 { margin: 6px 0 0; font-family: var(--display); font-size: 24px; text-transform: uppercase; }
+.nivel { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--paper); }
+.nivel h3 { margin: 0; padding: 8px 14px; font-family: var(--display); font-size: 18px; text-transform: uppercase; letter-spacing: .04em; display: flex; justify-content: space-between; gap: 8px; }
+.nivel h3 small { font-family: var(--body); font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 600; }
+.nivel.l h3 { background: var(--verde-soft); color: var(--verde); } .nivel.g h3 { background: var(--ambar-soft); color: var(--ambar); } .nivel.m h3 { background: var(--rojo-soft); color: var(--rojo); }
+.nivel ul { list-style: none; margin: 0; padding: 4px 14px 8px; }
+.nivel li { padding: 7px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 10px; font-size: 15px; }
+.nivel li:last-child { border-bottom: 0; }
+.nivel li small { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+.nota { font-size: 14px; color: var(--muted); background: var(--soft); border-radius: 10px; padding: 10px 14px; }
+@media (prefers-reduced-motion: reduce) { .track i { transition: none; } }
+</style>
+
+<header><div class="wrap">
+  <span class="plate">Taxi Telde · Ordenanza 2017</span>
+  <h1>Semáforo de faltas</h1>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-jugar" aria-selected="true">Jugar</button>
+    <button class="tab" role="tab" id="t-lista" aria-selected="false">Todas las faltas</button>
+  </div>
+</div></header>
+
+<main class="wrap" id="app"></main>
+
+<script>
+const F = [{"q": "t", "n": "L", "a": "78.1.a", "t": "Retrasar hasta 30 días la presentación del vehículo a la revisión"}, {"q": "t", "n": "L", "a": "78.1.b", "t": "No mantener el vehículo en buenas condiciones de conservación, limpieza y comodidad"}, {"q": "t", "n": "L", "a": "78.1.c", "t": "Poner el vehículo en servicio sin cumplir alguna de las características del art. 25 señaladas en esa letra"}, {"q": "t", "n": "L", "a": "78.1.d", "t": "No llevar en el vehículo la documentación del art. 51.1"}, {"q": "t", "n": "L", "a": "78.1.e", "t": "No comunicar la baja de un conductor cuando ha terminado la relación laboral"}, {"q": "t", "n": "L", "a": "78.1.f", "t": "No comunicar al Ayuntamiento su cambio de domicilio"}, {"q": "t", "n": "G", "a": "78.2.a", "t": "Retrasar la revisión del vehículo más de 30 días y hasta 60"}, {"q": "t", "n": "G", "a": "78.2.b", "t": "No subsanar las deficiencias de la primera inspección, comprobado en una segunda revisión"}, {"q": "t", "n": "G", "a": "78.2.c", "t": "No hacer acudir el vehículo a las paradas obligatorias"}, {"q": "t", "n": "G", "a": "78.2.d", "t": "No respetar los horarios de servicio fijados u otra forma de organización o control establecida"}, {"q": "t", "n": "G", "a": "78.2.e", "t": "Incumplir los servicios obligatorios que se establezcan"}, {"q": "t", "n": "G", "a": "78.2.f", "t": "Colocar publicidad en el vehículo sin ajustarse a los arts. 34 a 36"}, {"q": "t", "n": "G", "a": "78.2.g", "t": "Incumplir las normas sobre exhibición de publicidad en los vehículos"}, {"q": "t", "n": "G", "a": "78.2.h", "t": "No tener datáfono en el vehículo o tenerlo averiado"}, {"q": "t", "n": "G", "a": "78.2.i", "t": "Trabajar con un conductor contratado sin autorización municipal, aunque tenga Permiso Municipal"}, {"q": "t", "n": "G", "a": "78.2.j", "t": "Prestar servicio con un taxímetro sin la revisión metrológica vigente o con precintos alterados"}, {"q": "t", "n": "G", "a": "78.2.k", "t": "Instalar en el vehículo accesorios o equipos no autorizados que afecten al servicio"}, {"q": "t", "n": "G", "a": "78.2.l", "t": "Poner el vehículo en servicio sin las condiciones para funcionar bien o sin haber pasado las inspecciones"}, {"q": "t", "n": "G", "a": "78.2.m", "t": "Usar el vehículo para un servicio distinto al de taxi, salvo excepciones"}, {"q": "t", "n": "G", "a": "78.2.n", "t": "No poner el vehículo en servicio en los plazos desde la concesión o transferencia de la licencia"}, {"q": "t", "n": "G", "a": "78.2.o", "t": "No tener GPS, tenerlo averiado o no estar integrado en un sistema de Gestión de Flotas"}, {"q": "t", "n": "G", "a": "78.2.p", "t": "Incumplir la normativa sobre antigüedad de los vehículos"}, {"q": "t", "n": "M", "a": "78.3.a", "t": "Retrasar la revisión del vehículo más de 60 días"}, {"q": "t", "n": "M", "a": "78.3.b", "t": "No presentar el vehículo a dos revisiones ordinarias o a una extraordinaria"}, {"q": "t", "n": "M", "a": "78.3.c", "t": "Falsificar la documentación obligatoria de control o la de un procedimiento de la licencia"}, {"q": "t", "n": "M", "a": "78.3.d", "t": "Prestar servicio con un vehículo distinto al adscrito a la licencia"}, {"q": "t", "n": "M", "a": "78.3.e", "t": "Seguir trabajando con el vehículo ya sustituido después de la revisión favorable del nuevo"}, {"q": "t", "n": "M", "a": "78.3.f", "t": "Prestar servicio incumpliendo alguna condición esencial de la licencia (art. 80)"}, {"q": "t", "n": "M", "a": "78.3.g", "t": "No atender de forma preferente a personas con discapacidad cuando proceda"}, {"q": "t", "n": "M", "a": "78.3.h", "t": "Poner en servicio un taxi adaptado sin alguno de sus elementos o con alguno averiado"}, {"q": "t", "n": "M", "a": "78.3.i", "t": "Incumplir la obligación de prestación continuada del servicio (art. 49)"}, {"q": "t", "n": "M", "a": "78.3.j", "t": "Dejar de prestar servicio 30 días seguidos o 60 alternos en un año sin causa justa"}, {"q": "t", "n": "M", "a": "78.3.k", "t": "No tener el seguro obligatorio de daños a terceros o dejar que caduque"}, {"q": "t", "n": "M", "a": "78.3.l", "t": "Arrendar, subarrendar o ceder la licencia sin autorización"}, {"q": "t", "n": "M", "a": "78.3.m", "t": "Transmitir la licencia en vida sin cumplir el art. 14"}, {"q": "t", "n": "M", "a": "78.3.n", "t": "Que los herederos continúen el servicio sin cumplir el requisito del art. 28.4 del R.S.T."}, {"q": "t", "n": "M", "a": "78.3.o", "t": "Que el heredero no explote ni transfiera la licencia en un año desde el fallecimiento del titular"}, {"q": "t", "n": "M", "a": "78.3.p", "t": "Incumplir las normas de horario, calendario, descanso o vacaciones (art. 4)"}, {"q": "t", "n": "M", "a": "78.3.q", "t": "Incumplir órdenes individuales del órgano municipal de transportes"}, {"q": "t", "n": "M", "a": "78.3.r", "t": "Prestar servicio con personas sin certificado habilitante o sin Permiso Municipal de Conducir"}, {"q": "t", "n": "M", "a": "78.3.s", "t": "No llevar taxímetro, manipularlo o hacerlo funcionar mal"}, {"q": "t", "n": "M", "a": "78.3.t", "t": "Prestar servicio poniendo en peligro grave y directo la seguridad de las personas"}, {"q": "c", "n": "L", "a": "79.1.a", "t": "Bajar la bandera antes de que el usuario diga el destino"}, {"q": "c", "n": "L", "a": "79.1.b", "t": "No llevar cambio de un billete de 20 €"}, {"q": "c", "n": "L", "a": "79.1.c", "t": "Repostar con el taxi ocupado sin permiso del usuario o sin descontar ese tiempo"}, {"q": "c", "n": "L", "a": "79.1.d", "t": "No llevar iluminado el taxímetro a partir de la puesta del sol"}, {"q": "c", "n": "L", "a": "79.1.e", "t": "Incumplir las normas sobre paradas del art. 48"}, {"q": "c", "n": "L", "a": "79.1.f", "t": "Incumplir alguna de las obligaciones del art. 63.1"}, {"q": "c", "n": "L", "a": "79.1.g", "t": "Conducir un taxi que incumple una o dos de las características del art. 25 señaladas en esa letra"}, {"q": "c", "n": "L", "a": "79.1.h", "t": "No llevar visibles la placa ni la lista de derechos y deberes de los usuarios"}, {"q": "c", "n": "L", "a": "79.1.i", "t": "No llevar visible la tarjeta insular de identificación del conductor"}, {"q": "c", "n": "L", "a": "79.1.j", "t": "Llevar el uniforme incompleto o incumplir las normas del art. 73"}, {"q": "c", "n": "L", "a": "79.1.k", "t": "Descuidar el aseo interior o exterior del vehículo"}, {"q": "c", "n": "L", "a": "79.1.l", "t": "No tener a la vista los cuadros de tarifas y la documentación obligatoria para el usuario"}, {"q": "c", "n": "L", "a": "79.1.m", "t": "Incumplir las normas de circulación del art. 61 (carriles bus-taxi)"}, {"q": "c", "n": "L", "a": "79.1.n", "t": "Llevar más pasajeros de los autorizados (si no es una infracción más grave)"}, {"q": "c", "n": "L", "a": "79.1.o", "t": "No admitir maletas normales que quepan en el maletero o la baca, sin causa del art. 60.2"}, {"q": "c", "n": "L", "a": "79.1.p", "t": "Trabajar en un taxi sin datáfono o con el datáfono averiado"}, {"q": "c", "n": "G", "a": "79.2.a", "t": "Prestar servicio sin llevar alguno de los documentos del art. 51"}, {"q": "c", "n": "G", "a": "79.2.b", "t": "Conducir un taxi adaptado sin alguno de sus elementos o con alguno averiado"}, {"q": "c", "n": "G", "a": "79.2.c", "t": "No respetar los derechos de los usuarios (si no es grave o muy grave por otro motivo)"}, {"q": "c", "n": "G", "a": "79.2.d", "t": "Incumplir los puntos 2, 3, 6, 7 u 8 del art. 63"}, {"q": "c", "n": "G", "a": "79.2.e", "t": "No entregar recibo o factura al usuario que lo pide, o darla sin los requisitos"}, {"q": "c", "n": "G", "a": "79.2.f", "t": "No presentar la documentación a la que obliga el art. 52.4"}, {"q": "c", "n": "G", "a": "79.2.g", "t": "Incumplir las normas sobre exhibición de publicidad en el vehículo"}, {"q": "c", "n": "G", "a": "79.2.h", "t": "No atender una solicitud estando libre, o abandonar o rechazar un servicio sin causa"}, {"q": "c", "n": "G", "a": "79.2.i", "t": "Negarse a esperar al usuario sin motivo justificado"}, {"q": "c", "n": "G", "a": "79.2.j", "t": "Abandonar el servicio antes de cumplir el tiempo de espera pagado por el usuario"}, {"q": "c", "n": "G", "a": "79.2.k", "t": "Descuidar el aseo personal durante el servicio"}, {"q": "c", "n": "G", "a": "79.2.l", "t": "No seguir el itinerario más corto o el marcado por el viajero, haciendo más recorrido"}, {"q": "c", "n": "G", "a": "79.2.m", "t": "Usar el vehículo para fines distintos del servicio público (salvo «fuera de servicio»)"}, {"q": "c", "n": "G", "a": "79.2.n", "t": "Quedarse con objetos olvidados en el taxi sin cumplir el art. 62.2"}, {"q": "c", "n": "G", "a": "79.2.o", "t": "Usar palabras o gestos groseros con usuarios, viandantes, otros conductores o funcionarios"}, {"q": "c", "n": "G", "a": "79.2.p", "t": "Incumplir el régimen de paradas o sus turnos"}, {"q": "c", "n": "G", "a": "79.2.q", "t": "Negarse a colocar anclajes y cinturones o a manejar los equipos para personas con discapacidad"}, {"q": "c", "n": "G", "a": "79.2.r", "t": "Negarse a colocar y retirar el equipaje de una persona con discapacidad que lo pide"}, {"q": "c", "n": "G", "a": "79.2.s", "t": "Prestar servicio con taxímetro sin revisión metrológica en plazo o con precintos alterados"}, {"q": "c", "n": "G", "a": "79.2.t", "t": "No llevar el documento de reclamaciones o negar u obstaculizar su entrega"}, {"q": "c", "n": "G", "a": "79.2.u", "t": "No trasladar a la Administración las reclamaciones del libro o retrasarlo sin justificación"}, {"q": "c", "n": "G", "a": "79.2.v", "t": "Buscar viajeros en estaciones, paradas de guagua o aeropuertos fuera de las paradas habilitadas"}, {"q": "c", "n": "G", "a": "79.2.w", "t": "Ofrecer servicios con publicidad exterior, panfletos o similares"}, {"q": "c", "n": "M", "a": "79.3.a", "t": "Trabajar sin taxímetro, manipularlo o hacerlo funcionar mal"}, {"q": "c", "n": "M", "a": "79.3.b", "t": "Cobrar tarifas superiores a las autorizadas o suplementos no establecidos"}, {"q": "c", "n": "M", "a": "79.3.c", "t": "No cumplir con las personas de movilidad reducida las obligaciones del art. 53.1 en un taxi adaptado"}, {"q": "c", "n": "M", "a": "79.3.d", "t": "Trabajar con alcohol por encima de la tasa legal o bajo efectos de drogas"}, {"q": "c", "n": "M", "a": "79.3.e", "t": "Negarse a auxiliar a heridos o accidentados"}, {"q": "c", "n": "M", "a": "79.3.f", "t": "Incumplir los puntos 4 o 5 del art. 63"}, {"q": "c", "n": "M", "a": "79.3.g", "t": "Cometer un delito doloso con motivo de la profesión"}, {"q": "c", "n": "M", "a": "79.3.h", "t": "Conducir el taxi sin Permiso Municipal de Conducir o con él caducado, suspendido o extinguido"}, {"q": "c", "n": "M", "a": "79.3.i", "t": "Conducir el taxi sin carné de conducir o con él caducado, suspendido o extinguido"}, {"q": "c", "n": "M", "a": "79.3.j", "t": "Abandonar al viajero sin hacer el servicio y sin causa justificada"}, {"q": "c", "n": "M", "a": "79.3.k", "t": "Trabajar en los días de descanso establecidos"}, {"q": "a", "n": "L", "a": "117.1", "t": "Quedarse en el recinto con el turno fijo sin haber sido llamado por el apuntador"}, {"q": "a", "n": "L", "a": "117.2", "t": "Negarse o no acudir enseguida al viaje que indica el apuntador o el zumbador"}, {"q": "a", "n": "L", "a": "117.3", "t": "No respetar el turno de imaginarias"}, {"q": "a", "n": "L", "a": "117.4", "t": "Estacionar o circular fuera de los lugares habilitados para el taxi"}, {"q": "a", "n": "L", "a": "117.5", "t": "No tener encendida la luz verde en la parada"}, {"q": "a", "n": "L", "a": "117.6", "t": "No ajustar el funcionamiento de las imaginarias a lo establecido"}, {"q": "a", "n": "L", "a": "117.7", "t": "No salir de la parada en cuanto se ha cargado el servicio"}, {"q": "a", "n": "L", "a": "117.8", "t": "No acatar las órdenes de los apuntadores o de los agentes"}, {"q": "a", "n": "L", "a": "117.9", "t": "No dar o no actualizar los datos personales y teléfonos al servicio de apuntadores"}, {"q": "a", "n": "L", "a": "117.10", "t": "No presentarse al apuntador al empezar el turno"}, {"q": "a", "n": "L", "a": "117.11", "t": "Obstaculizar la salida de otros taxis o entretenerse recogiendo prensa o charlando"}, {"q": "a", "n": "L", "a": "117.12", "t": "No avisar antes de las 09:00 de que no puedes hacer tu turno en el aeropuerto"}, {"q": "a", "n": "L", "a": "117.13", "t": "No acreditar con documentos los permisos autorizados"}, {"q": "a", "n": "G", "a": "118.1", "t": "Engañar al apuntador o cargar saltándose el turno"}, {"q": "a", "n": "G", "a": "118.2", "t": "Recoger en Llegadas para llevar a Salidas, o recoger en paradas de guagua, aparcamientos o túneles"}, {"q": "a", "n": "G", "a": "118.3", "t": "Estar en el aeropuerto sin estar de turno ese día, salvo para dejar pasajeros"}, {"q": "a", "n": "G", "a": "118.4", "t": "No respetar los turnos o hacer cambios de turno"}, {"q": "a", "n": "G", "a": "118.5", "t": "Tocar el claxon sin motivo, lavar o limpiar el coche, decir palabras soeces o discutir a voces"}, {"q": "a", "n": "G", "a": "118.6", "t": "Hacer servicios con acompañante o con un conductor en prácticas"}, {"q": "a", "n": "G", "a": "118.7", "t": "No someterse a la toma de kilometraje del apuntador"}, {"q": "a", "n": "G", "a": "118.8", "t": "Ofrecer servicios dentro del recinto o abandonar el vehículo sin fuerza mayor"}, {"q": "a", "n": "G", "a": "118.9", "t": "Hacer servicios de agencias sin estar autorizado"}, {"q": "a", "n": "M", "a": "119.1", "t": "Alterar el cuentakilómetros con cualquier dispositivo"}, {"q": "a", "n": "M", "a": "119.2", "t": "Insultos, agresiones, lesiones o amenazas en las que esté implicado un taxista"}];
+const NIV = { L: "Leve", G: "Grave", M: "Muy grave" };
+const CLS = { L: "l", G: "g", M: "m" };
+const QUIEN = { t: "Titular de la licencia", c: "Conductor", a: "En el aeropuerto" };
+const SAN = {
+  L: "Multa hasta 400 € (o apercibimiento) · suspensión hasta 1 mes",
+  G: "Multa de 401 a 2.000 € · suspensión de 1 mes y 1 día a 3 meses",
+  M: "Multa de 2.001 a 6.000 € · suspensión de 3 meses y 1 día a 1 año",
+};
+const SANA = { L: "Exclusión del aeropuerto hasta 15 días", G: "Exclusión de 16 días a 3 meses", M: "Exclusión de 3 meses y 1 día a 6 meses" };
+const KEY = "semaforo-faltas-v1";
+let sabidas = {}; try { sabidas = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { sabidas = {}; }
+function guardar() { try { localStorage.setItem(KEY, JSON.stringify(sabidas)); } catch (e) {} }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const id = f => f.q + f.a;
+function mezclar(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+let vista = "jugar", filtro = "todas", cola = [], actual = null, resp = null, aciertos = 0, hechas = 0, fallada = new Set();
+function lote() {
+  const base = F.filter(f => filtro === "todas" || f.q === filtro);
+  const pend = base.filter(f => !sabidas[id(f)]);
+  return mezclar(pend.length ? pend : base).slice(0, 15);
+}
+function nuevaRonda() { cola = lote(); fallada = new Set(); aciertos = 0; hechas = 0; actual = cola.shift() || null; resp = null; pintar(); }
+
+function pintarJugar() {
+  const base = F.filter(f => filtro === "todas" || f.q === filtro);
+  const n = base.filter(f => sabidas[id(f)]).length;
+  const filtros = [["todas", "Todas"], ["c", "Conductor"], ["t", "Titular"], ["a", "Aeropuerto"]];
+  let h = `<div class="filtros">${filtros.map(([k, v]) => `<button class="chip" data-f="${k}" aria-pressed="${filtro === k}">${v}</button>`).join("")}</div>
+  <div class="barra"><div class="txt"><span>Te sabes <b>${n}</b> de ${base.length} faltas</span><span>Ronda: ${aciertos}/${hechas}</span></div><div class="track"><i style="width:${base.length ? n * 100 / base.length : 0}%"></i></div></div>`;
+  if (!actual) {
+    h += `<div class="fin"><h2>${n === base.length ? "¡Te las sabes todas! 🎉" : "¡Ronda terminada!"}</h2>
+      <p>${hechas ? `Has acertado ${aciertos} de ${hechas}.` : ""} ${n === base.length ? "Puedes seguir repasando para que no se olviden." : `Te quedan ${base.length - n} por aprender.`}</p>
+      <button class="sig" data-a="otra">Otra ronda de 15</button>
+      ${n ? `<button class="mini" data-a="reset">Empezar de cero</button>` : ""}</div>`;
+    return h;
+  }
+  const f = actual;
+  h += `<div class="tarjeta"><span class="quien">${QUIEN[f.q]}</span><div class="falta">${esc(f.t)}</div>${resp ? "" : `<span class="pista">¿Leve, grave o muy grave?</span>`}</div>
+  <div class="luces">${["L", "G", "M"].map(k => `<button class="luz ${CLS[k]} ${resp === k ? "elegida" : ""}" data-n="${k}" ${resp ? "disabled" : ""}><span></span>${NIV[k]}</button>`).join("")}</div>`;
+  if (resp) {
+    const ok = resp === f.n;
+    h += `<div class="fb ${ok ? "ok" : "ko"}"><b>${ok ? "¡Bien! " : "Es "}${NIV[f.n]}</b><span>${f.q === "a" ? SANA[f.n] : SAN[f.n]}</span><small>Art. ${f.a}</small>${ok ? "" : `<span>Te la vuelvo a preguntar en esta ronda.</span>`}</div>
+    <button class="sig" data-a="sig">Siguiente →</button>`;
+  }
+  return h;
+}
+function pintarLista() {
+  const q = (document.getElementById("buscar") || {}).value || "";
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const nq = norm(q);
+  let h = `<input class="buscar" id="buscar" type="search" placeholder="Buscar una falta (taxímetro, recibo, uniforme…)" value="${esc(q)}">`;
+  for (const w of ["c", "t", "a"]) {
+    const grupo = F.filter(f => f.q === w && (!nq || norm(f.t).includes(nq)));
+    if (!grupo.length) continue;
+    h += `<section class="grupo"><h2>${QUIEN[w]}</h2>`;
+    for (const k of ["L", "G", "M"]) {
+      const it = grupo.filter(f => f.n === k); if (!it.length) continue;
+      h += `<div class="nivel ${CLS[k]}"><h3>${NIV[k]} <small>${w === "a" ? SANA[k] : SAN[k].split(" · ")[0]}</small></h3><ul>${it.map(f => `<li><span>${sabidas[id(f)] ? "✓ " : ""}${esc(f.t)}</span><small>${f.a}</small></li>`).join("")}</ul></div>`;
+    }
+    h += `</section>`;
+  }
+  h += `<p class="nota"><b>Reglas generales.</b> Lo que vulnera la Ordenanza y no está en la lista es leve (o muy grave si por sus circunstancias lo merece, justificándolo). <b>Reincidir sube un nivel:</b> si ya te sancionaron por lo mismo en los 12 meses anteriores (6 meses en el aeropuerto), una leve pasa a grave y una grave a muy grave. En el aeropuerto, las agresiones con sentencia judicial cuentan como grave.</p>`;
+  return h;
+}
+function pintar() {
+  document.getElementById("t-jugar").setAttribute("aria-selected", vista === "jugar");
+  document.getElementById("t-lista").setAttribute("aria-selected", vista === "lista");
+  const foco = document.activeElement && document.activeElement.id === "buscar";
+  const app = document.getElementById("app");
+  app.innerHTML = vista === "jugar" ? pintarJugar() : pintarLista();
+  if (foco) { const b = document.getElementById("buscar"); b.focus(); b.setSelectionRange(b.value.length, b.value.length); }
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.id === "t-jugar") { vista = "jugar"; pintar(); }
+  else if (t.id === "t-lista") { vista = "lista"; pintar(); }
+  else if (t.dataset.f) { filtro = t.dataset.f; nuevaRonda(); }
+  else if (t.dataset.n && actual && !resp) {
+    resp = t.dataset.n; hechas++;
+    if (resp === actual.n) { aciertos++; if (!fallada.has(id(actual))) { sabidas[id(actual)] = 1; guardar(); } }
+    else { fallada.add(id(actual)); delete sabidas[id(actual)]; guardar(); cola.splice(Math.min(cola.length, 3), 0, actual); }
+    pintar();
+  }
+  else if (t.dataset.a === "sig") { actual = cola.shift() || null; resp = null; pintar(); window.scrollTo({ top: 0 }); }
+  else if (t.dataset.a === "otra") nuevaRonda();
+  else if (t.dataset.a === "reset") { sabidas = {}; guardar(); nuevaRonda(); }
+});
+document.addEventListener("input", e => { if (e.target.id === "buscar") pintar(); });
+nuevaRonda();
+</script>
+
+</body></html>
