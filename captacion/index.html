@@ -88,6 +88,21 @@ ul.reasons li.plus{color:var(--hard)} ul.reasons li.minus{color:var(--easy)}
 .goal{height:8px;border-radius:4px;background:var(--panel2);overflow:hidden;min-width:160px;flex:1}
 .goal i{display:block;height:100%;background:var(--easy)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:20;max-width:calc(100% - 32px);text-align:center}
+.call-layout{display:grid;gap:16px}
+.call-layout.on{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+@media (max-width:860px){.call-layout.on{grid-template-columns:1fr}}
+#qScript{background:var(--panel2);border-radius:10px;padding:14px;font-size:14px;min-width:0}
+#qScript h4{margin:12px 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+#qScript h4:first-child{margin-top:0}
+#qScript p{margin:0 0 6px}
+#qScript .say{border-left:3px solid var(--accent);padding-left:10px}
+#qScript details{border-top:1px solid var(--border);padding:6px 0}
+#qScript details summary{font-size:14px;color:var(--text);font-weight:600}
+#qScript details p{margin-top:6px}
+.outcome{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;padding:10px;border-radius:10px;background:var(--panel2)}
+.outcome button{padding:9px 12px}
+.outcome button.good{background:var(--easy);border-color:var(--easy);color:var(--bg);font-weight:600}
+.outcome input[type=date]{width:auto;padding:7px}
 kbd{font:12px ui-monospace,monospace;border:1px solid var(--border);border-radius:4px;padding:1px 5px;background:var(--panel2)}
 </style>
 </head>
@@ -153,6 +168,7 @@ kbd{font:12px ui-monospace,monospace;border:1px solid var(--border);border-radiu
       <label class="lbl">Tu nombre<input type="text" id="sName" placeholder="Ej: Eduardo"></label>
       <label class="lbl">Tu empresa / marca<input type="text" id="sBrand" placeholder="Ej: ESD Webs"></label>
       <label class="lbl">Tu web o portfolio<input type="text" id="sUrl" placeholder="https://..."></label>
+      <label class="lbl">Precio «desde» en € (para el guion)<input type="text" id="sPrice" inputmode="numeric" placeholder="Ej: 350"></label>
     </div>
     <label class="lbl" style="margin-top:8px">Plantilla de WhatsApp — variables: {negocio} {municipio} {argumento} {yo} {empresa} {web}
       <textarea id="sTpl" rows="5"></textarea>
@@ -176,11 +192,21 @@ kbd{font:12px ui-monospace,monospace;border:1px solid var(--border);border-radiu
   <!-- MODO RÁPIDO -->
   <section class="panel hidden" id="quick" aria-live="polite">
     <div class="quick-top">
-      <div><b>⚡ Modo rápido</b> <span class="small muted" id="qPos"></span></div>
+      <div><b id="qTitle">⚡ Modo rápido</b> <span class="small muted" id="qPos"></span></div>
       <div class="row" style="flex:1;max-width:420px"><span class="small" id="qGoalTxt"></span><div class="goal"><i id="qGoal"></i></div></div>
       <button id="qClose">Salir</button>
     </div>
-    <div id="qCard"></div>
+    <div class="call-layout">
+      <div id="qCard"></div>
+      <div id="qScript" class="hidden"></div>
+    </div>
+    <div id="qOutcome" class="outcome hidden">
+      <span class="small muted">¿Cómo ha ido la llamada?</span>
+      <button data-out="no_contesta">🔕 No contesta</button>
+      <span class="row" style="gap:4px"><button data-out="volver">🕑 Volver a llamar el</button><input type="date" id="qDate" aria-label="Fecha para volver a llamar"></span>
+      <button data-out="interesado" class="good">✅ Interesado</button>
+      <button data-out="no_interesa">👎 No le interesa</button>
+    </div>
     <div class="row" style="margin-top:12px;justify-content:space-between">
       <div class="row">
         <button id="qWeb" title="Comprobado: ya tiene página web">Ya tiene web</button>
@@ -217,6 +243,7 @@ kbd{font:12px ui-monospace,monospace;border:1px solid var(--border);border-radiu
         <label class="small"><input type="checkbox" id="fIg"> Solo con Instagram</label>
       </div>
       <div class="row">
+        <button class="primary" id="btnCalls" title="Llamadas pendientes de hoy primero, luego negocios nuevos, con guion">📞 Modo llamadas</button>
         <button class="primary" id="btnQuick" title="Te enseña los negocios pendientes uno a uno, del más fácil al más difícil">⚡ Modo rápido</button>
         <span class="small muted" id="count"></span>
         <button id="btnCsv">Exportar CSV</button>
@@ -243,7 +270,8 @@ const K = {data:'gc.data.v1', crm:'gc.crm.v1', set:'gc.settings.v1', theme:'gc.t
 const PAGE = 60;
 
 const STATUSES = [
-  ['nuevo','Nuevo'],['contactado','Contactado'],['interesado','Interesado'],['presupuesto','Presupuesto enviado'],
+  ['nuevo','Nuevo'],['contactado','Contactado'],['no_contesta','No contesta'],['volver_llamar','Volver a llamar'],
+  ['interesado','Interesado'],['presupuesto','Presupuesto enviado'],
   ['cerrado','Cerrado ✅'],['no_interesa','No le interesa'],['tiene_web','Ya tiene web'],['descartado','Descartado']
 ];
 
@@ -670,6 +698,11 @@ function setCrm(id, patch){
   store.set(K.crm, crm);
 }
 const today = () => new Date().toDateString();
+const FOLLOW = ['contactado','no_contesta','volver_llamar','interesado','presupuesto'];
+function isoDay(d = new Date()){ return new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
+function addDays(n){ const d = new Date(); d.setDate(d.getDate()+n); if(d.getDay()===0) d.setDate(d.getDate()+1); return isoDay(d); }
+const isDue = b => { const c = getCrm(b.id); return !!c.callback && c.callback<=isoDay() && FOLLOW.includes(c.status); };
+const callsToday = () => Object.values(crm).reduce((n,c)=>n+(c.calls||[]).filter(t=>new Date(t).toDateString()===today()).length, 0);
 const contactedToday = () => Object.values(crm).filter(c=>c.contactedAt && new Date(c.contactedAt).toDateString()===today()).length;
 function igUrl(b){
   return b.ig || `https://www.google.com/search?q=${encodeURIComponent('site:instagram.com "'+b.name+'" '+(b.muni||'Gran Canaria'))}`;
@@ -698,7 +731,7 @@ function buildFilterOptions(){
   $('#fMuni').innerHTML = '<option value="">Todos</option>' + munis.map(m=>`<option value="${esc(m)}">${esc(m)} (${cnt('muni',m)})</option>`).join('');
   const groups = Object.keys(GROUPS).filter(g=>cnt('group',g));
   $('#fGroup').innerHTML = '<option value="">Todos</option>' + groups.map(g=>`<option value="${g}">${GROUPS[g].label} (${cnt('group',g)})</option>`).join('');
-  $('#fStatus').innerHTML = '<option value="">Todos</option><option value="pendiente">Pendientes de contactar</option><option value="seguimiento">En seguimiento</option>' + STATUSES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  $('#fStatus').innerHTML = '<option value="">Todos</option><option value="pendiente">Pendientes de contactar</option><option value="llamar_hoy">Llamar hoy</option><option value="seguimiento">En seguimiento</option>' + STATUSES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
   $('#fMuni').value = vm; $('#fGroup').value = vg; $('#fStatus').value = vs;
 }
 
@@ -715,8 +748,9 @@ function filtered(){
     if(noChain && b.chain) return false;
     if(hideDone && ['descartado','tiene_web','no_interesa'].includes(s)) return false;
     if(st==='pendiente' && s!=='nuevo') return false;
-    if(st==='seguimiento' && !['contactado','interesado','presupuesto'].includes(s)) return false;
-    if(st && !['pendiente','seguimiento'].includes(st) && s!==st) return false;
+    if(st==='seguimiento' && !FOLLOW.includes(s)) return false;
+    if(st==='llamar_hoy' && !isDue(b)) return false;
+    if(st && !['pendiente','seguimiento','llamar_hoy'].includes(st) && s!==st) return false;
     if(q && !norm(b.name+' '+b.cat+' '+b.addr+' '+b.muni).includes(q)) return false;
     return true;
   });
@@ -730,13 +764,15 @@ function renderStats(){
   const it = data.items.filter(b=>!($('#fChains').checked && b.chain));
   const c = k => it.filter(b=>b.diff===k).length;
   const s = k => it.filter(b=>getCrm(b.id).status===k).length;
-  const seg = it.filter(b=>['contactado','interesado','presupuesto'].includes(getCrm(b.id).status)).length;
+  const seg = it.filter(b=>FOLLOW.includes(getCrm(b.id).status)).length;
+  const due = it.filter(isDue).length;
   const cards = [
     ['', it.length, 'Negocios sin web', ()=>{$('#fDiff').value='';$('#fStatus').value='';}],
     ['easy', c('easy'), 'Fáciles de cerrar', ()=>{$('#fDiff').value='easy';}],
     ['mid', c('mid'), 'Dificultad media', ()=>{$('#fDiff').value='mid';}],
     ['hard', c('hard'), 'Difíciles', ()=>{$('#fDiff').value='hard';}],
     ['', `${contactedToday()}/${+settings.goal||25}`, 'Contactados hoy', ()=>{$('#fStatus').value='contactado';}],
+    ['mid', due, 'Llamar hoy', ()=>{$('#fStatus').value='llamar_hoy';}],
     ['', seg, 'En seguimiento', ()=>{$('#fStatus').value='seguimiento';}],
     ['easy', s('cerrado'), 'Cerrados ✅', ()=>{$('#fStatus').value='cerrado';}]
   ];
@@ -768,7 +804,8 @@ function cardHTML(b){
   const ig = `<a class="btn ig" target="_blank" rel="noopener" data-ig="1" href="${esc(igUrl(b))}" title="Copia el mensaje y abre ${b.ig?'su perfil':'la búsqueda de su perfil'} de Instagram">Instagram${b.ig?'':' (buscar)'}</a>`;
   const verify = `https://www.google.com/search?q=${encodeURIComponent('"'+b.name+'" '+(b.muni||'Gran Canaria'))}`;
   const reasons = b.reasons.slice().sort((x,y)=>x[0]-y[0]).map(([p,t])=>`<li class="${p>0?'plus':'minus'}">${p>0?'+':''}${p} · ${esc(t)}</li>`).join('');
-  const chips = [b.src, b.chain?'Cadena':'', b.rating!=null?`${b.rating}★ (${b.reviews})`:'', b.social?'Redes sociales':''].filter(Boolean)
+  const cb = c.callback && FOLLOW.includes(c.status) ? `📅 Llamar ${c.callback.slice(8,10)}/${c.callback.slice(5,7)}` : '';
+  const chips = [cb, c.attempts?`${c.attempts} llamada${c.attempts>1?'s':''} sin respuesta`:'', b.src, b.chain?'Cadena':'', b.rating!=null?`${b.rating}★ (${b.reviews})`:'', b.social?'Redes sociales':''].filter(Boolean)
     .map(x=>`<span class="chip">${esc(x)}</span>`).join('');
   return `<article class="card st-${c.status}" data-id="${esc(b.id)}">
     <div class="card-h">
@@ -873,7 +910,7 @@ function init(){
 
   // ajustes
   const bind = (id, key) => { $(id).value = settings[key]||''; $(id).oninput = ()=>{ settings[key] = $(id).value; store.set(K.set, settings); }; };
-  bind('#sName','name'); bind('#sBrand','brand'); bind('#sUrl','url'); bind('#sTpl','tpl'); bind('#sIgTpl','igTpl'); bind('#sGoal','goal');
+  bind('#sName','name'); bind('#sBrand','brand'); bind('#sUrl','url'); bind('#sPrice','price'); bind('#sTpl','tpl'); bind('#sIgTpl','igTpl'); bind('#sGoal','goal');
   $('#btnBackup').onclick = ()=>download(`captacion-copia-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify({data, crm, settings:{...settings, gKey:''}}), 'application/json');
   $('#fileRestore').onchange = async e=>{
     const f = e.target.files[0]; if(!f) return;
@@ -930,7 +967,9 @@ function init(){
   });
 
   // modo rápido
-  $('#btnQuick').onclick = openQuick;
+  $('#btnQuick').onclick = ()=>openQuick('quick');
+  $('#btnCalls').onclick = ()=>openQuick('call');
+  $('#qOutcome').addEventListener('click', e=>{ const bt = e.target.closest('[data-out]'); if(bt) callOutcome(bt.dataset.out); });
   $('#qClose').onclick = closeQuick;
   $('#qNext').onclick = ()=>moveQuick(1);
   $('#qPrev').onclick = ()=>moveQuick(-1);
@@ -952,12 +991,25 @@ function init(){
 /* =========================================================
    MODO RÁPIDO: un negocio cada vez, del más fácil al más difícil
    ========================================================= */
-const quick = {list:[], i:0, pendingNext:false};
-function openQuick(){
-  // usa los filtros actuales, pero solo pendientes y ordenados por facilidad
-  quick.list = filtered().filter(b=>getCrm(b.id).status==='nuevo' && !b.chain).sort((a,b)=>a.score-b.score);
+const quick = {list:[], i:0, pendingNext:false, mode:'quick'};
+function openQuick(mode){
+  quick.mode = mode;
+  // usa los filtros actuales (menos el de estado)
+  const st = $('#fStatus').value; $('#fStatus').value = '';
+  const base = filtered().filter(b=>!b.chain);
+  $('#fStatus').value = st;
+  if(mode==='call'){
+    // primero las llamadas que tocan hoy, luego los nuevos más fáciles
+    const due = base.filter(b=>b.phones.length && isDue(b)).sort((a,b)=>getCrm(a.id).callback.localeCompare(getCrm(b.id).callback)||a.score-b.score);
+    const fresh = base.filter(b=>b.phones.length && getCrm(b.id).status==='nuevo').sort((a,b)=>a.score-b.score);
+    quick.list = [...due, ...fresh];
+  } else {
+    quick.list = base.filter(b=>getCrm(b.id).status==='nuevo').sort((a,b)=>a.score-b.score);
+  }
   quick.i = 0; quick.pendingNext = false;
-  if(!settings.name) toast('Pon tu nombre y tu marca en «Ajustes» para que salgan en los mensajes.');
+  $('#qTitle').textContent = mode==='call' ? '📞 Modo llamadas' : '⚡ Modo rápido';
+  $('#qOutcome').classList.toggle('hidden', mode!=='call');
+  if(!settings.name) toast('Pon tu nombre y tu marca en «Ajustes» para que salgan en los mensajes y el guion.');
   $('#quick').classList.remove('hidden');
   renderQuick();
   $('#quick').scrollIntoView({behavior:'smooth', block:'start'});
@@ -969,10 +1021,10 @@ function moveQuick(d){
   renderQuick();
 }
 function updateQuickHeader(){
-  const goal = +settings.goal || 25, n = contactedToday();
-  $('#qGoalTxt').textContent = `Hoy: ${n}/${goal}`;
+  const goal = +settings.goal || 25, n = quick.mode==='call' ? callsToday() : contactedToday();
+  $('#qGoalTxt').textContent = quick.mode==='call' ? `Llamadas hoy: ${n}/${goal}` : `Hoy: ${n}/${goal}`;
   $('#qGoal').style.width = Math.min(100, n/goal*100)+'%';
-  $('#qPos').textContent = quick.list.length ? `${Math.min(quick.i+1, quick.list.length)} de ${quick.list.length} pendientes` : '';
+  $('#qPos').textContent = quick.list.length ? `${Math.min(quick.i+1, quick.list.length)} de ${quick.list.length}` : '';
 }
 function renderQuick(){
   updateQuickHeader(); renderStats();
@@ -980,12 +1032,102 @@ function renderQuick(){
   if(!quick.list.length){
     $('#qCard').innerHTML = `<div class="empty">No hay negocios pendientes con estos filtros. ${data.items.length?'Quita algún filtro o busca más negocios.':'Primero pulsa «Buscar en toda Gran Canaria».'}</div>`;
   } else if(!b){
-    $('#qCard').innerHTML = `<div class="empty">🎉 Has terminado la lista. Hoy llevas <b>${contactedToday()}</b> contactos.</div>`;
+    $('#qCard').innerHTML = `<div class="empty">🎉 Has terminado la lista. Hoy llevas <b>${quick.mode==='call' ? callsToday()+' llamadas' : contactedToday()+' contactos'}</b>.</div>`;
   } else {
     $('#qCard').innerHTML = cardHTML(b);
-    const det = $('#qCard details'); if(det) det.open = true;
+    const det = $('#qCard details'); if(det) det.open = quick.mode!=='call';
   }
+  const showScript = quick.mode==='call' && !!b;
+  $('#qScript').classList.toggle('hidden', !showScript);
+  $('.call-layout').classList.toggle('on', showScript);
+  $('#qOutcome').classList.toggle('hidden', !showScript);
+  if(showScript){ $('#qScript').innerHTML = callScript(b); $('#qDate').value = addDays(1); }
   $('#qPrev').disabled = quick.i<=0; $('#qNext').disabled = !b;
+}
+
+function callOutcome(kind){
+  const b = quick.list[quick.i]; if(!b) return;
+  const c = getCrm(b.id);
+  const now = new Date().toISOString();
+  const calls = [...(c.calls||[]), now];
+  if(!c.contactedAt) setCrm(b.id, {contactedAt: now});
+  if(kind==='no_contesta'){
+    const attempts = (c.attempts||0) + 1;
+    if(attempts>=3){ setCrm(b.id, {status:'descartado', attempts, calls, callback:''}); toast('Tercera vez sin respuesta: lo descarto.'); }
+    else { setCrm(b.id, {status:'no_contesta', attempts, calls, callback:addDays(1)}); toast(`Sin respuesta (intento ${attempts} de 3). Te lo vuelvo a poner mañana.`); }
+    moveQuick(1);
+  } else if(kind==='volver'){
+    const d = $('#qDate').value || addDays(1);
+    setCrm(b.id, {status:'volver_llamar', calls, callback:d});
+    toast(`Apuntado: volver a llamar el ${d.slice(8,10)}/${d.slice(5,7)}. Escribe en notas a quién preguntar.`);
+    moveQuick(1);
+  } else if(kind==='interesado'){
+    setCrm(b.id, {status:'interesado', calls, callback:addDays(2)});
+    toast('¡Bien! Mándale el ejemplo por WhatsApp y apunta en notas lo hablado. Te lo recuerdo en 2 días.');
+    renderQuick();
+  } else if(kind==='no_interesa'){
+    setCrm(b.id, {status:'no_interesa', calls, callback:''});
+    moveQuick(1);
+  }
+}
+
+/* =========================================================
+   GUION DE LLAMADA (se adapta al negocio)
+   ========================================================= */
+const CALL_Q = {
+  hosteleria:['¿Os llegan muchos turistas o es sobre todo gente de la zona?','¿Los clientes os preguntan por la carta o por reservar antes de venir?'],
+  belleza:['¿Cómo gestionáis ahora las citas, todo por teléfono o WhatsApp?','¿Se os escapa algún cliente porque no podéis coger el teléfono mientras trabajáis?'],
+  oficios:['¿Los trabajos os llegan sobre todo por boca a boca?','¿Os gustaría tener más encargos de gente que busca en Google?'],
+  motor:['¿Los clientes os piden presupuesto por teléfono?','¿Os llega gente nueva o casi siempre son los de siempre?'],
+  alojamiento:['¿Qué parte de las reservas os entra por Booking o Airbnb?','¿Cuánto pagáis más o menos de comisión al mes?'],
+  profesional:['¿Cómo os llegan los clientes nuevos ahora mismo?','¿Os ha pasado que alguien os busque en internet y no os encuentre?'],
+  formacion:['¿Cómo se apuntan ahora los alumnos?','¿En qué época del año buscáis más alumnos nuevos?'],
+  deporte:['¿Cómo se apunta ahora la gente nueva?','¿Os llegan turistas o gente que busca en Google?'],
+  salud:['¿Cómo piden cita ahora los pacientes nuevos?','¿Os llegan pacientes que os han buscado en internet?'],
+  servicios:['¿Cómo os piden presupuesto los clientes?','¿Os llega trabajo de gente que busca en Google?'],
+  comercio:['¿Os llegan clientes nuevos o es sobre todo gente del barrio?','¿Os preguntan si se puede pedir por WhatsApp o ver los productos antes?'],
+  basico:['¿Os preguntan a menudo por horarios o si tenéis algún producto?'],
+  farmacia:['¿Os preguntan a menudo por guardias, horarios o si tenéis un producto?'],
+  otros:['¿Cómo os llegan ahora los clientes nuevos?']
+};
+const CALL_TIME = {
+  hosteleria:'Llama entre 10:00 y 12:00 o entre 16:30 y 19:00. Nunca a la hora de comer o de cenar.',
+  belleza:'Mejor a primera hora (9:30–10:30) o a media tarde; suelen estar con clientes.',
+  alojamiento:'Mejor a media mañana, cuando ya han hecho las salidas.',
+  oficios:'Mejor a primera hora (8:00–9:30) o a partir de las 17:00; durante el día están en obra.'
+};
+function callScript(b){
+  const g = GROUPS[b.group] || GROUPS.otros;
+  const muni = b.muni || 'Gran Canaria';
+  const sector = b.cat.toLowerCase();
+  const arg = g.pitch.replace('{sector}', sector).replace('{municipio}', muni);
+  const yo = settings.name || '[tu nombre]', emp = settings.brand ? ` de ${settings.brand}` : '';
+  const price = (settings.price||'').trim();
+  const c = getCrm(b.id);
+  const qs = (CALL_Q[b.group] || CALL_Q.otros).map(q=>`<p>· ${esc(q)}</p>`).join('');
+  const obj = [
+    ['«No me interesa» / «No lo necesito»', `Lo entiendo. Solo una cosa: si ahora mismo alguien busca «${sector} en ${muni}» en Google, le sale la competencia y no vosotros. Por eso te ofrezco el ejemplo gratis: lo ves y decides tú, sin compromiso.`],
+    ['«Ya tengo Facebook / Instagram»', `¡Genial, eso ayuda mucho! Pero cuando alguien busca «${sector} en ${muni}» Google enseña webs y fichas de Google, no perfiles de Instagram. La web trabaja junto con tus redes, no las sustituye.`],
+    ['«¿Cuánto cuesta?»', price ? `Hay webs desde ${price} €, depende de lo que necesites. Por eso prefiero enseñarte primero el ejemplo y luego darte un precio cerrado, sin sorpresas.` : `Depende de lo que necesites, hay opciones muy económicas. Por eso prefiero enseñarte primero el ejemplo y luego darte un precio cerrado, sin sorpresas.`],
+    ['«No tengo tiempo»', 'Por eso lo hago yo todo: tú solo me mandas unas fotos y en pocos días lo tienes funcionando. ¿Prefieres que te llame en otro momento? ¿Cuándo te viene mejor? → pulsa «Volver a llamar».'],
+    ['«Mándame información»', 'Claro. Mejor que un folleto, te mando por WhatsApp un ejemplo hecho para vosotros, así ves algo concreto. ¿Te lo mando a este número? → pulsa «Interesado».'],
+    ['«Ya me lo hace un conocido»', 'Perfecto, me alegro. Si algún día queréis una segunda opinión o se queda a medias, te dejo mi WhatsApp. → pulsa «No le interesa».'],
+    ['«No está el dueño / el encargado»', '¿A qué hora le pillo mejor? ¿Y cómo se llama, para preguntar por él/ella? → apúntalo en notas y pulsa «Volver a llamar».']
+  ].map(([t,a])=>`<details><summary>${esc(t)}</summary><p class="say">${esc(a)}</p></details>`).join('');
+  return `
+    ${c.callback && isDue(b) ? `<p class="note">Llamada de seguimiento (${esc((STATUSES.find(s=>s[0]===c.status)||[])[1]||'')}). ${c.notes?'Tus notas: '+esc(c.notes):''}</p>` : ''}
+    <h4>1 · Saludo (10 segundos)</h4>
+    <p class="say">Hola, buenos días. ¿Hablo con el responsable de <b>${esc(b.name)}</b>? Soy ${esc(yo)}${esc(emp)}, hago páginas web para negocios aquí en Gran Canaria. ¿Tienes un minuto? Es muy rápido.</p>
+    <h4>2 · Por qué llamas</h4>
+    <p class="say">Te llamo porque he buscado ${esc(sector)} en ${esc(muni)}, os he encontrado y he visto que no tenéis página web. ${esc(arg)}</p>
+    <h4>3 · Pregunta y escucha</h4>
+    ${qs}
+    <h4>4 · Cierre: pide permiso, no vendas</h4>
+    <p class="say">Lo que hago es prepararte un ejemplo de cómo quedaría vuestra web, <b>gratis y sin compromiso</b>. Si te gusta lo hablamos, y si no, no pasa nada. ¿Te lo mando por WhatsApp a este número?</p>
+    <p class="small muted">Si dice que sí: pregunta su nombre, pulsa «✅ Interesado» y mándale el WhatsApp al colgar.</p>
+    <h4>Si te pone una objeción</h4>
+    ${obj}
+    <p class="small muted" style="margin-top:10px">${esc(CALL_TIME[b.group] || 'Mejores horas: 10:00–13:00 y 16:30–19:00.')} Si te pide que no le llames más, pulsa «No le interesa» y no vuelvas a llamar.</p>`;
 }
 init();
 </script>
