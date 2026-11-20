@@ -29,7 +29,7 @@ export const STORY_VIDEOS = [
     noche('VIE 27', 'ALBERTO DÉNIZ', 'DJ AKE'), noche('SÁB 28', 'SAVIA NUEVA', 'DJ ASPED'),
     { dia: 'DOM 29', band: 'TARDEO PRE NAVIDAD', title: '4º ANIVERSARIO', desde: 'DESDE LAS 17:00', rows: [['17:00', 'CREMITA DE COCO'], ['19:00', 'YET GARBEY']] }] } },
   { key: 'p3-1202-semana', file: 'semana-3-7-dic.mp4', spec: { mode: 'semana', rango: '3 – 7 DIC', intro: { t1: 'ESTA', t2: 'SEMANA', sub: 'EN 5MENTARIOS', tags: 'HUMOR · DIRECTO · PUENTE' }, cta: CTA, days: [
-    { dia: 'JUE 3', kicker: 'MONÓLOGOS · NUEVA FECHA', big: 'KIKE PÉREZ', rows: [] },
+    { dia: 'JUE 3', kicker: 'MONÓLOGOS · KIKE PÉREZ', big: 'SOLD OUT', rows: [] },
     noche('VIE 4', 'APOLO', 'DJ RUVEN'), noche('SÁB 5', 'SON ALDEA', 'DJ ASPED'), noche('LUN 7', 'WILLY FLORES', 'DJ ASPED')] } },
   { key: 'p3-1209-semana', file: 'finde-11-12-dic.mp4', spec: { mode: 'semana', rango: '11 – 12 DIC', intro: { t1: 'ESTE', t2: 'FINDE', sub: 'EN 5MENTARIOS', tags: 'MÚSICA EN DIRECTO + DJ' }, cta: CTA, days: [
     noche('VIE 11', 'YET GARBEY', 'DJ AKE'), noche('SÁB 12', 'SON KARIBE', 'DJ ASPED')] } },

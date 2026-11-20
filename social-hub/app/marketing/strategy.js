@@ -47,7 +47,7 @@ export const STRATEGY = {
 // Campañas. `keys` = publicaciones del plan que pertenecen a cada campaña (prefijos de import_key).
 export const CAMPAIGNS = [
   { id: 'humor', name: 'Mes del humor', from: '2026-11-12', to: '2026-12-03',
-    objetivo: 'Llenar el aforo de los monólogos y vender la nueva fecha de Kike Pérez.', mensaje: 'Este jueves nos echamos unas risas en 5mentarios.',
+    objetivo: 'Llenar el aforo de los monólogos (Kike Pérez: SOLD OUT el 26/11 y el 03/12).', mensaje: 'Este jueves nos echamos unas risas en 5mentarios.',
     publico: 'Seguidores y público local que busca plan de jueves.', canales: ['Instagram (post + stories)', 'Canal de WhatsApp'],
     piezas: ['Post y story por humorista (entregados)', 'Story «Sold out» del 26/11', 'Stories «Hoy»'],
     kpis: ['Reservas por WhatsApp recibidas para cada monólogo', 'Aforo completo (sí/no)', 'Respuestas y menciones en stories'],

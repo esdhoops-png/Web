@@ -184,10 +184,10 @@ storiesNoche('p2-1121-stories', '11-21', 'sábado 21 · Son Diferente + DJ Ake',
 fotosLunes('p2-1123-fotos', '11-23', 'el finde 20–21 nov');
 
 // ===================== semana 23–29 (Champions J5 + aniversario) =====================
-add({ key: 'p2-1123-kike', kind: 'post', title: 'Post · Kike Pérez: 26/11 SOLD OUT + nueva fecha jue 03/12', starts_at: iso('11-23', '19:00'), format: 'Post 1080×1350', status: 'in_review',
-  objective: 'Avisar del sold out y vender la nueva fecha.', material: DELIV('carteles_y_posts/post-monologos-kike-perez-03-12'),
-  copy: `¡Agotado! 🎤 Kike Pérez y sus «20 años de Komedia» llenan el 26 de noviembre.\n\n¿Te has quedado fuera? Hay nueva fecha: jueves 3 de diciembre en 5mentarios.\n\nEl aforo es limitado, así que reserva en el ${WA} 😉`,
-  cta: `Reserva en el ${WA}`, hashtags: HT_MONO, pending_info: 'Precio de la entrada (15 € según el planificador [POR CONFIRMAR]) y hora del 03/12. No poner precio hasta confirmarlo.' });
+add({ key: 'p2-1123-kike', kind: 'post', title: 'Post · Kike Pérez: SOLD OUT los dos días (26/11 y 03/12)', starts_at: iso('11-23', '19:00'), format: 'Post 1080×1350', status: 'in_review',
+  objective: 'Agradecer el lleno de los dos días (26/11 y 03/12).', material: DELIV('carteles_y_posts/post-monologos-kike-perez-03-12'),
+  copy: `¡Doble SOLD OUT! 🎤🔥 Kike Pérez y sus «20 años de Komedia» llenan el jueves 26 de noviembre y el jueves 3 de diciembre.\n\nGracias por responder así. ¡Atentos a los próximos monólogos!`,
+  cta: `Reserva en el ${WA}`, hashtags: HT_MONO, pending_info: null });
 add({ key: 'p2-1123-ucl', kind: 'champions', title: 'Story · Esta semana, Champions en 5mentarios (J5)', starts_at: iso('11-23', '18:00'), format: 'Story 9:16', status: 'pending_prep',
   objective: 'Que se sepa que la Champions se ve en pantalla grande.', material: 'Plantillas Champions de octubre (Drive y lienzo de diseño de octubre).',
   copy: 'Mar 24 · 20:00 · R. Madrid vs PSV\nMié 25 · 17:45 · Sabah vs Barça\nCHAMPIONS · PANTALLA GRANDE · Volcán · Cuor di Pizza · te lo llevamos a la mesa', cta: 'Sticker «Recordarme»', hashtags: HT,
@@ -199,7 +199,7 @@ for (const [k, d, lbl, cal] of [['p2-1124-ucl', '11-24', 'martes 24', 'R. Madrid
     cta: 'Encuesta + ubicación', hashtags: HT, pending_info: null, description: `${cal} (según el carrusel «Champions en noviembre» entregado).`, attachments: [F.champPartido, F.champPartidoPsd] });
 }
 programacion('p2-1125-prog', '11-25', 'semana 26–29 nov', [
-  { dia: 'JUEVES 26', diaCorto: 'Jue', hora: '—', quien: 'Kike Pérez · SOLD OUT (nueva fecha 03/12)' },
+  { dia: 'JUEVES 26', diaCorto: 'Jue', hora: '—', quien: 'Kike Pérez · SOLD OUT' },
   { dia: 'VIERNES 27', diaCorto: 'Vie', hora: '22:30', quien: 'Alberto Déniz + 00:00 DJ Ake' },
   { dia: 'SÁBADO 28', diaCorto: 'Sáb', hora: '22:30', quien: 'Savia Nueva + 00:00 DJ Asped' },
   { dia: 'DOMINGO 29', diaCorto: 'Dom', hora: '17:00', quien: 'Tardeo pre Navidad · 4º aniversario: Cremita de Coco 17:00 · Yet Garbey 19:00' }]);
@@ -225,16 +225,16 @@ add({ key: 'p2-1201-diciembre', kind: 'carousel', title: 'Carrusel · Programaci
   copy: 'Diciembre en 5mentarios 🎄\n\nDesliza y apunta: monólogos, fines de semana con música, Champions y las fechas grandes del mes.\n\nGuárdalo para tenerlo a mano 📌', cta: 'Guarda el post', hashtags: HT,
   pending_info: 'Programación completa de diciembre.' });
 programacion('p2-1202-prog', '12-02', 'semana 3–7 dic', [
-  { dia: 'JUEVES 3', diaCorto: 'Jue', hora: null, quien: 'Monólogos con Kike Pérez (nueva fecha)' },
+  { dia: 'JUEVES 3', diaCorto: 'Jue', hora: null, quien: 'Monólogos con Kike Pérez · SOLD OUT' },
   { dia: 'VIERNES 4', diaCorto: 'Vie', hora: '22:30', quien: 'Apolo + 00:00 DJ Ruven' },
   { dia: 'SÁBADO 5', diaCorto: 'Sáb', hora: '22:30', quien: 'Son Aldea + 00:00 DJ Asped' },
   { dia: 'LUNES 7 (víspera de festivo)', diaCorto: 'Lun', hora: '22:30', quien: 'Willy Flores + 00:00 DJ Asped' }],
   { pending_info: 'Hora del monólogo de Kike Pérez del 03/12.' });
 reelProgramacion('p2-1202-reel', '12-02', 'semana 3–6 dic');
-add({ key: 'p2-1203-kike-evento', kind: 'event', title: 'Monólogos · Kike Pérez (nueva fecha)', starts_at: iso('12-03', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
+add({ key: 'p2-1203-kike-evento', kind: 'event', title: 'Monólogos · Kike Pérez (SOLD OUT)', starts_at: iso('12-03', '21:00'), requires_approval: false, status: 'scheduled', format: 'Evento',
   pending_info: 'Hora: los monólogos han sido a las 21:00; confirmar. Entrada 15 € [POR CONFIRMAR].' });
 add({ key: 'p2-1203-kike-story', kind: 'story', title: 'Story · Hoy Kike Pérez', starts_at: iso('12-03', '12:00'), format: 'Story 9:16', status: 'in_review',
-  material: DELIV('stories/story-monologos-* (Kike Pérez)'), copy: `HOY · Kike Pérez · AFORO LIMITADO · RESERVAS ${WA}`, cta: 'Enlace a WhatsApp' });
+  material: DELIV('stories/story-monologos-* (Kike Pérez)'), copy: 'HOY · Kike Pérez · SOLD OUT · ¡Gracias!', cta: '' });
 reelJueves('p2-1203-reel', '12-03', 'ambiente', { attachments: [F.vC0572, F.vC0573] });
 add({ key: 'p2-1204-navidad-menus', kind: 'carousel', title: 'Carrusel · Menús de Navidad para grupos', starts_at: iso('12-04', '13:00'), format: 'Carrusel 1080×1350', status: 'in_review',
   objective: 'Reservas de cenas de grupo en Navidad.', material: 'Diseño de Navidad en el lienzo de octubre–noviembre: tres variantes NAV, NAVB y NAVC. Elegir una y exportar PNG + PSD.',
@@ -323,7 +323,6 @@ const TASKS = [
   T({ title: 'Subir a la app los diseños ya entregados de esta semana (story «faltan 2 días», story «esta semana 12–14», reel Halloween → tardeo)', priority: 'urgent', due_date: '2026-11-12', post: 'p2-1112-reel-halloween',
     description: 'Cada uno en su publicación: «Subir nueva versión» → «Subir archivo». Así quedan guardados como versión 1 y el propietario puede verlos.' }),
   T({ title: 'Confirmar la hora del monólogo de Kike Pérez (jue 3 dic)', assignee: 'owner', priority: 'high', due_date: '2026-11-30', post: 'p2-1202-prog' }),
-  T({ title: 'Confirmar precio de la entrada de Kike Pérez (15 € según el planificador)', assignee: 'owner', priority: 'medium', due_date: '2026-11-20', post: 'p2-1123-kike' }),
   T({ title: 'Confirmar bebida incluida y precios definitivos de los menús de Navidad', assignee: 'owner', priority: 'high', due_date: '2026-12-02', post: 'p2-1204-navidad-menus' }),
   T({ title: 'Confirmar si se abre el 1 de enero (horario)', assignee: 'owner', priority: 'low', due_date: '2026-12-18', post: 'p2-1222-horarios' }),
   T({ title: 'Diseñar el carrusel de diciembre (formato del de noviembre)', priority: 'urgent', due_date: '2026-11-27', post: 'p2-1201-diciembre' }),
@@ -359,9 +358,9 @@ const OLD_TASK_TITLES = [
 ];
 
 // Publicaciones actualizadas con la programación de diciembre: si ya se importaron y nadie las ha tocado, se actualizan
-const SYNC_KEYS = ['p2-1114-tardeo', 'p2e-1121', 'p2-1123-ucl', 'p2-1124-ucl', 'p2-1125-ucl', 'p2-1118-prog', 'p2-1120-stories', 'p2-1121-stories', 'p2-1125-prog', 'p2-1127-aniversario', 'p2-1127-stories', 'p2-1128-stories', 'p2-1129-aniversario-evento', 'p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
+const SYNC_KEYS = ['p2-1203-kike-evento', 'p2-1203-kike-story', 'p2-1123-kike', 'p2-1114-tardeo', 'p2e-1121', 'p2-1123-ucl', 'p2-1124-ucl', 'p2-1125-ucl', 'p2-1118-prog', 'p2-1120-stories', 'p2-1121-stories', 'p2-1125-prog', 'p2-1127-aniversario', 'p2-1127-stories', 'p2-1128-stories', 'p2-1129-aniversario-evento', 'p2-1202-prog', 'p2-1204-stories', 'p2-1205-stories', 'p2-1209-prog', 'p2-1211-stories', 'p2-1212-stories', 'p2-1216-prog', 'p2-1218-stories',
   'p2-1219-stories', 'p2-1222-horarios', 'p2-1223-prog', 'p2-1224-fecha', 'p2-1225-fecha', 'p2-1226-stories', 'p2-1230-prog', 'p2-1231-fecha', 'p2-1231-stories'];
-const OBSOLETE_TASKS = ['Confirmar el sábado 21 nov: ¿Son Aldea o Son Diferente? (la programación enviada y el carrusel no coinciden)', 'Aclarar el sábado 14: ¿se mantiene el Tardeo Exterior Halloween además de la noche con Pedro Afonso?', 'Confirmar artistas, DJs y horas · finde 20–21 nov', 'Confirmar artistas, DJs y horas · finde 27–29 nov (y tardeo del aniversario)','Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
+const OBSOLETE_TASKS = ['Confirmar precio de la entrada de Kike Pérez (15 € según el planificador)', 'Confirmar el sábado 21 nov: ¿Son Aldea o Son Diferente? (la programación enviada y el carrusel no coinciden)', 'Aclarar el sábado 14: ¿se mantiene el Tardeo Exterior Halloween además de la noche con Pedro Afonso?', 'Confirmar artistas, DJs y horas · finde 20–21 nov', 'Confirmar artistas, DJs y horas · finde 27–29 nov (y tardeo del aniversario)','Confirmar artistas, DJs y horas · 3–6 dic (hora de Kike Pérez y horario del puente)', 'Confirmar artistas, DJs y horas · finde 11–12 dic',
   'Confirmar artistas, DJs y horas · finde 18–19 dic', 'Confirmar artistas, DJs y horas · Navidad (24–26 dic)', 'Confirmar horarios de Navidad y fin de año (24, 25, 31 y 1)', 'Decidir si hay plan de Nochevieja'];
 
 // Claves retiradas (si se importaron y nadie las ha tocado, se borran): la noche del 14 la sustituye el Tardeo Exterior
