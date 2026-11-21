@@ -145,7 +145,45 @@ var temaName={};TEMAS.forEach(function(t){temaName[t[0]]=t[1]});
 
 var S={q:{},exams:[],days:{},examDate:null};
 try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.q)S=p}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* Sincronización entre dispositivos (solo cuando la página se abre desde Claude; en otro sitio se queda en local). */
+var cloud=null,cloudState="local",pushT=null,pushing=false,dirty=false,lastJson="";
+function statusText(){return cloudState==="ok"?"Progreso sincronizado con tu cuenta: lo verás igual en el móvil y en el ordenador."
+  :cloudState==="err"?"No se ha podido sincronizar ahora. Se guarda en este navegador y se volverá a intentar."
+  :"Tu progreso se guarda en este navegador."}
+function setStatus(v){cloudState=v;var el=document.getElementById("sync");if(el)el.textContent=statusText()}
+function merge(a,b){
+  var r={q:{},exams:[],days:{},resetAt:Math.max(a.resetAt||0,b.resetAt||0)};
+  var da=a.dateAt||0,db=b.dateAt||0;
+  r.examDate=(db>da?b.examDate:a.examDate)||a.examDate||b.examDate;r.dateAt=Math.max(da,db);
+  [a,b].forEach(function(s){
+    for(var id in s.q||{}){var x=s.q[id];if(x.last<r.resetAt)continue;if(!r.q[id]||x.last>r.q[id].last)r.q[id]=x}
+    (s.exams||[]).forEach(function(e){if(e.ts>=r.resetAt&&!r.exams.some(function(y){return y.ts===e.ts}))r.exams.push(e)});
+    for(var d in s.days||{}){var y=s.days[d];if((y.u||0)<r.resetAt)continue;if(!r.days[d]||y.n>r.days[d].n)r.days[d]=y}
+  });
+  r.exams.sort(function(x,y){return x.ts-y.ts});
+  return r;
+}
+function push(){
+  if(!cloud)return;
+  var json=JSON.stringify(S);
+  if(json===lastJson)return;
+  if(pushing){dirty=true;return}
+  pushing=true;
+  cloud.set({json:json,ts:Date.now()}).then(function(){lastJson=json;setStatus("ok")},function(){setStatus("err")})
+    .then(function(){pushing=false;if(dirty){dirty=false;push()}});
+}
+function pull(){
+  if(!cloud)return;
+  cloud.get().then(function(snap){
+    var d=snap.exists?snap.data():null;
+    if(d&&typeof d.json==="string"){lastJson=d.json;try{S=merge(S,JSON.parse(d.json))}catch(e){}}
+    saveLocal();setStatus("ok");push();
+    if(!session)home();
+  }).catch(function(){setStatus("err")});
+}
+function save(){saveLocal();clearTimeout(pushT);pushT=setTimeout(push,800)}
 function dayKey(d){d=d||new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
 if(!S.examDate){var d0=new Date();d0.setDate(d0.getDate()+5);S.examDate=dayKey(d0)}
 
@@ -156,7 +194,7 @@ function seen(q){return st(q).n>0}
 function record(q,ok){
   var s=S.q[q.id]||(S.q[q.id]={n:0,ok:0,k:0,last:0,lo:null});
   s.n++; if(ok){s.ok++;s.k++}else s.k=0; s.lo=ok; s.last=Date.now();
-  var d=S.days[dayKey()]||(S.days[dayKey()]={n:0,ok:0}); d.n++; if(ok)d.ok++;
+  var d=S.days[dayKey()]||(S.days[dayKey()]={n:0,ok:0}); d.n++; if(ok)d.ok++; d.u=Date.now();
 }
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -262,7 +300,7 @@ function home(){
     '<li><b>Día 5.</b> Simulacros hasta aprobar tres seguidos. Repasa las cifras: velocidades, tasas de alcohol, puntos y distancias.</li>'+
     '</ol><p class="muted small" style="margin:10px 0 0">Estas preguntas son de elaboración propia sobre el temario. Complétalas con los test oficiales de la DGT, que usan el mismo formato y sus propias imágenes.</p></details>';
 
-  h+='<div class="foot"><span class="muted small">Tu progreso se guarda en este navegador.</span><span id="resetBox"><button class="link" id="reset">Borrar todo el progreso</button></span></div>';
+  h+='<div class="foot"><span class="muted small" id="sync">'+statusText()+'</span><span id="resetBox"><button class="link" id="reset">Borrar todo el progreso</button></span></div>';
   app.innerHTML=h;
   document.getElementById("sub").textContent="Teórico del permiso B";
 }
@@ -375,10 +413,10 @@ app.addEventListener("click",function(ev){
   if(b.dataset.jump!==undefined){s.i=+b.dataset.jump;render();window.scrollTo(0,0);return}
   if(b.dataset.go){b.dataset.go==="home"?home():start(b.dataset.go,b.dataset.tema);return}
   if(b.dataset.tema){start("tema",b.dataset.tema);return}
-  if(b.id==="reset")confirmBox(document.getElementById("resetBox"),"¿Borrar todo?","Sí, borrar",function(){S={q:{},exams:[],days:{},examDate:S.examDate};save();home()});
+  if(b.id==="reset")confirmBox(document.getElementById("resetBox"),"¿Borrar todo?","Sí, borrar",function(){S={q:{},exams:[],days:{},examDate:S.examDate,dateAt:S.dateAt||0,resetAt:Date.now()};save();home()});
 });
 app.addEventListener("change",function(ev){
-  if(ev.target.id==="examDate"&&ev.target.value){S.examDate=ev.target.value;save();home()}
+  if(ev.target.id==="examDate"&&ev.target.value){S.examDate=ev.target.value;S.dateAt=Date.now();save();home()}
 });
 btnHome.addEventListener("click",function(){
   if(session&&session.exam&&!session.done){
@@ -387,7 +425,18 @@ btnHome.addEventListener("click",function(){
   }
   home();
 });
-save();home();
+saveLocal();home();
+if(window.claude&&window.claude.use){
+  Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    if(!r[0]||!r[1])return;
+    return r[1].id().then(function(id){
+      if(!id)return;
+      cloud=r[0].doc("data/users/"+id+"/progreso");
+      pull();
+      document.addEventListener("visibilitychange",function(){if(document.hidden)push();else if(!session)pull()});
+    });
+  }).catch(function(){});
+}
 })();
 </script>
 </body>
