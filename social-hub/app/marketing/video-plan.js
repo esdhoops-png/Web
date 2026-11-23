@@ -58,7 +58,7 @@ export const STORY_VIDEOS = [
   ].map(([key, file, rango, dia, acts, o = {}]) => ({ key, file, spec: { mode: 'hoy', rango, intro: { sub: 'EN 5MENTARIOS', tags: o.tags || `${acts.length === 1 ? '1 DIRECTO' : acts.length + ' DIRECTOS'} · DESDE LAS ${acts[0].hora}`.replace('1 DIRECTO', 'DJ') },
     acts, resumen: { t1: ['NOCHEBUENA', 'NAVIDAD', 'NOCHEVIEJA'].includes(dia) ? 'ESTA' : 'ESTE', t2: dia }, cta: { pill: WA } } })),
   // ---------- Champions · día de partido (estilo de las stories del 3 y 4 nov) ----------
-  { key: 'p2-1124-ucl', file: 'champions-24-nov.mp4', spec: { mode: 'partido', rango: 'CHAMPIONS', local: 'R. MADRID', visitante: 'PSV', hora: '20:00', photo: null } },
-  { key: 'p2-1125-ucl', file: 'champions-25-nov.mp4', spec: { mode: 'partido', rango: 'CHAMPIONS', local: 'BARÇA', visitante: 'SABAH', hora: '17:45', photo: null } }
+  { key: 'p2-1124-ucl', file: 'champions-24-nov.mp4', spec: { mode: 'partido', rango: 'CHAMPIONS', local: 'R. MADRID', visitante: 'PSV', hora: '20:00', photo: 'ucl-real-madrid.jpg' } },
+  { key: 'p2-1125-ucl', file: 'champions-25-nov.mp4', spec: { mode: 'partido', rango: 'CHAMPIONS', local: 'SABAH', visitante: 'BARÇA', hora: '17:45', photo: 'ucl-barca.jpg' } }
 ];
 export const PENDING_VIDEOS = [{ key: 'p2-1121-stories', why: 'Sábado 21 nov: falta confirmar si toca Son Aldea, Son Diferente o «Directo».' }];
