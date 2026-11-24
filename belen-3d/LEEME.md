@@ -10,15 +10,18 @@ Las vistas de montaje están en `preview/` (PNG y GLB en color).
 | maria_cuerpo (crema), maria_cabeza (madera) | 1 | 1 | 1 |
 | jose_cuerpo (oscuro), jose_cabeza (madera), jose_baston (crema) | 1 | 1 | 1 |
 | pesebre_cuenco (madera), nino_cuerpo (crema), nino_cabeza (madera) | 1 | 1 | 1 |
-| arbol_grande / mediano / pequeno (crema) | grande, mediano | grande, pequeño | los tres |
+| arbol_grande / mediano / pequeno (crema) | grande, mediano | grande, pequeño | mediano, 2 pequeños |
 | casa_grande_cuerpo (crema) + tejado (oscuro) | 1 | – | – |
 | casa_pequena_cuerpo (crema) + tejado (oscuro) | – | 1 | 1 |
-| establo + estrella_establo (crema) | – | 1 | – |
+| establo (crema) + estrella_establo (amarillo) | – | 1 | – |
 | iglesia_cuerpo (crema) + tejado_torre + tejado_nave (oscuro) | – | – | 1 |
 | valla (oscuro) | – | – | 1 |
-| estrella_con_palo (crema o amarillo translúcido) | 1 | – | 1 |
-| base_con_agujero_estrella | 1 | – | 1 |
-| base_lisa | – | 1 | – |
+| estrella_con_palo (amarillo o translúcido) | 1 | – | 1 |
+| base (crema) | base_belen_1_casa | base_belen_2_establo | base_belen_3_pueblo |
+
+Cada base lleva asientos de 1,2 mm con la forma de cada pieza, así que la colocación
+queda fijada (ver `preview/*_planta.png`). Bajo árboles y casas hay un pasacables de
+Ø12 con canal por debajo hasta el borde trasero, para una guirnalda de microleds.
 
 ## Ajustes recomendados (FDM, PLA, boquilla 0,4)
 
@@ -29,6 +32,8 @@ Las vistas de montaje están en `preview/` (PNG y GLB en color).
   o una tira de luces. Una vela LED estándar (Ø38) cabe en el árbol grande, el mediano y las casas.
 - La base mide 210 × 125 mm: necesita cama de 220 mm o más.
 - Bastón, estrellas y valla se imprimen tumbados; son finos, despégalos con cuidado.
+  Las estrellas son facetadas por delante y planas por detrás.
+- Marcos de ventanas y alféizares sobresalen 0,8–1,4 mm: salen sin soportes.
 
 ## Montaje
 
@@ -37,7 +42,7 @@ Las vistas de montaje están en `preview/` (PNG y GLB en color).
 - Tejados: van apoyados sobre el cuerpo; una gota de pegamento si quieres fijarlos.
 - Estrella con palo: encaja en el agujero rectangular de la base.
 - Estrella del establo: encaja en la ranura de la cumbrera.
-- Valla y figuras: sueltas o pegadas a la base, a tu gusto.
+- Valla y figuras: encajan en su asiento de la base; pegamento opcional.
 
 Los encajes llevan 0,25 mm de holgura. Si quedan duros u holgados, cambia `HOLG`
 en `generar_belen.py` y vuelve a generar (`pip install manifold3d trimesh numpy`).
